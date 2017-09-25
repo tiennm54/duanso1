@@ -18,13 +18,12 @@ use SEOMeta;
 use OpenGraph;
 use Twitter;
 use URL;
+use App\Helpers\SeoPage;
 
 class ArticlesDetailController extends CheckMemberController  {
 
     public function sumRateProduct($model_product){
-
         $sum = 0;
-
         $count_user_rate = count($model_product->getReview);
         if ($count_user_rate == 0){
             return $sum;
@@ -33,6 +32,12 @@ class ArticlesDetailController extends CheckMemberController  {
             return $sum;
         }
 
+    }
+
+    public function seoView($model){
+        $url_page = URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title.'.html' ]);
+        $image_page = url('images/' . $model->getArticles->image);
+        SeoPage::createSeo($model, $url_page, $image_page);
     }
 
     public function view($id = 0){
@@ -48,21 +53,7 @@ class ArticlesDetailController extends CheckMemberController  {
 
         if ($model){
 
-            SEOMeta::setTitle($model->seo_title);
-            SEOMeta::setDescription($model->seo_description);
-            SEOMeta::addKeyword([$model->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model->seo_title);
-            OpenGraph::setDescription($model->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title ]));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('images/'. $model->getArticles->image)]);
-            OpenGraph::addImage(['url' => url('images/'. $model->getArticles->image), 'size' => 300]);
-            OpenGraph::addImage(url('images/'. $model->getArticles->image), ['height' => 300, 'width' => 300]);
+            $this->seoView($model);
 
             $model_related = ArticlesType::where("articles_id","=",$model->articles_id)->where("id", "!=", $model->id)->get();
             $model_list_product = Articles::orderBy("title","ASC")->get();

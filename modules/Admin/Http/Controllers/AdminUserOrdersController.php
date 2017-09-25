@@ -211,7 +211,6 @@ class AdminUserOrdersController extends Controller {
         }
         $request->session()->flash('alert-warning', 'Warning: Đã xảy ra lỗi khi cập nhật trạng thái');
         return back();
-
     }
 
 

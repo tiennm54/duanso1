@@ -95,12 +95,12 @@
                                     ?></td>
                                 <td>
                                     <a class="btn btn-primary"
-                                       href="<?php echo URL::route('articles.getEdit', $item->id); ?>">
+                                       href="<?php echo URL::route('articles.getEdit', ['id' => $item->id, 'url'=> $item->url_title.'.html']); ?>">
                                         <i class="fa fa-edit"></i>
                                     </a>
 
                                     <a class="btn btn-primary"
-                                       href="<?php echo URL::route('articles.view', $item->id); ?>">
+                                       href="<?php echo URL::route('articles.view', ['id' => $item->id, 'url'=> $item->url_title.'.html']); ?>" target="_blank">
                                         <i class="fa fa-eye"></i>
                                     </a>
 

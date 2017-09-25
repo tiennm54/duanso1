@@ -55,7 +55,7 @@
                         <div class="price">
                             <a onclick="addToCart({{ $item->id }})" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 <img src="{{url('theme_frontend/image/cart-1.png')}}" alt="Add to cart">
-                                Add to cart
+                                ADD TO CART
                             </a>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
 
         <hr/>
 
-        <img src="{{url('images/icon/step-buy-key.png')}}" alt="step buy premium key" width="100%">
+        <a href="{{ URL::route('frontend.articles.pricing', ['id' => $model->id, 'url'=> $model->url_title.".html"] ) }}"><img src="{{url('images/icon/step-buy-key.png')}}" alt="step buy premium key" width="100%"></a>
 
         <hr/>
 

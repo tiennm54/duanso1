@@ -28,6 +28,7 @@ class BackendArticlesController extends Controller {
                 "articles.code",
                 "articles.brand",
                 "articles.status_stock",
+                "articles.url_title",
                 "category.id as category_id",
                 "category.name as category_name"
             );

@@ -151,6 +151,7 @@ return [
         'Buzz\LaravelGoogleCaptcha\CaptchaServiceProvider',
         'Maatwebsite\Excel\ExcelServiceProvider',
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+        'App\Providers\HelperServiceProvider',
 
     ],
 
@@ -210,7 +211,7 @@ return [
         'Twitter'   => Artesaos\SEOTools\Facades\TwitterCard::class,
         // or
         'SEO' => Artesaos\SEOTools\Facades\SEOTools::class,
-
+        'SeoPage' => 'App\Helpers\SeoPage',
     ],
 
 ];

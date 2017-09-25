@@ -17,6 +17,7 @@
     <link href="{{url('theme_backend/css/bootstrap-datetimepicker.min.css')}}" type="text/css" rel="stylesheet" media="screen">
     <link type="text/css" href="{{url('theme_backend/css/stylesheet.css')}}" rel="stylesheet" media="screen">
     <script src="{{url('theme_backend/js/common.js')}}" type="text/javascript"></script>
+    <link href="{{url('theme_frontend/image/favicon.png')}}" rel="icon">
 
     <script type="text/javascript">
 

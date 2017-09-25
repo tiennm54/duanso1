@@ -16,6 +16,7 @@ use OpenGraph;
 use Twitter;
 use URL;
 use App\Models\Seo;
+use App\Helpers\SeoPage;
 
 class UsersProfileController extends CheckMemberController  {
 
@@ -24,29 +25,18 @@ class UsersProfileController extends CheckMemberController  {
         $this->middleware("member");
     }
 
+    public function seoMyAccount($model_seo){
+        $url_page = URL::route('users.getMyAccount');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
+
     //Hiển thị trang quản lý của khách hàng
     public function getMyAccount(){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("My account Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoMyAccount($model_seo);
         }
-
         $model = $this->checkMember();
         if ($model) {
             return view('users::user.my_account');
@@ -54,30 +44,18 @@ class UsersProfileController extends CheckMemberController  {
         return redirect()->route('users.getLogin');
     }
 
+    public function seoEditProfile($model_seo){
+        $url_page = URL::route('users.getEditProfile');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
+
     ///CẦN LÀM THÊM MIDDWARE
     public function getEditProfile(){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Edit profile Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoEditProfile($model_seo);
         }
-
-
         $model = $this->checkMember();
         if ($model){
             $country = "US";
@@ -86,7 +64,6 @@ class UsersProfileController extends CheckMemberController  {
                     $country = $model->profiles->country;
                 }
             }
-
             $countryState = new CountryState();
             $countries = $countryState->getCountries();
             $countryState = new CountryState();
@@ -152,30 +129,18 @@ class UsersProfileController extends CheckMemberController  {
         }
     }
 
+    public function seoChangePassword($model_seo){
+        $url_page = URL::route('users.getChangePassword');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
 
     //Thay đổi password
     public function getChangePassword(){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Change password Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoChangePassword($model_seo);
         }
-
         $model = $this->checkMember();
         if ($model){
             return view('users::profile.change-password');
@@ -205,7 +170,6 @@ class UsersProfileController extends CheckMemberController  {
                 }
             }
         }
-
         return redirect()->route('users.getLogin');
     }
 }

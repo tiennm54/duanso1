@@ -52,7 +52,7 @@ Route::group(['prefix' => 'users/shipping-address', 'namespace' => 'Modules\User
 Route::group(['prefix' => 'users/order-history', 'namespace' => 'Modules\Users\Http\Controllers'], function()
 {
     Route::get('index.html',['as'=>'users.orderHistory','uses'=>'OrderHistoryController@listOrder']);
-    Route::get('view/{id}/{order_no?}',['as'=>'users.orderHistoryView','uses'=>'OrderHistoryController@view']);
+    Route::get('view-{id}/{order_no?}',['as'=>'users.orderHistoryView','uses'=>'OrderHistoryController@view']);
 });
 
 

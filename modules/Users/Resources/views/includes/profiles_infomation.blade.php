@@ -67,7 +67,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Address 1</label>
+                        <label>Address 2</label>
                         <input type="text" class="form-control border-input" placeholder="Home Address 2" name="street_address_02"
                                value="{!! old('street_address_02',(isset($model) && isset($model->profiles)) ? $model->profiles->street_address_02 : null) !!}">
                     </div>

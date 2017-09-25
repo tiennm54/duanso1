@@ -7,23 +7,23 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     //Route::get('/taotieuchi', 'AdminController@taoTieuChi');
 
     //ARTICLES
-    Route::group(['prefix' => 'articles'], function() {
+    Route::group(['prefix' => 'product'], function() {
 
         Route::get('index', ['as' => 'articles.index', 'uses' => 'BackendArticlesController@index']);
         Route::get('create', ['as' => 'articles.getCreate', 'uses' => 'BackendArticlesController@getCreate']);
         Route::post('create', ['as' => 'articles.postCreate', 'uses' => 'BackendArticlesController@postCreate']);
-        Route::get('edit/{id}', ['as' => 'articles.getEdit', 'uses' => 'BackendArticlesController@getEdit']);
-        Route::post('edit/{id}', ['as' => 'articles.postEdit', 'uses' => 'BackendArticlesController@postEdit']);
-        Route::get('view/{id}', ['as' => 'articles.view', 'uses' => 'BackendArticlesController@view']);
+        Route::get('view/{id}/{url?}', ['as' => 'articles.view', 'uses' => 'BackendArticlesController@view']);
+        Route::get('edit/{id}/{url?}', ['as' => 'articles.getEdit', 'uses' => 'BackendArticlesController@getEdit']);
+        Route::post('edit/{id}/{url?}', ['as' => 'articles.postEdit', 'uses' => 'BackendArticlesController@postEdit']);
 
     });
     //ARTICLES CHILDREN
-    Route::group(['prefix' => 'articlesChildren'], function() {
+    Route::group(['prefix' => 'sub-product'], function() {
         Route::get('create/{articles_id}', ['as' => 'articlesChildren.getCreate', 'uses' => 'BackendArticlesChildrenController@getCreate']);
         Route::post('create/{articles_id}', ['as' => 'articlesChildren.postCreate', 'uses' => 'BackendArticlesChildrenController@postCreate']);
         Route::get('view/{id}/{url?}', ['as' => 'articlesChildren.view', 'uses' => 'BackendArticlesChildrenController@view']);
-        Route::get('edit/{id}', ['as' => 'articlesChildren.getEdit', 'uses' => 'BackendArticlesChildrenController@getEdit']);
-        Route::post('edit/{id}', ['as' => 'articlesChildren.postEdit', 'uses' => 'BackendArticlesChildrenController@postEdit']);
+        Route::get('edit/{id}/{url?}', ['as' => 'articlesChildren.getEdit', 'uses' => 'BackendArticlesChildrenController@getEdit']);
+        Route::post('edit/{id}/{url?}', ['as' => 'articlesChildren.postEdit', 'uses' => 'BackendArticlesChildrenController@postEdit']);
 
         Route::get('autoComplete',['as' => 'articlesChildren.autoComplete', 'uses' => 'BackendArticlesChildrenController@autoComplete']);
         Route::post('addKeyToProduct/{id?}',['as' => 'articlesChildren.addKeyToProduct', 'uses' => 'BackendArticlesChildrenController@addKeyToProduct']);
@@ -41,7 +41,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('delete/{id}', ['as' => 'category.delete', 'uses' => 'BackendCategoryController@delete']);
     });
     //PAYMENT TYPE
-    Route::group(['prefix' => 'paymentType'], function() {
+    Route::group(['prefix' => 'payment-type'], function() {
         Route::get('index', ['as' => 'paymentType.index', 'uses' => 'BackendPaymentTypeController@index']);
         Route::get('create', ['as' => 'paymentType.getCreate', 'uses' => 'BackendPaymentTypeController@getCreate']);
         Route::post('create', ['as' => 'paymentType.postCreate', 'uses' => 'BackendPaymentTypeController@postCreate']);
@@ -50,7 +50,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('delete/{id}', ['as' => 'paymentType.delete', 'uses' => 'BackendPaymentTypeController@delete']);
     });
     //TERMS CONDITIONS
-    Route::group(['prefix' => 'termsConditions'], function() {
+    Route::group(['prefix' => 'terms-conditions'], function() {
         Route::get('view', ['as' => 'termsConditions.getView', 'uses' => 'BackendTermsConditionsController@getView']);
         Route::post('view', ['as' => 'termsConditions.postView', 'uses' => 'BackendTermsConditionsController@postView']);
     });
@@ -63,7 +63,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     });
 
 
-    Route::group(['prefix' => 'userOrders'], function() {
+    Route::group(['prefix' => 'user-orders'], function() {
         Route::get('list', ['as' => 'adminUserOrders.listOrders', 'uses' => 'AdminUserOrdersController@listOrders']);
         Route::get('view/{id}', ['as' => 'adminUserOrders.viewOrders', 'uses' => 'AdminUserOrdersController@viewOrders']);
         Route::post('sendKey/{id}/{email}', ['as' => 'adminUserOrders.sendKey', 'uses' => 'AdminUserOrdersController@sendKey']);
@@ -84,7 +84,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     });
 
 
-    Route::group(['prefix' => 'userManagement'], function() {
+    Route::group(['prefix' => 'user-management'], function() {
         Route::get('index', ['as' => 'admin.userManagement.index', 'uses' => 'UserManagementController@index']);
         Route::get('getCreate', ['as' => 'admin.userManagement.getCreate', 'uses' => 'UserManagementController@getCreate']);
     });

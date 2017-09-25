@@ -23,6 +23,7 @@ use Twitter;
 use URL;
 use App\Models\Seo;
 use Illuminate\Support\Facades\Session;
+use App\Helpers\SeoPage;
 
 class UsersController extends CheckMemberController {
 
@@ -33,27 +34,17 @@ class UsersController extends CheckMemberController {
         $obj_shopping_cart->setSession($array_orders);
     }
 
+    public function seoLogin($model_seo){
+        $url_page = URL::route('users.getLogin');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
+
 	public function getLogin(){
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Login Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoLogin($model_seo);
         }
-
 		return view('users::user.login');
 	}
 
@@ -90,30 +81,17 @@ class UsersController extends CheckMemberController {
 			}
 	}
 
-
+    public function seoRegister($model_seo){
+        $url_page = URL::route('users.getRegister');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
 
 	public function getRegister(){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Register Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoRegister($model_seo);
         }
-
         return view('users::user.register');
     }
 
@@ -144,6 +122,9 @@ class UsersController extends CheckMemberController {
                 Auth::loginUsingId($model->id);
 
                 DB::commit();
+
+                Session::set('user_email_login', $model->email);
+
                 return redirect()->route('users.getRegisterSuccess');
 
             }else{
@@ -163,28 +144,17 @@ class UsersController extends CheckMemberController {
     }
 
 
+    public function seoRegisterSuccess($model_seo){
+        $url_page = URL::route('users.getRegisterSuccess');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
+
     public function getRegisterSuccess(){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Register success Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoRegisterSuccess($model_seo);
         }
-
         $model = $this->checkMember();
         if ($model) {
             return view('users::user.register-success');
@@ -193,29 +163,17 @@ class UsersController extends CheckMemberController {
         }
     }
 
+    public function seoAfterLogout($model_seo){
+        $url_page = URL::route('users.afterLogout');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
 
     public function afterLogout(){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Logout Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoAfterLogout($model_seo);
         }
-
         return view('users::user.logout');
     }
 
@@ -225,29 +183,17 @@ class UsersController extends CheckMemberController {
         return redirect()->route('users.afterLogout');
     }
 
+    public function seoForgotten($model_seo){
+        $url_page = URL::route('users.getForgotten');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
     //Hiển thị trang khi người dùng quên mật khẩu
     public function getForgotten(){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Forgotten Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoForgotten($model_seo);
         }
-
         return view('users::user.forgotten');
     }
 
@@ -268,6 +214,9 @@ class UsersController extends CheckMemberController {
                     $m->to($model->email, $model->name)->subject('Forgot password');
                 });
 
+                $request->session()->flash('alert-success', ' Success: If there is an account associated with '. $model->email .' you will receive an email with a link to reset your password.!');
+                return redirect()->route('users.getLogin');
+
             }else{
                 $request->session()->flash('alert-danger', ' Warning: The E-Mail Address was not found in our records, please try again!');
                 return redirect()->route('users.getForgotten');
@@ -275,26 +224,16 @@ class UsersController extends CheckMemberController {
         }
     }
 
+    public function seoResetPassword($model_seo){
+        $url_page = URL::route('users.getForgotten');
+        $image_page = url('theme_frontend/image/logo.png');
+        SeoPage::createSeo($model_seo, $url_page, $image_page);
+    }
+
     public function getResetPassword($email, $key_forgotten, Request $request){
-
         $model_seo = Seo::where("type","=","index")->first();
-
         if ($model_seo) {
-            SEOMeta::setTitle("Reset Password Premium Key - ".$model_seo->seo_title);
-            SEOMeta::setDescription($model_seo->seo_description);
-            SEOMeta::addKeyword([$model_seo->seo_keyword]);
-            SEOMeta::addMeta('article:published_time', $model_seo->created_at->toW3CString(), 'property');
-            SEOMeta::addMeta('article:section', 'news', 'property');
-
-            OpenGraph::setTitle($model_seo->seo_title);
-            OpenGraph::setDescription($model_seo->seo_description);
-            OpenGraph::setUrl(URL::route('frontend.articles.index'));
-            OpenGraph::addProperty('type', 'article');
-            OpenGraph::addProperty('locale', 'pt-br');
-            OpenGraph::addProperty('locale:alternate', ['pt-pt', 'en-us']);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png')]);
-            OpenGraph::addImage(['url' => url('theme_frontend/image/logo.png'), 'size' => 300]);
-            OpenGraph::addImage(url('theme_frontend/image/logo.png'), ['height' => 300, 'width' => 300]);
+            $this->seoResetPassword($model_seo);
         }
 
         $model = User::where("email","=",$email)->where("key_forgotten","=",trim($key_forgotten))->first();

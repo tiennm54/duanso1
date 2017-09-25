@@ -5,7 +5,7 @@
 
             <div class="pull-right">
                 <button type="submit" form="form-edit-product-detail" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Save"><i class="fa fa-save"></i></button>
-                <a href="<?php echo URL::route('articlesChildren.view', ['id' => $model->id]); ?>" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="View">
+                <a href="<?php echo URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title.".html"]); ?>" target="_blank" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="View">
                     <i class="fa fa-eye"></i>
                 </a>
 

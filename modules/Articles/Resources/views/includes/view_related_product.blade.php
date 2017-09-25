@@ -1,5 +1,6 @@
 <?php if ($model_related):?>
-<h3>Related Products</h3>
+<hr/>
+<h2>Related Products</h2>
 <div class="row">
     <?php foreach ($model_related as $item):?>
     <div class="col-xs-6 col-sm-3">
