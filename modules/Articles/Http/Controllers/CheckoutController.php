@@ -182,7 +182,7 @@ class CheckoutController extends ShoppingCartController {
         return redirect()->route('frontend.articles.index');
     }
 
-    //Xóa sản phẩm khi checkout
+    //Xóa sản phẩm tại giao diện checkout
     public function deleteProductCheckout(Request $request) {
         if (isset($request)) {
             $data = $request->all();
@@ -224,15 +224,18 @@ class CheckoutController extends ShoppingCartController {
         return response()->json("Delete error !!!", 404);
     }
 
-    public function confirmOrderForMember($model_user, $data, $array_orders, $flag_user) {
-
-        //Đối với người dùng đăng nhập
+    public function createOrder($model_user, $data, $array_orders) {
         $model_user_orders = new UserOrders();
         $model_user_orders->users_id = $model_user->id;
         $model_user_orders->users_roles_id = $model_user->roles_id;
         $model_user_orders->first_name = $model_user->first_name;
         $model_user_orders->last_name = $model_user->last_name;
-        $model_user_orders->email = $data["shipping_address"];
+        if(isset($data["shipping_address"])){
+            $model_user_orders->email = $data["shipping_address"];
+        }else{
+            $model_user_orders->email = $model_user->email;
+        }
+
         $model_user_orders->payments_type_id = $data["payments_type_id"];
         $model_user_orders->sub_total = $data["sub_total"];
         $model_user_orders->payment_charges = $data["payment_charges"];
@@ -242,26 +245,13 @@ class CheckoutController extends ShoppingCartController {
         $model_user_orders->order_no = $this->getNameOrderNo($model_user_orders);
         $model_user_orders->save();
 
-        return $model_user_orders->id;
-    }
+        $model_user_orders->order_no = $this->getNameOrderNo($model_user_orders->id);
+        $model_user_orders->save();
 
-    public function confirmOrderForGuest($model_user, $data, $array_orders) {
-        unset($data["_token"]);
-        unset($data["check_term"]);
-        $data["users_id"] = $model_user->id;
-        $data["users_roles_id"] = $model_user->roles_id;
-        $data["quantity_product"] = count($array_orders);
-        $data["created_at"] = Carbon::now();
-        $data["updated_at"] = Carbon::now();
-        $id = UserOrders::insertGetId($data);
-        return $id;
-    }
-
-    public function saveUserOrdersDetail($user_order_id, $model_user, $array_orders) {
-
+        //Save Order Detail
         foreach ($array_orders as $item) {
             $model_user_orders_detail = new UserOrdersDetail();
-            $model_user_orders_detail->user_orders_id = $user_order_id;
+            $model_user_orders_detail->user_orders_id = $model_user_orders->id;
             $model_user_orders_detail->users_id = $model_user->id;
             $model_user_orders_detail->users_roles_id = $model_user->roles_id;
             $model_user_orders_detail->articles_type_id = $item["id"];
@@ -272,6 +262,7 @@ class CheckoutController extends ShoppingCartController {
             $model_user_orders_detail->total_price = $item["total"];
             $model_user_orders_detail->save();
         }
+        return $model_user_orders;
     }
 
     //Thay đổi trạng thái shopping cart của khách hàng
@@ -282,6 +273,11 @@ class CheckoutController extends ShoppingCartController {
         $obj->emptySession();
     }
 
+    public function getConfirmOrder(Request $request){
+        $request->session()->flash('alert-warning', 'Warning: Server error. Please come back later!');
+        return redirect()->route('frontend.checkout.index');
+    }
+
     public function confirmOrder(Request $request) {
         if (isset($request)) {
             DB::beginTransaction();
@@ -290,51 +286,31 @@ class CheckoutController extends ShoppingCartController {
             if (count($array_orders) > 0) {
 
                 $model_user = $this->checkMember();
-                $flag_user = 0; // Đánh dấu người dùng vãng lai, chưa từng có trong hệ thống
-                if ($model_user) {
-                    $flag_user = 1; // Đã đăng nhập
-                } else {
-                    //Đối với người dùng vãng lai có 2 TH
-                    //TH1: Dùng email đã có trên hệ thống
-                    //TH2: Chưa có email nào trên hệ thống => Cần tự tạo tài khoản để người dùng có thể đăng nhập lần sau.
+                if($model_user == null){
                     $model_user = User::where("email", "=", $data["email"])->first();
-                    if ($model_user == null) {
+                    if ($model_user == null) {// Không có mail trong bảng User
                         $check_user_shipping = UserShippingAddress::where("email", "=", $data["email"])->first();
-                        if ($check_user_shipping) {
+                        if ($check_user_shipping) {// Tìm thấy email trong bảng shipping address
                             $model_user = User::find($check_user_shipping->user_id);
-                            if ($model_user) {
-                                $flag_user = 3; // Có email là tài khoản shipping trên hệ thống
-                            }
                         }
-                    } else {
-                        $flag_user = 2; // Có email là tài khoản đã đăng kí
                     }
                 }
 
                 $password = "";
-                if ($flag_user == 0) {
-                    //Tạo mới user
+                if ($model_user == null) {
                     $obj_user = new User();
                     $result = $obj_user->createUser($data);
                     $user_id = $result["user_id"];
                     $password = $result["password"];
                     $model_user = User::find($user_id);
+                    //Chỉ user new mới được login, bởi cần tính bảo mật trong trường hợp người dùng điền bừa email
                     Auth::loginUsingId($model_user->id);
+                    Session::set('user_email_login', $model_user->email);
+                    $data["shipping_address"] = $model_user->email;
                 }
-                //0 và 1 được login luôn vào hệ thống
-                if ($flag_user == 0 || $flag_user == 1) {
-                    $user_order_id = $this->confirmOrderForMember($model_user, $data, $array_orders, $flag_user);
-                } else {
-                    $user_order_id = $this->confirmOrderForGuest($model_user, $data, $array_orders);
-                }
-
-                $this->saveUserOrdersDetail($user_order_id, $model_user, $array_orders);
+                $model_orders = $this->createOrder($model_user, $data, $array_orders);
                 DB::commit();
-                $model_orders = UserOrders::find($user_order_id);
                 if ($model_orders) {
-                    $model_orders->order_no = $this->getNameOrderNo($user_order_id);
-                    $model_orders->save();
-
                     $this->changeStatusAfterCheckout($model_user);
                     $this->sendMail($model_orders, $password);
                     $this->sendMailToMe($model_orders);

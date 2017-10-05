@@ -10,4 +10,8 @@ class ArticlesTypeKey extends Model{
         return $this->hasOne('App\Models\ArticlesType', 'id' ,'articles_type_id');
     }
 
+    public function getUserOrders(){
+        return $this->hasOne('App\Models\UserOrders', 'id' ,'user_orders_id');
+    }
+
 }

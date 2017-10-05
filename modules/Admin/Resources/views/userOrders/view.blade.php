@@ -5,10 +5,17 @@
         <div class="container-fluid">
 
             <div class="pull-right">
+
+                <a href="{{URL::route('import.getImport')}}" data-toggle="tooltip"
+                   class="btn btn-primary" data-original-title="Import Premium Key">
+                    <i class="glyphicon glyphicon-save"></i>
+                </a>
+
                 <a href="<?php echo URL::route('adminUserOrders.listOrders'); ?>" data-toggle="tooltip"
                    class="btn btn-default" data-original-title="Cancel">
                     <i class="fa fa-reply"></i>
                 </a>
+
             </div>
 
             <h1>Orders</h1>
@@ -99,19 +106,19 @@
                         <tr>
                             <td>
                                 <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
-                                        data-original-title="Telephone"><i class="fa fa-phone fa-fw"></i>
+                                        data-original-title="Import Key"><i class="glyphicon glyphicon-grain"></i>
                                 </button>
                             </td>
-                            <td>{{ $model->telephone }}</td>
+                            <td>Order No: <b>{{ $model->order_no }}</b></td>
                         </tr>
 
                         <tr>
                             <td>
-                                <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
-                                        data-original-title="Import Key"><i class="glyphicon glyphicon-grain"></i>
+                                <button data-toggle="tooltip" title="" class="btn btn-info btn-xs">
+                                    <i class="glyphicon glyphicon-grain"></i>
                                 </button>
                             </td>
-                            <td><a class="btn btn-primary" href="{{URL::route('import.getImport')}}">Import</a></td>
+                            <td>Order ID: <b>#{{ $model->id }}</b></td>
                         </tr>
 
                         </tbody>
@@ -126,11 +133,7 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td>Orders</td>
-                                <td id="invoice" class="text-right">#{{ $model->id }}</td>
-                            </tr>
-                            <tr>
-                                <td>Status</td>
+                                <td width="30%">Status</td>
                                 <td class="text-right col-md-12">
                                     <form method="post" action="{{ URL::route('adminUserOrders.saveStatusPayment',['id'=>$model->id] ) }}">
                                         <div class="col-md-9">
@@ -144,7 +147,6 @@
                                             <button class="btn btn-primary btn-xs" data-toggle="confirmation" data-placement="left">Save</button>
                                         </div>
                                     </form>
-
                                 </td>
                             </tr>
                             <tr>
@@ -152,18 +154,18 @@
                                 <td class="text-right">${{ $model->total_price }}</td>
                             </tr>
 
-                            <tr>
+                            <!--<tr>
                                 <td>Send key</td>
                                 <?php if($model->payment_status == "pending"){?>
                                     <td class="text-right">
                                         <form method="post" action="{{ URL::route('adminUserOrders.sendKey',['id'=>$model->id, 'email'=> $model->email]) }}">
-                                            <button class="btn btn-warning" data-toggle="confirmation">Send Key</button>
+                                            <button class="btn btn-warning" data-toggle="confirmation">Auto Send</button>
                                         </form>
                                     </td>
                                 <?php }else{?>
                                     <td class="text-right"><button class="btn btn-primary" disabled>Sent</button></td>
                                 <?php }?>
-                            </tr>
+                            </tr>-->
                         </tbody>
                     </table>
                 </div>
@@ -180,52 +182,64 @@
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead>
-                        <tr>
-                            <td class="text-left">Product Name</td>
-                            <td class="text-left">Model</td>
-                            <td class="text-right">Quantity</td>
-                            <td class="text-right">Price</td>
-                            <td class="text-right">Total</td>
+                            <tr>
 
-                        </tr>
+                                <td class="text-left">Product Name</td>
+                                <td class="text-left">Model</td>
+                                <td class="text-right">Quantity</td>
+                                <td class="text-left">Premium key</td>
+                                <td class="text-right">Price</td>
+                                <td class="text-right">Total</td>
+
+                            </tr>
                         </thead>
-                        <tbody>
                         <?php if (count($model->orders_detail) == 0):?>
-                        <tr>
-                            <td class="text-left" colspan="6">Your shopping cart is empty!</td>
-                        </tr>
+                            <tbody>
+                                <tr>
+                                    <td class="text-left" colspan="6">Your shopping cart is empty!</td>
+                                </tr>
+                            </tbody>
                         <?php endif;?>
                         <?php if (count($model->orders_detail) > 0):?>
                         <?php foreach ($model->orders_detail as $item):?>
-                        <tr>
-                            <td class="text-left">
-                                <a href="{{URL::route('articlesChildren.view',[ 'id' => $item->articles_type->id, 'url' => $item->articles_type->url_title.".html" ])}}" target="_blank">
-                                    {{ $item->articles_type->title }}
-                                </a>
-                            </td>
-                            <td class="text-left">{{ $item->articles_type->getArticles->title }}</td>
-                            <td class="text-right">{{ $item->quantity }}</td>
-                            <td class="text-right">${{ $item->price_order }}</td>
-                            <td class="text-right">${{ $item->total_price }}</td>
+                            <tbody>
+                                <tr>
 
-                        </tr>
+                                    <td class="text-left">
+                                        <a href="{{URL::route('adminUserOrders.getAddPremiumKey',[ 'product_id' => $item->articles_type->id, 'order_detail_id' => $item->id ])}}" target="_blank">
+                                            {{ $item->articles_type->title }}
+                                        </a>
+                                    </td>
+                                    <td class="text-left">{{ $item->articles_type->getArticles->title }}</td>
+                                    <td class="text-right">{{ $item->quantity }}</td>
+
+                                    <td class="text-left">
+                                        <button class="btn {{ ($item->count_key == $item->quantity) ? "btn-primary" : "btn-danger"}}" data-toggle="modal" data-target="#modalAddKey">
+                                            <i class="fa fa-eye"> {{ $item->count_key }} Key</i>
+                                        </button>
+                                    </td>
+
+                                    <td class="text-right">${{ $item->price_order }}</td>
+                                    <td class="text-right">${{ $item->total_price }}</td>
+
+                                </tr>
+                            </tbody>
                         <?php endforeach;?>
                         <?php endif;?>
-                        </tbody>
-
+                            
                         <tfoot>
                             <tr>
-                                <td colspan="3"></td>
+                                <td colspan="4"></td>
                                 <td class="text-right"><b>Sub-Total</b></td>
                                 <td class="text-right">${{ $model->sub_total }}</td>
                             </tr>
                             <tr>
-                                <td colspan="3"></td>
+                                <td colspan="4"></td>
                                 <td class="text-right"><b>Chargers {{ $model->payment_type->title }}</b></td>
                                 <td class="text-right">${{ $model->payment_charges }}</td>
                             </tr>
                             <tr>
-                                <td colspan="3"></td>
+                                <td colspan="4"></td>
                                 <td class="text-right"><b>Total</b></td>
                                 <td class="text-right">${{ $model->total_price }}</td>
                             </tr>
@@ -247,12 +261,12 @@
                         <td class="text-left">
                             Full name: {{ $model->first_name }} {{ $model->last_name }} <br/>
                             Email: {{ $model->email }} <br/>
-                            Telephone: {{ $model->telephone }} <br/>
-                            Address: {{ $model->address }} <br/>
-                            City: {{ $model->city }} <br/>
-                            Zip code: {{ $model->zip_code }} <br/>
-                            Country: {{ $model->country_name }} <br/>
-                            State province: {{ $model->state_name }} <br/>
+                            Telephone: {{ ($model->telephone) ? $model->telephone : "N/A" }} <br/>
+                            Address: {{ ($model->address) ? "$model->address" : "N/A"}} <br/>
+                            City: {{ ($model->city) ? $model->city : "N/A" }} <br/>
+                            Zip code: {{ ($model->zip_code) ? $model->zip_code : "N/A" }} <br/>
+                            Country: {{ ($model->country_name) ? $model->country_name : "N/A" }} <br/>
+                            State province: {{ ($model->state_name) ? $model->state_name : "N/A" }} <br/>
                         </td>
                         <td class="text-left">
                             Email: {{ $model->email }} <br/>
@@ -264,5 +278,5 @@
         </div>
     </div>
 
-
+    @include('admin::userOrders.modal.addKey');
 @stop

@@ -4,7 +4,7 @@
             <i class="fa fa-opencart"></i>
         </div>
         <div>
-            <h4>John Doe</h4>
+            <h4>Buy Premium Key</h4>
             <small>Administrator</small>
         </div>
     </div>
@@ -42,6 +42,18 @@
                 <li>
                     <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
                     <a href="{{ URL::route('config.seo.index') }}">SEO</a>
+                </li>
+            </ul>
+        </li>
+
+        <li id="menu-catalog">
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>Category</span></a>
+            <ul class="collapse">
+                <li>
+                    <a href="{{ URL::route('admin.categoryFaq.index') }}">Category FAQ</a>
+                </li>
+                <li>
+                    <a href="{{ URL::route('admin.faq.index') }}">Articles FAQ</a>
                 </li>
             </ul>
         </li>

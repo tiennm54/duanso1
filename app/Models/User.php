@@ -97,10 +97,8 @@ class User extends Model implements AuthenticatableContract,
 
 
     public function createUser($data){
-
         $obj_key = ShortId::create(array("length" => 7));
         $password = $obj_key->generate();
-
         $model = new User();
         $model->first_name = $data["first_name"];
         $model->last_name = $data["last_name"];
@@ -108,7 +106,6 @@ class User extends Model implements AuthenticatableContract,
         $model->password = Hash::make($password);
         $model->roles_id = 2; // memeber
         $model->save();
-
 
         $model_shipping_address = new UserShippingAddress();
         $model_shipping_address->user_id = $model->id;
@@ -120,17 +117,7 @@ class User extends Model implements AuthenticatableContract,
         $model_profile = new UserProfiles();
         $model_profile->users_id = $model->id;
         $model_profile->users_roles_id = $model->roles_id;
-        $model_profile->telephone = $data["telephone"];
-        $model_profile->street_address_01 = $data["address"];
-        $model_profile->street_address_02 = $data["address"];
-        $model_profile->city = $data["city"];
-        $model_profile->zip_code = $data["zip_code"];
-        $model_profile->state_province = $data["state_province"];
-        $model_profile->country = $data["country"];
-        $model_profile->country = $data["country"];
-
         $model_profile->save();
-
 
         $result = array(
             'user_id' => $model->id,
@@ -138,8 +125,6 @@ class User extends Model implements AuthenticatableContract,
         );
 
         return $result;
-
-
     }
 
 }

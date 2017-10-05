@@ -40,6 +40,29 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::post('edit/{id}', ['as' => 'category.postEdit', 'uses' => 'BackendCategoryController@postEdit']);
         Route::get('delete/{id}', ['as' => 'category.delete', 'uses' => 'BackendCategoryController@delete']);
     });
+
+    //CATEGORY FAQ
+    Route::group(['prefix' => 'category-faq'], function() {
+        Route::get('index', ['as' => 'admin.categoryFaq.index', 'uses' => 'BackendCategoryFaqController@index']);
+        Route::get('create', ['as' => 'admin.categoryFaq.getCreate', 'uses' => 'BackendCategoryFaqController@getCreate']);
+        Route::post('create', ['as' => 'admin.categoryFaq.postCreate', 'uses' => 'BackendCategoryFaqController@postCreate']);
+        Route::get('edit/{id}/{url?}', ['as' => 'admin.categoryFaq.getEdit', 'uses' => 'BackendCategoryFaqController@getEdit']);
+        Route::post('edit/{id}/{url?}', ['as' => 'admin.categoryFaq.postEdit', 'uses' => 'BackendCategoryFaqController@postEdit']);
+        Route::get('delete/{id}', ['as' => 'admin.categoryFaq.delete', 'uses' => 'BackendCategoryFaqController@delete']);
+    });
+
+
+    // FAQ
+    Route::group(['prefix' => 'faq'], function() {
+        Route::get('index/{category?}', ['as' => 'admin.faq.index', 'uses' => 'BackendFaqController@index']);
+        Route::get('create', ['as' => 'admin.faq.getCreate', 'uses' => 'BackendFaqController@getCreate']);
+        Route::post('create', ['as' => 'admin.faq.postCreate', 'uses' => 'BackendFaqController@postCreate']);
+        Route::get('edit/{id}/{url?}', ['as' => 'admin.faq.getEdit', 'uses' => 'BackendFaqController@getEdit']);
+        Route::post('edit/{id}/{url?}', ['as' => 'admin.faq.postEdit', 'uses' => 'BackendFaqController@postEdit']);
+        Route::get('delete/{id}', ['as' => 'admin.faq.delete', 'uses' => 'BackendFaqController@delete']);
+    });
+
+
     //PAYMENT TYPE
     Route::group(['prefix' => 'payment-type'], function() {
         Route::get('index', ['as' => 'paymentType.index', 'uses' => 'BackendPaymentTypeController@index']);
@@ -59,16 +82,19 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     Route::group(['prefix' => 'import'], function() {
         Route::get('import-key/{id?}', ['as' => 'import.getImport', 'uses' => 'ImportKeyController@getImport']);
         Route::post('import-key', ['as' => 'import.postImport', 'uses' => 'ImportKeyController@postImport']);
-
     });
 
-
+    //USER ORDER
     Route::group(['prefix' => 'user-orders'], function() {
         Route::get('list', ['as' => 'adminUserOrders.listOrders', 'uses' => 'AdminUserOrdersController@listOrders']);
         Route::get('view/{id}', ['as' => 'adminUserOrders.viewOrders', 'uses' => 'AdminUserOrdersController@viewOrders']);
         Route::post('sendKey/{id}/{email}', ['as' => 'adminUserOrders.sendKey', 'uses' => 'AdminUserOrdersController@sendKey']);
         Route::get('autoCompleteEmail', ['as' => 'adminUserOrders.autoCompleteEmail', 'uses' => 'AdminUserOrdersController@autoCompleteEmail']);
         Route::post('saveStatusPayment/{id}', ['as' => 'adminUserOrders.saveStatusPayment', 'uses' => 'AdminUserOrdersController@saveStatusPayment']);
+        
+        Route::get('add-premium-key/{product_id}/{order_detail_id}', ['as' => 'adminUserOrders.getAddPremiumKey', 'uses' => 'AdminUserOrdersController@getAddPremiumKey']);
+        Route::post('add-premium-key/{product_id}/{order_detail_id}', ['as' => 'adminUserOrders.postAddPremiumKey', 'uses' => 'AdminUserOrdersController@postAddPremiumKey']);
+        Route::post('delete-premium-key/{id}', ['as' => 'adminUserOrders.deletePremiumKey', 'uses' => 'AdminUserOrdersController@deletePremiumKey']);
     });
 
 

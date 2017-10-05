@@ -43,9 +43,11 @@
         }
 
         $( document ).ready(function() {
-            countCharactersSeoTitle();
-            countCharactersSeoDescription();
-            countCharactersSeoKeyword();
+            if ($(".seo-title")[0]) {
+                countCharactersSeoTitle();
+                countCharactersSeoDescription();
+                countCharactersSeoKeyword();
+            }
         });
     </script>
 

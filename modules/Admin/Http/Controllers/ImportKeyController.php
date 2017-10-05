@@ -17,9 +17,7 @@ class ImportKeyController extends Controller {
     }
 
     public function getImport($id = 0){
-
         $model = ArticlesType::find($id);
-
         return view('admin::import.import-key', compact('model'));
     }
 

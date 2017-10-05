@@ -75,7 +75,7 @@
             </ul>
         </li>
         <li>
-            <a href="">
+            <a href="{{ URL::route('users.getLogout') }}">
                 <span class="hidden-xs hidden-sm hidden-md">Logout</span> <i class="fa fa-sign-out fa-lg"></i>
             </a>
         </li>
