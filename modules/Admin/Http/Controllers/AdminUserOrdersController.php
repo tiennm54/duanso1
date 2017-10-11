@@ -41,130 +41,73 @@ class AdminUserOrdersController extends Controller {
         if (isset($data["start_created_at"]) && $data["start_created_at"] != "" && isset($data["end_created_at"]) && $data["end_created_at"] != "") {
             $model = $model->where("created_at", ">", $data["start_created_at"])->where("created_at", "<", $data["end_created_at"]);
         }
-
-
         $model = $model->paginate(20);
         return view('admin::userOrders.listOrders', compact('model'));
     }
 
+    //Xem thông tin chi tiết order
     public function viewOrders($id) {
         $model = UserOrders::find($id);
         if ($model) {
-            
-            foreach ($model->orders_detail as &$item){
-                $count_key = ArticlesTypeKey::where("articles_type_id","=",$item->articles_type_id)
-                        ->where("user_orders_detail_id","=",$item->id)
-                        ->where("user_orders_id","=",$model->id)
+
+            foreach ($model->orders_detail as &$item) {
+                $count_key = ArticlesTypeKey::where("articles_type_id", "=", $item->articles_type_id)
+                        ->where("user_orders_detail_id", "=", $item->id)
+                        ->where("user_orders_id", "=", $model->id)
+                        ->whereNotNull("key")->where("key", "!=", "")
                         ->count();
                 $item["count_key"] = $count_key;
             }
+
+            $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model->id)->get();
+
+
             $countryState = new CountryState();
             $countries = $countryState->getCountries();
-
             $countryState = new CountryState();
             $states = $countryState->getStates($model->country);
-
             $model["country_name"] = $countryState->findCountry($model->country, $countries);
             $model["state_name"] = $countryState->findState($model->state_province, $states);
-            return view('admin::userOrders.view', compact('model'));
+
+            $check_send_key = $this->checkKeyEnough($model);
+            $model["check_send_key"] = $check_send_key;
+
+
+
+            return view('admin::userOrders.view', compact('model', 'model_key'));
         }
     }
 
-    //PHAI KIEM TRA LAI
-    //Lấy key trên hệ thống và gửi đi cho khách hàng
-    public function getKeySend($model_orders, $model_order_detail) {
-        //Danh sách sản phẩm
-        $list_product = array();
-
-        foreach ($model_order_detail as $item) {
-            $product_id = $item->articles_type_id;
-            $product_quantity = $item->quantity;
-            for ($i = 0; $i < $product_quantity; $i++) {
-                $model_key = ArticlesTypeKey::where("articles_type_id", "=", $product_id)->where("status", "=", "active")->first();
-                if ($model_key) {
-                    $model_key->user_orders_detail_id = $model_order_detail->id;
-                    $model_key->user_id = $item->users_id;
-                    $model_key->status = "sent";
-                    $model_key->save();
-
-                    $tmp_content = array(
-                        "title" => $item->title,
-                        "price_order" => $item->price_order,
-                        "key" => $model_key->key
-                    );
-
-                    array_push($list_product, $tmp_content);
+    public function sendKey($id, Request $request) {
+        $model_orders = UserOrders::find($id);
+        if($model_orders){
+            $model_key = $this->getPremiumKeySend($model_orders);
+            if($model_key){
+                $check_send = $this->sendProductEmail($model_orders, $model_key);
+                if($check_send){
+                    $model_orders->payment_status = "completed";
+                    $model_orders->save();
+                    $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
+                    return back();
                 }
             }
         }
-
-        $model_orders->payment_status = "paid";
-        $model_orders->save();
-
-        return $list_product;
+        $request->session()->flash('alert-warning', 'Warning: Đã xảy ra lỗi !!!');
+        return back();
     }
 
     //Gửi mail sản phẩm tới khách hàng
-    public function sendProductEmail($model_orders, $list_product) {
-        Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'list_product' => $list_product], function ($m) use ($model_orders) {
-            $m->from("buypremiumkey@gmail.com", "Buy Premium Key");
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject('Send product for orders #' . $model_orders->id);
+    public function sendProductEmail($model_orders, $model_key) {
+        Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders) {
+            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey.Com");
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject('[BuyPremiumKey.Com] Send product for orders #' . $model_orders->order_no);
         });
 
-        if (count(Mail::failures()) > 0) {
+        if (count(Mail::failures()) > 0) { // gửi lỗi
             return 0;
         } else {
             return 1;
         }
-    }
-
-    //Func chính thực hiện chức năng gửi sản phẩm tới khách hàng qua email
-    public function sendKey($id, $email, Request $request) {
-        if (isset($request)) {
-            DB::beginTransaction();
-            $model_orders = UserOrders::find($id);
-            if ($model_orders) {
-                if ($model_orders->email == $email && $model_orders->payment_status == "pending") {
-                    //GET LIST KEY SẼ SENT
-                    $model_order_detail = UserOrdersDetail::where("user_orders_id", "=", $model_orders->id)->get();
-                    if (count($model_order_detail) != 0) {
-                        $flag = true;
-                        $string_product_error = "| ";
-                        foreach ($model_order_detail as $item) {
-
-                            $product_id = $item->articles_type_id;
-                            $product_quantity = $item->quantity;
-
-                            $check = ArticlesTypeKey::where("articles_type_id", "=", $product_id)->where("status", "=", "active")->count();
-                            if ($check < $product_quantity) {
-                                $flag = false;
-                                $string_product_error = $string_product_error . $item->articles_type->title . ' |';
-                            }
-                        }
-                        if ($flag == true) {
-                            //Send email + cap nhat trang thai orders
-                            $list_product = $this->getKeySend($model_orders, $model_order_detail);
-                            $check_email = $this->sendProductEmail($model_orders, $list_product);
-
-                            if ($check_email == 1) {
-                                DB::commit();
-                                $request->session()->flash('alert-success', 'Success: Đã gửi key thành công tới khách hàng!');
-                                return back();
-                            } else {
-                                $request->session()->flash('alert-warning', 'Warning: Không thể gửi sản phẩm tới địa chỉ email này!');
-                                return back();
-                            }
-                        } else {
-
-                            $request->session()->flash('alert-warning', 'Warning: Thiếu key cho sản phẩm: ' . $string_product_error);
-                            return back();
-                        }
-                    }
-                }
-            }
-        }
-        $request->session()->flash('alert-warning', 'Waring: Không đủ key hoặc đã xảy ra lỗi!');
-        return back();
     }
 
     public function autoCompleteEmail(Request $request) {
@@ -176,36 +119,17 @@ class AdminUserOrdersController extends Controller {
         }
     }
 
+    //Cần xem lại
     public function saveStatusPayment($id, Request $request) {
         if (isset($request)) {
             $data = $request->all();
             if (isset($data["payment_status"])) {
                 $model = UserOrders::find($id);
                 if ($model) {
-
-                    if ($data["payment_status"] == "paid") {
-                        $model->payment_status = $data["payment_status"];
-                        $model->save();
-                        $request->session()->flash('alert-success', 'Success: Cập nhật trạng thái đã thanh toán thành công');
-                        return back();
-                    } else {
-                        $model_detail = UserOrdersDetail::where("user_orders_id", "=", $id)->get();
-                        $list_orders_id = array();
-                        foreach ($model_detail as $item) {
-                            array_push($list_orders_id, $item->id);
-                        }
-
-                        $check_key = ArticlesTypeKey::whereIn("user_orders_detail_id", $list_orders_id)->count();
-                        if ($check_key == 0) {
-                            $model->payment_status = $data["payment_status"];
-                            $model->save();
-                            $request->session()->flash('alert-success', 'Success: Cập nhật trạng thái đã thanh toán thành công');
-                            return back();
-                        } else {
-                            $request->session()->flash('alert-warning', 'Warning: Không thể cập nhật trạng thái, Orders đã được xử lý');
-                            return back();
-                        }
-                    }
+                    $model->payment_status = $data["payment_status"];
+                    $model->save();
+                    $request->session()->flash('alert-success', 'Success: Cập nhật trạng thái đã thanh toán thành công');
+                    return back();
                 }
             }
         }
@@ -249,6 +173,8 @@ class AdminUserOrdersController extends Controller {
                     if ($count_key < $model_order_detail->quantity) {
                         $model_key = new ArticlesTypeKey();
                         $model_key->articles_type_id = $model_product->id;
+                        $model_key->articles_type_title = $model_product->title;
+                        $model_key->articles_type_price = $model_product->price_order;
                         $model_key->user_orders_detail_id = $model_order_detail->id;
                         $model_key->user_orders_id = $model->id;
                         $model_key->key = $data["premium_key"];
@@ -270,10 +196,10 @@ class AdminUserOrdersController extends Controller {
         return view('errors.503');
     }
 
-    public function deletePremiumKey($id, Request $request){
+    public function deletePremiumKey($id, Request $request) {
         $model = ArticlesTypeKey::find($id);
-        if($model){
-            if($model->status == "active"){
+        if ($model) {
+            if ($model->status == "active") {
                 $model->delete();
                 $request->session()->flash('alert-success', 'Success: Xóa Premium Key thành công !!! ');
                 return back();
@@ -281,6 +207,56 @@ class AdminUserOrdersController extends Controller {
         }
         $request->session()->flash('alert-warning', 'Warning: Bạn không thể xóa Premium Key này !!! ');
         return back();
+    }
+    
+    
+    //Lấy premium gửi cho khách
+    public function getPremiumKeySend($model_order){
+        if($model_order){
+            $check = $this->checkKeyEnough($model_order);
+            if ($check == 1) {//Nếu số key đã đủ để send cho khách
+                $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model_order->id)->get();
+                return $model_key;
+            }
+        }
+        return null;
+    }
+
+    //Kiểm tra số lượng key đã đủ để có thể gửi cho khách
+    public function checkKeyEnough($model_order) {
+        if ($model_order) {
+            $count_quantity = UserOrdersDetail::where("user_orders_id", "=", $model_order->id)->sum("quantity");
+            $count_key = ArticlesTypeKey::where("user_orders_id", "=", $model_order->id)
+                    ->whereNotNull("key")->where("key", "!=", "")
+                    ->count();
+
+            if ($count_quantity == $count_key) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+    public function savePremiumKey(Request $request) {
+        $data = $request->all();
+        if (isset($data["id"]) && isset($data["key"]) && $data["key"] != "") {
+            $id = $data["id"];
+            $key = $data["key"];
+            $model = ArticlesTypeKey::find($id);
+            if ($model) {
+                $model->key = $key;
+                $model->status = "active";
+                $model->save();
+                
+                $model_order = UserOrders::find($model->user_orders_id);
+                $check = $this->checkKeyEnough($model_order);
+                if ($check == 1) {
+                    return 1;
+                }
+                return 2;
+            }
+        }
+        return 0;
     }
 
 }

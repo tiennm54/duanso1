@@ -1,7 +1,6 @@
 @extends('backend.master')
 @section('content')
 
-
     <div class="page-header">
         <div class="container-fluid">
 
@@ -45,6 +44,9 @@
 
                 <div class="tab-content">
                     <div id="add-key" class="tab-pane fade in active">
+                        <div class="alert alert-success" style="display: none">
+
+                        </div>
                         @include('validator.flash-message')
                         <form action="" method="POST">
                             <div class="row">
@@ -67,7 +69,7 @@
                                 <tr>
                                     <th>Order no</th>
                                     <th>Product</th>
-                                    <th>Key</th>
+                                    <th width="40%">Key</th>
                                     <th>Status</th>
                                     <th>Created at</th>
                                     <th>Received User</th>
@@ -84,7 +86,10 @@
                                 <tr>
                                     <td>{{ ($item->getUserOrders) ?  $item->getUserOrders->order_no : "N/A"}}</td>
                                     <td>{{ $item->getProduct->title }}</td>
-                                    <td>{{ $item->key }}</td>
+                                    <td>
+                                        <input class="form-control" value="{{ $item->key }}" id="premium_key{{$item->id}}">
+                                    </td>
+
                                     <td class="{{ ($item->status == "active" ? "status-green" : "status-red") }}">{{ $item->status }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td>{{ ($item->user_email) ?  $item->user_email : "Chưa được nhận" }}</td>
@@ -94,6 +99,7 @@
                                                 <i class="fa fa-trash-o"></i>
                                             </button>
                                         </form>
+                                        <button class="btn btn-primary" onclick="savePremiumKey({{ $item }})"><i class="fa fa-save"></i></button>
                                     </td>
                                 </tr>
                                 <?php endforeach;?>
@@ -104,6 +110,7 @@
             </div>
         </div>
     </div>
+    @include('admin::userOrders.includes.js')
 
     <style>
         .status-green{

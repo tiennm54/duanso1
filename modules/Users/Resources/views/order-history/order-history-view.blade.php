@@ -11,7 +11,8 @@
             </ul>
 
             <div class="row">
-                <div id="content" class="col-sm-9"><h2>Order Information</h2>
+                <div id="content" class="col-sm-9">
+                    <h2>Order Information</h2>
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -21,13 +22,14 @@
                         <tbody>
                         <tr>
                             <td class="text-left" style="width: 50%;">
-                                <b>Order No:</b> <span style="color: #00A6C7; font-weight: bold">{{ $model->order_no }}</span><br>
-                                <b>Order ID:</b> #{{ $model->id }}<br>
-                                <b>Date Added:</b> {{ $model->created_at }}
+                                Order No: <span class="label label-default">{{ $model->order_no }}</span><br>
+                                Date Added: {{ $model->created_at }} <br>
+                                Order ID: #{{ $model->id }}
                             </td>
                             <td class="text-left" style="width: 50%;">
-                                <b>Payment Method:</b> {{ $model->payment_type->title }} <br>
-                                <b>Shipping Method:</b> Send by email.
+                                Orders Status: <span class="label label-primary">{{ $model->payment_status }}</span><br>
+                                Payment Method: {{ $model->payment_type->title }} <br>
+                                Shipping Method: Send by email.
                             </td>
                         </tr>
                         </tbody>
@@ -42,80 +44,37 @@
                         <tbody>
                         <tr>
                             <td class="text-left">
-                                Full name: {{ $model->first_name }} {{ $model->last_name }} <br/>
+                                Full name: <span class="label label-success">{{ $model->first_name }} {{ $model->last_name }}</span> <br/>
                                 Email: {{ $model->email }} <br/>
                             </td>
                             <td class="text-left">
-                                Email: {{ $model->email }} <br/>
+                                Email: <span class="label label-success">{{ $model->email }}</span> <br/>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <td class="text-left">Product Name</td>
-                                    <td class="text-left">Model</td>
-                                    <td class="text-right">Quantity</td>
-                                    <td class="text-right">Price</td>
-                                    <td class="text-right">Total</td>
-                                    <td style="width: 20px;"></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (count($model_order) == 0):?>
-                                    <tr>
-                                        <td class="text-left" colspan="6">Your shopping cart is empty!</td>
-                                    </tr>
-                                <?php endif;?>
-                                <?php if (count($model_order) > 0):?>
-                                    <?php foreach ($model_order as $item):?>
-                                    <tr>
-                                        <td class="text-left">{{ $item->articles_type->title }}</td>
-                                        <td class="text-left">{{ $item->articles_type->getArticles->title }}</td>
-                                        <td class="text-right">{{ $item->quantity }}</td>
-                                        <td class="text-right">${{ $item->price_order }}</td>
-                                        <td class="text-right">${{ $item->total_price }}</td>
 
-                                        <td class="text-right" style="white-space: nowrap;">
-                                            <a onclick="addToCart({{ $item->articles_type_id }})" data-toggle="modal" data-target="#myModal"
-                                               data-toggle="tooltip" title="Reorder" class="btn btn-primary" data-original-title="Reorder">
-                                                <i class="fa fa-shopping-cart"></i>
-                                            </a>
-                                            {{--<a href="" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Return">
-                                                <i class="fa fa-reply"></i>
-                                            </a>--}}
-                                        </td>
+                    <h2>Your Products</h2>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#list_order_product"><span style="font-size: 14px">Products</span></a></li>
+                        <li><a data-toggle="tab" href="#list_premium_key"><span style="font-size: 14px">Premium Key</span></a></li>
+                    </ul>
 
-                                    </tr>
-                                    <?php endforeach;?>
-                                <?php endif;?>
-                            </tbody>
+                    <div class="tab-content">
 
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3"></td>
-                                    <td class="text-right"><b>Sub-Total</b></td>
-                                    <td class="text-right">${{ $model->sub_total }}</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"></td>
-                                    <td class="text-right"><b>Chargers {{ $model->payment_type->title }}</b></td>
-                                    <td class="text-right">${{ $model->payment_charges }}</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="3"></td>
-                                    <td class="text-right"><b>Total</b></td>
-                                    <td class="text-right">${{ $model->total_price }}</td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
+                        <div id="list_order_product" class="tab-pane fade in active">
+                            <!--THONG TIN ĐƠN HÀNG-->
+                            @include('users::order-history.includes.list_product')
+                        </div>
 
-                        </table>
+                        <div id="list_premium_key" class="tab-pane fade">
+                            <!--THONG TIN CODE-->
+                            @include('users::order-history.includes.premium_key')
+                        </div>
+
                     </div>
+
+
 
                     <div class="buttons clearfix">
                         <div class="pull-right">

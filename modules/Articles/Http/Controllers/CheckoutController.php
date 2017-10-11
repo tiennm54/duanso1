@@ -11,6 +11,7 @@ use App\Models\TermsConditions;
 use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
 use App\Models\UserShippingAddress;
+use App\Models\ArticlesTypeKey;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -69,7 +70,7 @@ class CheckoutController extends ShoppingCartController {
         return $payment_charges;
     }
 
-    public function seoIndexCheckOut($model_seo){
+    public function seoIndexCheckOut($model_seo) {
         $url_page = URL::route('frontend.checkout.index');
         $image_page = url('theme_frontend/image/logo.png');
         SeoPage::createSeo($model_seo, $url_page, $image_page);
@@ -230,9 +231,9 @@ class CheckoutController extends ShoppingCartController {
         $model_user_orders->users_roles_id = $model_user->roles_id;
         $model_user_orders->first_name = $model_user->first_name;
         $model_user_orders->last_name = $model_user->last_name;
-        if(isset($data["shipping_address"])){
+        if (isset($data["shipping_address"])) {
             $model_user_orders->email = $data["shipping_address"];
-        }else{
+        } else {
             $model_user_orders->email = $model_user->email;
         }
 
@@ -261,8 +262,20 @@ class CheckoutController extends ShoppingCartController {
             $model_user_orders_detail->price_order = $item["price_order"];
             $model_user_orders_detail->total_price = $item["total"];
             $model_user_orders_detail->save();
+            for($i = 0; $i < $item["quantity"]; $i++){
+                $model_premium_key = new ArticlesTypeKey();
+                $model_premium_key->user_orders_id = $model_user_orders->id;
+                $model_premium_key->user_orders_detail_id = $model_user_orders_detail->id;
+                $model_premium_key->articles_type_id = $model_user_orders_detail->articles_type_id;
+                $model_premium_key->articles_type_title = $model_user_orders_detail->title;
+                $model_premium_key->articles_type_price = $model_user_orders_detail->price_order;
+                $model_premium_key->status = "none";
+                $model_premium_key->save();
+            }
         }
+        
         return $model_user_orders;
+        
     }
 
     //Thay đổi trạng thái shopping cart của khách hàng
@@ -273,7 +286,7 @@ class CheckoutController extends ShoppingCartController {
         $obj->emptySession();
     }
 
-    public function getConfirmOrder(Request $request){
+    public function getConfirmOrder(Request $request) {
         $request->session()->flash('alert-warning', 'Warning: Server error. Please come back later!');
         return redirect()->route('frontend.checkout.index');
     }
@@ -286,7 +299,7 @@ class CheckoutController extends ShoppingCartController {
             if (count($array_orders) > 0) {
 
                 $model_user = $this->checkMember();
-                if($model_user == null){
+                if ($model_user == null) {
                     $model_user = User::where("email", "=", $data["email"])->first();
                     if ($model_user == null) {// Không có mail trong bảng User
                         $check_user_shipping = UserShippingAddress::where("email", "=", $data["email"])->first();
