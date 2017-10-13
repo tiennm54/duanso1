@@ -26,7 +26,6 @@
 
                             <thead>
                                 <tr>
-                                    <td class="text-left">Order ID</td>
                                     <td class="text-left">Order No</td>
                                     <td class="text-center">Customer</td>
                                     <td class="text-center">No. of Products</td>
@@ -40,13 +39,12 @@
                             <tbody>
                                 <?php foreach ($model as $item): ?>
                                     <tr>
-                                        <td class="text-left" style="vertical-align: middle">#{{ $item->id }}</td>
                                         <td class="text-left" style="vertical-align: middle"><span class="label label-default">{{ $item->order_no }}</span></td>
                                         <td class="text-center" style="vertical-align: middle"><span class="label label-success">{{ $item->user->first_name }} {{ $item->user->last_name }}</span></td>
                                         <td class="text-center" style="vertical-align: middle">{{ $item->quantity_product }}</td>
                                         <td class="text-center" style="vertical-align: middle"><span class="label label-primary">{{ $item->payment_status }}</span></td>
                                         <td class="text-center" style="vertical-align: middle">${{ $item->total_price }}</td>
-                                        <td class="text-center" style="vertical-align: middle">{{ $item->created_at }}</td>
+                                        <td class="text-center" style="vertical-align: middle"><span class="label label-default">{{ $item->created_at }}</span></td>
                                         <td class="text-center" style="vertical-align: middle">
                                             <a href="{{ URL::route('users.orderHistoryView', ["id" => $item->id , "order_no" => $item->order_no ]) }}" data-toggle="tooltip" title="View Detail" class="btn btn-primary" data-original-title="View">
                                                 <i class="fa fa-eye"></i>
