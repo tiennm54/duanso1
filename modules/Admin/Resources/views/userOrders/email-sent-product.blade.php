@@ -64,7 +64,7 @@
                                                 <table cellpadding="0" cellspacing="0" border="0" width="100%">
                                                     <tr>
                                                         <td align="left" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
-                                                            <p><span style="font-weight: bold">{{ $item->articles_type_title }}</span>: <span style="color: darkgray">{{ $item->key }}</span></p>
+                                                            <p><span style="font-weight: bold">{{ $item->articles_type_title }}</span>: <span style="color: #7ca230">{{ $item->key }}</span></p>
 
                                                         </td>
                                                     </tr>
@@ -102,7 +102,7 @@
                                         <td style="padding: 0 0 10px 0;">
                                             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                                                 <tr>
-                                                    <td align="left" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">Charges ({{$model_orders->payment_type->title}})</td>
+                                                    <td align="left" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;"><b>Charges ({{$model_orders->payment_type->title}})</b></td>
                                                 </tr>
                                             </table>
                                         </td>
@@ -114,7 +114,7 @@
                                         <td style="padding: 0 0 10px 0;">
                                             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                                                 <tr>
-                                                    <td align="right" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">${{$model_orders->payment_charges}}</td>
+                                                    <td align="right" style="font-family: Arial, sans-serif; color: #7ca230; font-size: 16px; font-weight: bold;">${{$model_orders->payment_charges}}</td>
                                                 </tr>
                                             </table>
                                         </td>

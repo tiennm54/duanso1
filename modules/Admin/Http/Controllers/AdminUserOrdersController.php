@@ -80,13 +80,23 @@ class AdminUserOrdersController extends Controller {
 
     public function sendKey($id, Request $request) {
         $model_orders = UserOrders::find($id);
-        if($model_orders){
+        if ($model_orders) {
             $model_key = $this->getPremiumKeySend($model_orders);
-            if($model_key){
+            if ($model_key) {
                 $check_send = $this->sendProductEmail($model_orders, $model_key);
-                if($check_send){
+                if ($check_send) {
                     $model_orders->payment_status = "completed";
+                    $model_orders->payment_date = Carbon::now();
                     $model_orders->save();
+
+                    foreach ($model_key as $item) {
+                        $item->status = "sent";
+                        $item->date_sent = Carbon::now();
+                        $item->user_id = $model_orders->users_id;
+                        $item->user_email = $model_orders->email;
+                        $item->save();
+                    }
+
                     $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
                     return back();
                 }
@@ -98,9 +108,15 @@ class AdminUserOrdersController extends Controller {
 
     //Gửi mail sản phẩm tới khách hàng
     public function sendProductEmail($model_orders, $model_key) {
-        Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders) {
+       
+        $subject_email = '[BuyPremiumKey.Com] Send product(s) for orders #' . $model_orders->order_no;
+        if($model_orders->payment_status == "completed"){
+            $subject_email = '[BuyPremiumKey.Com] Resend product(s) for orders #' . $model_orders->order_no;
+        }
+        
+        Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders, $subject_email) {
             $m->from("buypremiumkey@gmail.com", "BuyPremiumKey.Com");
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject('[BuyPremiumKey.Com] Send product for orders #' . $model_orders->order_no);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
         });
 
         if (count(Mail::failures()) > 0) { // gửi lỗi
@@ -208,11 +224,10 @@ class AdminUserOrdersController extends Controller {
         $request->session()->flash('alert-warning', 'Warning: Bạn không thể xóa Premium Key này !!! ');
         return back();
     }
-    
-    
+
     //Lấy premium gửi cho khách
-    public function getPremiumKeySend($model_order){
-        if($model_order){
+    public function getPremiumKeySend($model_order) {
+        if ($model_order) {
             $check = $this->checkKeyEnough($model_order);
             if ($check == 1) {//Nếu số key đã đủ để send cho khách
                 $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model_order->id)->get();
@@ -247,7 +262,7 @@ class AdminUserOrdersController extends Controller {
                 $model->key = $key;
                 $model->status = "active";
                 $model->save();
-                
+
                 $model_order = UserOrders::find($model->user_orders_id);
                 $check = $this->checkKeyEnough($model_order);
                 if ($check == 1) {

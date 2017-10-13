@@ -75,7 +75,7 @@
                                 data-original-title="Import Key"><i class="glyphicon glyphicon-grain"></i>
                         </button>
                     </td>
-                    <td>Order No: <b>{{ $model->order_no }}</b></td>
+                    <td>Order No: <span class="label label-default">{{ $model->order_no }}</span></td>
                 </tr>
 
                 <tr>
@@ -84,7 +84,7 @@
                             <i class="glyphicon glyphicon-grain"></i>
                         </button>
                     </td>
-                    <td>Order ID: <b>#{{ $model->id }}</b></td>
+                    <td>Order ID: <span class="label label-default">#{{ $model->id }}</span></td>
                 </tr>
 
                 </tbody>
@@ -107,7 +107,14 @@
                 <tr>
                     <td>Quantity</td>
                     <td class="text-left">
-                        {{ $model_order_detail->quantity }}
+                        <span class="label label-default">{{ $model_order_detail->quantity }}</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Orders Status</td>
+                    <td class="text-left">
+                        <span class="label label-primary">{{ $model->payment_status }}</span>
                     </td>
                 </tr>
 

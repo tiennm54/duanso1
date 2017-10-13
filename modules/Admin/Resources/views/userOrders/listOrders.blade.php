@@ -66,6 +66,10 @@
                                         <option value="paid" {{ (app('request')->input('payment_status') == "paid") ? "selected" : "" }}>
                                             Paid
                                         </option>
+                                        
+                                        <option value="completed" {{ (app('request')->input('payment_status') == "completed") ? "selected" : "" }}>
+                                            Completed
+                                        </option>
                                     </select>
                                 </div>
                             </div>

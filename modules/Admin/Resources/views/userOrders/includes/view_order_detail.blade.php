@@ -106,6 +106,7 @@
                                     <select class="form-control" name="payment_status">
                                         <option value="pending" {{ ($model->payment_status == "pending") ? "selected" : "" }}>Pending</option>
                                         <option value="paid" {{ ($model->payment_status == "paid") ? "selected" : "" }}>Paid</option>
+                                        <option value="completed" {{ ($model->payment_status == "completed") ? "selected" : "" }}>Completed</option>
                                     </select>
                                 </div>
 
