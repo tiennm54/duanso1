@@ -16,7 +16,7 @@ class ReviewProductRequest extends Request {
             'email' => 'required|email',
             'description' => 'required|min:20',
             'rating' => 'required',
-            //'g-recaptcha-response' => 'required|captcha'
+            'g-recaptcha-response' => 'required|captcha'
         ];
     }
 

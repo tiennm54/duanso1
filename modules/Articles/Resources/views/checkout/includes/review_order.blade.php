@@ -67,7 +67,7 @@
 
 
             <label class="checkbox-inline">
-                <input type="checkbox" value="1" required name="check_term">
+                <input type="checkbox" value="1" name="check_term" required id="termsConditions">
                 <a style="color: black; cursor: pointer" data-toggle="modal" data-target="#termsConditions">I've read and agree the Terms and Conditions</a>
             </label>
 

@@ -45,11 +45,12 @@
 
             <div class="form-group col-md-12">
                 <label>Email <span class="input-require"> *</span></label>
-                <input type="email" class="form-control" placeholder="Email"
+                <input type="email" class="form-control" placeholder="Email" id="user_orders_email"
                        name="email"
-                       value="{!! old('last_name',isset($model_user) ? $model_user->email : null) !!}"
+                       value="{!! old('email',isset($model_user) ? $model_user->email : null) !!}"
                        <?php if ($model_user){ echo "disabled"; } ?>
                        required>
+                {!! $errors->first('email','<span class="control-label color-red" style="color: red">*:message</span>') !!}
             </div>
         <?php }?>
 

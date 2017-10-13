@@ -42,7 +42,7 @@ class ContactController extends Controller  {
 
             Mail::send('users::email.email-contact', ['user' => $data], function ($m) use ($data) {
                 $m->from($data["email"], $data["email"]);
-                $m->to("buypremiumkey@gmail.com", "Buy Premium Key")->subject('[BuyPremiumKey.Com] Contact');
+                $m->to("buypremiumkey@gmail.com", "BuyPremiumKey Contact")->subject('[BuyPremiumKey.Com] Contact of Customer');
             });
 
 //            Mail::send('users::email.email-contact-member', ['user' => $data], function ($m) use ($data) {

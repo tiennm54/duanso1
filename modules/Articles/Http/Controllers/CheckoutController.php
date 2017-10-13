@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Session;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Http\Request;
 use Modules\Articles\Http\Requests\CreateRequest;
+use Modules\Articles\Http\Requests\CheckoutRequest;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use DougSisk\CountryState\CountryState;
 use Response;
@@ -36,8 +37,8 @@ use App\Helpers\SeoPage;
 class CheckoutController extends ShoppingCartController {
 
     //Gửi mail có khách orders
-    public function sendMail($model_orders, $password) {
-        Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'password' => $password], function ($m) use ($model_orders) {
+    public function sendMail($model_orders, $model_user, $password) {
+        Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user,'password' => $password], function ($m) use ($model_orders) {
             $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject('[Paypal payment] Paypal Invoice for Order #' . $model_orders->order_no);
         });
@@ -45,8 +46,8 @@ class CheckoutController extends ShoppingCartController {
 
     public function sendMailToMe($model_orders) {
         Mail::send('articles::checkout.email-checkout-me', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
-            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
-            $m->to("minhtienuet@gmail.com", "Minh Tiến")->subject('[Payment Request] Order Customer: #' . $model_orders->order_no);
+            $m->from("buypremiumkey@gmail.com", "Order of Customer");
+            $m->to("minhtienuet@gmail.com", "Minh Tiến")->subject('[Payment Request] Orders of Customer: #' . $model_orders->order_no);
         });
     }
 
@@ -234,7 +235,13 @@ class CheckoutController extends ShoppingCartController {
         if (isset($data["shipping_address"])) {
             $model_user_orders->email = $data["shipping_address"];
         } else {
-            $model_user_orders->email = $model_user->email;
+            if (isset($data["email"])) {
+                $model_user_orders->email = $data["email"];
+                $model_user_orders->first_name = $data["first_name"];
+                $model_user_orders->last_name = $data["last_name"];
+            } else {
+                $model_user_orders->email = $model_user->email;
+            }
         }
 
         $model_user_orders->payments_type_id = $data["payments_type_id"];
@@ -262,7 +269,7 @@ class CheckoutController extends ShoppingCartController {
             $model_user_orders_detail->price_order = $item["price_order"];
             $model_user_orders_detail->total_price = $item["total"];
             $model_user_orders_detail->save();
-            for($i = 0; $i < $item["quantity"]; $i++){
+            for ($i = 0; $i < $item["quantity"]; $i++) {
                 $model_premium_key = new ArticlesTypeKey();
                 $model_premium_key->user_orders_id = $model_user_orders->id;
                 $model_premium_key->user_orders_detail_id = $model_user_orders_detail->id;
@@ -273,9 +280,8 @@ class CheckoutController extends ShoppingCartController {
                 $model_premium_key->save();
             }
         }
-        
+
         return $model_user_orders;
-        
     }
 
     //Thay đổi trạng thái shopping cart của khách hàng
@@ -291,7 +297,7 @@ class CheckoutController extends ShoppingCartController {
         return redirect()->route('frontend.checkout.index');
     }
 
-    public function confirmOrder(Request $request) {
+    public function confirmOrder(CheckoutRequest $request) {
         if (isset($request)) {
             DB::beginTransaction();
             $data = $request->all();
@@ -325,7 +331,7 @@ class CheckoutController extends ShoppingCartController {
                 DB::commit();
                 if ($model_orders) {
                     $this->changeStatusAfterCheckout($model_user);
-                    $this->sendMail($model_orders, $password);
+                    $this->sendMail($model_orders, $model_user, $password);
                     $this->sendMailToMe($model_orders);
                     return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
                 }

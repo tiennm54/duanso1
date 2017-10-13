@@ -12,6 +12,7 @@ use Hash;
 use Mockery\CountValidator\Exception;
 use Modules\Users\Http\Requests\LoginRequest;
 use Modules\Users\Http\Requests\RegisterRequest;
+use Modules\Users\Http\Requests\EmailRequest;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Support\Facades\Session;
 use App\Models\UserShoppingCart;
@@ -50,7 +51,7 @@ class ShippingAddressController extends CheckMemberController  {
         }
     }
 
-    public function addShippingAddress(Request $request){
+    public function addShippingAddress(EmailRequest $request){
         $model_user = $this->checkMember();
         if ($model_user) {
             if (isset($request)){

@@ -19,7 +19,11 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <input type="email" class="form-control border-input" placeholder="Email" name="email" required/>
+                                        <input type="email" class="form-control border-input" 
+                                               placeholder="Email" name="email" 
+                                               value="{!! old('email') !!}"
+                                               required/>
+                                        {!! $errors->first('email','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                                     </div>
                                 </div>
 

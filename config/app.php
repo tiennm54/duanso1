@@ -212,6 +212,7 @@ return [
         // or
         'SEO' => Artesaos\SEOTools\Facades\SEOTools::class,
         'SeoPage' => 'App\Helpers\SeoPage',
+        'MinhTien' => 'App\Helpers\MinhTien',
     ],
 
 ];

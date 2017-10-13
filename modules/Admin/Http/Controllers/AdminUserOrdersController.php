@@ -115,7 +115,7 @@ class AdminUserOrdersController extends Controller {
         }
         
         Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders, $subject_email) {
-            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey.Com");
+            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
         });
 

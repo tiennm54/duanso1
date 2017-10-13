@@ -1,8 +1,8 @@
 <?php
-namespace Modules\Users\Http\Requests;
+namespace Modules\Articles\Http\Requests;
 use App\Http\Requests\Request;
 
-class ContactRequest extends Request {
+class CheckoutRequest extends Request {
 
     public function authorize()
     {
@@ -12,10 +12,9 @@ class ContactRequest extends Request {
     public function rules()
     {
         return [
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|email',
-            'enquiry' => 'required|min:20',
-            'g-recaptcha-response' => 'required|captcha'
         ];
     }
 
