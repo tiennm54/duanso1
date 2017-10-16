@@ -134,8 +134,17 @@ class AdminUserOrdersController extends Controller {
             return response()->json($data);
         }
     }
+    
+    
+    public function sendMailPaid($model_orders){
+        $subject_email = '[BuyPremiumKey.Com] Orders #'.$model_orders->order_no.' Information';
+        Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+        });
+    }
 
-    //Cần xem lại
+        //Thay đổi trạng thái order
     public function saveStatusPayment($id, Request $request) {
         if (isset($request)) {
             $data = $request->all();
@@ -144,6 +153,11 @@ class AdminUserOrdersController extends Controller {
                 if ($model) {
                     $model->payment_status = $data["payment_status"];
                     $model->save();
+                    
+                    if($data["payment_status"] == 'paid'){
+                        $this->sendMailPaid($model);
+                    }
+                    
                     $request->session()->flash('alert-success', 'Success: Cập nhật trạng thái đã thanh toán thành công');
                     return back();
                 }
