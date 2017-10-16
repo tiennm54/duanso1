@@ -54,3 +54,9 @@ Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controller
     Route::get('contact-us', ['as' => 'users.contact.getContact', 'uses' => 'ContactController@getContact']);
     Route::post('contact-us', ['as' => 'users.contact.postContact', 'uses' => 'ContactController@postContact']);
 });
+
+
+Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controllers'], function() {
+    Route::get('get-premium-key.html', ['as' => 'users.guestOrder.guestGetKey', 'uses' => 'UserGetKeyController@guestGetKey']);
+    Route::post('get-premium-key.html', ['as' => 'users.guestOrder.postGuestGetKey', 'uses' => 'UserGetKeyController@postGuestGetKey']);
+});

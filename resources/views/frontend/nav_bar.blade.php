@@ -11,10 +11,25 @@
                 <li>
                     <a href="{{ URL::route('frontend.articles.index') }}">Home</a>
                 </li>
+
                 <li>
                     <a href="{{ URL::route('users.contact.getContact') }}">Contact</a>
                 </li>
+                <?php if (!Auth::check()):?>
 
+                    <li>
+                        <a href="{{ URL::route('users.guestOrder.guestGetKey') }}">Get Key</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ URL::route('users.getLogin') }}">Login</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ URL::route('users.getRegister') }}">Register</a>
+                    </li>
+
+                <?php endif;?>
             </ul>
         </div>
     </nav>
