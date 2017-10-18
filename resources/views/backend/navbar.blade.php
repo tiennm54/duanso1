@@ -13,51 +13,6 @@
             <a href="#">
                 <i class="fa fa-dashboard fw"></i> <span>Dashboard</span></a>
         </li>
-        <li id="menu-catalog">
-            <a class="parent"><i class="fa fa-tags fw"></i> <span>Catalog</span></a>
-            <ul class="collapse">
-                <li>
-                    <a href="{{ URL::route('articles.index') }}">Products</a>
-                </li>
-                <li>
-                    <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
-                </li>
-
-                <li>
-                    <!--Các thông tin về điều lệ và thông tin website
-                        + About Us
-                        + Delivery Information
-                        + Privacy Policy
-                        + Terms & Conditions
-                    --->
-                    <a href="{{ URL::route('admin.information.index') }}">Information</a>
-                </li>
-
-
-                <li>
-                    <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
-                    <a href="#">Reviews</a>
-                </li>
-
-                <li>
-                    <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
-                    <a href="{{ URL::route('config.seo.index') }}">SEO</a>
-                </li>
-            </ul>
-        </li>
-
-        <li id="menu-catalog">
-            <a class="parent"><i class="fa fa-tags fw"></i> <span>Category</span></a>
-            <ul class="collapse">
-                <li>
-                    <a href="{{ URL::route('admin.categoryFaq.index') }}">Category FAQ</a>
-                </li>
-                <li>
-                    <a href="{{ URL::route('admin.faq.index') }}">Articles FAQ</a>
-                </li>
-            </ul>
-        </li>
-
 
         <li id="menu-sale">
             <a class="parent"><i class="fa fa-shopping-cart fw"></i> <span>Sales</span></a>
@@ -74,6 +29,55 @@
                 </li>
             </ul>
         </li>
+
+        <li id="menu-catalog">
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>Catalog</span></a>
+            <ul class="collapse">
+                <li>
+                    <a href="{{ URL::route('articles.index') }}">Products</a>
+                </li>
+                <li>
+                    <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
+                </li>
+                <li>
+                    <a href="{{ URL::route('admin.information.index') }}">Information</a>
+                </li>
+                <li>
+                    <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
+                    <a href="#">Reviews</a>
+                </li>
+
+                <li>
+                    <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
+                    <a href="{{ URL::route('config.seo.index') }}">SEO</a>
+                </li>
+            </ul>
+        </li>
+
+        <li id="menu-category">
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>Category</span></a>
+            <ul class="collapse">
+                <li>
+                    <a href="{{ URL::route('admin.categoryFaq.index') }}">Category FAQ</a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li id="menu-articles">
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>Articles</span></a>
+            <ul class="collapse">
+                <li>
+                    <a href="{{ URL::route('admin.faq.index') }}">FAQs</a>
+                </li>
+                <li>
+                    <a href="{{ URL::route('admin.news.index') }}">News</a>
+                </li>
+            </ul>
+        </li>
+
+
+
 
         <li id="menu-customer">
             <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>

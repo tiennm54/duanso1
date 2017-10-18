@@ -67,7 +67,7 @@
 
 
             <label class="checkbox-inline">
-                <input type="checkbox" value="1" name="check_term" required id="termsConditions">
+                <input type="checkbox" value="1" name="check_term" required id="cb-terms" checked>
                 <a style="color: black; cursor: pointer" data-toggle="modal" data-target="#termsConditions">I've read and agree the Terms and Conditions</a>
             </label>
 
@@ -78,3 +78,5 @@
 
     </div>
 </div>
+
+@include('articles::modal.termsConditions')

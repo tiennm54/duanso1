@@ -29,7 +29,7 @@
     </div>
 </div>
 
-@include('articles::modal.termsConditions')
+
 
 <script>
 
@@ -43,7 +43,7 @@
         var $this = $(this);
         $this.button('loading');
 
-        var termsConditions = $("#termsConditions").is(':checked');
+        var termsConditions = $("#cb-terms").is(':checked');
         console.log("terms: " + termsConditions);
         var checkEmail = validateEmail($("#user_orders_email").val());
         console.log("email: " + checkEmail);
