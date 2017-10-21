@@ -13,8 +13,8 @@
                 <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive">
             </div>
             <div class="col-md-8">
-                <h1 style="margin-top: 0px;">{{ $model->title }} Premium Key</h1>
-                <p style="color: red">Paypal payment method will charge 10-15% fee & Take 24 hours to delivery!</p>
+                <h1 style="margin-top: 0px;">{{ $model->title }} Premium Key |   We Are Best Official Reseller {{ $model->title }} Premium Key/Account</h1>
+                <p style="color: red">Paypal payment method will charge 10-15% fee & Take 24 hours to delivery! Thank you so much!</p>
             </div>
         </div>
         <hr/>

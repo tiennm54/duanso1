@@ -42,16 +42,6 @@
 
                         <div id="general" class="tab-pane fade  in active">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Category</label>
-                                        <select class="form-control border-input" name="int_category">
-                                            <?php foreach ($model_cate as $item):?>
-                                            <option value="<?php echo $item->id; ?>" <?php if($model->category_id == $item->id){ echo "selected"; } ?>><?php echo $item->name; ?></option>
-                                            <?php endforeach;?>
-                                        </select>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-4">
                                     <div class="form-group">
