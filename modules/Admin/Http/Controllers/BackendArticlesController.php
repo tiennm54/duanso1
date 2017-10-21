@@ -76,7 +76,7 @@ class BackendArticlesController extends Controller {
             $model->title = $request->txt_title;
             $model->code = $request->txt_code;
             $model->url_title = str_slug($request->txt_title, '-').'-'.'premium-key-reseller';
-            $model->category_id = $request->int_category;
+            //$model->category_id = $request->int_category;
             $model->status_stock = $request->int_instock;
 
             if(isset($request->txt_brand)){
@@ -138,7 +138,7 @@ class BackendArticlesController extends Controller {
                 $model->title = $request->txt_title;
                 $model->code = $request->txt_code;
 
-                $model->category_id = $request->int_category;
+                //$model->category_id = $request->int_category;
                 $model->status_stock = $request->int_instock;
 
                 /*if (isset($request->txt_url_title)) {

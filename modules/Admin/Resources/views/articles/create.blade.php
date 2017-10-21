@@ -43,16 +43,6 @@
                                 <div class="tab-content">
                                     <div id="general" class="tab-pane fade  in active">
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Category</label>
-                                                    <select class="form-control border-input" name="int_category">
-                                                        <?php foreach ($model_cate as $item):?>
-                                                        <option value="<?php echo $item->id; ?>"><?php echo $item->name; ?></option>
-                                                        <?php endforeach;?>
-                                                    </select>
-                                                </div>
-                                            </div>
 
                                             <div class="col-md-4">
                                                 <div class="form-group">
@@ -104,8 +94,8 @@
                                         <div class="row">
                                             <div class="col-md-9">
                                                 <div class="form-group">
-                                                    <label for="exampleInputEmail1">SEO Title</label>
-                                                    <input type="text" class="form-control border-input" placeholder="SEO Title..." name="txt_seo_title">
+                                                    <label for="exampleInputEmail1">SEO Title (<span class="count-seo-title"></span>)/65-70</label>
+                                                    <input type="text" class="form-control border-input seo-title" onkeyup="countCharactersSeoTitle()" placeholder="SEO Title..." name="txt_seo_title">
                                                 </div>
                                             </div>
                                         </div>
@@ -113,8 +103,8 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="exampleInputEmail1">SEO Description</label>
-                                                    <textarea class="form-control border-input" name="txt_seo_description" rows="5"></textarea>
+                                                    <label for="exampleInputEmail1">SEO Description (<span class="count-seo-des"></span>)/120-160</label>
+                                                    <textarea class="form-control border-input seo-des" name="txt_seo_description" onkeyup="countCharactersSeoDescription()" rows="5"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,8 +112,8 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label>SEO Keyword</label>
-                                                    <textarea class="form-control border-input" name="txt_seo_keyword" rows="5"></textarea>
+                                                    <label>SEO Keyword (<span class="count-seo-keyword"></span>)</label>
+                                                    <textarea class="form-control border-input seo-keyword" onkeyup="countCharactersSeoKeyword()" name="txt_seo_keyword" rows="5"></textarea>
                                                 </div>
                                             </div>
                                         </div>

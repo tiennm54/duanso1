@@ -3,13 +3,6 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            <label>Category: </label>
-            <span>{{ $model->getCategory->name }}</span>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="form-group">
             <label>Stock: </label>
             <?php if ($model->status_stock == 1){ ?>
             <span style="color: blue">In Stock</span>

@@ -9,10 +9,6 @@
             <button id="addMore" class="btn btn-primary">Add more fields</button>
         </div>
     </div>
-
-    <div class="col-md-4">
-        <button id="clone-specification" class="btn btn-primary">Clone Specification</button>
-    </div>
 </div>
 
 <script>
@@ -25,18 +21,4 @@
         });
     });
 
-    function cloneSpecification(id) {
-//        var token = $("#_token").val();
-//        $.ajax({
-//            type: 'POST',
-//            url: "<?php echo URL::route('frontend.shoppingCart.addToCart') ?>",
-//            data: {"product_id": id, "_token": token},
-//            success: function (data) {
-//                $("#list_order").html(data);
-//            },
-//            error: function (ex) {
-//
-//            }
-//        });
-    }
 </script>
