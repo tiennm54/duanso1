@@ -42,13 +42,8 @@ class ContactController extends Controller  {
 
             Mail::send('users::email.email-contact', ['user' => $data], function ($m) use ($data) {
                 $m->from($data["email"], $data["email"]);
-                $m->to("buypremiumkey@gmail.com", "BuyPremiumKey Contact")->subject('[BuyPremiumKey.Com] Contact of Customer');
+                $m->to("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller")->subject('[BuyPremiumKey.Com] Contact by customer');
             });
-
-//            Mail::send('users::email.email-contact-member', ['user' => $data], function ($m) use ($data) {
-//                $m->from("buypremiumkey@gmail.com", "Buy Premium Key");
-//                $m->to($data["email"], $data["name"])->subject('[BuyPremiumKey.Com] Your Contact');
-//            });
 
             $request->session()->flash('alert-success', ' Success: You have successfully sent your contact enquiry');
             return redirect()->route('users.contact.getContact');

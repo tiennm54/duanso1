@@ -45,6 +45,16 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
+                                        <label>Disable</label>
+                                        <select class="form-control border-input" name="status_disable">
+                                            <option value="0" <?php if($model->status_disable == 0){ echo "selected"; } ?>>Show</option>
+                                            <option value="1" <?php if($model->status_disable == 1){ echo "selected"; } ?>>Hide</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
                                         <label>Stock</label>
                                         <select class="form-control border-input" name="int_instock">
                                             <option value="1" <?php if($model->status_stock == 1){ echo "selected"; } ?>>In Stock</option>
@@ -52,9 +62,6 @@
                                         </select>
                                     </div>
                                 </div>
-
-
-
 
                             </div>
                             <div class="row">

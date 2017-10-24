@@ -10,11 +10,10 @@
 
         <div class="row">
             <div class="col-md-4">
-                <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive">
+                <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive" style="width: 100%">
             </div>
             <div class="col-md-8">
-                <h1 style="margin-top: 0px;">{{ $model->title }} Premium Key |   We Are Best Official Reseller {{ $model->title }} Premium Key/Account</h1>
-                <p style="color: red">Paypal payment method will charge 10-15% fee & Take 24 hours to delivery! Thank you so much!</p>
+                <h1 style="margin-top: 0px;"><span style="color: #337ab7">Buy {{ $model->title }} Premium Key</span> - BuyPremiumKey Are Best Official Reseller {{ $model->title }} Premium</h1>
             </div>
         </div>
         <hr/>

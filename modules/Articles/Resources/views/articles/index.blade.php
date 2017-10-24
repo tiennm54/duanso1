@@ -19,12 +19,18 @@
 								<div class="image">
 									<a href="{{ URL::route('frontend.articles.pricing', ['id' => $item->id, 'url' => $item->url_title.".html" ]) }}">
 										<img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" title="{{ $item->title }}"
-											 class="img-responsive">
+											 class="img-responsive" style="width: 100%">
 									</a>
 								</div>
 							</div>
 						</div>
 					<?php endforeach; ?>
+				</div>
+
+				<div class="row">
+					<div class="text-center">
+						<a href="{{ URL::route('frontend.articles.getListProduct') }}" class="btn btn-primary">Show List Product</a>
+					</div>
 				</div>
 
 

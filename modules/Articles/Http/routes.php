@@ -3,6 +3,7 @@
 Route::group(['prefix' => '', 'namespace' => 'Modules\Articles\Http\Controllers'], function()
 {
     Route::get('/',['as'=>'frontend.articles.index','uses'=>'ArticlesController@index']);
+    Route::get('list-product.html',['as'=>'frontend.articles.getListProduct','uses'=>'ArticlesController@getListProduct']);
     Route::get('premium-key-reseller-{id?}/{url?}',['as'=>'frontend.articles.pricing','uses'=>'ArticlesController@pricing']);
     Route::get('premium-key-view-{id?}/{url?}',['as'=>'frontend.articles.view','uses'=>'ArticlesDetailController@view']);
     Route::get('premium-key-reseller/search',['as'=>'frontend.articles.getSearch','uses'=>'ArticlesController@getSearch']);

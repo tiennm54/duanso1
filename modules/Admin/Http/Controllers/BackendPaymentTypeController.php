@@ -34,6 +34,7 @@ class BackendPaymentTypeController extends Controller {
             $model->status_disable = $request->int_status_disable;
             $model->position = $request->txt_position;
             $model->fees = $request->txt_fees;
+            $model->plus = $request->txt_plus;
 
             if (isset($request->txt_description)){
                 $model->description = $request->txt_description;
@@ -78,6 +79,7 @@ class BackendPaymentTypeController extends Controller {
                 $model->status_disable = $request->int_status_disable;
                 $model->position = $request->txt_position;
                 $model->fees = $request->txt_fees;
+                $model->plus = $request->txt_plus;
 
                 if (isset($request->txt_description)){
                     $model->description = $request->txt_description;
@@ -99,9 +101,7 @@ class BackendPaymentTypeController extends Controller {
 
                 $model->save();
                 DB::commit();
-
-                return redirect()->route('paymentType.index');
-
+                return back();
             }
         }
         return view('errors.503');

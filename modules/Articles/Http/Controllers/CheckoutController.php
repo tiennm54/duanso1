@@ -322,6 +322,7 @@ class CheckoutController extends ShoppingCartController {
                     $user_id = $result["user_id"];
                     $password = $result["password"];
                     $model_user = User::find($user_id);
+                    //BẢO MẬT NÊN KHÔNG ĐƯỢC DI CHUYỂN KHỎI IF NÀY
                     //Chỉ user new mới được login, bởi cần tính bảo mật trong trường hợp người dùng điền bừa email
                     Auth::loginUsingId($model_user->id);
                     Session::set('user_email_login', $model_user->email);

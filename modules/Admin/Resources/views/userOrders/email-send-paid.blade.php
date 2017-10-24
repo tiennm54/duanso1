@@ -13,14 +13,14 @@
                     <!-- COPY -->
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding-top: 30px;" class="padding-copy">Buy Premium Key</td>
+                            <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding-copy">Buy Premium Key</td>
                         </tr>
                         <tr>
                             <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
 
                                 <p>
-                                    We already received your payment. You will be received your premium key/account within 6 hours.
+                                    We already received your payment. You will be received your premium key/account within 6->8 hours.
                                     We're sorry for the delay in delivery.
                                 </p>
 

@@ -7,6 +7,7 @@ use App\Models\ArticlesType;
 use App\Models\PaymentType;
 use App\Models\Seo;
 use App\Models\TermsConditions;
+use Log;
 use Illuminate\Support\Facades\Session;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Http\Request;
@@ -34,8 +35,17 @@ class ArticlesController extends Controller {
         if ($model_seo) {
             $this->seoIndex($model_seo);
         }
-        $model = Articles::orderBy("position", "ASC")->get();
+        $model = Articles::where("status_disable","=",0)->orderBy("position", "ASC")->get();
         return view('articles::articles.index', compact("model"));
+    }
+
+    public function getListProduct() {
+        $model_seo = Seo::where("type", "=", "index")->first();
+        if ($model_seo) {
+            $this->seoIndex($model_seo);
+        }
+        $model = Articles::where("status_disable","=",0)->orderBy("position", "ASC")->get();
+        return view('articles::articles.index_list_product', compact("model"));
     }
 
     public function seoPricing($model){
@@ -78,6 +88,10 @@ class ArticlesController extends Controller {
             $keyword = $data["keyword"];
             if ($keyword != "") {
                 $keyword = preg_replace('/[^a-zA-Z0-9 ]/', '', $keyword);
+                $model = Articles::where("title", "LIKE", "%" . $keyword . "%")->orderBy("position", "ASC")->get();
+                if(count($model) == 0){
+                    $keyword = str_replace(' ', '', $keyword);
+                }
                 $model = Articles::where("title", "LIKE", "%" . $keyword . "%")->orderBy("position", "ASC")->get();
                 return view('articles::articles.index', compact("model"));
             }

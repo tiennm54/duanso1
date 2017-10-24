@@ -41,8 +41,8 @@
                                     <b>Notice: please read carefully before you make the payment</b>
                                 <ul>
                                     <li>1. Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)</li>
-                                    <li>2. Your keys/vouchers/account will be delivery within 1-3 hours. If you can not wait, please do not make the payment.</li>
-                                    <li>3. If you do not receive premium in maximum 6 hours => Please contact us first, do not open the disputed!</li>
+                                    <li>2. Your keys/vouchers/account will be delivery within 2-6 hours. If you can not wait, please do not make the payment.</li>
+                                    <li>3. If you do not receive premium in maximum 12 hours => Please contact us first, do not open the disputed!</li>
                                     <li>4. Your premium key/account will be deilivery by email from buypremiumkey@gmail.com . Please make sure to check your Inbox and Spam(Junk) box to get the key/account.</li>
                                 </ul>
                                 </p>

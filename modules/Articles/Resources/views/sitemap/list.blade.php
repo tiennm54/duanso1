@@ -5,6 +5,10 @@
     </url>
 
     <url>
+        <loc>{{ URL::route('frontend.articles.getListProduct') }}</loc>
+    </url>
+
+    <url>
         <loc>{{ URL::route('frontend.checkout.index') }}</loc>
     </url>
 

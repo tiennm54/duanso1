@@ -24,7 +24,7 @@
 </div>
 <?php }else{?>
     <p>Please wait! Your payment is processing.</p>
-    <p>After paid if you do not receive premium in maximum 8 hours, please contact us: <span style="font-weight: bold"><a href="mailto:buypremiumkey.com@gmail.com">buypremiumkey.com@gmail.com</a></span>. We will check again and send you the premium key/account</p>
+    <p>After paid if you do not receive premium in maximum 12 hours, please contact us: <span style="font-weight: bold"><a href="mailto:buypremiumkey.com@gmail.com">buypremiumkey.com@gmail.com</a></span>. We will check again and send you the premium key/account</p>
     <p>Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.</p>
     <p>Thanks in advance,</p>
     <b>Reseller Team</b>

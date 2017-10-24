@@ -99,30 +99,30 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td width="30%">Status</td>
+                        <td width="20%">Status</td>
                         <td class="text-right col-md-12">
                             <form method="post" action="{{ URL::route('adminUserOrders.saveStatusPayment',['id'=>$model->id] ) }}">
-                                <div class="col-md-9">
-                                    <select class="form-control" name="payment_status">
+                                <div class="col-md-8" style="float: left">
+                                    <select class="form-control" name="payment_status" style="width: 120px">
                                         <option value="pending" {{ ($model->payment_status == "pending") ? "selected" : "" }}>Pending</option>
                                         <option value="paid" {{ ($model->payment_status == "paid") ? "selected" : "" }}>Paid</option>
                                         <option value="completed" {{ ($model->payment_status == "completed") ? "selected" : "" }}>Completed</option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-3">
-                                    <button class="btn btn-primary btn-xs" data-toggle="confirmation" data-placement="left">Save</button>
+                                <div class="col-md-4">
+                                    <button class="btn btn-primary" data-toggle="confirmation" data-placement="left">Save</button>
                                 </div>
                             </form>
                         </td>
                     </tr>
                     <tr>
-                        <td>Total price</td>
+                        <td>Total</td>
                         <td class="text-right"><label class="label label-default">${{ $model->total_price }}</label></td>
                     </tr>
                     
                     <tr>
-                        <td>Eligible sent mail</td>
+                        <td>Email</td>
                         <td class="text-right"><label class="label {{ ($model->check_send_key) ? "label-success" : "label-danger" }}">{{ ($model->check_send_key) ? "YES" : "NO" }}</label></td>
                     </tr>
                     
