@@ -79,7 +79,7 @@
 
                             <tr>
                                 <td><img src="<?php echo url('images/' . $item->image); ?>" width="100px"></td>
-                                <td><?php echo $item->title;?></td>
+                                <td><?php echo $item->title;?> <span style="background-color: yellow; font-weight: bold">{{ ($item->status_disable == 1) ? "(HIDDEN)" : "" }}</span></td>
                                 <td><?php echo $item->code;?></td>
                                 <td><?php echo $item->brand;?></td>
 

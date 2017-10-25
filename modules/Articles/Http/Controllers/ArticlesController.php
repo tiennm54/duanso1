@@ -60,7 +60,7 @@ class ArticlesController extends Controller {
         if ($model != null) {
             $this->seoPricing($model);
             $model_type = ArticlesType::where("articles_id", "=", $id)->orderBy("price_order", "ASC")->get();
-            $model_all_product = Articles::get();
+            $model_all_product = Articles::where("status_disable","=",0)->get();
             if (count($model_type) != 0) {
                 foreach ($model_type as &$product) {
                     $product["image"] = $model->image;

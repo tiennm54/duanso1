@@ -20,19 +20,7 @@ class BackendArticlesController extends Controller {
 
     public function index(Request $request){
 
-        $model = Articles::join('category','articles.category_id','=','category.id')
-            ->select(
-                "articles.id",
-                "articles.image",
-                "articles.title",
-                "articles.code",
-                "articles.brand",
-                "articles.status_stock",
-                "articles.url_title",
-                "category.id as category_id",
-                "category.name as category_name"
-            );
-
+        $model = new Articles();
 
         if ($request->txt_title){
             $model = $model->where("title","LIKE", "%" . $request->txt_title . "%");
@@ -53,12 +41,8 @@ class BackendArticlesController extends Controller {
         if ($request->int_category){
             $model = $model->where("category.id","=", $request->int_category);
         }
-
         $model = $model->get();
-
-        $model_cate = Category::get();
-
-        return view('admin::articles.index', compact('model','model_cate'));
+        return view('admin::articles.index', compact('model'));
     }
 
     public function getCreate()

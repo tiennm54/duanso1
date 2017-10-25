@@ -56,7 +56,7 @@ class ArticlesDetailController extends CheckMemberController  {
             $this->seoView($model);
 
             $model_related = ArticlesType::where("articles_id","=",$model->articles_id)->where("id", "!=", $model->id)->get();
-            $model_list_product = Articles::orderBy("title","ASC")->get();
+            $model_list_product = Articles::where("status_disable","=",0)->orderBy("title","ASC")->get();
             return view('articles::articles.view', compact("model", "model_related", "model_user", "attributes", "sum_rate","model_list_product"));
         }
         return redirect()->route('frontend.articles.index');
