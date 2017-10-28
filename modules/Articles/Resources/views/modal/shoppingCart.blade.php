@@ -34,3 +34,46 @@
 
     </div>
 </div>
+
+<script type="text/javascript">
+    //Hàm thực hiện khi thay đổi số lượng sản phẩm trên popup order
+    function changeNumberProductOrder(id) {
+        console.log("Change Number Product Order");
+        var number = $("#numberProductOrder"+id).val();
+        if (number <= 0){
+            number = 1;
+            $("#numberProductOrder"+id).val(1);
+        }
+
+        var token = $("#_token").val();
+        $.ajax({
+            type: 'POST',
+            url: "<?php echo URL::route('frontend.shoppingCart.changeNumberProductOrder') ?>",
+            data: {"id" : id, "number" : number, "_token" : token},
+            success: function (data) {
+                $("#list_order").html(data);
+            },
+            error: function (ex) {
+
+            }
+        });
+    }
+
+    function deleteSessionOrder(item) {
+        console.log("Delete Session Order");
+        if (confirm("Are you sure you want to delete this item?")) {
+            var token = $("#_token").val();
+            $.ajax({
+                type: 'POST',
+                url: "<?php echo URL::route('frontend.shoppingCart.deleteSessionOrder') ?>",
+                data: {"id": item, "_token": token},
+                success: function (data) {
+                    $("#list_order").html(data);
+                },
+                error: function (ex) {
+
+                }
+            });
+        }
+    }
+</script>
