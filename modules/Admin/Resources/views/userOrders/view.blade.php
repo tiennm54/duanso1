@@ -60,6 +60,7 @@
             </div>
             <!--THONG TIN SHIPPING-->
             @include('admin::userOrders.includes.view_order_billing')
+            @include('admin::userOrders.includes.view_order_history')
         </div>
     </div>
 </div>

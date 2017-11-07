@@ -46,14 +46,14 @@
                     <tbody>
                         <tr>
                             <td class="text-left" style="width: 50%;">
-                                <p>Order No: <span class="label label-default">{{ $model->order_no }}</span></p>
-                                <p>Date Added: <span class="label label-default">{{ $model->created_at }}</span></p>
-                                <p>Order ID: <span class="label label-default">#{{ $model->id }}</span></p>
+                                <p>Order No: <span style="font-weight: bold">{{ $model->order_no }}</span></p>
+                                <p>Date Added: <span style="font-weight: bold">{{ $model->created_at }}</span></p>
+                                <p>Order ID: <span style="font-weight: bold">#{{ $model->id }}</span></p>
                             </td>
                             <td class="text-left" style="width: 50%;">
                                 <p>Orders Status: <span class="label label-primary">{{ $model->payment_status }}</span></p>
-                                <p>Payment Method: <span class="label label-default">{{ $model->payment_type->title }}</span></p>
-                                <p>Shipping Method: <span class="label label-default">Send by email.</span></p>
+                                <p>Payment Method: <span style="font-weight: bold">{{ $model->payment_type->title }}</span></p>
+                                <p>Shipping Method: <span style="font-weight: bold">Send by email.</span></p>
                             </td>
                         </tr>
                     </tbody>
@@ -68,8 +68,8 @@
                     <tbody>
                         <tr>
                             <td class="text-left">
-                                <p>Full name: <span class="label label-default">{{ $model->first_name }} {{ $model->last_name }}</span></p>
-                                <p>Email: <span class="label label-default">{{ $model->email }}</span></p>
+                                <p>Full name: <span style="font-weight: bold">{{ $model->first_name }} {{ $model->last_name }}</span></p>
+                                <p>Email: <span style="font-weight: bold">{{ $model->email }}</span></p>
                             </td>
                             <td class="text-left">
                                 <p>Email: <span class="label label-primary">{{ $model->email }}</span></p>
@@ -98,6 +98,8 @@
 
                 </div>
 
+                <!--HISTORY-->
+                @include('users::order-history.includes.orders_history')
 
 
                 <div class="buttons clearfix">

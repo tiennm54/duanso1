@@ -102,11 +102,12 @@
                         <td width="20%">Status</td>
                         <td class="text-right col-md-12">
                             <form method="post" action="{{ URL::route('adminUserOrders.saveStatusPayment',['id'=>$model->id] ) }}">
-                                <div class="col-md-8" style="float: left">
+                                <div class="col-md-8">
                                     <select class="form-control" name="payment_status" style="width: 120px">
                                         <option value="pending" {{ ($model->payment_status == "pending") ? "selected" : "" }}>Pending</option>
                                         <option value="paid" {{ ($model->payment_status == "paid") ? "selected" : "" }}>Paid</option>
-                                        <option value="completed" {{ ($model->payment_status == "completed") ? "selected" : "" }}>Completed</option>
+                                        <option value="refund" {{ ($model->payment_status == "refund") ? "selected" : "" }}>Refund</option>
+                                        <option value="completed" {{ ($model->payment_status == "completed") ? "selected" :"" }}>Completed</option>
                                     </select>
                                 </div>
 

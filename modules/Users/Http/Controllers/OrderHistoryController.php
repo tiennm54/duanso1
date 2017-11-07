@@ -5,6 +5,7 @@ namespace Modules\Users\Http\Controllers;
 use App\Models\ArticlesTypeKey;
 use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
+use App\Models\UserOrdersHistory;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -74,7 +75,9 @@ class OrderHistoryController extends CheckMemberController  {
 
                 $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model->id)->get();
 
-                return view('users::order-history.order-history-view',compact('model','model_order','model_key'));
+                $model_history = UserOrdersHistory::where("user_orders_id","=",$model->id)->get();
+
+                return view('users::order-history.order-history-view',compact('model','model_order','model_key','model_history'));
             }
         }else{
             return redirect()->route('users.getLogin');

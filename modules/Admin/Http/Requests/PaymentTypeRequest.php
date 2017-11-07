@@ -22,7 +22,6 @@ class PaymentTypeRequest extends Request {
         return [
             'txt_name.required'	=> 'Hãy điền tên cho loại thanh toán !',
             'txt_name.unique'	=> 'Loại thanh toán này đã tồn tại !',
-
             'txt_position.required'	=> 'Hãy điền số thứ tự hiển thị !',
         ];
     }

@@ -24,7 +24,7 @@
                 </td>
                 <td class="text-center">
                     <form method="post" action="{{ URL::route('adminUserOrders.sendKey',['id'=>$model->id]) }}">
-                        <button class="btn btn-primary" id="btn-send-key" <?php echo ($model->check_send_key == 1) ? "" : "disabled"?>>Send Key</button>
+                        <button class="btn btn-primary" id="btn-send-key" <?php echo ($model->check_send_key == 1) ? "" : "disabled"?> data-toggle="confirmation">Send Key</button>
                     </form>
                 </td>
             </tr>

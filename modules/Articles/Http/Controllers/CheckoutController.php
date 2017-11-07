@@ -10,6 +10,7 @@ use App\Models\PaymentType;
 use App\Models\TermsConditions;
 use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
+use App\Models\UserOrdersHistory;
 use App\Models\UserShippingAddress;
 use App\Models\ArticlesTypeKey;
 use Carbon\Carbon;
@@ -49,6 +50,13 @@ class CheckoutController extends ShoppingCartController {
             $m->from("buypremiumkey@gmail.com", "Order of Customer");
             $m->to("minhtienuet@gmail.com", "Minh Tiến")->subject('[Payment Request] Orders of Customer: #' . $model_orders->order_no);
         });
+    }
+
+    public function saveHistory($model_orders){
+        $model_history = new UserOrdersHistory();
+        $model_history->user_orders_id = $model_orders->id;
+        $model_history->history_name = "pending";
+        $model_history->save();
     }
 
     public function getNameOrderNo($order_id) {
@@ -232,18 +240,9 @@ class CheckoutController extends ShoppingCartController {
         $model_user_orders->users_roles_id = $model_user->roles_id;
         $model_user_orders->first_name = $model_user->first_name;
         $model_user_orders->last_name = $model_user->last_name;
-        if (isset($data["shipping_address"])) {
-            $model_user_orders->email = $data["shipping_address"];
-        } else {
-            if (isset($data["email"])) {
-                $model_user_orders->email = $data["email"];
-                $model_user_orders->first_name = $data["first_name"];
-                $model_user_orders->last_name = $data["last_name"];
-            } else {
-                $model_user_orders->email = $model_user->email;
-            }
-        }
-
+        $model_user_orders->email = $data["email"];
+        $model_user_orders->first_name = $data["first_name"];
+        $model_user_orders->last_name = $data["last_name"];
         $model_user_orders->payments_type_id = $data["payments_type_id"];
         $model_user_orders->sub_total = $data["sub_total"];
         $model_user_orders->payment_charges = $data["payment_charges"];
@@ -334,6 +333,7 @@ class CheckoutController extends ShoppingCartController {
                     $this->changeStatusAfterCheckout($model_user);
                     $this->sendMail($model_orders, $model_user, $password);
                     $this->sendMailToMe($model_orders);
+                    $this->saveHistory($model_orders);
                     return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
                 }
             } else {

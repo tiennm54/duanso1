@@ -41,6 +41,13 @@
                                 <input type="text" class="form-control border-input" placeholder="Title..." name="txt_title" required>
                             </div>
                         </div>
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control border-input" placeholder="Email..." name="txt_email" required>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -57,8 +64,8 @@
                             <div class="form-group">
                                 <label>Disable</label>
                                 <select class="form-control border-input" name="int_status_disable">
-                                    <option value="0" selected>No disable</option>
-                                    <option value="1">Disable</option>
+                                    <option value="0" selected>Show</option>
+                                    <option value="1">Hide</option>
                                 </select>
                             </div>
                         </div>

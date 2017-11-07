@@ -6,6 +6,7 @@ use App\Models\ArticlesType;
 use App\Models\ArticlesTypeKey;
 use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
+use App\Models\UserOrdersHistory;
 use Carbon\Carbon;
 use DougSisk\CountryState\CountryState;
 use Illuminate\Http\Request;
@@ -73,8 +74,11 @@ class AdminUserOrdersController extends Controller {
             $model["check_send_key"] = $check_send_key;
 
 
+            $model_history = UserOrdersHistory::where("user_orders_id","=",$model->id)->get();
 
-            return view('admin::userOrders.view', compact('model', 'model_key'));
+
+
+            return view('admin::userOrders.view', compact('model', 'model_key','model_history'));
         }
     }
 
@@ -144,6 +148,14 @@ class AdminUserOrdersController extends Controller {
         });
     }
 
+    public function sendMailRefund($model_orders){
+        $subject_email = '[BuyPremiumKey.Com] Refund For Orders #'.$model_orders->order_no;
+        Mail::send('admin::userOrders.email-send-refund', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+        });
+    }
+
         //Thay đổi trạng thái order
     public function saveStatusPayment($id, Request $request) {
         if (isset($request)) {
@@ -151,14 +163,31 @@ class AdminUserOrdersController extends Controller {
             if (isset($data["payment_status"])) {
                 $model = UserOrders::find($id);
                 if ($model) {
+
+                    $tmp_status = $model->payment_status;
+                    if($data["payment_status"] == 'refund' || $data["payment_status"] == 'completed'){
+                        if($tmp_status != 'paid'){
+                            $request->session()->flash('alert-warning', 'Warning: Đơn hàng này chưa được thanh toán hoặc có trạng thái không thay đổi');
+                            return back();
+                        }
+                    }
+
                     $model->payment_status = $data["payment_status"];
                     $model->save();
-                    
+
                     if($data["payment_status"] == 'paid'){
                         $this->sendMailPaid($model);
                     }
+                    if ($data["payment_status"] == 'refund'){
+                        $this->sendMailRefund($model);
+                    }
+
+                    $model_history = new UserOrdersHistory();
+                    $model_history->user_orders_id = $model->id;
+                    $model_history->history_name = $model->payment_status;
+                    $model_history->save();
                     
-                    $request->session()->flash('alert-success', 'Success: Cập nhật trạng thái đã thanh toán thành công');
+                    $request->session()->flash('alert-success', 'Success: Cập nhật trạng thái thành công');
                     return back();
                 }
             }
@@ -286,6 +315,23 @@ class AdminUserOrdersController extends Controller {
             }
         }
         return 0;
+    }
+
+
+    public function saveHistory($id, Request $request){
+        $data = $request->all();
+        $model_history = UserOrdersHistory::find($id);
+        if($model_history){
+            if(isset($data["history_comment"])){
+                $model_history->comment = $data["history_comment"];
+                $model_history->save();
+                $request->session()->flash('alert-success', 'Success: Update history thành công !!! ');
+                return back();
+            }
+
+        }
+        $request->session()->flash('alert-warning', 'Warning: Update history thất bại !!! ');
+        return back();
     }
 
 }

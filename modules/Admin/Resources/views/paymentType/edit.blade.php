@@ -42,6 +42,14 @@
                                 <input type="text" value="<?php echo ($model->title) ? $model->title : ''; ?>" class="form-control border-input" placeholder="Title..." name="txt_title" required>
                             </div>
                         </div>
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" value="<?php echo ($model->email) ? $model->email : ''; ?>" class="form-control border-input" placeholder="Email..." name="txt_email" required>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="row">
 
@@ -56,8 +64,8 @@
                             <div class="form-group">
                                 <label>Disable</label>
                                 <select class="form-control border-input" name="int_status_disable">
-                                    <option value="1" <?php if($model->status_disable == 1){ echo "selected"; } ?>>Disabled</option>
-                                    <option value="0" <?php if($model->status_disable == 0){ echo "selected"; } ?>>No Disable</option>
+                                    <option value="0" <?php if($model->status_disable == 0){ echo "selected"; } ?>>Show</option>
+                                    <option value="1" <?php if($model->status_disable == 1){ echo "selected"; } ?>>Hide</option>
                                 </select>
                             </div>
                         </div>

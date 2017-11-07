@@ -91,7 +91,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::post('sendKey/{id}', ['as' => 'adminUserOrders.sendKey', 'uses' => 'AdminUserOrdersController@sendKey']);
         Route::get('autoCompleteEmail', ['as' => 'adminUserOrders.autoCompleteEmail', 'uses' => 'AdminUserOrdersController@autoCompleteEmail']);
         Route::post('saveStatusPayment/{id}', ['as' => 'adminUserOrders.saveStatusPayment', 'uses' => 'AdminUserOrdersController@saveStatusPayment']);
-        
+        Route::post('saveHistory/{id}', ['as' => 'adminUserOrders.saveHistory', 'uses' => 'AdminUserOrdersController@saveHistory']);
+
         Route::get('add-premium-key/{product_id}/{order_detail_id}', ['as' => 'adminUserOrders.getAddPremiumKey', 'uses' => 'AdminUserOrdersController@getAddPremiumKey']);
         Route::post('add-premium-key/{product_id}/{order_detail_id}', ['as' => 'adminUserOrders.postAddPremiumKey', 'uses' => 'AdminUserOrdersController@postAddPremiumKey']);
         Route::post('delete-premium-key/{id}', ['as' => 'adminUserOrders.deletePremiumKey', 'uses' => 'AdminUserOrdersController@deletePremiumKey']);
