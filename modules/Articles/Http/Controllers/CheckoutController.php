@@ -39,7 +39,7 @@ class CheckoutController extends ShoppingCartController {
 
     //Gửi mail có khách orders
     public function sendMail($model_orders, $model_user, $password) {
-        Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user,'password' => $password], function ($m) use ($model_orders) {
+        Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
             $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject('[Paypal payment] Paypal Invoice for Order #' . $model_orders->order_no);
         });
@@ -52,7 +52,7 @@ class CheckoutController extends ShoppingCartController {
         });
     }
 
-    public function saveHistory($model_orders){
+    public function saveHistory($model_orders) {
         $model_history = new UserOrdersHistory();
         $model_history->user_orders_id = $model_orders->id;
         $model_history->history_name = "pending";
@@ -144,51 +144,56 @@ class CheckoutController extends ShoppingCartController {
         }
     }
 
+    function getTotalOrder($data_product, $payment_id) {
+        $sub_total = 0;
+        $payment_charges = 0;
+        $total = 0;
+
+        foreach ($data_product as $item) {
+            $sub_total = $sub_total + ($item["quantity"] * $item["price_order"]);
+        }
+
+        if ($sub_total != 0) {
+            // Default 20%
+            $payment_charges = round(($sub_total * 20) / 100, 2);
+            $model = PaymentType::find($payment_id);
+            if ($model != null) {
+                $payment_charges = $this->getPaymentCharges($sub_total, $model);
+            }
+            $total = $sub_total + $payment_charges;
+        }
+
+        $return_data = array(
+            "sub_total" => $sub_total,
+            "charges" => $payment_charges,
+            "total" => $total
+        );
+        return $return_data;
+    }
+
     //Thay đổi số lượng sản phẩm khi checkout
     public function changeQuantity(Request $request) {
         if (isset($request)) {
             $data = $request->all();
-
             if (isset($data["id"]) && isset($data["number"])) {
                 $id = $data["id"];
                 $number = $data["number"];
-
                 $model_articles_type = ArticlesType::find($id);
                 if ($model_articles_type) {
-
                     $model_user = $this->checkMember();
-
                     if ($model_user) {
                         $array_orders = $this->changeNumberProductOrderForMember($model_user, $model_articles_type, $number);
                     } else {
                         $array_orders = $this->changeNumberProductOrderForGuest($model_articles_type, $number);
                     }
-
                     $obj_shopping_cart = new UserShoppingCart();
                     $data_product = $array_orders;
                     $obj_shopping_cart->setSession($data_product);
-                    $subTotal = Session::get('sub_total');
-
-                    $payment_charges = 0;
-                    if (isset($data["payment_type"])) {
-                        $payment_id = $data["payment_type"];
-                        $model = PaymentType::find($payment_id);
-
-                        if ($model != null) {
-                            $payment_charges = $this->getPaymentCharges($subTotal, $model);
-                            $total = $subTotal + $payment_charges;
-                        } else {
-                            $total = $subTotal;
-                        }
-                    } else {
-                        $total = $subTotal;
-                    }
-
-                    return view('articles::append.listProductCheckout', compact('data_product', 'subTotal', 'payment_charges', 'total'));
+                    $totalOrder = $this->getTotalOrder($data_product, $data["payment_type"]);
+                    return $totalOrder;
                 }
             }
         }
-
         return redirect()->route('frontend.articles.index');
     }
 
@@ -196,7 +201,6 @@ class CheckoutController extends ShoppingCartController {
     public function deleteProductCheckout(Request $request) {
         if (isset($request)) {
             $data = $request->all();
-
             $id = $data["id"];
             $model_articles_type = ArticlesType::find($id);
             if ($model_articles_type) {
@@ -207,34 +211,21 @@ class CheckoutController extends ShoppingCartController {
                 } else {
                     $array_orders = $this->deleteSessionOrderForGuest($model_articles_type);
                 }
-
                 $obj_shopping_cart = new UserShoppingCart();
                 $data_product = $array_orders;
                 $obj_shopping_cart->setSession($data_product);
-                $subTotal = Session::get('sub_total');
-
-                $payment_charges = 0;
-                if (isset($data["payment_type"])) {
-                    $payment_id = $data["payment_type"];
-                    $model = PaymentType::find($payment_id);
-                    if ($model != null) {
-                        $payment_charges = $this->getPaymentCharges($subTotal, $model);
-                        $total = $subTotal + $payment_charges;
-                    } else {
-                        $total = $subTotal;
-                    }
-                } else {
-                    $total = $subTotal;
-                }
-
+                $totalOrder = $this->getTotalOrder($data_product, $data["payment_type"]);
+                $subTotal = $totalOrder["sub_total"];
+                $payment_charges = $totalOrder["charges"];
+                $total = $totalOrder["total"];
                 return view('articles::append.listProductCheckout', compact('data_product', 'subTotal', 'payment_charges', 'total'));
             }
         }
-
         return response()->json("Delete error !!!", 404);
     }
 
     public function createOrder($model_user, $data, $array_orders) {
+        $totalOrder = $this->getTotalOrder($array_orders, $data["payments_type_id"]);
         $model_user_orders = new UserOrders();
         $model_user_orders->users_id = $model_user->id;
         $model_user_orders->users_roles_id = $model_user->roles_id;
@@ -244,9 +235,9 @@ class CheckoutController extends ShoppingCartController {
         $model_user_orders->first_name = $data["first_name"];
         $model_user_orders->last_name = $data["last_name"];
         $model_user_orders->payments_type_id = $data["payments_type_id"];
-        $model_user_orders->sub_total = $data["sub_total"];
-        $model_user_orders->payment_charges = $data["payment_charges"];
-        $model_user_orders->total_price = $data["total_price"];
+        $model_user_orders->sub_total = $totalOrder["sub_total"];
+        $model_user_orders->payment_charges = $totalOrder["charges"];
+        $model_user_orders->total_price = $totalOrder["total"];
         $model_user_orders->quantity_product = count($array_orders);
         $model_user_orders->save();
         $model_user_orders->order_no = $this->getNameOrderNo($model_user_orders);

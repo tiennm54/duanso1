@@ -42,32 +42,25 @@
         var check = false;
         var $this = $(this);
         $this.button('loading');
-
         var termsConditions = $("#cb-terms").is(':checked');
         console.log("terms: " + termsConditions);
         var checkEmail = validateEmail($("#user_orders_email").val());
         console.log("email: " + checkEmail);
-        
         $('[required]').each(function () {
             if ($.trim($(this).val()) == '' || termsConditions == false || checkEmail == false) {
                 check = true;
             }
         });
-
         if (check == true) {
             console.log("check = true");
             setTimeout(function () {
                 $this.button('reset');
             }, 1000);
         }
-
     });
-
-
 
     function selectTypePayment(item) {
         var token = $("#_token").val();
-
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.checkout.selectTypePayment') ?>",
@@ -81,32 +74,37 @@
                 $("#sub-total-popup").html(data["total"]);
             },
             error: function (ex) {
-
+                console.log(ex.responseJSON);
+                location.reload();
             }
         });
     }
 
-    function changeQuantity(id) {
+    function updateTotalOrder(data) {
+        $("#sub-total-order").html("$" + data["sub_total"]);
+        $("#sub-total").html(data["sub_total"]);
+        $("#payment_charges").html(data["charges"]);
+        $("#total").html(data["total"]);
+    }
 
+    function changeQuantity(id) {
         var number = $("#quantityProduct" + id).val();
         var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
-
         if (number <= 0) {
             number = 1;
             $("#quantityProduct" + id).val(1);
         }
-
         var token = $("#_token").val();
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.checkout.changeQuantity') ?>",
             data: {"id": id, "number": number, "payment_type": payment_type, "_token": token},
             success: function (data) {
-
-                $("#list-product-checkout").html(data);
+                updateTotalOrder(data);
             },
             error: function (ex) {
-
+                console.log(ex.responseJSON);
+                location.reload();
             }
         });
     }
@@ -120,11 +118,11 @@
                 url: "<?php echo URL::route('frontend.checkout.deleteProductCheckout') ?>",
                 data: {"id": id, "payment_type": payment_type, "_token": token},
                 success: function (data) {
-
                     $("#list-product-checkout").html(data);
                 },
                 error: function (ex) {
                     alert(ex.responseJSON);
+                    location.reload();
                 }
             });
         }

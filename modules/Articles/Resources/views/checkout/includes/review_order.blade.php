@@ -8,7 +8,7 @@
                 <tr>
                     <th>Product name</th>
                     <th width="10%">Quantity</th>
-                    <th>Price</th>
+                    <th>Unit Price</th>
                 </tr>
                 </thead>
                 <tbody id="list-product-checkout">
@@ -30,7 +30,7 @@
                         <input type="number" id="quantityProduct<?php echo $item['id'];?>" onchange="changeQuantity(<?php echo $item['id']; ?>)" class="form-control" value="{{ $item["quantity"] }}" style="width: 70%;" min="1">
                     </td>
                     <td align="center">
-                        <p>${{ $item["total"] }}</p>
+                        <p>${{ $item["price_order"] }}</p>
                         <a class="btn btn-danger" onclick="deleteProductCheckout(<?php echo $item['id']; ?>)"><i class="glyphicon glyphicon-trash"></i></a>
                     </td>
                 </tr>
@@ -50,17 +50,14 @@
                 <tr>
                     <td>Sub-Total: </td>
                     <td align="center">$<span id="sub-total">{{ $subTotal }}</span></td>
-                    <input name="sub_total" value="{{ $subTotal }}" hidden/>
                 </tr>
                 <tr>
                     <td>Charges <span id="text_payment_selected">{{ $model_payment_selected->title }}</span>: </td>
                     <td align="center">$<span id="payment_charges">{{ $payment_charges }}</span></td>
-                    <input name="payment_charges" value="{{ $payment_charges }}" hidden/>
                 </tr>
                 <tr>
                     <td>Total: </td>
                     <td align="center">$<span id="total">{{ $total }}</span></td>
-                    <input name="total_price" value="{{ $total }}" hidden/>
                 </tr>
                 </tbody>
             </table>

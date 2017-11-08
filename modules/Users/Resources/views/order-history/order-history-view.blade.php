@@ -29,6 +29,10 @@
                             $intProgress = "width: 100%";
                             $stringProgress = "Completed";
                             break;
+                        case "refund" :
+                            $intProgress = "width: 100%";
+                            $stringProgress = "Refunded";
+                            break;
                     }
                 ?>
                 <div class="progress">

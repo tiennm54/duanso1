@@ -15,8 +15,8 @@
                            <?php if ($item->status_selected == 1){ echo "checked='checked'"; } ?>
                            onclick="selectTypePayment({{ $item }})"
                     />
-                    <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" />
-                    <span>{{ $item->title }}</span>
+                    <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" style="width: 80px"/>
+                    <span style="font-weight: bold">{{ $item->title }}</span>
                     <p style="margin-top: 5px">
                         <span>Charges: </span>
                         <span>{{ $item->fees}}</span><span>%</span>

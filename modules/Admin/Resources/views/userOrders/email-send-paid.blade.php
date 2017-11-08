@@ -35,7 +35,7 @@
 
                                 <p>
                                     <b>Best Regards</b>
-                                    <p>Support Team</p>
+                                    <p>Support Team BuyPremiumKey.Com</p>
                                 </p>
                             </td>
                         </tr>
