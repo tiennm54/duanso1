@@ -36,7 +36,11 @@
                     <div class="plan">
 
                         <div class="header-pricing">
-                            <p class="month">${{ $item->price_order }}</p>
+                            <?php if($item->status_stock == 1){?>
+                                <p class="month">${{ $item->price_order }}</p>
+                            <?php }else{?>
+                                <p class="month">NOT IN STOCK</p>
+                            <?php }?>
                         </div>
 
                         <div class="content">
@@ -52,7 +56,7 @@
                         </div>
 
                         <div class="price">
-                            <a onclick="addToCart({{ $item->id }})" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                            <a onclick="addToCart({{ $item->id }})" class="btn btn-primary" data-toggle="modal" data-target="#myModal" <?php echo ($item->status_stock == 0) ? "disabled" : ""?>>
                                 <img src="{{url('theme_frontend/image/cart-1.png')}}" alt="Add to cart">
                                 ADD TO CART
                             </a>

@@ -2,11 +2,6 @@
 @section('content')
     <tr>
         <td bgcolor="#ffffff" align="center" style="padding: 15px;">
-            <!--[if (gte mso 9)|(IE)]>
-            <table align="center" border="0" cellspacing="0" cellpadding="0" width="500">
-                <tr>
-                    <td align="center" valign="top" width="500">
-            <![endif]-->
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;" class="responsive-table">
                 <tr>
                     <td>
@@ -20,7 +15,7 @@
                                     Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
                                     <p>
                                         I'm so sorry to inform you that the product that you requested has been sold out. 
-                                        Your payment has been refunded.
+                                        Your payment has been refunded. Refund is: ${{$model_orders->total_price}}. <br/>
                                         Please select a different product instead. 
                                     </p>
                                     <p>
@@ -40,13 +35,7 @@
                         </table>
                     </td>
                 </tr>
-
             </table>
-            <!--[if (gte mso 9)|(IE)]>
-            </td>
-            </tr>
-            </table>
-            <![endif]-->
         </td>
     </tr>
 

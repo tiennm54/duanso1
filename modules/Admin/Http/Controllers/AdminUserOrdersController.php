@@ -15,6 +15,7 @@ use DB;
 use Input;
 use Excel;
 use Illuminate\Support\Facades\Mail;
+use Log;
 
 class AdminUserOrdersController extends Controller {
 
@@ -47,10 +48,9 @@ class AdminUserOrdersController extends Controller {
     }
 
     //Xem thông tin chi tiết order
-    public function viewOrders($id) {
+    public function viewOrders($id, Request $request) {
         $model = UserOrders::find($id);
         if ($model) {
-
             foreach ($model->orders_detail as &$item) {
                 $count_key = ArticlesTypeKey::where("articles_type_id", "=", $item->articles_type_id)
                         ->where("user_orders_detail_id", "=", $item->id)
@@ -59,10 +59,7 @@ class AdminUserOrdersController extends Controller {
                         ->count();
                 $item["count_key"] = $count_key;
             }
-
             $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model->id)->get();
-
-
             $countryState = new CountryState();
             $countries = $countryState->getCountries();
             $countryState = new CountryState();
@@ -72,14 +69,11 @@ class AdminUserOrdersController extends Controller {
 
             $check_send_key = $this->checkKeyEnough($model);
             $model["check_send_key"] = $check_send_key;
-
-
-            $model_history = UserOrdersHistory::where("user_orders_id","=",$model->id)->get();
-
-
-
-            return view('admin::userOrders.view', compact('model', 'model_key','model_history'));
+            $model_history = UserOrdersHistory::where("user_orders_id", "=", $model->id)->get();
+            return view('admin::userOrders.view', compact('model', 'model_key', 'model_history'));
         }
+        $request->session()->flash('alert-warning', 'Warning: Đã xảy ra lỗi !!!');
+        return back();
     }
 
     public function sendKey($id, Request $request) {
@@ -87,23 +81,23 @@ class AdminUserOrdersController extends Controller {
         if ($model_orders) {
             $model_key = $this->getPremiumKeySend($model_orders);
             if ($model_key) {
-                $check_send = $this->sendProductEmail($model_orders, $model_key);
-                if ($check_send) {
-                    $model_orders->payment_status = "completed";
-                    $model_orders->payment_date = Carbon::now();
-                    $model_orders->save();
+                $model_orders->payment_status = "completed";
+                $model_orders->payment_date = Carbon::now();
+                $model_orders->save();
 
-                    foreach ($model_key as $item) {
-                        $item->status = "sent";
-                        $item->date_sent = Carbon::now();
-                        $item->user_id = $model_orders->users_id;
-                        $item->user_email = $model_orders->email;
-                        $item->save();
-                    }
-
-                    $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
-                    return back();
+                foreach ($model_key as $item) {
+                    $item->status = "sent";
+                    $item->date_sent = Carbon::now();
+                    $item->user_id = $model_orders->users_id;
+                    $item->user_email = $model_orders->email;
+                    $item->save();
                 }
+
+                $this->sendProductEmail($model_orders, $model_key);
+
+                $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
+                return back();
+
             }
         }
         $request->session()->flash('alert-warning', 'Warning: Đã xảy ra lỗi !!!');
@@ -112,17 +106,17 @@ class AdminUserOrdersController extends Controller {
 
     //Gửi mail sản phẩm tới khách hàng
     public function sendProductEmail($model_orders, $model_key) {
-       
-        $subject_email = '[BuyPremiumKey.Com] Send product(s) for orders #' . $model_orders->order_no;
-        if($model_orders->payment_status == "completed"){
-            $subject_email = '[BuyPremiumKey.Com] Resend product(s) for orders #' . $model_orders->order_no;
+        $subject_email = SUBJECT_SEND_PRODUCT . $model_orders->order_no;
+        if ($model_orders->payment_status == "completed") {
+            $subject_email = SUBJECT_RESEND_PRODUCT . $model_orders->order_no;
         }
-        
         Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders, $subject_email) {
-            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
         });
-
+        
+        $this->saveHistoryOrder($model_orders);
+        
         if (count(Mail::failures()) > 0) { // gửi lỗi
             return 0;
         } else {
@@ -138,25 +132,31 @@ class AdminUserOrdersController extends Controller {
             return response()->json($data);
         }
     }
-    
-    
-    public function sendMailPaid($model_orders){
-        $subject_email = '[BuyPremiumKey.Com] Orders #'.$model_orders->order_no.' Information';
+
+    public function sendMailPaid($model_orders) {
+        $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->order_no;
         Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
-            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
         });
     }
 
-    public function sendMailRefund($model_orders){
-        $subject_email = '[BuyPremiumKey.Com] Refund For Orders #'.$model_orders->order_no;
+    public function sendMailRefund($model_orders) {
+        $subject_email = SUBJECT_REFUND . $model_orders->order_no;
         Mail::send('admin::userOrders.email-send-refund', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
-            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
         });
     }
 
-        //Thay đổi trạng thái order
+    public function saveHistoryOrder($model_order) {
+        $model_history = new UserOrdersHistory();
+        $model_history->user_orders_id = $model_order->id;
+        $model_history->history_name = $model_order->payment_status;
+        $model_history->save();
+    }
+
+    //Thay đổi trạng thái order
     public function saveStatusPayment($id, Request $request) {
         if (isset($request)) {
             $data = $request->all();
@@ -165,28 +165,33 @@ class AdminUserOrdersController extends Controller {
                 if ($model) {
 
                     $tmp_status = $model->payment_status;
-                    if($data["payment_status"] == 'refund' || $data["payment_status"] == 'completed'){
-                        if($tmp_status != 'paid'){
+                    if ($data["payment_status"] == 'refund' || $data["payment_status"] == 'completed') {
+                        if ($tmp_status != 'paid') {
                             $request->session()->flash('alert-warning', 'Warning: Đơn hàng này chưa được thanh toán hoặc có trạng thái không thay đổi');
                             return back();
+                        } else {
+                            if ($data["payment_status"] == 'completed') {
+                                $checkUpdateCompleted = $this->checkKeyEnough($model);
+                                if ($checkUpdateCompleted == 0) {
+                                    $request->session()->flash('alert-warning', 'Warning: Chưa cung cấp premium key cho người dùng');
+                                    return back();
+                                }
+                            }
                         }
                     }
 
                     $model->payment_status = $data["payment_status"];
                     $model->save();
 
-                    if($data["payment_status"] == 'paid'){
+                    if ($data["payment_status"] == 'paid') {
                         $this->sendMailPaid($model);
                     }
-                    if ($data["payment_status"] == 'refund'){
+                    if ($data["payment_status"] == 'refund') {
                         $this->sendMailRefund($model);
                     }
 
-                    $model_history = new UserOrdersHistory();
-                    $model_history->user_orders_id = $model->id;
-                    $model_history->history_name = $model->payment_status;
-                    $model_history->save();
-                    
+                    $this->saveHistoryOrder($model);
+
                     $request->session()->flash('alert-success', 'Success: Cập nhật trạng thái thành công');
                     return back();
                 }
@@ -196,7 +201,7 @@ class AdminUserOrdersController extends Controller {
         return back();
     }
 
-    //ADD KEY
+    //ADD KEY CHO ORDER
     public function getAddPremiumKey($product_id, $order_detail_id) {
 
         $model_product = ArticlesType::find($product_id);
@@ -309,26 +314,25 @@ class AdminUserOrdersController extends Controller {
                 $model_order = UserOrders::find($model->user_orders_id);
                 $check = $this->checkKeyEnough($model_order);
                 if ($check == 1) {
-                    return 1;
+                    return 1; // Đủ key để gửi cho khách
                 }
-                return 2;
+                return 2; // Không đủ key
             }
         }
-        return 0;
+        return 0; // Lỗi
     }
-
-
-    public function saveHistory($id, Request $request){
+    
+    //SAVE COMMENT HISTORY
+    public function saveHistory($id, Request $request) {
         $data = $request->all();
         $model_history = UserOrdersHistory::find($id);
-        if($model_history){
-            if(isset($data["history_comment"])){
+        if ($model_history) {
+            if (isset($data["history_comment"])) {
                 $model_history->comment = $data["history_comment"];
                 $model_history->save();
                 $request->session()->flash('alert-success', 'Success: Update history thành công !!! ');
                 return back();
             }
-
         }
         $request->session()->flash('alert-warning', 'Warning: Update history thất bại !!! ');
         return back();

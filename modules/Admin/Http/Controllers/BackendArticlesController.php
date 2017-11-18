@@ -9,6 +9,7 @@ use Modules\Admin\Http\Requests\ArticlesRequest;
 use Pingpong\Modules\Routing\Controller;
 use Input;
 use DB;
+use Log;
 
 class BackendArticlesController extends Controller {
 
@@ -163,6 +164,13 @@ class BackendArticlesController extends Controller {
                 }
 
                 $model->save();
+                
+                if($model->status_stock == 0){
+                    ArticlesType::where("articles_id","=",$model->id)->update(['status_stock' => 0]);
+                }else{
+                    ArticlesType::where("articles_id","=",$model->id)->update(['status_stock' => 1]);
+                }
+                
                 DB::commit();
                 $request->session()->flash('alert-success', 'Success: Update Completed!');
                 return back();

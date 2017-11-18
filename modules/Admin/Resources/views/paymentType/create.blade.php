@@ -79,7 +79,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Fees</label>
+                                <label>Plus</label>
                                 <input type="number"  step="any" class="form-control border-input" placeholder="Plus..." name="txt_plus" required>
                             </div>
                         </div>

@@ -37,18 +37,28 @@ use App\Helpers\SeoPage;
 
 class CheckoutController extends ShoppingCartController {
 
-    //Gửi mail có khách orders
+    //[Paypal payment]Gửi mail có khách orders 
     public function sendMail($model_orders, $model_user, $password) {
         Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
-            $m->from("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller");
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject('[Paypal payment] Paypal Invoice for Order #' . $model_orders->order_no);
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PAYPAL_PAYMENT . $model_orders->order_no);
         });
     }
+    
+    //[Amazon payment] Gửi mail cho khách hàng sử dụng phương thức amazon
+    public function sendMailAmazon($model_orders, $model_user, $password) {
+        Mail::send('articles::checkout.amazon-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_AMAZON_PAYMENT . $model_orders->order_no);
+        });
+    }
+    
+    
 
     public function sendMailToMe($model_orders) {
         Mail::send('articles::checkout.email-checkout-me', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
-            $m->from("buypremiumkey@gmail.com", "Order of Customer");
-            $m->to("minhtienuet@gmail.com", "Minh Tiến")->subject('[Payment Request] Orders of Customer: #' . $model_orders->order_no);
+            $m->from(EMAIL_BUYPREMIUMKEY, "Order of Customer");
+            $m->to(EMAIL_RECEIVE_ORDER, "Minh Tiến")->subject(SUBJECT_REQUEST_ORDER . $model_orders->order_no);
         });
     }
 
@@ -322,7 +332,15 @@ class CheckoutController extends ShoppingCartController {
                 DB::commit();
                 if ($model_orders) {
                     $this->changeStatusAfterCheckout($model_user);
-                    $this->sendMail($model_orders, $model_user, $password);
+                    switch($model_orders->payment_type->code){
+                        case "PAYPAL": 
+                            $this->sendMail($model_orders, $model_user, $password);
+                            break;
+                        case "AMAZON":
+                            $this->sendMailAmazon($model_orders, $model_user, $password);
+                            break;
+                    }
+                    
                     $this->sendMailToMe($model_orders);
                     $this->saveHistory($model_orders);
                     return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);

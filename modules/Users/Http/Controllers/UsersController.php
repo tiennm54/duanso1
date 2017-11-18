@@ -210,8 +210,8 @@ class UsersController extends CheckMemberController {
                 $model->save();
 
                 Mail::send('users::email.email-forgotten', ['user' => $model], function ($m) use ($model) {
-                    $m->from('buypremiumkey@gmail.com', 'BuyPremiumKey Authorized Reseller');
-                    $m->to($model->email, $model->name)->subject('Forgot password');
+                    $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                    $m->to($model->email, $model->name)->subject(SUBJECT_FORGOT);
                 });
 
                 $request->session()->flash('alert-success', ' Success: If there is an account associated with '. $model->email .' you will receive an email with a link to reset your password.!');

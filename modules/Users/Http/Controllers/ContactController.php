@@ -42,7 +42,7 @@ class ContactController extends Controller  {
 
             Mail::send('users::email.email-contact', ['user' => $data], function ($m) use ($data) {
                 $m->from($data["email"], $data["email"]);
-                $m->to("buypremiumkey@gmail.com", "BuyPremiumKey Authorized Reseller")->subject('[BuyPremiumKey.Com] Contact by customer');
+                $m->to(EMAIL_BUYPREMIUMKEY, NAME_COMPANY)->subject(SUBJECT_CONTACT);
             });
 
             $request->session()->flash('alert-success', ' Success: You have successfully sent your contact enquiry');

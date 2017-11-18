@@ -5,7 +5,7 @@
             <td class="text-left">Product Name</td>
             <td class="text-left">Model</td>
             <td class="text-right">Quantity</td>
-            <td class="text-right">Price</td>
+            <td class="text-right">Unit Price</td>
             <td class="text-right">Total</td>
             <td style="width: 20px;"></td>
         </tr>

@@ -2,21 +2,17 @@
 @section('content')
 <tr>
     <td bgcolor="#ffffff" align="center" style="padding: 15px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 500px;"
-               class="responsive-table">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 500px;" class="responsive-table">
             <tr>
                 <td>
-                    <!-- COPY -->
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 500px;" class="responsive-table">
                         <tr>
-                            <td align="center"
-                                style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;"
-                                class="padding-copy">Invoice #{{ $model_orders->order_no }}
+                            <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding-copy">
+                                Invoice #{{ $model_orders->order_no }}
                             </td>
                         </tr>
                         <tr>
-                            <td align="left"
-                                style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
+                            <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span></p>
                                 Your order has been placed! Orders: #<span style="font-weight: bold; color: #0000cc">{{ $model_orders->order_no }}</span><br/>
                                 You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.<br/>
@@ -25,15 +21,21 @@
                                     <p>Password: {{ $password }}</p>
                                     <p>Click <a href="{{ URL::route('users.getChangePassword') }}">here</a> to change your password</p>
                                 <?php } ?>
-                                <p style="background-color: yellow"><b>Notice: please read carefully before you make the payment</b></p>
+                                <p style="background-color: yellow"><b>Amazon Gift Cards Instructions</b></p>
                                 <ul>
-                                    <li>1. Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)</li>
-                                    <li>2. Your keys/vouchers/account will be delivery within 2-6 hours. If you can not wait, please do not make the payment.</li>
-                                    <li>3. If you do not receive premium in maximum 12 hours => Please contact us first, do not open the disputed!</li>
-                                    <li>4. Your premium key/account will be deilivery by email from <?php echo EMAIL_BUYPREMIUMKEY; ?>. Please make sure to check your Inbox and Spam(Junk) box to get the key/account.</li>
+                                    <li>1. Click <a href="https://www.amazon.com/gp/product/B004LLIKVU/">https://www.amazon.com/gp/product/B004LLIKVU/</a></li>
+                                    <li>2. Set the amount in your order: <b>${{ $model_orders->total_price }}</b></li>
+                                    <li>3. Set the "Recipient E-mail": <b>{{ $model_orders->payment_type->email }}</b></li>
+                                    <li>4. Set the "Message": <span style="color: red">(You must correct this message)</span> <br>
+                                        <b>{{ $model_orders->order_no }} - {{ $model_orders->email }}</b>
+                                    </li>
+                                    <li>5. Click the "Proceed to checkout" button to pay</li>
                                 </ul>
+                                <a href="https://youtu.be/-yHq2W0BmUQ" style="font-weight: bold">Video : How To Send Amazon E-mail Gift Cards</a>
+                                
                             </td>
                         </tr>
+
                         <!--LIST PRODUCT--->
                         <tr>
                             <td>
@@ -190,15 +192,6 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
-                                <?php
-                                    $url_checkout = "https://www.paypal.com/cgi-bin/webscr?business=". $model_orders->payment_type->email ."&cmd=_xclick&currency_code=USD&amount=" . $model_orders->total_price . "&item_name=Design-Logo-" . $model_orders->order_no;
-                                ?>
-                                <p style="background-color: yellow"><b>Check out with Paypal</b></p>
-                                <p>
-                                    <a href="{{ $url_checkout }}" target="_blank">
-                                        <img alt="Buy premium key com" src="{{url('theme_frontend/image/checkout-paypal.png')}}" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px;" border="0">
-                                    </a>
-                                </p>
                                 <p>If you do not receive premium in maximum 6 hours, please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and send you the premium key/account </p>
                                 <p>Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.</p>
                                 <p style="font-weight: bold">Thanks in advance, <br/> Reseller Team <?php echo NAME_COMPANY; ?></p>
@@ -210,6 +203,5 @@
         </table>
     </td>
 </tr>
-
 
 @stop

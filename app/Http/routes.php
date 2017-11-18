@@ -1,4 +1,22 @@
 <?php
+define('NAME_COMPANY','BuyPremiumKey Authorized Reseller');
+define('EMAIL_BUYPREMIUMKEY','buypremiumkey@gmail.com');
+define('EMAIL_RECEIVE_ORDER','minhtienuet@gmail.com');
+define('EMAIL_RECEIVE_AMAZON','driverxheqadni@gmail.com');
+
+define('SUBJECT_PAYPAL_PAYMENT','[Paypal payment] Paypal Invoice for Order #');
+define('SUBJECT_AMAZON_PAYMENT','[Amazon payment] Amazon Invoice for Order #');
+
+
+define('SUBJECT_REQUEST_ORDER','[Payment Request] Orders of Customer: #');
+define('SUBJECT_SEND_PRODUCT','[BuyPremiumKey.Com] Send product(s) for orders #');
+define('SUBJECT_RESEND_PRODUCT','[BuyPremiumKey.Com] Resend product(s) for orders #');
+define('SUBJECT_CUSTOMER_PAID','[BuyPremiumKey.Com] We received your payment for the order #');
+define('SUBJECT_REFUND','[BuyPremiumKey.Com] Refund For Orders #');
+define('SUBJECT_CONTACT','[BuyPremiumKey.Com] Contact by customer');
+define('SUBJECT_FORGOT','[BuyPremiumKey.Com] Forgot password');
+
+
 
 /*
 |--------------------------------------------------------------------------
