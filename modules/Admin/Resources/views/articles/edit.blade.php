@@ -63,6 +63,13 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Site official</label>
+                                        <input type="text" class="form-control border-input" placeholder="Site official..." name="site_official" value="<?php echo ($model->site_official) ? $model->site_official : ''; ?>">
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="row">
                                 <div class="col-md-4">

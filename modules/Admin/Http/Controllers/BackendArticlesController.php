@@ -85,6 +85,10 @@ class BackendArticlesController extends Controller {
                 $model->seo_keyword = $request->txt_seo_keyword;
             }
 
+            if (isset($request->site_official)){
+                $model->site_official = $request->site_official;
+            }
+
             if(isset($request->txt_image)){
                 if ($request->hasFile('txt_image')) {
                     $image = $request->file('txt_image');
@@ -146,6 +150,10 @@ class BackendArticlesController extends Controller {
 
                 if (isset($request->txt_seo_keyword)) {
                     $model->seo_keyword = $request->txt_seo_keyword;
+                }
+
+                if (isset($request->site_official)) {
+                    $model->site_official = $request->site_official;
                 }
 
 

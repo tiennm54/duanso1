@@ -39,9 +39,10 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Title</th>
-                                <th>Code</th>
-                                <th>Brand</th>
+                                <!--<th>Code</th>
+                                <th>Brand</th>-->
                                 <th>Status Stock</th>
+                                <th>Site official</th>
                                 <th width="15%">Action</th>
                             </tr>
 
@@ -51,14 +52,14 @@
                                     <input class="form-control border-input" placeholder="Search Title"
                                            name="txt_title"/>
                                 </th>
-                                <th>
+                                <!--<th>
                                     <input class="form-control border-input" placeholder="Search Code"
                                            name="txt_code"/>
                                 </th>
                                 <th>
                                     <input class="form-control border-input" placeholder="Search Brand"
                                            name="txt_brand"/>
-                                </th>
+                                </th>-->
 
                                 <th>
                                     <select class="form-control border-input" name="int_status_stock">
@@ -67,7 +68,7 @@
                                         <option value="0">Not In Stock</option>
                                     </select>
                                 </th>
-
+                                <th></th>
                                 <th>
                                     <button type="submit" class="btn btn-info btn-fill btn-wd">Search</button>
                                 </th>
@@ -80,8 +81,8 @@
                             <tr>
                                 <td><img src="<?php echo url('images/' . $item->image); ?>" width="100px"></td>
                                 <td><?php echo $item->title;?> <span style="background-color: yellow; font-weight: bold">{{ ($item->status_disable == 1) ? "(HIDDEN)" : "" }}</span></td>
-                                <td><?php echo $item->code;?></td>
-                                <td><?php echo $item->brand;?></td>
+                                <!--<td><?php echo $item->code;?></td>
+                                <td><?php echo $item->brand;?></td>-->
 
                                 <td><?php
                                     switch ($item->status_stock) {
@@ -92,7 +93,11 @@
                                             echo "Not In Stock";
                                             break;
                                     }
-                                    ?></td>
+                                    ?>
+                                </td>
+
+                                <td><a href="<?php echo $item->site_official;?>" target="_blank"><?php echo $item->site_official;?></a></td>
+
                                 <td>
                                     <a class="btn btn-primary"
                                        href="<?php echo URL::route('articles.getEdit', ['id' => $item->id, 'url'=> $item->url_title.'.html']); ?>">

@@ -24,7 +24,7 @@
                 <tbody>
                     <tr>
                         <td class="text-left">
-                            <a href="{{URL::route('adminUserOrders.getAddPremiumKey',[ 'product_id' => $item->articles_type->id, 'order_detail_id' => $item->id ])}}">
+                            <a href="{{URL::route('frontend.articles.view',[ 'id' => $item->articles_type->id, 'url' => $item->articles_type->url_title.".html" ])}}" target="_blank">
                                 {{ $item->articles_type->title }}
                             </a>
                         </td>

@@ -63,6 +63,14 @@
                                                     </select>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Site official</label>
+                                                    <input type="text" class="form-control border-input" placeholder="Site official..." name="site_official">
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <div class="row">
