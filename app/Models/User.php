@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Crisu83\ShortId\ShortId;
+use App\Helpers\MinhTien;
 use Hash;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 
-class User extends Model implements AuthenticatableContract,
-                                    AuthorizableContract,
-                                    CanResetPasswordContract
-{
-    use Authenticatable, Authorizable, CanResetPassword;
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
+
+    use Authenticatable,
+        Authorizable,
+        CanResetPassword;
 
     /**
      * The database table used by the model.
@@ -39,19 +39,16 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
-    public function role()
-    {
-        return $this->belongsTo('App\Models\Role','roles_id');
+    public function role() {
+        return $this->belongsTo('App\Models\Role', 'roles_id');
     }
 
-    public function profiles()
-    {
-        return $this->belongsTo('App\Models\UserProfiles','id','users_id');
+    public function profiles() {
+        return $this->belongsTo('App\Models\UserProfiles', 'id', 'users_id');
     }
 
-    public function shippingAddress()
-    {
-        return $this->hasMany('App\Models\UserShippingAddress','user_id','id');
+    public function shippingAddress() {
+        return $this->hasMany('App\Models\UserShippingAddress', 'user_id', 'id');
     }
 
     /**
@@ -59,8 +56,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @return mixed
      */
-    public function getAuthIdentifier()
-    {
+    public function getAuthIdentifier() {
         return $this->getKey();
     }
 
@@ -69,8 +65,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @return string
      */
-    public function getAuthPassword()
-    {
+    public function getAuthPassword() {
         return $this->password;
     }
 
@@ -79,52 +74,56 @@ class User extends Model implements AuthenticatableContract,
      *
      * @return string
      */
-    public function getReminderEmail()
-    {
+    public function getReminderEmail() {
         return $this->email;
     }
 
-    public function getRememberToken(){
-
-    }
-    public function setRememberToken($value){
-
-    }
-    public function getRememberTokenName(){
-
+    public function getRememberToken() {
+        
     }
 
+    public function setRememberToken($value) {
+        
+    }
 
+    public function getRememberTokenName() {
+        
+    }
 
-    public function createUser($data){
-        $obj_key = ShortId::create(array("length" => 7));
-        $password = $obj_key->generate();
-        $model = new User();
-        $model->first_name = $data["first_name"];
-        $model->last_name = $data["last_name"];
-        $model->email = $data["email"];
-        $model->password = Hash::make($password);
-        $model->roles_id = 2; // memeber
-        $model->save();
+    public function createUser($data) {
+        $password = MinhTien::createPassword();
+        $userIdShare = MinhTien::createIdShare();
+        if ($userIdShare != null) {
+            $model = new User();
+            $model->first_name = $data["first_name"];
+            $model->last_name = $data["last_name"];
+            $model->email = $data["email"];
+            $model->password = Hash::make($password);
+            $model->roles_id = 2; // memeber
+            $model->id_share = $userIdShare;
+            $model->save();
 
-        $model_shipping_address = new UserShippingAddress();
-        $model_shipping_address->user_id = $model->id;
-        $model_shipping_address->email = $model->email;
-        $model_shipping_address->status = "default";
-        $model_shipping_address->save();
+            $model_shipping_address = new UserShippingAddress();
+            $model_shipping_address->user_id = $model->id;
+            $model_shipping_address->email = $model->email;
+            $model_shipping_address->status = "default";
+            $model_shipping_address->save();
 
-        //Add profile
-        $model_profile = new UserProfiles();
-        $model_profile->users_id = $model->id;
-        $model_profile->users_roles_id = $model->roles_id;
-        $model_profile->save();
+            //Add profile
+            $model_profile = new UserProfiles();
+            $model_profile->users_id = $model->id;
+            $model_profile->users_roles_id = $model->roles_id;
+            $model_profile->save();
 
-        $result = array(
-            'user_id' => $model->id,
-            'password' => $password,
-        );
+            $result = array(
+                'user_id' => $model->id,
+                'password' => $password,
+            );
 
-        return $result;
+            return $result;
+        }else{
+            return null;
+        }
     }
 
 }

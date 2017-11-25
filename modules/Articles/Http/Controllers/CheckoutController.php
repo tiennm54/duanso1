@@ -44,7 +44,7 @@ class CheckoutController extends ShoppingCartController {
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PAYPAL_PAYMENT . $model_orders->order_no);
         });
     }
-    
+
     //[Amazon payment] Gửi mail cho khách hàng sử dụng phương thức amazon
     public function sendMailAmazon($model_orders, $model_user, $password) {
         Mail::send('articles::checkout.amazon-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
@@ -52,8 +52,6 @@ class CheckoutController extends ShoppingCartController {
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_AMAZON_PAYMENT . $model_orders->order_no);
         });
     }
-    
-    
 
     public function sendMailToMe($model_orders) {
         Mail::send('articles::checkout.email-checkout-me', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
@@ -319,28 +317,33 @@ class CheckoutController extends ShoppingCartController {
                 if ($model_user == null) {
                     $obj_user = new User();
                     $result = $obj_user->createUser($data);
-                    $user_id = $result["user_id"];
-                    $password = $result["password"];
-                    $model_user = User::find($user_id);
-                    //BẢO MẬT NÊN KHÔNG ĐƯỢC DI CHUYỂN KHỎI IF NÀY
-                    //Chỉ user new mới được login, bởi cần tính bảo mật trong trường hợp người dùng điền bừa email
-                    Auth::loginUsingId($model_user->id);
-                    Session::set('user_email_login', $model_user->email);
-                    $data["shipping_address"] = $model_user->email;
+                    if ($result) {
+                        $user_id = $result["user_id"];
+                        $password = $result["password"];
+                        $model_user = User::find($user_id);
+                        //BẢO MẬT NÊN KHÔNG ĐƯỢC DI CHUYỂN KHỎI IF NÀY
+                        //Chỉ user new mới được login, bởi cần tính bảo mật trong trường hợp người dùng điền bừa email
+                        Auth::loginUsingId($model_user->id);
+                        Session::set('user_email_login', $model_user->email);
+                        $data["shipping_address"] = $model_user->email;
+                    } else {
+                        $request->session()->flash('alert-warning', 'Warning: Server error. Please come back later!');
+                        return redirect()->route('frontend.checkout.index');
+                    }
                 }
                 $model_orders = $this->createOrder($model_user, $data, $array_orders);
                 DB::commit();
                 if ($model_orders) {
                     $this->changeStatusAfterCheckout($model_user);
-                    switch($model_orders->payment_type->code){
-                        case "PAYPAL": 
+                    switch ($model_orders->payment_type->code) {
+                        case "PAYPAL":
                             $this->sendMail($model_orders, $model_user, $password);
                             break;
                         case "AMAZON":
                             $this->sendMailAmazon($model_orders, $model_user, $password);
                             break;
                     }
-                    
+
                     $this->sendMailToMe($model_orders);
                     $this->saveHistory($model_orders);
                     return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
