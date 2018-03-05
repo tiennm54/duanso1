@@ -19,7 +19,6 @@ class BackendFaqController extends Controller {
             $model = $model->where("category_faq_id","=",$data["category"]);
         }
         $model = $model->get();
-
         $model_cate = CategoryFaq::get();
         if($model && $model_cate) {
             return view('admin::faq.index', compact('model','model_cate'));

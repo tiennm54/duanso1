@@ -69,6 +69,16 @@
                                 </select>
                             </div>
                         </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Selected</label>
+                                <select class="form-control border-input" name="int_status_selected">
+                                    <option value="1" selected>ON</option>
+                                    <option value="0">OFF</option>
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="col-md-2">
                             <div class="form-group">

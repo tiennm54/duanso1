@@ -53,6 +53,14 @@ class CheckoutController extends ShoppingCartController {
         });
     }
 
+    //[My money payment] Gửi mail cho khách hàng sử dụng phương thức my money
+    public function sendMailChooseBonus($model_orders, $model_user, $password) {
+        Mail::send('articles::checkout.bonus-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_BONUS_PAYMENT . $model_orders->order_no);
+        });
+    }
+
     public function sendMailToMe($model_orders) {
         Mail::send('articles::checkout.email-checkout-me', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
             $m->from(EMAIL_BUYPREMIUMKEY, "Order of Customer");
@@ -113,7 +121,6 @@ class CheckoutController extends ShoppingCartController {
         $payment_charges = $this->getPaymentCharges($subTotal, $model_payment_selected);
         $total = $subTotal + $payment_charges;
         $model_user = $this->checkMember();
-        $model_shipping_address = null;
 
         if (count($data) != 0) {
             return view('articles::checkout.checkout', compact(
@@ -300,61 +307,97 @@ class CheckoutController extends ShoppingCartController {
             DB::beginTransaction();
             $data = $request->all();
             $array_orders = Session::get('array_orders', []);
-            if (count($array_orders) > 0) {
-
-                $model_user = $this->checkMember();
-                if ($model_user == null) {
-                    $model_user = User::where("email", "=", $data["email"])->first();
-                    if ($model_user == null) {// Không có mail trong bảng User
-                        $check_user_shipping = UserShippingAddress::where("email", "=", $data["email"])->first();
-                        if ($check_user_shipping) {// Tìm thấy email trong bảng shipping address
-                            $model_user = User::find($check_user_shipping->user_id);
+            $password = "";
+            if (isset($data["payments_type_id"])) {
+                $model_payment_type = PaymentType::find($data["payments_type_id"]);
+                if ($model_payment_type != null) {
+                    if (count($array_orders) > 0) {
+                        //Kiểm tra tài khoản trong trường hợp người dùng chọn hình thức thành toán bằng tiền BONUS
+                        $model_user = $this->checkMember();
+                        if ($model_user == null) {
+                            $model_user = User::where("email", "=", $data["email"])->first();
+                            if ($model_user == null) {// Không có mail trong bảng User
+                                $check_user_shipping = UserShippingAddress::where("email", "=", $data["email"])->first();
+                                if ($check_user_shipping) {// Tìm thấy email trong bảng shipping address
+                                    $model_user = User::find($check_user_shipping->user_id);
+                                }
+                            }
                         }
-                    }
-                }
-
-                $password = "";
-                if ($model_user == null) {
-                    $obj_user = new User();
-                    $result = $obj_user->createUser($data);
-                    if ($result) {
-                        $user_id = $result["user_id"];
-                        $password = $result["password"];
-                        $model_user = User::find($user_id);
-                        //BẢO MẬT NÊN KHÔNG ĐƯỢC DI CHUYỂN KHỎI IF NÀY
-                        //Chỉ user new mới được login, bởi cần tính bảo mật trong trường hợp người dùng điền bừa email
-                        Auth::loginUsingId($model_user->id);
-                        Session::set('user_email_login', $model_user->email);
-                        $data["shipping_address"] = $model_user->email;
+                        if ($model_user != null) {
+                            if ($model_payment_type->code == "BONUS") {
+                                $checkMoney = $this->deductionMoney($data, $array_orders, $model_user);
+                                if ($checkMoney == false) {
+                                    $request->session()->flash('alert-warning', 'Warning: You do not have enough money in your account. Please come back later!');
+                                    return redirect()->route('frontend.checkout.index');
+                                }
+                            }
+                        } else {
+                            $obj_user = new User();
+                            $result = $obj_user->createUser($data);
+                            if ($result) {
+                                $user_id = $result["user_id"];
+                                $password = $result["password"];
+                                $model_user = User::find($user_id);
+                                //BẢO MẬT NÊN KHÔNG ĐƯỢC DI CHUYỂN KHỎI IF NÀY
+                                //Chỉ user new mới được login, bởi cần tính bảo mật trong trường hợp người dùng điền bừa email
+                                Auth::loginUsingId($model_user->id);
+                                Session::set('user_email_login', $model_user->email);
+                                $data["shipping_address"] = $model_user->email;
+                            } else {
+                                $request->session()->flash('alert-warning', 'Warning: Server error. Please come back later!');
+                                return redirect()->route('frontend.checkout.index');
+                            }
+                        }
+                        $model_orders = $this->createOrder($model_user, $data, $array_orders);
+                        if ($model_orders) {
+                            $this->changeStatusAfterCheckout($model_user);
+                            switch ($model_orders->payment_type->code) {
+                                case "PAYPAL":
+                                    $this->sendMail($model_orders, $model_user, $password);
+                                    break;
+                                case "AMAZON":
+                                    $this->sendMailAmazon($model_orders, $model_user, $password);
+                                    break;
+                                case "BONUS":
+                                    $this->sendMailChooseBonus($model_orders, $model_user, $password);
+                            }
+                            //$this->sendMailToMe($model_orders);
+                            $this->saveHistory($model_orders);
+                            DB::commit();
+                            return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
+                        }
                     } else {
-                        $request->session()->flash('alert-warning', 'Warning: Server error. Please come back later!');
+                        $request->session()->flash('alert-warning', 'Warning: Your shopping cart is empty!');
                         return redirect()->route('frontend.checkout.index');
                     }
-                }
-                $model_orders = $this->createOrder($model_user, $data, $array_orders);
-                DB::commit();
-                if ($model_orders) {
-                    $this->changeStatusAfterCheckout($model_user);
-                    switch ($model_orders->payment_type->code) {
-                        case "PAYPAL":
-                            $this->sendMail($model_orders, $model_user, $password);
-                            break;
-                        case "AMAZON":
-                            $this->sendMailAmazon($model_orders, $model_user, $password);
-                            break;
-                    }
-
-                    $this->sendMailToMe($model_orders);
-                    $this->saveHistory($model_orders);
-                    return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
+                } else {
+                    $request->session()->flash('alert-warning', 'Warning: This payment method does not exist!');
+                    return redirect()->route('frontend.checkout.index');
                 }
             } else {
-                $request->session()->flash('alert-warning', 'Warning: Your shopping cart is empty!');
+                $request->session()->flash('alert-warning', 'Warning: Please select a payment method!');
+                return redirect()->route('frontend.checkout.index');
             }
         }
 
         $request->session()->flash('alert-warning', 'Warning: Server error. Please come back later!');
         return redirect()->route('frontend.checkout.index');
+    }
+
+    //Trừ tiền đặt hàng trong tài khoản khách hàng.
+    public function deductionMoney($data, $array_orders, $model_user) {
+        $totalOrder = $this->getTotalOrder($array_orders, $data["payments_type_id"]);
+        $total_price = $totalOrder["total"];
+        $total_money = $model_user->user_money;
+        if ($total_money >= $total_price) {
+            $money_current = $total_money - $total_price;
+            $model_user->user_money = $money_current;
+            $model_user->save();
+            Session::set('user_money', $model_user->user_money);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function checkoutSuccess($email = "", $password = "") {

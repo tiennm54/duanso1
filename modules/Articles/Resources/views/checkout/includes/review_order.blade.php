@@ -52,7 +52,7 @@
                     <td align="center">$<span id="sub-total">{{ $subTotal }}</span></td>
                 </tr>
                 <tr>
-                    <td>Charges <span id="text_payment_selected">{{ $model_payment_selected->title }}</span>: </td>
+                    <td>Charges <span id="text_payment_selected">{{ ($model_payment_selected) ? $model_payment_selected->title : "(N/A)"}}</span>: </td>
                     <td align="center">$<span id="payment_charges">{{ $payment_charges }}</span></td>
                 </tr>
                 <tr>

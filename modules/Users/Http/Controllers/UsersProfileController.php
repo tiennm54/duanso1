@@ -4,16 +4,18 @@ namespace Modules\Users\Http\Controllers;
 
 use App\Models\UserProfiles;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\UserOrders;
+use App\Models\UserWishList;
+use App\Models\BonusHistory;
+use App\Models\UserRef;
+use App\Models\BonusConfig;
+use App\Models\BonusPaymentHistory;
 use Hash;
 use Modules\Users\Http\Requests\ChangePasswordRequest;
-use Pingpong\Modules\Routing\Controller;
 use DougSisk\CountryState\CountryState;
+use Illuminate\Support\Facades\Session;
+
 use DB;
-use SEOMeta;
-use OpenGraph;
-use Twitter;
 use URL;
 use App\Models\Seo;
 use App\Helpers\SeoPage;
@@ -39,7 +41,27 @@ class UsersProfileController extends CheckMemberController  {
         }
         $model = $this->checkMember();
         if ($model) {
-            return view('users::user.my_account');
+            Session::set('user_money', $model->user_money);
+            $total_order = UserOrders::where("users_id",$model->id)->count();
+            $total_wish = UserWishList::where("user_id",$model->id)->count();
+            $total_team = UserRef::where("user_sponser_id",$model->id)->count();
+            $total_bonus = $model->getMoneyBonus();
+            $total_spending = $model->getSpendingMoney();
+            $link_ref = DOMAIN_SITE . "/users/register?ref=".$model->email;
+            $data = array(
+                "total_order" => $total_order,
+                "total_wish" => $total_wish,
+                "total_team" => $total_team,
+                "total_bonus" => $total_bonus,
+                "total_spending" => $total_spending,
+                "link_ref"=>$link_ref
+            );
+            //So tien duoc bonus bao gồm được bonus và bonus khi mua hàng
+            $model_bonus = $model->getModelBonus();
+            //So tien chi tieu
+            $model_spending = $model->getModelSpending();
+            $model_bonus_config = BonusConfig::first();
+            return view('users::user.my_account', compact('data','model_bonus','model_spending','model_bonus_config','model'));
         }
         return redirect()->route('users.getLogin');
     }

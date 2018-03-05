@@ -7,23 +7,22 @@
  */
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Description of UserRef
+ * Description of BonusPaymentHistory
  *
  * @author minht
  */
-class UserRef extends Model{
-    protected $table = 'user_ref';
+class BonusPaymentHistory extends Model {
+
+    //put your code here
+    protected $table = 'bonus_payment_history';
     public $timestamps = true;
-    public function userMember()
-    {
-        return $this->hasOne('App\Models\User', 'id' ,'user_id');
-    }
     
-    public function userSponsor()
-    {
-        return $this->hasOne('App\Models\User', 'id' ,'user_sponser_id');
+    public function getUserOrder(){
+        return $this->hasOne('App\Models\UserOrders', 'id' ,'user_orders_id');
     }
+
 }

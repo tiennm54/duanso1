@@ -34,7 +34,7 @@
                         <th>Image</th>
                         <th>Title</th>
                         <th>Email</th>
-                        <th>Description</th>
+                        <th>Selected</th>
                         <th>Position</th>
                         <th>Fees</th>
                         <th>Disabled</th>
@@ -46,13 +46,13 @@
 
                         <tr>
                             <td><?php echo $key + 1; ?></td>
-                            <td><img src="{{ url('images/'.$item->image) }}"></td>
+                            <td><img src="{{ url('images/'.$item->image) }}" width="80px"></td>
                             <td><?php echo $item->title; ?></td>
                             <td><span class="label label-primary"><?php echo ($item->email) ? $item->email : "N/A"; ?></span></td>
-                            <td><?php echo $item->description; ?></td>
+                            <td><span class="label {{ ($item->status_selected == 1) ? "label-primary" : "label-danger"}}"><?php echo ($item->status_selected == 1) ? "ON" : "OFF" ; ?></span></td>
                             <td><?php echo $item->position; ?></td>
                             <td><?php echo $item->fees; ?></td>
-                            <td> {{ ($item->status_disable == 0) ? "Show" : "Hide" }}</td>
+                            <td> <span class="label {{ ($item->status_disable == 0) ? "label-primary" : "label-danger"}}"> {{ ($item->status_disable == 0) ? "SHOW" : "HIDE" }}</td>
                             <td>
                                 <a class="btn btn-primary" href="<?php echo URL::route('paymentType.getEdit', $item->id); ?>"><i class="fa fa-edit"></i></a>
                                 <a onclick="return confirm('Are you sure you want to delete this item?');" href="<?php echo URL::route('paymentType.delete', $item->id); ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>

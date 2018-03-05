@@ -33,6 +33,11 @@
                             $intProgress = "width: 100%";
                             $stringProgress = "Refunded";
                             break;
+                        
+                        case "cancel" :
+                            $intProgress = "width: 100%";
+                            $stringProgress = "Canceled";
+                            break;
                     }
                 ?>
                 <div class="progress">
@@ -55,7 +60,7 @@
                                 <p>Order ID: <span style="font-weight: bold">#{{ $model->id }}</span></p>
                             </td>
                             <td class="text-left" style="width: 50%;">
-                                <p>Orders Status: <span class="label label-primary">{{ $model->payment_status }}</span></p>
+                                <p>Orders Status: <span class="label  <?php echo ($model->payment_status == "completed") ? "label-primary" : "label-danger"; ?>">{{ $model->payment_status }}</span></p>
                                 <p>Payment Method: <span style="font-weight: bold">{{ $model->payment_type->title }}</span></p>
                                 <p>Shipping Method: <span style="font-weight: bold">Send by email.</span></p>
                             </td>

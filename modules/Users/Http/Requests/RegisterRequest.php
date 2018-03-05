@@ -17,8 +17,7 @@ class RegisterRequest extends Request {
             'email'	=> 'required|email|unique:users,email,'.$this->id,
             'password' => 'required:users,password|min:5',
             'confirm_password' => 'required|same:password',
-
-
+            'sponsor' => 'email',
         ];
     }
     public function messages () {

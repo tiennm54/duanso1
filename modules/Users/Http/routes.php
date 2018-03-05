@@ -49,6 +49,9 @@ Route::group(['prefix' => 'users/order-history', 'namespace' => 'Modules\Users\H
     Route::get('view-{id}/{order_no?}', ['as' => 'users.orderHistoryView', 'uses' => 'OrderHistoryController@view']);
 });
 
+Route::group(['prefix' => 'users/team', 'namespace' => 'Modules\Users\Http\Controllers'], function() {
+    Route::get('index.html', ['as' => 'users.team', 'uses' => 'TeamController@listTeam']);
+});
 
 Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controllers'], function() {
     Route::get('contact-us', ['as' => 'users.contact.getContact', 'uses' => 'ContactController@getContact']);

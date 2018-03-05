@@ -16,7 +16,7 @@
                            onclick="selectTypePayment({{ $item }})"
                     />
                     <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" style="width: 80px"/>
-                    <span style="font-weight: bold">{{ $item->title }}</span>
+                    <span style="font-weight: bold">{{ $item->title }} <?php if($item->code == "BONUS" && $model_user != null){ echo "(".$model_user->user_money ."$)"; }?></span>
                     <p style="margin-top: 5px">
                         <span>Charges: </span>
                         <span>{{ $item->fees}}</span><span>%</span>

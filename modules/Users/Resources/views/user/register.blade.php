@@ -8,6 +8,8 @@
             <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
             <li><a href="#">Register</a></li>
         </ul>
+        
+        @include('validator.flash-message')
 
         <div class="col-md-12 well">
             <form novalidate="novalidate" role="form" method="POST" action="{!! route('users.postRegister') !!}">
@@ -19,7 +21,8 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Sponsor: </label>
                         <div class="col-sm-4">
-                            <input type="text" name="sponsor" class="form-control" placeholder="If you don't have sponsor, then leave it blank" value="{{ $ref }}">
+                            <input type="email" name="sponsor" class="form-control" placeholder="If you don't have sponsor, then leave it blank" value="{{ $ref }}">
+                            {!! $errors->first('sponsor','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
 

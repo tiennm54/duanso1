@@ -6,6 +6,16 @@
             </div>
             <table class="table">
                 <tbody>
+                    
+                    <tr>
+                        <td>
+                            <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
+                                    data-original-title="Payment Method"><i
+                                    class="fa fa-credit-card fa-fw"></i></button>
+                        </td>
+                        <td><span class="label label-danger">{{ $model->payment_type->title }}</span></td>
+                    </tr>
+
                     <tr>
                         <td style="width: 1%;">
                             <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
@@ -22,14 +32,7 @@
                         </td>
                         <td>{{ $model->created_at }}</td>
                     </tr>
-                    <tr>
-                        <td>
-                            <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
-                                    data-original-title="Payment Method"><i
-                                    class="fa fa-credit-card fa-fw"></i></button>
-                        </td>
-                        <td>{{ $model->payment_type->title }}</td>
-                    </tr>
+
                     <tr>
                         <td>
                             <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
@@ -108,6 +111,7 @@
                                         <option value="paid" {{ ($model->payment_status == "paid") ? "selected" : "" }}>Paid</option>
                                         <option value="refund" {{ ($model->payment_status == "refund") ? "selected" : "" }}>Refund</option>
                                         <option value="completed" {{ ($model->payment_status == "completed") ? "selected" :"" }}>Completed</option>
+                                        <option value="cancel" {{ ($model->payment_status == "cancel") ? "selected" :"" }}>Canceled</option>
                                     </select>
                                 </div>
 
@@ -121,12 +125,12 @@
                         <td>Total</td>
                         <td class="text-right"><label class="label label-default">${{ $model->total_price }}</label></td>
                     </tr>
-                    
+
                     <tr>
                         <td>Email</td>
                         <td class="text-right"><label class="label {{ ($model->check_send_key) ? "label-success" : "label-danger" }}">{{ ($model->check_send_key) ? "YES" : "NO" }}</label></td>
                     </tr>
-                    
+
                 </tbody>
             </table>
         </div>

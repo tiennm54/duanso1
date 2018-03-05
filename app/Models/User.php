@@ -92,38 +92,73 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function createUser($data) {
         $password = MinhTien::createPassword();
-        $userIdShare = MinhTien::createIdShare();
-        if ($userIdShare != null) {
-            $model = new User();
-            $model->first_name = $data["first_name"];
-            $model->last_name = $data["last_name"];
-            $model->email = $data["email"];
-            $model->password = Hash::make($password);
-            $model->roles_id = 2; // memeber
-            $model->id_share = $userIdShare;
-            $model->save();
+        $model = new User();
+        $model->first_name = $data["first_name"];
+        $model->last_name = $data["last_name"];
+        $model->full_name = $data["first_name"] . " " . $data["last_name"];
+        $model->email = $data["email"];
+        $model->password = Hash::make($password);
+        $model->roles_id = 2; // memeber
+        $model->save();
 
-            $model_shipping_address = new UserShippingAddress();
-            $model_shipping_address->user_id = $model->id;
-            $model_shipping_address->email = $model->email;
-            $model_shipping_address->status = "default";
-            $model_shipping_address->save();
+        $model_shipping_address = new UserShippingAddress();
+        $model_shipping_address->user_id = $model->id;
+        $model_shipping_address->email = $model->email;
+        $model_shipping_address->status = "default";
+        $model_shipping_address->save();
 
-            //Add profile
-            $model_profile = new UserProfiles();
-            $model_profile->users_id = $model->id;
-            $model_profile->users_roles_id = $model->roles_id;
-            $model_profile->save();
+        //Add profile
+        $model_profile = new UserProfiles();
+        $model_profile->users_id = $model->id;
+        $model_profile->users_roles_id = $model->roles_id;
+        $model_profile->save();
 
-            $result = array(
-                'user_id' => $model->id,
-                'password' => $password,
-            );
+        $result = array(
+            'user_id' => $model->id,
+            'password' => $password,
+        );
+        return $result;
+    }
 
-            return $result;
-        }else{
-            return null;
-        }
+    public function getModelBonus() {
+        $model_bonus = $total_bonus_money = BonusHistory::where('user_buy_id', '=', $this->id)
+                        ->where("bonus_type", "Buyer")
+                        ->orWhere(function ($query){
+                            $query->where('user_sponser_id', $this->id)
+                            ->where('bonus_type', 'Sponser');
+                        })->paginate(NUMBER_PAGE);
+        return $model_bonus;
+    }
+    
+    public function getModelSpending(){
+        $model_spending = BonusPaymentHistory::where("user_id",$this->id)->paginate(NUMBER_PAGE);
+        return $model_spending;
+    }
+
+    public function getMoneyBonus() {
+
+        $total_bonus_money = BonusHistory::where('user_buy_id', '=', $this->id)
+                        ->where("bonus_type", "Buyer")
+                        ->orWhere(function ($query) {
+                            $query->where('user_sponser_id', $this->id)
+                            ->where('bonus_type', 'Sponser');
+                        })->sum("bonus");
+
+        return $total_bonus_money;
+    }
+
+    public function getSpendingMoney() {
+        $total_bonus_paid = BonusPaymentHistory::where("user_id", "=", $this->id)->where("status", "=", "completed")->sum("total_payment");
+        return $total_bonus_paid;
+    }
+
+    public function getMoneyForUser() {
+        //Tổng số tiền được bonus
+        $total_bonus_money = $this->getMoneyBonus();
+        //Tổng số tiền đã chi tiêu
+        $total_bonus_paid = $this->getSpendingMoney();
+        $total_money = $total_bonus_money - $total_bonus_paid;
+        return $total_money;
     }
 
 }

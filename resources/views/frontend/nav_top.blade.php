@@ -1,13 +1,27 @@
 <nav id="top">
     <div class="container">
+        <div id="top-links" class="nav pull-left">
+            <ul class="list-inline">
+                <li>
+                    <a style="color: red; font-weight: bold">Bonus 2% for sponsor and 2% for buyers per order is successfully transacted.</a>
+                </li>
+            </ul>
+        </div>
 
         <div id="top-links" class="nav pull-right">
             <ul class="list-inline">
                 <li>
-                    <a href="skype:tiennm54?chat">
-                        <i class="fa fa-skype"></i>
-                        <span class="hidden-xs hidden-sm hidden-md">tiennm54</span>
-                    </a>
+                    <?php if (!Auth::check()) { ?>
+                        <a href="skype:tiennm54?chat">
+                            <i class="fa fa-skype"></i>
+                            <span class="hidden-xs hidden-sm hidden-md">tiennm54</span>
+                        </a>
+                    <?php } else { ?>
+                        <a href="{{ URL::route('users.getMyAccount') }}">
+                            <i class="fa fa-money"></i>
+                            <span class="hidden-xs hidden-sm hidden-md"><b><?php echo (Session::get('user_money')) ? Session::get('user_money') : "0"; ?>$</b></span>
+                        </a>
+                    <?php } ?>
 
                 </li>
 
@@ -15,14 +29,16 @@
                     <a href="#" title="My Account" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-user"></i>
                         <span class="hidden-xs hidden-sm hidden-md">
-                            <?php if (!Auth::check()){
+                            <?php
+                            if (!Auth::check()) {
                                 echo "My Account";
-                            }else{
+                            } else {
                                 echo Session::get('user_email_login');
-                            }?>
+                            }
+                            ?>
                         </span> <span class="caret"></span>
                     </a>
-                    <?php if (!Auth::check()):?>
+                    <?php if (!Auth::check()) { ?>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="{{ URL::route('users.getRegister') }}">Register</a>
@@ -31,12 +47,11 @@
                                 <a href="{{ URL::route('users.getLogin') }}">Login</a>
                             </li>
                         </ul>
-                    <?php endif; ?>
-
-                    <?php if (Auth::check()):?>
+                    <?php } ?>
+                    <?php if (Auth::check()) { ?>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a href="{{ URL::route('users.getMyAccount') }}">My account</a>
+                                <a href="{{ URL::route('users.getMyAccount') }}">My account (<?php echo (Session::get('user_money')) ? Session::get('user_money') : "0"; ?>$)</a>
                             </li>
 
                             <li>
@@ -44,15 +59,11 @@
                             </li>
 
                             <li>
-                                <a href="{{ URL::route('users.shippingAddress.getShippingAddress') }}">Shipping Address</a>
-                            </li>
-
-                            <li>
                                 <a href="{{ URL::route('users.getLogout') }}">Logout</a>
                             </li>
 
                         </ul>
-                    <?php endif; ?>
+                    <?php } ?>
 
 
                 </li>
@@ -65,7 +76,7 @@
                 <li>
                     <a href="#" title="Shopping Cart" data-toggle="modal" data-target="#myModal" onclick="viewCartModal()">
                         <i class="fa fa-shopping-cart"></i> <span
-                                class="hidden-xs hidden-sm hidden-md">Shopping Cart</span>
+                            class="hidden-xs hidden-sm hidden-md">Shopping Cart</span>
                     </a>
                 </li>
                 <li>

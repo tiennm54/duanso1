@@ -62,7 +62,7 @@
                                 <div id="product">
                                     <div class="form-group">
                                         <button type="button" id="button-cart" data-loading-text="Loading..." onclick="addToCart({{ $model->id }})" data-toggle="modal" data-target="#myModal"
-                                                class="btn btn-primary btn-lg btn-block">Add to Cart
+                                                class="btn btn-primary btn-lg btn-block"  <?php echo ($model->status_stock == 0) ? "disabled" : ""?>>Add to Cart
                                         </button>
                                     </div>
                                 </div>

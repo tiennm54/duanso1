@@ -72,6 +72,16 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
+                                <label>Selected</label>
+                                <select class="form-control border-input" name="int_status_selected">
+                                    <option value="1" <?php if($model->status_selected == 0){ echo "selected"; } ?>>ON</option>
+                                    <option value="0" <?php if($model->status_selected == 0){ echo "selected"; } ?>>OFF</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
                                 <label>Fees</label>
                                 <input type="number"  step="any" value="<?php echo ($model->fees) ? $model->fees : ''; ?>" class="form-control border-input" placeholder="Fees..." name="txt_fees" required>
                             </div>

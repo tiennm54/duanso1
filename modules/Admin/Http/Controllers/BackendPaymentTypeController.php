@@ -30,6 +30,7 @@ class BackendPaymentTypeController extends Controller {
             $model = new PaymentType();
             $model->title = $request->txt_title;
             $model->status_disable = $request->int_status_disable;
+            $model->status_selected = $request->int_status_selected;
             $model->position = $request->txt_position;
             $model->fees = $request->txt_fees;
             $model->plus = $request->txt_plus;
@@ -77,6 +78,7 @@ class BackendPaymentTypeController extends Controller {
 
                 $model->title = $request->txt_title;
                 $model->status_disable = $request->int_status_disable;
+                $model->status_selected = $request->int_status_selected;
                 $model->position = $request->txt_position;
                 $model->fees = $request->txt_fees;
                 $model->plus = $request->txt_plus;

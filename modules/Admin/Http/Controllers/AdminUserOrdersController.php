@@ -7,6 +7,11 @@ use App\Models\ArticlesTypeKey;
 use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
 use App\Models\UserOrdersHistory;
+use App\Models\BonusPaymentHistory;
+use App\Models\UserRef;
+use App\Models\User;
+use App\Models\BonusConfig;
+use App\Models\BonusHistory;
 use Carbon\Carbon;
 use DougSisk\CountryState\CountryState;
 use Illuminate\Http\Request;
@@ -24,22 +29,17 @@ class AdminUserOrdersController extends Controller {
     }
 
     public function listOrders(Request $request) {
-
         $data = $request->all();
         $model = UserOrders::orderBy("id", "DESC");
-
         if (isset($data["order_id"]) && $data["order_id"] != "") {
             $model = $model->where("id", "=", $data["order_id"]);
         }
-
         if (isset($data["email"]) && $data["email"] != "") {
             $model = $model->where("email", "LIKE", "%" . $data["email"] . "%");
         }
-
         if (isset($data["payment_status"]) && $data["payment_status"] != "") {
             $model = $model->where("payment_status", "=", $data["payment_status"]);
         }
-
         if (isset($data["start_created_at"]) && $data["start_created_at"] != "" && isset($data["end_created_at"]) && $data["end_created_at"] != "") {
             $model = $model->where("created_at", ">", $data["start_created_at"])->where("created_at", "<", $data["end_created_at"]);
         }
@@ -76,14 +76,13 @@ class AdminUserOrdersController extends Controller {
         return back();
     }
 
+    /////////////////////HOÀN THIỆN ĐƠN HÀNG ĐỒNG THỜI BONUS TIỀN CHO NGƯỜI DÙNG////////////////////////
     public function sendKey($id, Request $request) {
+        DB::beginTransaction();
         $model_orders = UserOrders::find($id);
         if ($model_orders) {
             $model_key = $this->getPremiumKeySend($model_orders);
             if ($model_key) {
-                $model_orders->payment_status = "completed";
-                $model_orders->payment_date = Carbon::now();
-                $model_orders->save();
 
                 foreach ($model_key as $item) {
                     $item->status = "sent";
@@ -94,14 +93,88 @@ class AdminUserOrdersController extends Controller {
                 }
 
                 $this->sendProductEmail($model_orders, $model_key);
+                
+                $model_orders->payment_status = "completed";
+                $model_orders->payment_date = Carbon::now();
+                $model_orders->save();
+                
+                $this->saveHistoryOrder($model_orders);
+                $this->bonusMoney($model_orders);
+
+                DB::commit();
 
                 $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
                 return back();
-
             }
         }
         $request->session()->flash('alert-warning', 'Warning: Đã xảy ra lỗi !!!');
         return back();
+    }
+
+    //Bonus cho sponser và người mua
+    public function bonusMoney($model_orders) {
+        $model_bonus_his = BonusHistory::where("user_order_id", "=", $model_orders->id)->first();
+        if ($model_bonus_his == null) {
+            $model_bonus_config = BonusConfig::orderBy("id", "DESC")->first();
+            if ($model_bonus_config && $model_bonus_config->bonus_sponsor > 0) {
+                $model_user_sponser = $this->bonusSponser($model_orders, $model_bonus_config);
+                //Nếu người mua có sponsor
+                if ($model_user_sponser) {
+                    $this->updateMoneyForUser($model_user_sponser);
+                    $model_user = $this->bonusUser($model_orders, $model_bonus_config, $model_user_sponser);
+                    if ($model_user) {
+                        $this->updateMoneyForUser($model_user);
+                    }
+                }
+            }
+        }
+    }
+
+    //Bonus cho người được ref từ người mua
+    public function bonusSponser($model_orders, $model_bonus_config) {
+        //Người mua hàng
+        $user_id = $model_orders->users_id;
+        $model_user_ref = UserRef::where("user_id", "=", $user_id)->first();
+        if ($model_user_ref) {
+            if ($model_user_ref->user_sponser_id) {
+                $user_sponser_id = $model_user_ref->user_sponser_id;
+                $model_user_sponser = User::find($user_sponser_id);
+                if ($model_user_sponser) {
+                    $bonus_sponser = ($model_bonus_config->bonus_sponsor * $model_orders->sub_total) / 100;
+                    if ($bonus_sponser > 0) {
+                        $this->saveBonusHistory($model_orders, $user_id, $user_sponser_id, $bonus_sponser, "Sponser", $model_bonus_config->bonus_sponsor);
+                        return $model_user_sponser;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    //Bonus cho người mua
+    public function bonusUser($model_orders, $model_bonus_config, $model_user_sponser) {
+        $user_id = $model_orders->users_id;
+        $model_user = User::find($user_id);
+        if ($model_user) {
+            $bonus_user = ($model_bonus_config->bonus_reg * $model_orders->sub_total) / 100;
+            if ($bonus_user > 0) {
+                $this->saveBonusHistory($model_orders, $user_id, $model_user_sponser->id, $bonus_user, "Buyer", $model_bonus_config->bonus_reg);
+                return $model_user;
+            }
+        }
+        return null;
+    }
+
+    //Lưu lịch sử bonus cho người dùng
+    public function saveBonusHistory($model_orders, $user_buy_id, $user_sponser_id, $bonus_money, $bonus_type, $bonus_percent) {
+        $model = new BonusHistory();
+        $model->user_buy_id = $user_buy_id;
+        $model->user_sponser_id = $user_sponser_id;
+        $model->user_order_id = $model_orders->id;
+        $model->bonus = $bonus_money;
+        $model->bonus_type = $bonus_type;
+        $model->bonus_percent = $bonus_percent;
+        $model->save();
     }
 
     //Gửi mail sản phẩm tới khách hàng
@@ -114,9 +187,6 @@ class AdminUserOrdersController extends Controller {
             $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
         });
-        
-        $this->saveHistoryOrder($model_orders);
-        
         if (count(Mail::failures()) > 0) { // gửi lỗi
             return 0;
         } else {
@@ -149,11 +219,22 @@ class AdminUserOrdersController extends Controller {
         });
     }
 
+    public function sendMailCancel($model_orders) {
+        $subject_email = SUBJECT_CANCEL . $model_orders->order_no;
+        Mail::send('admin::userOrders.email-send-cancel', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+        });
+    }
+
     public function saveHistoryOrder($model_order) {
-        $model_history = new UserOrdersHistory();
-        $model_history->user_orders_id = $model_order->id;
-        $model_history->history_name = $model_order->payment_status;
-        $model_history->save();
+        $model_check = UserOrdersHistory::where("user_orders_id", "=", $model_order->id)->where("history_name", "=", "completed")->first();
+        if ($model_check == null) {
+            $model_history = new UserOrdersHistory();
+            $model_history->user_orders_id = $model_order->id;
+            $model_history->history_name = $model_order->payment_status;
+            $model_history->save();
+        }
     }
 
     //Thay đổi trạng thái order
@@ -163,7 +244,6 @@ class AdminUserOrdersController extends Controller {
             if (isset($data["payment_status"])) {
                 $model = UserOrders::find($id);
                 if ($model) {
-
                     $tmp_status = $model->payment_status;
                     if ($data["payment_status"] == 'refund' || $data["payment_status"] == 'completed') {
                         if ($tmp_status != 'paid') {
@@ -180,15 +260,43 @@ class AdminUserOrdersController extends Controller {
                         }
                     }
 
-                    $model->payment_status = $data["payment_status"];
-                    $model->save();
+                    if ($data["payment_status"] == 'cancel' && $tmp_status != "pending") {
+                        $request->session()->flash('alert-warning', 'Warning: Không thể hủy đơn hàng này!');
+                        return back();
+                    }
 
                     if ($data["payment_status"] == 'paid') {
-                        $this->sendMailPaid($model);
+                        //Xác nhận thanh toán
+                        $checkPaid = false;
+                        if ($model->payment_type->code == "BONUS") {
+                            $checkPaid = $this->paymentByBonus($model);
+                            if ($checkPaid) {
+                                $this->sendMailPaid($model);
+                            } else {
+                                $request->session()->flash('alert-warning', 'Warning: Vui lòng kiểm tra giao dịch của tài khoản này!');
+                                return back();
+                            }
+                        } else {
+                            $this->sendMailPaid($model);
+                        }
                     }
                     if ($data["payment_status"] == 'refund') {
+                        //Tra lai tien cho nguoi dung
+                        if ($model->payment_type->code == "BONUS") {
+                            $this->refundByBonus($model);
+                        }
                         $this->sendMailRefund($model);
                     }
+                    if ($data["payment_status"] == 'cancel') {
+                        $model_user = User::find($model->users_id);
+                        if ($model_user) {
+                            $this->updateMoneyForUser($model_user);
+                        }
+                        $this->sendMailCancel($model);
+                    }
+
+                    $model->payment_status = $data["payment_status"];
+                    $model->save();
 
                     $this->saveHistoryOrder($model);
 
@@ -321,7 +429,7 @@ class AdminUserOrdersController extends Controller {
         }
         return 0; // Lỗi
     }
-    
+
     //SAVE COMMENT HISTORY
     public function saveHistory($id, Request $request) {
         $data = $request->all();
@@ -336,6 +444,48 @@ class AdminUserOrdersController extends Controller {
         }
         $request->session()->flash('alert-warning', 'Warning: Update history thất bại !!! ');
         return back();
+    }
+
+    //Update lại tiên trong tài khoản cho người dùng, việc này xảy ra khi bonus cho người dùng
+    public function updateMoneyForUser($model_user) {
+        $total_money = $model_user->getMoneyForUser();
+        $model_user->user_money = $total_money;
+        $model_user->save();
+    }
+
+    //XÁC NHẬN THANH TOÁN CHO NGƯỜI DÙNG TRONG TRƯỜNG HỢP NGƯỜI DÙNG DÙNG PHƯƠNG THỨC THANH TOÁN BẰNG TIỀN BONUS
+    public function paymentByBonus($model_order) {
+        $model_user = User::find($model_order->users_id);
+        if ($model_user) {
+            //Lấy tiền trước khi thanh toán
+            $total_money = $model_user->getMoneyForUser();
+            //Tien thanh toans
+            $total_payment = $model_order->total_price;
+
+            if ($total_money == $model_user->user_money + $total_payment) {
+                //Ghi log
+                $model_bonus_history = new BonusPaymentHistory();
+                $model_bonus_history->user_orders_id = $model_order->id;
+                $model_bonus_history->user_id = $model_user->id;
+                $model_bonus_history->total_payment = $total_payment;
+                $model_bonus_history->total_before = $total_money;
+                $model_bonus_history->total_after = $total_money - $total_payment;
+                $model_bonus_history->status = "completed";
+                $model_bonus_history->save();
+                //Update lại tiền vào tài khoản người dùng
+                $this->updateMoneyForUser($model_user);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function refundByBonus($model_order) {
+        $model_user = User::find($model_order->users_id);
+        BonusPaymentHistory::where("user_orders_id", "=", $model_order->id)->update(["status" => "refund"]);
+        if ($model_user) {
+            $this->updateMoneyForUser($model_user);
+        }
     }
 
 }

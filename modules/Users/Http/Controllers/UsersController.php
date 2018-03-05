@@ -2,7 +2,6 @@
 
 namespace Modules\Users\Http\Controllers;
 
-use App\Http\Controllers\SendEmailController;
 use App\Models\UserOrders;
 use App\Models\UserShippingAddress;
 use Illuminate\Http\Request;
@@ -17,9 +16,6 @@ use App\Models\UserShoppingCart;
 use DB;
 use Crisu83\ShortId\ShortId;
 use Illuminate\Support\Facades\Mail;
-use SEOMeta;
-use OpenGraph;
-use Twitter;
 use URL;
 use App\Models\Seo;
 use Illuminate\Support\Facades\Session;
@@ -30,6 +26,8 @@ class UsersController extends CheckMemberController {
 
     public function getInfoUser($model_user) {
         Session::set('user_email_login', $model_user->email);
+        Session::set('user_money', $model_user->user_money);
+        
         $obj_shopping_cart = new UserShoppingCart();
         $array_orders = $obj_shopping_cart->getShoppingOrder($model_user);
         $obj_shopping_cart->setSession($array_orders);
@@ -65,18 +63,14 @@ class UsersController extends CheckMemberController {
                             Session::set('user_email_login', "Admin");
                             return redirect()->route('articles.index');
                         case "member" :
-
                             $this->getInfoUser($user);
-
-                            //return redirect()->intended('users.getMyAccount');
                             return redirect()->route('users.getMyAccount');
-
-
                         default:
                             return view('users::user.login');
                     }
                 }
             } else {
+                $request->session()->flash('alert-warning', ' Warning: Invalid username and/or password, please try again.');
                 return view('users::user.login');
             }
         }
@@ -101,35 +95,38 @@ class UsersController extends CheckMemberController {
             try {
                 DB::beginTransaction();
                 $data = $request->all();
-                $userIdShare = MinhTien::createIdShare();
                 $check_user_exits = User::where("email", "=", trim($data["email"]))->count();
                 if ($check_user_exits == 0) {
-                    if ($userIdShare != null) {
-                        $model = new User();
-                        $model->first_name = $data["first_name"];
-                        $model->last_name = $data["last_name"];
-                        $model->full_name = $data["first_name"] . " " . $data["last_name"];
-                        $model->email = $data["email"];
-                        $model->password = Hash::make($data["password"]);
-                        $model->roles_id = 2; // memeber
-                        $model->id_share = $userIdShare;
-                        $model->save();
+                    $model = new User();
+                    $model->first_name = $data["first_name"];
+                    $model->last_name = $data["last_name"];
+                    $model->full_name = $data["first_name"] . " " . $data["last_name"];
+                    $model->email = $data["email"];
+                    $model->password = Hash::make($data["password"]);
+                    $model->roles_id = 2; // memeber
+                    $model->save();
 
-                        if (isset($data["sponsor"])) {
-                            MinhTien::saveSponsor($data["sponsor"], $model);
+                    //Save shipping address
+                    $model_shipping_address = new UserShippingAddress();
+                    $model_shipping_address->user_id = $model->id;
+                    $model_shipping_address->email = $model->email;
+                    $model_shipping_address->status = "default";
+                    $model_shipping_address->save();
+
+                    //Save sponsor
+                    if (isset($data["sponsor"])) {
+                        $sponsor_email = $data["sponsor"];
+                        $model_ref = MinhTien::saveSponser($model, $sponsor_email);
+                        if ($model_ref == null) {
+                            $request->session()->flash('alert-warning', 'Warning: Sponsor ' . $sponsor_email . ' is not exist!');
+                            return redirect()->route('users.getRegister', ['ref' => $sponsor_email]);
                         }
-
-                        $model_shipping_address = new UserShippingAddress();
-                        $model_shipping_address->user_id = $model->id;
-                        $model_shipping_address->email = $model->email;
-                        $model_shipping_address->status = "default";
-                        $model_shipping_address->save();
-
-                        Auth::loginUsingId($model->id);
-                        DB::commit();
-                        Session::set('user_email_login', $model->email);
-                        return redirect()->route('users.getRegisterSuccess');
                     }
+
+                    Auth::loginUsingId($model->id);
+                    DB::commit();
+                    Session::set('user_email_login', $model->email);
+                    return redirect()->route('users.getRegisterSuccess');
                 } else {
                     $string = '<i class="fa fa-check-circle"></i>' .
                             ' Warning: There is already an account with this email address. If you are sure that it is your email address,' .

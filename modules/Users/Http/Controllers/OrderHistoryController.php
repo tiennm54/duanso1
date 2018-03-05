@@ -7,19 +7,6 @@ use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
 use App\Models\UserOrdersHistory;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Hash;
-use Mockery\CountValidator\Exception;
-use Modules\Users\Http\Requests\LoginRequest;
-use Modules\Users\Http\Requests\RegisterRequest;
-use Pingpong\Modules\Routing\Controller;
-use Illuminate\Support\Facades\Session;
-use App\Models\UserShoppingCart;
-use DougSisk\CountryState\CountryState;
-use SEOMeta;
-use OpenGraph;
-use Twitter;
 use URL;
 use App\Models\Seo;
 use App\Helpers\SeoPage;
@@ -38,14 +25,23 @@ class OrderHistoryController extends CheckMemberController  {
     }
 
     // Khi login thì đã set session rồi
-    public function listOrder(){
+    public function listOrder(Request $request){
+        $data = $request->all();
         $model_seo = Seo::where("type","=","index")->first();
         if ($model_seo) {
             $this->seoOrderHistory($model_seo);
         }
         $model_user = $this->checkMember();
         if ($model_user){
-            $model = UserOrders::where("users_id","=", $model_user->id)->orderBy("id","DESC")->paginate(20);
+            $model = UserOrders::where("users_id","=", $model_user->id)->orderBy("id","DESC");
+            if(isset($data["searchOrderNo"]) && $data["searchOrderNo"] != ""){
+                $model = $model->where("order_no","LIKE", "%" . $data["searchOrderNo"] . "%");
+            }
+            if(isset($data["searchStatus"]) && $data["searchStatus"] != ""){
+                $model = $model->where("payment_status","=",$data["searchStatus"]);
+            }
+            $model = $model->paginate(NUMBER_PAGE);
+            
             return view('users::order-history.order-history',compact('model'));
         }else{
             return redirect()->route('users.getLogin');

@@ -86,14 +86,9 @@
                     </div>
 
                     <div id="comment" class="tab-pane fade row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="fb-comments" data-href="{{ URL::route('frontend.articles.pricing', ['id' => $item->id, 'url' => $item->url_title.".html" ]) }}" data-numposts="6"></div>
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="fb-page  pull-right" data-href="https://www.facebook.com/buypremiumkey/" data-tabs="timeline" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/buypremiumkey/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/buypremiumkey/">Buy Premium Key</a></blockquote></div>
-                        </div>
-
                     </div>
                 </div>
             </div>
