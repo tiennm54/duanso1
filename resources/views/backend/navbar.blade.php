@@ -53,6 +53,14 @@
                 </li>
             </ul>
         </li>
+        
+         <li id="menu-customer">
+            <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>
+            <ul class="collapse">
+                <li><a href="{{ URL::route('admin.userManagement.index') }}">List User</a></li>
+            </ul>
+        </li>
+
 
         <li id="menu-category">
             <a class="parent"><i class="fa fa-tags fw"></i> <span>Category</span></a>
@@ -73,16 +81,6 @@
                 <li>
                     <a href="{{ URL::route('admin.news.index') }}">News</a>
                 </li>
-            </ul>
-        </li>
-
-
-
-
-        <li id="menu-customer">
-            <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>
-            <ul class="collapse">
-                <li><a href="#">List User</a></li>
             </ul>
         </li>
 

@@ -26,6 +26,7 @@ Route::group(['prefix' => 'checkout', 'namespace' => 'Modules\Articles\Http\Cont
     Route::post('selectTypePayment',['as'=>'frontend.checkout.selectTypePayment','uses'=>'CheckoutController@selectTypePayment']);
     Route::post('changeQuantity',['as'=>'frontend.checkout.changeQuantity','uses'=>'CheckoutController@changeQuantity']);
     Route::post('deleteProductCheckout',['as'=>'frontend.checkout.deleteProductCheckout','uses'=>'CheckoutController@deleteProductCheckout']);
+    Route::post('chooseBonusMoney',['as'=>'frontend.checkout.chooseBonusMoney','uses'=>'CheckoutController@chooseBonusMoney']);
 
     Route::post('confirmOrder',['as'=>'frontend.checkout.confirmOrder','uses'=>'CheckoutController@confirmOrder']);
     Route::get('confirmOrder',['as'=>'frontend.checkout.getConfirmOrder','uses'=>'CheckoutController@getConfirmOrder']);

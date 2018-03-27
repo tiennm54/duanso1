@@ -1,4 +1,6 @@
-<?php namespace Modules\Articles\Http\Controllers;
+<?php
+
+namespace Modules\Articles\Http\Controllers;
 
 use App\Models\Articles;
 use App\Models\ArticlesType;
@@ -20,50 +22,46 @@ use Twitter;
 use URL;
 use App\Helpers\SeoPage;
 
-class ArticlesDetailController extends CheckMemberController  {
+class ArticlesDetailController extends CheckMemberController {
 
-    public function sumRateProduct($model_product){
+    public function sumRateProduct($model_product) {
         $sum = 0;
         $count_user_rate = count($model_product->getReview);
-        if ($count_user_rate == 0){
+        if ($count_user_rate == 0) {
             return $sum;
-        }else{
-            $sum = UserReview::where("articles_type_id","=", $model_product->id)->sum("rate") / $count_user_rate;
+        } else {
+            $sum = UserReview::where("articles_type_id", "=", $model_product->id)->sum("rate") / $count_user_rate;
             return $sum;
         }
-
     }
 
-    public function seoView($model){
-        $url_page = URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title.'.html' ]);
+    public function seoView($model) {
+        $url_page = URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title . '.html']);
         $image_page = url('images/' . $model->getArticles->image);
         SeoPage::createSeo($model, $url_page, $image_page);
     }
 
-    public function view($id = 0){
+    public function view($id = 0) {
 
         $attributes = [
             'data-theme' => 'light',
-            'data-type'	=>	'image',
+            'data-type' => 'image',
         ];
 
         $model = ArticlesType::find($id);
         $model_user = $this->checkMember();
-        $sum_rate = $this->sumRateProduct($model);
-
-        if ($model){
-
+        if ($model) {
             $this->seoView($model);
-
-            $model_related = ArticlesType::where("articles_id","=",$model->articles_id)->where("id", "!=", $model->id)->get();
-            $model_list_product = Articles::where("status_disable","=",0)->orderBy("title","ASC")->get();
-            return view('articles::articles.view', compact("model", "model_related", "model_user", "attributes", "sum_rate","model_list_product"));
+            $sum_rate = $this->sumRateProduct($model);
+            $model_related = ArticlesType::where("articles_id", "=", $model->articles_id)->where("id", "!=", $model->id)->get();
+            $model_list_product = Articles::where("status_disable", "=", 0)->orderBy("title", "ASC")->get();
+            return view('articles::articles.view', compact("model", "model_related", "model_user", "attributes", "sum_rate", "model_list_product"));
         }
         return redirect()->route('frontend.articles.index');
     }
 
-    public function reviewProduct(ReviewProductRequest $request){
-        if ($request){
+    public function reviewProduct(ReviewProductRequest $request) {
+        if ($request) {
             $data = $request->all();
 
             $product_id = $data["product_id"];
@@ -83,11 +81,12 @@ class ArticlesDetailController extends CheckMemberController  {
                 $model->save();
 
                 $request->session()->flash('alert-success', 'Success: Thank you for your review. It has been submitted to the webmaster for approval!');
-                return redirect()->route('frontend.articles.view', [ 'id' => $model_product->id, 'url' => $model_product->url_title ]);
+                return redirect()->route('frontend.articles.view', ['id' => $model_product->id, 'url' => $model_product->url_title]);
             }
         }
 
         $request->session()->flash('alert-warning', 'Warning: Review Product Error!');
         return redirect()->route('frontend.articles.index');
     }
+
 }

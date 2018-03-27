@@ -14,7 +14,10 @@
                         <tr>
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span></p>
-                                Your order has been placed! Orders: #<span style="font-weight: bold; color: #0000cc">{{ $model_orders->order_no }}</span><br/>
+                                Your order has been placed! Orders: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span><br/>
+                                <?php if ($model_orders->total_price == 0) { ?>
+                                    <span style="font-weight: bold; color: blue">This order has been charging on your available balance. Please wait us to verify again, then we will send you an email to confirm that your payment is valid. If your payment is not valid, transaction will be canceled.</span>
+                                <?php } ?>
                                 You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.<br/>
                                 <p>Your account: {{ $model_user->email }}</p>
                                 <?php if ($password != "") { ?>
@@ -32,7 +35,7 @@
                                     <li>5. Click the "Proceed to checkout" button to pay</li>
                                 </ul>
                                 <a href="https://youtu.be/-yHq2W0BmUQ" style="font-weight: bold">Video : How To Send Amazon E-mail Gift Cards</a>
-                                
+
                             </td>
                         </tr>
 
@@ -125,6 +128,48 @@
                                                                 <td align="right"
                                                                     style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
                                                                     ${{$model_orders->payment_charges}}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <!-- TWO COLUMNS -->
+                                <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+                                        <td valign="top" style="padding: 0;" class="mobile-wrapper">
+                                            <!-- LEFT COLUMN -->
+                                            <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;"
+                                                   align="left">
+                                                <tr>
+                                                    <td style="padding: 0 0 10px 0;">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td align="left"
+                                                                    style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
+                                                                    Used bonus
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <!-- RIGHT COLUMN -->
+                                            <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;"
+                                                   align="right">
+                                                <tr>
+                                                    <td style="padding: 0 0 10px 0;">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td align="right"
+                                                                    style="font-family: Arial, sans-serif; color: #333333; font-size: 16px;">
+                                                                    ${{$model_orders->used_bonus}}</td>
                                                             </tr>
                                                         </table>
                                                     </td>

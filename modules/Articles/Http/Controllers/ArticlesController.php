@@ -35,7 +35,7 @@ class ArticlesController extends Controller {
         if ($model_seo) {
             $this->seoIndex($model_seo);
         }
-        $model = Articles::where("status_disable","=",0)->orderBy("position", "ASC")->get();
+        $model = Articles::where("status_disable","=",0)->orderBy("order_count", "DESC")->orderBy("view_count", "DESC")->get();
         return view('articles::articles.index', compact("model"));
     }
 
@@ -59,6 +59,7 @@ class ArticlesController extends Controller {
         $model = Articles::find($id);
         if ($model != null) {
             $this->seoPricing($model);
+            $model->saveViewCount();
             $model_type = ArticlesType::where("articles_id", "=", $id)->orderBy("price_order", "ASC")->get();
             $model_all_product = Articles::where("status_disable","=",0)->get();
             if (count($model_type) != 0) {

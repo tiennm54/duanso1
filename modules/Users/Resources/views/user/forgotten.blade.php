@@ -6,7 +6,7 @@
             <ul class="breadcrumb">
                 <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
                 <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
-                <li><a href="#">Forgotten Password</a></li>
+                <li>Forgotten Password</li>
             </ul>
 
             @include('validator.flash-message')

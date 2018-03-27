@@ -4,12 +4,9 @@
         <div class="container-fluid">
 
             <div class="pull-right">
-                <a href="{{ URL::route('admin.userManagement.getCreate') }}" data-toggle="tooltip" title="Add new"
-                   class="btn btn-primary" data-original-title="Add New">
-                    <i class="fa fa-plus"></i>
-                </a>
-
+                
             </div>
+            
             <h1>Customers</h1>
             <ul class="breadcrumb">
                 <li>
@@ -25,7 +22,7 @@
     <div class="container-fluid">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-list"></i> Create Infomation</h3>
+                <h3 class="panel-title"><i class="fa fa-list"></i> User Management</h3>
             </div>
             <div class="panel-body">
 
@@ -45,12 +42,33 @@
                                     <input type="text" name="filter_email" value="{{Request::get('filter_email')}}" placeholder="E-Mail" id="input-email" class="form-control">
                                 </div>
                             </div>
+                            
+                             <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="input-email">Status lock</label>
+                                    <select class="form-control" name="filter_status">
+                                        <option value="">Select status</option>
+                                        <option value="0">OKIE</option>
+                                        <option value="1">LOCKED</option>
+                                    </select>
+                                </div>
+                            </div>
 
                             <div class="col-sm-1">
                                 <div class="form-group">
                                     <label class="control-label">Search</label>
                                     <div>
                                         <button type="submit" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-filter"></i> Filter</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label class="control-label">Reset</label>
+                                    <div>
+                                        <a type="submit" class="btn btn-default pull-right" href="<?php echo URL::route('admin.userManagement.index'); ?>">
+                                            <i class="fa fa-filter"></i> Reset
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -65,23 +83,35 @@
                             <td class="text-left"><a>No</a></td>
                             <td class="text-left"><a>Email Login</a></td>
                             <td class="text-left"><a>Full Name</a></td>
+                            <td class="text-left"><a>Money Account</a></td>
+                            <td class="text-left"><a>Money Bonus</a></td>
+                            <td class="text-left"><a>Status lock</a></td>
                             <td class="text-left"><a>Created At</a></td>
-                            <td class="text-left"><a>Updated At</a></td>
                             <td class="text-right">Action</td>
                         </tr>
                         </thead>
                         <tbody>
+                        <?php if(count($model) == 0):?> 
+                            <tr>
+                                <td colspan="8">Không có bản ghi nào</td>
+                            </tr>
+                            <?php endif;?>
+                        
                         <?php foreach ($model as $key => $item):?>
                         <tr>
                             <td class="text-left">{{ $key + 1 }}</td>
                             <td class="text-left">{{ $item->email }}</td>
                             <td class="text-left">{{ $item->first_name." ".$item->last_name }} </td>
-                            <td class="text-left">{{ $item->created_at }}</td>
-                            <td class="text-left">{{ $item->updated_at }}</td>
+                            <td class="text-center">{{ ($item->getMoneyAccountCurrent()) ? $item->getMoneyAccountCurrent() : "0.00" }}$ </td>
+                            <td class="text-center">{{ $item->getMoneyForUser() }}$</td>
+                            <td class="text-center">
+                                <span class="label {{ ($item->status_lock == 0) ? "label-primary" : "label-danger" }}">{{ ($item->status_lock == 0) ? "OKIE" : "LOCKED" }}</span>
+                            </td>
+                            <td class="text-center">{{ $item->created_at }} </td>
                             <td class="text-right">
-                                <a href="" data-toggle="tooltip" title="" class="btn btn-primary"
-                                   data-original-title="Edit">
-                                    <i class="fa fa-pencil"></i>
+                                <a href="{{ URL::route('admin.userManagement.view', ["id" => $item->id]) }}" data-toggle="tooltip" title="" class="btn btn-primary"
+                                   data-original-title="View">
+                                    <i class="fa fa-eye"></i>
                                 </a>
                             </td>
                         </tr>

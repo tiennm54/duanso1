@@ -14,8 +14,8 @@
                                 <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                     Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
                                     <p>
-                                        I'm so sorry to inform you that the product that you requested has been sold out. 
-                                        Your payment has been refunded. Refund is: ${{$model_orders->total_price}}. <br/>
+                                        I'm so sorry to inform you that the product that you requested has been sold out. <br/>
+                                        We will refund you within 24 hours.The Refund is: ${{$model_orders->total_price}}. <br/>
                                         Please select a different product instead. 
                                     </p>
                                     <p>

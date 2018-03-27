@@ -6,7 +6,7 @@
             <ul class="breadcrumb">
                 <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
                 <li><a href="{{ URL::route('users.getLogin') }}">Account</a></li>
-                <li><a href="#">Logout</a></li>
+                <li>Logout</li>
             </ul>
 
 

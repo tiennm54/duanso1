@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
-            Spending by bonus money: {{ ($data["total_spending"]) ? $data["total_spending"] : "0" }}$
+            Spending by bonus money: {{ ($model->getSpendingMoney()) ? $model->getSpendingMoney() : 0 }}$
         </h3>
     </div>
     <div class="table-responsive">
@@ -26,7 +26,7 @@
                 <?php foreach ($model_spending as $key => $spending): ?>
                     <tr>
                         <td style="vertical-align: middle">
-                            <a href="{{ URL::route('users.orderHistoryView', ["id" => $spending->getUserOrder->id , "order_no" => $spending->getUserOrder->order_no ]) }}">
+                            <a href="{{ URL::route('adminUserOrders.viewOrders', ["id" => $spending->getUserOrder->id ]) }}" target="_blank">
                                 <span class="label label-primary">{{ $spending->getUserOrder->order_no }}</span>
                             </a>
                         </td>
@@ -36,7 +36,7 @@
                         <td style="vertical-align: middle">{{ $spending->getUserOrder->total_price }}$</td>
                         <td style="vertical-align: middle">{{ $spending->created_at }}</td>
                         <td> 
-                            <a href="{{ URL::route('users.orderHistoryView', ["id" => $spending->getUserOrder->id , "order_no" => $spending->getUserOrder->order_no ]) }}" data-toggle="tooltip" title="View Order" class="btn btn-primary">
+                            <a href="{{ URL::route('adminUserOrders.viewOrders', ["id" => $spending->getUserOrder->id]) }}" target="_blank" data-toggle="tooltip" title="View Order" class="btn btn-primary">
                                 <i class="fa fa-eye"></i>
                             </a>
                         </td>

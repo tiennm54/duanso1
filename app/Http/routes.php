@@ -8,6 +8,7 @@ define('EMAIL_RECEIVE_AMAZON','driverxheqadni@gmail.com');
 define('SUBJECT_PAYPAL_PAYMENT','[Paypal payment] Paypal Invoice for Order #');
 define('SUBJECT_AMAZON_PAYMENT','[Amazon payment] Amazon Invoice for Order #');
 define('SUBJECT_BONUS_PAYMENT','[Your money payment] Invoice for Order #');
+define('SUBJECT_LOCK_ACCOUNT','Your account was has been locked');
 
 define('SUBJECT_REQUEST_ORDER','[Payment Request] Orders of Customer: #');
 define('SUBJECT_SEND_PRODUCT','[BuyPremiumKey.Com] Send product(s) for orders #');

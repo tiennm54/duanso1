@@ -6,14 +6,17 @@
             </div>
             <table class="table">
                 <tbody>
-                    
+
                     <tr>
                         <td>
                             <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
                                     data-original-title="Payment Method"><i
                                     class="fa fa-credit-card fa-fw"></i></button>
                         </td>
-                        <td><span class="label label-danger">{{ $model->payment_type->title }}</span></td>
+                        <td><span class="label {{($model->payment_type->code == "BONUS") ? "label-danger" : "label-primary"}}">
+                                {{ $model->payment_type->title }}
+                            </span>
+                        </td>
                     </tr>
 
                     <tr>

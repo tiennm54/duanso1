@@ -14,6 +14,11 @@
                             <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
                                 <p>This is your product for the invoice # <b>{{ $model_orders->order_no }}</b></p>
+                                <p>
+                                    Please check your key as soon as possible.
+                                    If your key has a problem please contact us within 48 hours, we will resolve the problem for you. 
+                                    After 48 hours we will not be able to help you resolve any issues for you.
+                                </p>
                                 <p>You can view your order history by going to the
                                     <a href="{{ URL::route('users.getMyAccount') }}">my account</a>
                                     page and by clicking on
@@ -99,6 +104,41 @@
                                                         <table cellpadding="0" cellspacing="0" border="0" width="100%">
                                                             <tr>
                                                                 <td align="right" style="font-family: Arial, sans-serif; color: #7ca230; font-size: 16px; font-weight: bold;">${{$model_orders->payment_charges}}</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px 0 0px 0; border-top: 1px solid #eaeaea; border-bottom: 1px dashed #aaaaaa;">
+                                <!-- TWO COLUMNS -->
+                                <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+                                        <td valign="top" class="mobile-wrapper">
+                                            <!-- LEFT COLUMN -->
+                                            <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;" align="left">
+                                                <tr>
+                                                    <td style="padding: 0 0 10px 0;">
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td align="left" style="font-family: Arial, sans-serif; color: #333333; font-size: 16px; font-weight: bold;">Used bonus</td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <!-- RIGHT COLUMN -->
+                                            <table cellpadding="0" cellspacing="0" border="0" width="47%" style="width: 47%;" align="right">
+                                                <tr>
+                                                    <td>
+                                                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td align="right" style="font-family: Arial, sans-serif; color: #7ca230; font-size: 16px; font-weight: bold;">${{ $model_orders->used_bonus }}</td>
                                                             </tr>
                                                         </table>
                                                     </td>

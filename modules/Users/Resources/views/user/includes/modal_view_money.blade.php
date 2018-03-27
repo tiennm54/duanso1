@@ -11,7 +11,7 @@
       <div class="modal-body">
         <p>Total Bonus: {{ ($data["total_bonus"]) ? $data["total_bonus"] : "0" }}$</p>
         <p>Spending by bonus money: {{ ($data["total_spending"]) ? $data["total_spending"] : "0" }}$</p>
-        <p>My money: {{ ($model->user_money) ? $model->user_money : 0 }}$</p>
+        <p>My money: {{ ($data["total_money"]) ? $data["total_money"] : 0 }}$</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

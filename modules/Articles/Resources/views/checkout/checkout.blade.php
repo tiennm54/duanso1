@@ -43,16 +43,13 @@
         var $this = $(this);
         $this.button('loading');
         var termsConditions = $("#cb-terms").is(':checked');
-        console.log("terms: " + termsConditions);
         var checkEmail = validateEmail($("#user_orders_email").val());
-        console.log("email: " + checkEmail);
         $('[required]').each(function () {
             if ($.trim($(this).val()) == '' || termsConditions == false || checkEmail == false) {
                 check = true;
             }
         });
         if (check == true) {
-            console.log("check = true");
             setTimeout(function () {
                 $this.button('reset');
             }, 1000);
@@ -61,17 +58,13 @@
 
     function selectTypePayment(item) {
         var token = $("#_token").val();
+        var check_bonus = $("#cb-my-bonus").is(':checked');
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.checkout.selectTypePayment') ?>",
-            data: {"payment_id": item.id, "_token": token},
+            data: {"payment_id": item.id, "check_bonus": check_bonus, "_token": token},
             success: function (data) {
-                $("#payment_charges").text(data["payment_charges"]);
-                $("#text_payment_selected").text(data["payment_name"]);
-                $("#total").text(data["total"]);
-
-                $("#sub-total-order").html(data["total"]);
-                $("#sub-total-popup").html(data["total"]);
+                updateTotalOrder(data);
             },
             error: function (ex) {
                 console.log(ex.responseJSON);
@@ -85,9 +78,20 @@
         $("#sub-total").html(data["sub_total"]);
         $("#payment_charges").html(data["charges"]);
         $("#total").html(data["total"]);
+        $("#text_payment_selected").text(data["payment_name"]);
+        $("#sub-total-popup").html(data["total"]);
+        
+        if(data["payment_code"] == "BONUS"){
+            $("#tr-use-bonus").hide();
+            $('#cb-my-bonus').prop('checked', false);
+        }else{
+            $("#tr-use-bonus").show();
+        }
+        
     }
 
     function changeQuantity(id) {
+        var check_bonus = $("#cb-my-bonus").is(':checked');
         var number = $("#quantityProduct" + id).val();
         var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
         if (number <= 0) {
@@ -98,7 +102,7 @@
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.checkout.changeQuantity') ?>",
-            data: {"id": id, "number": number, "payment_type": payment_type, "_token": token},
+            data: {"id": id, "number": number, "payment_type": payment_type, "check_bonus": check_bonus, "_token": token},
             success: function (data) {
                 updateTotalOrder(data);
             },
@@ -113,10 +117,11 @@
         if (confirm("Are you sure you want to delete this item?")) {
             var token = $("#_token").val();
             var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
+            var check_bonus = $("#cb-my-bonus").is(':checked');
             $.ajax({
                 type: 'POST',
                 url: "<?php echo URL::route('frontend.checkout.deleteProductCheckout') ?>",
-                data: {"id": id, "payment_type": payment_type, "_token": token},
+                data: {"id": id, "payment_type": payment_type, "check_bonus": check_bonus, "_token": token},
                 success: function (data) {
                     $("#list-product-checkout").html(data);
                 },
@@ -126,6 +131,24 @@
                 }
             });
         }
+    }
+
+    function chooseBonusMoney() {
+        var token = $("#_token").val();
+        var payment_id = $('input[type="radio"][class="payment-type"]:checked').val();
+        var check_bonus = $("#cb-my-bonus").is(':checked');
+        $.ajax({
+            type: 'POST',
+            url: "<?php echo URL::route('frontend.checkout.chooseBonusMoney') ?>",
+            data: {"payment_id": payment_id, "check_bonus": check_bonus, "_token": token},
+            success: function (data) {
+                updateTotalOrder(data)
+            },
+            error: function (ex) {
+                alert(ex.responseJSON);
+                //location.reload();
+            }
+        });
     }
 
 </script>

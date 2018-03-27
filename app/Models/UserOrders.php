@@ -1,26 +1,118 @@
 <?php
-namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
 
-class UserOrders extends Model
-{
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use Log;
+
+class UserOrders extends Model {
+
     protected $table = 'user_orders';
     public $timestamps = true;
 
-
-    public function user()
-    {
-        return $this->hasOne('App\Models\User', 'id' ,'users_id');
+    public function user() {
+        return $this->hasOne('App\Models\User', 'id', 'users_id');
     }
 
-    public function payment_type()
-    {
-        return $this->hasOne('App\Models\PaymentType', 'id' ,'payments_type_id');
+    public function payment_type() {
+        return $this->hasOne('App\Models\PaymentType', 'id', 'payments_type_id');
     }
 
-    public function orders_detail(){
-        return $this->hasMany('App\Models\UserOrdersDetail','user_orders_id','id');
+    public function orders_detail() {
+        return $this->hasMany('App\Models\UserOrdersDetail', 'user_orders_id', 'id');
+    }
+
+    //LAY ORDER NO CHO ORDER
+    public function getNameOrderNo() {
+        $time = strtotime(Carbon::now());
+        $month = date("m", $time);
+        $year = date("Y", $time);
+        $order_no = "BPK-" . $year . $month . $this->id;
+        return $order_no;
+    }
+
+    public function createOrder($model_user, $money_user, $data, $array_orders, $totalOrder) {
+
+        if ($model_user->status_lock == 1) {//Tài khoản đã bị khóa
+            return null;
+        }
+
+        if ($totalOrder['payment_code'] == "BONUS" || $totalOrder["used_bonus"] > 0) {
+            $check_money = $model_user->getMoneyAccountCurrent();
+            Log::info($check_money);
+            Log::info($money_user);
+            if ($check_money != $money_user) {
+                $model_user->saveLockStatus();
+                return null;
+            }
+        }
+
+        $this->users_id = $model_user->id;
+        $this->users_roles_id = $model_user->roles_id;
+        $this->first_name = $model_user->first_name;
+        $this->last_name = $model_user->last_name;
+        $this->email = $data["email"];
+        $this->first_name = $data["first_name"];
+        $this->last_name = $data["last_name"];
+        $this->payments_type_id = $data["payments_type_id"];
+        $this->sub_total = $totalOrder["sub_total"];
+        $this->payment_charges = $totalOrder["charges"]; // Tien phi
+        $this->used_bonus = $totalOrder["used_bonus"]; // Su dung tien bonus de thanh toan
+        $this->total_price = $totalOrder["total"];
+        $this->quantity_product = count($array_orders);
+        $this->payment_status = "pending";
+        $this->save();
+        $this->order_no = $this->getNameOrderNo();
+        $this->save();
+        //Save Order Detail
+        foreach ($array_orders as $item) {
+            $model_user_orders_detail = new UserOrdersDetail();
+            $model_user_orders_detail->user_orders_id = $this->id;
+            $model_user_orders_detail->users_id = $model_user->id;
+            $model_user_orders_detail->users_roles_id = $model_user->roles_id;
+            $model_user_orders_detail->articles_type_id = $item["id"];
+            $model_user_orders_detail->title = $item["title"];
+            $model_user_orders_detail->image = $item["image"];
+            $model_user_orders_detail->quantity = $item["quantity"];
+            $model_user_orders_detail->price_order = $item["price_order"];
+            $model_user_orders_detail->total_price = $item["total"];
+            $model_user_orders_detail->save();
+            for ($i = 0; $i < $item["quantity"]; $i++) {
+                $model_premium_key = new ArticlesTypeKey();
+                $model_premium_key->user_orders_id = $this->id;
+                $model_premium_key->user_orders_detail_id = $model_user_orders_detail->id;
+                $model_premium_key->articles_type_id = $model_user_orders_detail->articles_type_id;
+                $model_premium_key->articles_type_title = $model_user_orders_detail->title;
+                $model_premium_key->articles_type_price = $model_user_orders_detail->price_order;
+                $model_premium_key->status = "none";
+                $model_premium_key->save();
+            }
+        }
+        return $this;
+    }
+
+    //Update lại tài khoản nếu có nghi vấn thì update trong user
+    public function cancelRefundOrder($type, $model_user) {
+        if ($model_user) {
+            $total_refund = 0;
+            $payment_code = $this->payment_type->code;
+            
+            if ($payment_code == "BONUS") {
+                $total_refund = $this->total_price;
+            } else {
+                $total_refund = $this->used_bonus;
+            }
+            
+            $total_after_refund =  $model_user->getMoneyAccountCurrent() + $total_refund;
+            $model_user->updateMoneyForUser($total_after_refund);
+
+            $this->payment_status = $type;
+            $this->save();
+            BonusPaymentHistory::where("user_orders_id", "=", $this->id)->update(["status" => $type]);
+            return true;
+        }
+        return false;
     }
 
 }

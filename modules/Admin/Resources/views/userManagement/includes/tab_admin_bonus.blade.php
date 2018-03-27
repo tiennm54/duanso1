@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
-            Total Bonus: {{ ($data["total_bonus"]) ? $data["total_bonus"] : "0" }}$
+            Total Bonus: {{ ($model->getMoneyBonus()) ? $model->getMoneyBonus() : 0 }}$
         </h3>
     </div>
     <div class="table-responsive">
@@ -27,7 +27,7 @@
                     <tr>
                         <td style="vertical-align: middle">{{ $bonus->getUserBuy->email }}</td>
                         <td style="vertical-align: middle">
-                            <a class="label label-primary" href="{{ URL::route('users.orderHistoryView', ["id" => $bonus->getOrder->id , "order_no" => $bonus->getOrder->order_no ]) }}">
+                            <a class="label label-primary" target="_blank" href="{{ URL::route('adminUserOrders.viewOrders', ["id" => $bonus->getOrder->id ]) }}">
                                 {{ $bonus->getOrder->order_no }}
                             </a>
                         </td>

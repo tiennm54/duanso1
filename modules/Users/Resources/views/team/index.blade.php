@@ -6,7 +6,7 @@
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
             <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
-            <li><a href="#">Team</a></li>
+            <li>Team</li>
         </ul>
         <?php
         $searchTeam = app('request')->input('searchTeam');

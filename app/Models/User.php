@@ -11,6 +11,8 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Support\Facades\Session;
+use Log;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
@@ -92,51 +94,57 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function createUser($data) {
         $password = MinhTien::createPassword();
-        $model = new User();
-        $model->first_name = $data["first_name"];
-        $model->last_name = $data["last_name"];
-        $model->full_name = $data["first_name"] . " " . $data["last_name"];
-        $model->email = $data["email"];
-        $model->password = Hash::make($password);
-        $model->roles_id = 2; // memeber
-        $model->save();
+        $this->first_name = $data["first_name"];
+        $this->last_name = $data["last_name"];
+        $this->full_name = $data["first_name"] . " " . $data["last_name"];
+        $this->email = $data["email"];
+        $this->password = Hash::make($password);
+        $this->roles_id = 2; // memeber
+        $this->save();
 
         $model_shipping_address = new UserShippingAddress();
-        $model_shipping_address->user_id = $model->id;
-        $model_shipping_address->email = $model->email;
+        $model_shipping_address->user_id = $this->id;
+        $model_shipping_address->email = $this->email;
         $model_shipping_address->status = "default";
         $model_shipping_address->save();
 
         //Add profile
         $model_profile = new UserProfiles();
-        $model_profile->users_id = $model->id;
-        $model_profile->users_roles_id = $model->roles_id;
+        $model_profile->users_id = $this->id;
+        $model_profile->users_roles_id = $this->roles_id;
         $model_profile->save();
 
         $result = array(
-            'user_id' => $model->id,
+            'user_id' => $this->id,
             'password' => $password,
+            'email' => $this->email
         );
         return $result;
     }
 
+    //Lấy danh sách số tiền được thưởng
     public function getModelBonus() {
         $model_bonus = $total_bonus_money = BonusHistory::where('user_buy_id', '=', $this->id)
                         ->where("bonus_type", "Buyer")
-                        ->orWhere(function ($query){
+                        ->orWhere(function ($query) {
                             $query->where('user_sponser_id', $this->id)
                             ->where('bonus_type', 'Sponser');
-                        })->paginate(NUMBER_PAGE);
+                        })->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
         return $model_bonus;
     }
-    
-    public function getModelSpending(){
-        $model_spending = BonusPaymentHistory::where("user_id",$this->id)->paginate(NUMBER_PAGE);
+
+    //Lấy danh sách số tiền đã chi tiêu
+    public function getModelSpending() {
+        $model_spending = BonusPaymentHistory::where("user_id", $this->id)
+                        ->where(function ($query) {
+                            $query->where("status", "=", "completed")
+                            ->orWhere('status', '=', 'pending');
+                        })->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
         return $model_spending;
     }
 
+    //Lấy tiền được thưởng
     public function getMoneyBonus() {
-
         $total_bonus_money = BonusHistory::where('user_buy_id', '=', $this->id)
                         ->where("bonus_type", "Buyer")
                         ->orWhere(function ($query) {
@@ -147,18 +155,59 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $total_bonus_money;
     }
 
+    //Lấy tiền chi tiêu
     public function getSpendingMoney() {
-        $total_bonus_paid = BonusPaymentHistory::where("user_id", "=", $this->id)->where("status", "=", "completed")->sum("total_payment");
+        $total_bonus_paid = BonusPaymentHistory::where("user_id", "=", $this->id)
+                ->where(function ($query) {
+                    $query->where("status", "=", "completed")
+                    ->orWhere('status', '=', 'pending');
+                })
+                ->sum("total_payment");
         return $total_bonus_paid;
     }
 
+    public function getSpendingMoneyCompleted() {
+        $total_bonus_completed = BonusPaymentHistory::where("user_id", "=", $this->id)
+                ->where("status", "=", "completed")
+                ->sum("total_payment");
+        return $total_bonus_completed;
+    }
+
     public function getMoneyForUser() {
-        //Tổng số tiền được bonus
         $total_bonus_money = $this->getMoneyBonus();
-        //Tổng số tiền đã chi tiêu
         $total_bonus_paid = $this->getSpendingMoney();
         $total_money = $total_bonus_money - $total_bonus_paid;
+        $total_money = number_format($total_money, 2);
         return $total_money;
+    }
+
+    public function getMoneyAccountCurrent() {
+        $money = $this->user_money;
+        $money = number_format($money, 2);
+        return $money;
+    }
+
+    public function updateMoneyForUser($total_money) {
+        $this->user_money = $total_money;
+        $this->save();
+    }
+
+    public function saveLockStatus() {
+        if ($this->status_lock != 1) {
+            $this->status_lock = 1; // lock account
+            $this->save();
+        }
+    }
+
+    public function saveUnLock() {
+        if ($this->status_lock != 0) {
+            $this->status_lock = 0; // lock account
+            $this->save();
+        }
+    }
+
+    public function updateSessionMoney($money) {
+        Session::set('user_money', $money);
     }
 
 }

@@ -1,11 +1,9 @@
 <?php
 
 namespace Modules\Users\Http\Controllers;
-use Hash;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
 
 class CheckMemberController extends Controller {
     public function checkMember(){

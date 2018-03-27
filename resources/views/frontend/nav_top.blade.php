@@ -19,7 +19,11 @@
                     <?php } else { ?>
                         <a href="{{ URL::route('users.getMyAccount') }}">
                             <i class="fa fa-money"></i>
-                            <span class="hidden-xs hidden-sm hidden-md"><b><?php echo (Session::get('user_money')) ? Session::get('user_money') : "0"; ?>$</b></span>
+                            <span class="hidden-xs hidden-sm hidden-md">
+                                <b>
+                                    <span class="my_money_bonus"><?php echo (Session::get('user_money')) ? Session::get('user_money') : "0"; ?></span>$
+                                </b>
+                            </span>
                         </a>
                     <?php } ?>
 
@@ -51,7 +55,9 @@
                     <?php if (Auth::check()) { ?>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a href="{{ URL::route('users.getMyAccount') }}">My account (<?php echo (Session::get('user_money')) ? Session::get('user_money') : "0"; ?>$)</a>
+                                <a href="{{ URL::route('users.getMyAccount') }}">
+                                    My account (<span class="my_money_bonus"><?php echo (Session::get('user_money')) ? Session::get('user_money') : "0"; ?></span>$)
+                                </a>
                             </li>
 
                             <li>

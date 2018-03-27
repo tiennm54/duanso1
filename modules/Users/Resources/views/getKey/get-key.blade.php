@@ -5,7 +5,7 @@
 
             <ul class="breadcrumb">
                 <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
-                <li><a href="#">Get Premium Key</a></li>
+                <li>Get Premium Key</li>
             </ul>
 
             @include('validator.flash-message')

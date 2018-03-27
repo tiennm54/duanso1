@@ -35,7 +35,7 @@
                         Money
                     </div>
                     <div class="tile-body"><i class="fa fa-credit-card"></i>
-                        <h2 class="pull-right">{{ ($model->user_money) ? $model->user_money : 0 }}$</h2>
+                        <h2 class="pull-right">{{ ($data['total_money']) ? $data['total_money'] : 0 }}$</h2>
                     </div>
                     <div class="tile-footer"><a data-toggle="modal" data-target="#viewMoney" style="cursor: pointer">View more...</a></div>
                 </div>
@@ -76,8 +76,8 @@
             <div class="col-lg-9">
 
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#total_bonus">Total bonus</a></li>
-                    <li><a data-toggle="tab" href="#spending">Your spending</a></li>
+                    <li class="active"><a data-toggle="tab" href="#total_bonus">My bonus</a></li>
+                    <li><a data-toggle="tab" href="#spending">My spending</a></li>
                 </ul>
 
                 <div class="tab-content">

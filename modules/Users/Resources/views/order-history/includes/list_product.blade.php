@@ -55,6 +55,13 @@
         </tr>
         <tr>
             <td colspan="3"></td>
+            <td class="text-right"><b>Used bonus</b></td>
+            <td class="text-right">${{ $model->used_bonus }}</td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td colspan="3"></td>
             <td class="text-right"><b>Total</b></td>
             <td class="text-right">${{ $model->total_price }}</td>
             <td></td>

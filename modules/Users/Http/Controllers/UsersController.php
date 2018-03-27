@@ -26,8 +26,6 @@ class UsersController extends CheckMemberController {
 
     public function getInfoUser($model_user) {
         Session::set('user_email_login', $model_user->email);
-        Session::set('user_money', $model_user->user_money);
-        
         $obj_shopping_cart = new UserShoppingCart();
         $array_orders = $obj_shopping_cart->getShoppingOrder($model_user);
         $obj_shopping_cart->setSession($array_orders);
@@ -126,7 +124,7 @@ class UsersController extends CheckMemberController {
                     Auth::loginUsingId($model->id);
                     DB::commit();
                     Session::set('user_email_login', $model->email);
-                    return redirect()->route('users.getRegisterSuccess');
+                    return redirect()->route('users.getMyAccount');
                 } else {
                     $string = '<i class="fa fa-check-circle"></i>' .
                             ' Warning: There is already an account with this email address. If you are sure that it is your email address,' .
@@ -275,23 +273,4 @@ class UsersController extends CheckMemberController {
             }
         }
     }
-
-    public function viewEmail() {
-
-        $model_orders = UserOrders::first();
-        $list_product = array(
-            array(
-                "title" => "File Bom",
-                "key" => "aaaaaaaaaaaaaaaaaaaaaaaaaa",
-                "price_order" => 20
-            ),
-            array(
-                "title" => "File Bom",
-                "key" => "aaaaaaaaaaaaaaaaaaaaaaaaaa",
-                "price_order" => 20
-            )
-        );
-        return view("admin::userOrders.email-sent-product", compact('list_product', 'model_orders'));
-    }
-
 }

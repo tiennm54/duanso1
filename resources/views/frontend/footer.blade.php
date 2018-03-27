@@ -38,9 +38,9 @@
                     <li><span style="color: #ccc">Email: <a href="mailto:buypremiumkey.com@gmail.com">buypremiumkey.com@gmail.com</a></span></li>
                     <li><span style="color: #ccc">Working Days/Hours: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span></li>
                     <li><span style="color: #ccc">Skype: <a href="skype:tiennm54?chat">
-                        <i class="fa fa-skype"></i>
-                        <span class="hidden-xs hidden-sm hidden-md">tiennm54</span>
-                    </a></span></li>
+                                <i class="fa fa-skype"></i>
+                                <span class="hidden-xs hidden-sm hidden-md">tiennm54</span>
+                            </a></span></li>
                 </ul>
             </div>
 
@@ -55,9 +55,10 @@
     <script src="{{url('theme_frontend/js/bootstrap-confirmation.min.js')}}" type="text/javascript" ></script>
     <script type="text/javascript">
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
             getSubTotal();
+            getMoneyBonus();
         });
 
         $('[data-toggle=confirmation]').confirmation({
@@ -82,18 +83,29 @@
             if (subTotal) {
                 $("#sub-total-order").html("$" + subTotal);
                 $("#quantity_item").html(quantity);
-            }else{
+            } else {
                 $("#sub-total-order").html("$0.00");
             }
         }
 
+        function getMoneyBonus() {
+           
+            var moneyBonus = "<?php echo Session::get('user_money'); ?>";
+            var emailLogin = "<?php echo Session::get('user_email_login'); ?>";
+            if (emailLogin) {
+                console.log("GET MONEY BONUS");
+                console.log(moneyBonus);
+                $(".my_money_bonus").html(moneyBonus);
+            }
+        }
 
-        function addToCart(id){
+
+        function addToCart(id) {
             var token = $("#_token").val();
             $.ajax({
                 type: 'POST',
                 url: "<?php echo URL::route('frontend.shoppingCart.addToCart') ?>",
-                data: {"product_id" : id, "_token" : token},
+                data: {"product_id": id, "_token": token},
                 success: function (data) {
                     $("#list_order").html(data);
                 },
@@ -103,12 +115,12 @@
             });
         }
 
-        function addWishlist(id){
+        function addWishlist(id) {
             var token = $("#_token").val();
             $.ajax({
                 type: 'POST',
                 url: "<?php echo URL::route('users.addWishlist') ?>",
-                data: {"product_id" : id, "_token" : token},
+                data: {"product_id": id, "_token": token},
                 success: function (data) {
                     location.href = location.href;
                 },
@@ -118,7 +130,7 @@
             });
         }
 
-        function deleteWishList(id){
+        function deleteWishList(id) {
             var token = $("#_token").val();
 
             console.log(token);
@@ -126,7 +138,7 @@
             $.ajax({
                 type: 'POST',
                 url: "<?php echo URL::route('users.deleteWishList') ?>",
-                data: {"product_id" : id, "_token" : token},
+                data: {"product_id": id, "_token": token},
                 success: function (data) {
                     console.log(data);
                 },
@@ -135,14 +147,15 @@
                 }
             });
         }
-
     </script>
 
     <script>
-        (function(d, s, id) {
+        (function (d, s, id) {
             var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
+            if (d.getElementById(id))
+                return;
+            js = d.createElement(s);
+            js.id = id;
             js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
@@ -150,7 +163,9 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script src="https://apis.google.com/js/platform.js" async defer>
-        {lang: 'en-GB'}
+        {
+            lang: 'en-GB'
+        }
     </script>
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5974dc1fb28b9513"></script>

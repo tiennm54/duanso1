@@ -58,9 +58,24 @@
             </tr>
             <tr>
                 <td colspan="4"></td>
+                <td class="text-right"><b>Used bonus</b></td>
+                <td class="text-right" style="vertical-align: middle">
+                    <span class="label {{ ($model->used_bonus == 0) ? "label-success" : "label-danger"}}">${{ $model->used_bonus }}</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="4"></td>
                 <td class="text-right"><b>Total</b></td>
                 <td class="text-right">${{ $model->total_price }}</td>
             </tr>
+            
+            <tr>
+                <td colspan="4"></td>
+                <td class="text-right"><b>Thực nhận</b></td>
+                <td class="text-right">${{ ($model->total_price - (($model->total_price * 3.9)/100 + 0.3)) }}</td>
+            </tr>
+
         </tfoot>
 
     </table>

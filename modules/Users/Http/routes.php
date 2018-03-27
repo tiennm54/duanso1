@@ -47,6 +47,8 @@ Route::group(['prefix' => 'users/shipping-address', 'namespace' => 'Modules\User
 Route::group(['prefix' => 'users/order-history', 'namespace' => 'Modules\Users\Http\Controllers'], function() {
     Route::get('index.html', ['as' => 'users.orderHistory', 'uses' => 'OrderHistoryController@listOrder']);
     Route::get('view-{id}/{order_no?}', ['as' => 'users.orderHistoryView', 'uses' => 'OrderHistoryController@view']);
+    Route::get('userCancelOrder/{id}', ['as' => 'users.getCancelOrder', 'uses' => 'OrderHistoryController@getCancelOrder']);
+    Route::post('userCancelOrder/{id}', ['as' => 'users.postCancelOrder', 'uses' => 'OrderHistoryController@postCancelOrder']);
 });
 
 Route::group(['prefix' => 'users/team', 'namespace' => 'Modules\Users\Http\Controllers'], function() {

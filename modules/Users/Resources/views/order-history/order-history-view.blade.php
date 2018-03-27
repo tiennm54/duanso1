@@ -7,38 +7,38 @@
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
             <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
             <li><a href="{{ URL::route('users.orderHistory') }}">Order History</a></li>
-            <li><a href="#">Order Information</a></li>
+            <li>Order Information</li>
         </ul>
-
+        @include('validator.flash-message')
         <div class="row">
             <div id="content" class="col-sm-9">
                 <h2>Order Information</h2>
                 <?php
-                    $intProgress = "";
-                    $stringProgress = "";
-                    switch($model->payment_status){
-                        case "pending" : 
-                            $intProgress = "width: 30%";
-                            $stringProgress = "Pending";
-                            break;
-                        case "paid" :
-                            $intProgress = "width: 60%";
-                            $stringProgress = "Paid";
-                            break;
-                         case "completed" :
-                            $intProgress = "width: 100%";
-                            $stringProgress = "Completed";
-                            break;
-                        case "refund" :
-                            $intProgress = "width: 100%";
-                            $stringProgress = "Refunded";
-                            break;
-                        
-                        case "cancel" :
-                            $intProgress = "width: 100%";
-                            $stringProgress = "Canceled";
-                            break;
-                    }
+                $intProgress = "";
+                $stringProgress = "";
+                switch ($model->payment_status) {
+                    case "pending" :
+                        $intProgress = "width: 30%";
+                        $stringProgress = "Pending";
+                        break;
+                    case "paid" :
+                        $intProgress = "width: 60%";
+                        $stringProgress = "Paid";
+                        break;
+                    case "completed" :
+                        $intProgress = "width: 100%";
+                        $stringProgress = "Completed";
+                        break;
+                    case "refund" :
+                        $intProgress = "width: 100%";
+                        $stringProgress = "Refunded";
+                        break;
+
+                    case "cancel" :
+                        $intProgress = "width: 100%";
+                        $stringProgress = "Canceled";
+                        break;
+                }
                 ?>
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="{{ $intProgress }}">
@@ -49,8 +49,20 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <td class="text-left" colspan="2">Order Details</td>
-                        </tr>
+                    <form method="post" action="{{ URL::route('users.postCancelOrder',['id'=>$model->id] ) }}">
+                        <td class="text-left" colspan="2">
+                            Order Details
+                            <?php if ($model->payment_status == "pending"): ?>
+                                <button class="btn btn-danger" 
+                                        data-toggle="confirmation" 
+                                        data-placement="left" style="float: right" 
+                                        data-toggle="tooltip" title="Cancel Order">
+                                    Cancel
+                                </button>
+                            <?php endif; ?>
+                        </td>
+                    </form>
+                    </tr>
                     </thead>
                     <tbody>
                         <tr>
@@ -60,7 +72,11 @@
                                 <p>Order ID: <span style="font-weight: bold">#{{ $model->id }}</span></p>
                             </td>
                             <td class="text-left" style="width: 50%;">
-                                <p>Orders Status: <span class="label  <?php echo ($model->payment_status == "completed") ? "label-primary" : "label-danger"; ?>">{{ $model->payment_status }}</span></p>
+                                <p>Orders Status: 
+                                    <span class="label  <?php echo ($model->payment_status == "completed") ? "label-primary" : "label-danger"; ?>">
+                                        {{ $model->payment_status }}
+                                    </span>
+                                </p>
                                 <p>Payment Method: <span style="font-weight: bold">{{ $model->payment_type->title }}</span></p>
                                 <p>Shipping Method: <span style="font-weight: bold">Send by email.</span></p>
                             </td>

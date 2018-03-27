@@ -41,12 +41,13 @@ class UsersProfileController extends CheckMemberController  {
         }
         $model = $this->checkMember();
         if ($model) {
-            Session::set('user_money', $model->user_money);
+            
             $total_order = UserOrders::where("users_id",$model->id)->count();
             $total_wish = UserWishList::where("user_id",$model->id)->count();
             $total_team = UserRef::where("user_sponser_id",$model->id)->count();
             $total_bonus = $model->getMoneyBonus();
             $total_spending = $model->getSpendingMoney();
+            $total_money = $total_bonus - $total_spending;
             $link_ref = DOMAIN_SITE . "/users/register?ref=".$model->email;
             $data = array(
                 "total_order" => $total_order,
@@ -54,8 +55,10 @@ class UsersProfileController extends CheckMemberController  {
                 "total_team" => $total_team,
                 "total_bonus" => $total_bonus,
                 "total_spending" => $total_spending,
+                "total_money" => $total_money,
                 "link_ref"=>$link_ref
             );
+            $model->updateSessionMoney($total_money);
             //So tien duoc bonus bao gồm được bonus và bonus khi mua hàng
             $model_bonus = $model->getModelBonus();
             //So tien chi tieu

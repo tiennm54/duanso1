@@ -6,7 +6,7 @@
             <ul class="breadcrumb">
                 <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
                 <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
-                <li><a href="#">Register Success</a></li>
+                <li>Register Success</li>
             </ul>
 
             <div class="row">
@@ -15,7 +15,7 @@
                     <p>You can now take advantage of member privileges to enhance your online shopping experience with us.</p>
                     <p>If you have ANY questions about the operation of this online shop, please e-mail the store owner.</p>
                     <p>A confirmation has been sent to the provided e-mail address. If you have not received it within the hour, please
-                        <a href="#">contact us</a>.
+                        <a href="{{ URL::route('users.contact.getContact') }}">contact us</a>.
                     </p>
                     <div class="buttons">
                         <div class="pull-right">

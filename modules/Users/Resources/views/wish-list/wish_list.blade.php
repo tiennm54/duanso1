@@ -5,7 +5,7 @@
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
             <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
-            <li><a href="#">My Wish List</a></li>
+            <li>My Wish List</li>
         </ul>
         @include('validator.flash-message')
 

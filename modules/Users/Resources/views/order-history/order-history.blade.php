@@ -6,7 +6,7 @@
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
             <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
-            <li><a href="#">Order History</a></li>
+            <li><a href="{{ URL::route('users.orderHistory') }}">Order History</a></li>
         </ul>
         <?php
         $searchOrderNo = app('request')->input('searchOrderNo');
