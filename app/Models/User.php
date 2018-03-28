@@ -209,5 +209,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function updateSessionMoney($money) {
         Session::set('user_money', $money);
     }
+    
+    
+    public function countTotalUser(){
+        $count = User::count();
+        return $count;
+    }
+    
+    public function getModelUserLock(){
+        $model = User::where("status_lock","=",1)->get();
+        return $model;
+    }
 
 }

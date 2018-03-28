@@ -97,14 +97,14 @@ class UserOrders extends Model {
         if ($model_user) {
             $total_refund = 0;
             $payment_code = $this->payment_type->code;
-            
+
             if ($payment_code == "BONUS") {
                 $total_refund = $this->total_price;
             } else {
                 $total_refund = $this->used_bonus;
             }
-            
-            $total_after_refund =  $model_user->getMoneyAccountCurrent() + $total_refund;
+
+            $total_after_refund = $model_user->getMoneyAccountCurrent() + $total_refund;
             $model_user->updateMoneyForUser($total_after_refund);
 
             $this->payment_status = $type;
@@ -113,6 +113,35 @@ class UserOrders extends Model {
             return true;
         }
         return false;
+    }
+
+    public function getOrderPending() {
+        $model = UserOrders::where("payment_status", "pending")->paginate(5);
+        return $model;
+    }
+
+    public function getOrderPaid() {
+        $model = UserOrders::where("payment_status", "paid")->paginate(5);
+        return $model;
+    }
+
+    public function getTotalOrderMoney() {
+        //Tiền thanh toán
+        $money_order = UserOrders::where("payment_status", "completed")->sum('total_price');
+        //Tiền thực nhận sau khi trừ 3.9% + 0.3$ phí
+        $charge = ( ($money_order * 4) / 100 );
+        $money = $money_order - $charge;
+        $money = number_format($money, 2);
+        $money_order = number_format($money_order, 2);
+        $data = array(
+            "money_order" => $money_order,
+            "money" => $money
+        );
+        //Log::info($money_order);
+        //Log::info($charge);
+        //Log::info($money);
+        
+        return $data;
     }
 
 }

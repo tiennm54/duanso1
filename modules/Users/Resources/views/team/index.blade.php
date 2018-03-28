@@ -17,7 +17,7 @@
                 <form class="form-inline" method="GET">
                     <input type="text" class="form-control" name="searchTeam" placeholder="Email..." value="{{ $searchTeam }}">
                     <button type="submit" class="btn btn-primary">Search</button>
-                    <span style="margin-left: 20px">Your Sponsor: {{ ($model_sponsor) ? $model_sponsor->userSponsor->email : "No Sponsor"}} </span>
+                    <span style="margin-left: 20px; font-size: 18px">Your Sponsor: {{ ($model_sponsor) ? $model_sponsor->userSponsor->email : "No Sponsor"}} </span>
                 </form>
                 <div class="panel panel-default">
                     <div class="panel-heading">

@@ -59,7 +59,7 @@ class UsersController extends CheckMemberController {
                     switch ($user->role->alias) {
                         case "admin" :
                             Session::set('user_email_login', "Admin");
-                            return redirect()->route('articles.index');
+                            return redirect()->route('admin.index');
                         case "member" :
                             $this->getInfoUser($user);
                             return redirect()->route('users.getMyAccount');

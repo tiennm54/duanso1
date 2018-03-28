@@ -1,21 +1,17 @@
 <?php
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controllers'], function()
-{
-	Route::get('/', 'AdminController@index');
-
+Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controllers'], function() {
+    //Route::get('/', 'AdminController@index');
+    Route::get('/', ['as' => 'admin.index', 'uses' => 'AdminController@index']);
     //Route::get('/taotieuchi', 'AdminController@taoTieuChi');
-
     //ARTICLES
     Route::group(['prefix' => 'product'], function() {
-
         Route::get('index', ['as' => 'articles.index', 'uses' => 'BackendArticlesController@index']);
         Route::get('create', ['as' => 'articles.getCreate', 'uses' => 'BackendArticlesController@getCreate']);
         Route::post('create', ['as' => 'articles.postCreate', 'uses' => 'BackendArticlesController@postCreate']);
         Route::get('view/{id}/{url?}', ['as' => 'articles.view', 'uses' => 'BackendArticlesController@view']);
         Route::get('edit/{id}/{url?}', ['as' => 'articles.getEdit', 'uses' => 'BackendArticlesController@getEdit']);
         Route::post('edit/{id}/{url?}', ['as' => 'articles.postEdit', 'uses' => 'BackendArticlesController@postEdit']);
-
     });
     //ARTICLES CHILDREN
     Route::group(['prefix' => 'sub-product'], function() {
@@ -25,11 +21,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('edit/{id}/{url?}', ['as' => 'articlesChildren.getEdit', 'uses' => 'BackendArticlesChildrenController@getEdit']);
         Route::post('edit/{id}/{url?}', ['as' => 'articlesChildren.postEdit', 'uses' => 'BackendArticlesChildrenController@postEdit']);
 
-        Route::get('autoComplete',['as' => 'articlesChildren.autoComplete', 'uses' => 'BackendArticlesChildrenController@autoComplete']);
-        Route::post('addKeyToProduct/{id?}',['as' => 'articlesChildren.addKeyToProduct', 'uses' => 'BackendArticlesChildrenController@addKeyToProduct']);
+        Route::get('autoComplete', ['as' => 'articlesChildren.autoComplete', 'uses' => 'BackendArticlesChildrenController@autoComplete']);
+        Route::post('addKeyToProduct/{id?}', ['as' => 'articlesChildren.addKeyToProduct', 'uses' => 'BackendArticlesChildrenController@addKeyToProduct']);
 
         Route::get('delete/{id}', ['as' => 'articlesChildren.delete', 'uses' => 'BackendArticlesChildrenController@delete']);
-
     });
     //CATEGORY
     Route::group(['prefix' => 'category'], function() {
@@ -108,7 +103,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
 
         Route::get('edit/{id?}', ['as' => 'admin.information.getEdit', 'uses' => 'InformationController@getEdit']);
         Route::post('edit/{id?}', ['as' => 'admin.information.postEdit', 'uses' => 'InformationController@postEdit']);
-
     });
 
 
@@ -126,5 +120,4 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('edit/{id?}', ['as' => 'admin.news.getEdit', 'uses' => 'BackendNewsController@getEdit']);
         Route::post('edit/{id?}', ['as' => 'admin.news.postEdit', 'uses' => 'BackendNewsController@postEdit']);
     });
-
 });

@@ -47,7 +47,7 @@ class UsersProfileController extends CheckMemberController  {
             $total_team = UserRef::where("user_sponser_id",$model->id)->count();
             $total_bonus = $model->getMoneyBonus();
             $total_spending = $model->getSpendingMoney();
-            $total_money = $total_bonus - $total_spending;
+            $total_money = number_format($total_bonus - $total_spending, 2);
             $link_ref = DOMAIN_SITE . "/users/register?ref=".$model->email;
             $data = array(
                 "total_order" => $total_order,
