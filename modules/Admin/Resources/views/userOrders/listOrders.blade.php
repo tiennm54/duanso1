@@ -114,6 +114,7 @@
                         <tr>
                             <th>Order ID</th>
                             <th>Invoice</th>
+                            <th>Used bonus</th>
                             <th>Total</th>
                             <th>Payment</th>
                             <th>Email</th>
@@ -137,6 +138,11 @@
                                             #{{ $item->order_no }}
                                         </a>
                                     </td>
+                                    
+                                    <td>
+                                        <span class="label {{ ($item->used_bonus == 0) ? "label-primary" : "label-danger" }}">{{ $item->used_bonus }}$</span>
+                                    </td>
+                                    
                                     <td>{{ $item->total_price }}$</td>
                                     <td>
                                         <span class="label {{($item->payment_type->code == "BONUS") ? "label-danger" : "label-success"}}">{{ $item->payment_type->title }}</span>

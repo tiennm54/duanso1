@@ -120,4 +120,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('edit/{id?}', ['as' => 'admin.news.getEdit', 'uses' => 'BackendNewsController@getEdit']);
         Route::post('edit/{id?}', ['as' => 'admin.news.postEdit', 'uses' => 'BackendNewsController@postEdit']);
     });
+    
+    Route::group(['prefix' => 'feedback'], function() {
+        Route::get('index', ['as' => 'admin.feedback.index', 'uses' => 'FeedbackManagerController@index']);
+        Route::get('view/{id}', ['as' => 'admin.feedback.view', 'uses' => 'FeedbackManagerController@view']);
+        Route::post('saveFinish/{id}', ['as' => 'admin.feedback.saveFinish', 'uses' => 'FeedbackManagerController@saveFinish']);
+    });
 });

@@ -27,9 +27,9 @@
                     <tr>
                         <td style="vertical-align: middle">{{ $bonus->getUserBuy->email }}</td>
                         <td style="vertical-align: middle">
-                            <a class="label label-primary" href="{{ URL::route('users.orderHistoryView', ["id" => $bonus->getOrder->id , "order_no" => $bonus->getOrder->order_no ]) }}">
+                            <span class="label label-primary">
                                 {{ $bonus->getOrder->order_no }}
-                            </a>
+                            </span>
                         </td>
                         <td style="vertical-align: middle">{{ $bonus->getOrder->sub_total }}$</td>
                         <td style="vertical-align: middle">{{ $bonus->bonus_percent }}%</td>

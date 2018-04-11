@@ -5,6 +5,7 @@
         <a href="{{ URL::route('users.getChangePassword') }}" class="list-group-item">Password</a>
         <a href="{{ URL::route('users.getWishList') }}" class="list-group-item">Wish List</a>
         <a href="{{ URL::route('users.orderHistory') }}" class="list-group-item">Order History</a>
+        <a href="{{URL::route('users.feedback.getFeedBack')}}" class="list-group-item">Feedback</a>
         <a href="{{ URL::route('users.getLogout') }}" class="list-group-item">Logout</a>
     </div>
 

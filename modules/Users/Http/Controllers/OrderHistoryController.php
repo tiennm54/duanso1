@@ -58,21 +58,21 @@ class OrderHistoryController extends CheckMemberController {
         $model_user = $this->checkMember();
         if ($model_user) {
             $model = UserOrders::find($id);
-            if ($model && $model->users_id == $model_user->id) {
-
-                if ($model_seo) {
-                    $this->seoViewOrderHistory($model_seo, $model);
+            if ($model) {
+                if ($model->users_id == $model_user->id) {
+                    if ($model_seo) {
+                        $this->seoViewOrderHistory($model_seo, $model);
+                    }
+                    $model_order = UserOrdersDetail::where("user_orders_id", "=", $model->id)
+                            ->where("users_id", "=", $model_user->id)
+                            ->get();
+                    $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model->id)->get();
+                    $model_history = UserOrdersHistory::where("user_orders_id", "=", $model->id)->get();
+                    return view('users::order-history.order-history-view', compact('model', 'model_order', 'model_key', 'model_history'));
+                } else {
+                    $request->session()->flash('alert-warning', 'Warning: You do not have permission to view this order!');
+                    return back();
                 }
-
-                $model_order = UserOrdersDetail::where("user_orders_id", "=", $model->id)
-                        ->where("users_id", "=", $model_user->id)
-                        ->get();
-
-                $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model->id)->get();
-
-                $model_history = UserOrdersHistory::where("user_orders_id", "=", $model->id)->get();
-
-                return view('users::order-history.order-history-view', compact('model', 'model_order', 'model_key', 'model_history'));
             } else {
                 $request->session()->flash('alert-warning', 'Warning: Order does not exist!');
                 return back();
@@ -98,13 +98,13 @@ class OrderHistoryController extends CheckMemberController {
             $model_order = UserOrders::find($id);
             if ($model_order && $model_order->payment_status == "pending") {
                 $check_cancel = $model_order->cancelRefundOrder("cancel", $model_user);
-                if($check_cancel) {
+                if ($check_cancel) {
                     $model_orders_history = new UserOrdersHistory();
                     $model_orders_history->saveHistoryOrder($model_order);
                     //Update session for user
                     $model_user->updateSessionMoney($model_user->getMoneyAccountCurrent());
                     $request->session()->flash('alert-success', 'Success: The order was successfully canceled!');
-                }else{
+                } else {
                     $request->session()->flash('alert-warning', 'Warning: You can not cancel this order!');
                 }
             } else {

@@ -15,7 +15,12 @@
                 <li>
                     <a href="{{ URL::route('users.contact.getContact') }}">Contact</a>
                 </li>
-                <?php if (!Auth::check()):?>
+
+                <li>
+                    <a href="{{ URL::route('users.feedback.getFeedBack') }}">Feedback</a>
+                </li>
+
+                <?php if (!Auth::check()): ?>
 
                     <li>
                         <a href="{{ URL::route('users.guestOrder.guestGetKey') }}">Get Key</a>
@@ -29,7 +34,7 @@
                         <a href="{{ URL::route('users.getRegister') }}">Register</a>
                     </li>
 
-                <?php endif;?>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>

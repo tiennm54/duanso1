@@ -31,7 +31,7 @@ class CheckoutController extends ShoppingCartController {
     }
 
     //[Paypal payment]Gửi mail có khách orders 
-    public function sendMail($model_orders, $model_user, $password) {
+    public function sendMailPaypal($model_orders, $model_user, $password) {
         Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
             $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PAYPAL_PAYMENT . $model_orders->order_no);
@@ -54,10 +54,10 @@ class CheckoutController extends ShoppingCartController {
         });
     }
 
-    public function sendMailToMe($model_orders) {
-        Mail::send('articles::checkout.email-checkout-me', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, "Order of Customer");
-            $m->to(EMAIL_RECEIVE_ORDER, "Minh Tiến")->subject(SUBJECT_REQUEST_ORDER . $model_orders->order_no);
+    public function sendMailUsedBonus($model_orders) {
+        Mail::send('articles::checkout.email-used-bonus', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to(EMAIL_RECEIVE_ORDER, "Minh Tiến")->subject(SUBJECT_USED_BONUS . $model_orders->order_no);
         });
     }
     
@@ -318,7 +318,7 @@ class CheckoutController extends ShoppingCartController {
 
                                 switch ($model_orders->payment_type->code) {
                                     case "PAYPAL":
-                                        $this->sendMail($model_orders, $model_user, $password);
+                                        $this->sendMailPaypal($model_orders, $model_user, $password);
                                         break;
                                     case "AMAZON":
                                         $this->sendMailAmazon($model_orders, $model_user, $password);
@@ -326,6 +326,10 @@ class CheckoutController extends ShoppingCartController {
                                     case "BONUS":
                                         $this->sendMailChooseBonus($model_orders, $model_user, $password);
                                         break;
+                                }
+                                
+                                if($model_orders->total_price == 0 || $model_orders->payment_type->code == "BONUS"){
+                                    $this->sendMailUsedBonus($model_orders);
                                 }
 
                                 DB::commit();

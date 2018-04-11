@@ -1,43 +1,36 @@
 <?php
 
 namespace Modules\Users\Http\Controllers;
+
 use Modules\Users\Http\Requests\ContactRequest;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
-use SEOMeta;
-use OpenGraph;
-use Twitter;
 use URL;
 use App\Models\Seo;
 use App\Helpers\SeoPage;
 
-class ContactController extends Controller  {
+class ContactController extends Controller {
 
-    public function seoContact($model_seo){
+    public function seoContact($model_seo) {
         $url_page = URL::route('users.contact.getContact');
         $image_page = url('theme_frontend/image/logo.png');
         SeoPage::createSeo($model_seo, $url_page, $image_page);
     }
-
-    public function getContact(){
-
-        $model_seo = Seo::where("type","=","index")->first();
-
+    
+    public function getContact() {
+        $model_seo = Seo::where("type", "=", "index")->first();
         if ($model_seo) {
             $this->seoContact($model_seo);
         }
-
         $attributes = [
             'data-theme' => 'light',
-            'data-type'	=>	'image',
+            'data-type' => 'image',
         ];
-
         return view("users::contact.form-contact", compact('attributes'));
     }
 
-
-    public function postContact(ContactRequest $request){
-        if (isset($request)){
+    public function postContact(ContactRequest $request) {
+        if (isset($request)) {
             $data = $request->all();
 
             Mail::send('users::email.email-contact', ['user' => $data], function ($m) use ($data) {
@@ -49,4 +42,5 @@ class ContactController extends Controller  {
             return redirect()->route('users.contact.getContact');
         }
     }
+
 }

@@ -42,7 +42,7 @@
                         <?php foreach ($model as $key => $item):?>
                         <tr>
                             <td class="text-left">{{ $key + 1 }}</td>
-                            <td class="text-left">{{ $item->getProduct->title }}</td>
+                            <td class="text-left">{{ ($item->getProduct) ?  $item->getProduct->title : "N/A" }}</td>
                             <td class="text-left">{{ $item->title }}</td>
                             <td class="text-left">{{ $item->created_at }}</td>
                             <td class="text-right">

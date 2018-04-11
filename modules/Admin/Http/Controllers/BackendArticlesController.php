@@ -23,23 +23,23 @@ class BackendArticlesController extends Controller {
 
         $model = new Articles();
 
-        if ($request->txt_title){
+        if (isset($request->txt_title)){
             $model = $model->where("title","LIKE", "%" . $request->txt_title . "%");
         }
 
-        if ($request->txt_code){
+        if (isset($request->txt_code)){
             $model = $model->where("code","LIKE", "%" . $request->txt_code . "%");
         }
 
-        if ($request->txt_brand){
+        if (isset($request->txt_brand)){
             $model = $model->where("brand","LIKE", "%" . $request->txt_brand . "%");
         }
 
-        if ($request->int_status_stock){
+        if (isset($request->int_status_stock)){
             $model = $model->where("status_stock","=", $request->int_status_stock);
         }
 
-        if ($request->int_category){
+        if (isset($request->int_category)){
             $model = $model->where("category.id","=", $request->int_category);
         }
         $model = $model->get();

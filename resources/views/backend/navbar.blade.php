@@ -36,11 +36,19 @@
                 <li>
                     <a href="{{ URL::route('articles.index') }}">Products</a>
                 </li>
+
+                <li>
+                    <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
+                </li>
+
                 <li>
                     <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
                 </li>
                 <li>
                     <a href="{{ URL::route('admin.information.index') }}">Information</a>
+                </li>
+                <li>
+                    <a href="{{ URL::route('admin.news.index') }}">News</a>
                 </li>
                 <li>
                     <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
@@ -53,8 +61,8 @@
                 </li>
             </ul>
         </li>
-        
-         <li id="menu-customer">
+
+        <li id="menu-customer">
             <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>
             <ul class="collapse">
                 <li><a href="{{ URL::route('admin.userManagement.index') }}">List User</a></li>

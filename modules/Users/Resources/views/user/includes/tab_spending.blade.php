@@ -26,7 +26,7 @@
                 <?php foreach ($model_spending as $key => $spending): ?>
                     <tr>
                         <td style="vertical-align: middle">
-                            <a href="{{ URL::route('users.orderHistoryView', ["id" => $spending->getUserOrder->id , "order_no" => $spending->getUserOrder->order_no ]) }}">
+                            <a href="{{ URL::route('users.orderHistoryView', ["id" => $spending->getUserOrder->id , "order_no" => $spending->getUserOrder->order_no ]) }}" target="blank" data-toggle="tooltip" title="View Order">
                                 <span class="label label-primary">{{ $spending->getUserOrder->order_no }}</span>
                             </a>
                         </td>

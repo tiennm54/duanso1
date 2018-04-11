@@ -65,3 +65,8 @@ Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controller
     Route::get('get-premium-key.html', ['as' => 'users.guestOrder.guestGetKey', 'uses' => 'UserGetKeyController@guestGetKey']);
     Route::post('get-premium-key.html', ['as' => 'users.guestOrder.postGuestGetKey', 'uses' => 'UserGetKeyController@postGuestGetKey']);
 });
+
+Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controllers'], function() {
+    Route::get('feed-back', ['as' => 'users.feedback.getFeedBack', 'uses' => 'FeedBackController@getFeedBack']);
+    Route::post('feed-back', ['as' => 'users.feedback.postFeedBack', 'uses' => 'FeedBackController@postFeedBack']);
+});

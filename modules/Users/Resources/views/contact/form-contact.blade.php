@@ -5,18 +5,13 @@
 
             <ul class="breadcrumb">
                 <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a>Contact</a></li>
             </ul>
-
+            
             @include('validator.flash-message')
-
             <div id="content" class="col-sm-9">
-                <h1>Contact Us</h1>
-
                 <form action="{{ URL::route('users.contact.postContact') }}" method="post" enctype="multipart/form-data" class="form-horizontal">
-
                     <fieldset>
-
                         <div class="form-group required">
                             <label class="col-sm-2 control-label">Your Name</label>
                             <div class="col-sm-10">

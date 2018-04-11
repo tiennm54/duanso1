@@ -4,20 +4,11 @@ namespace Modules\Articles\Http\Controllers;
 
 use App\Models\Articles;
 use App\Models\ArticlesType;
-use App\Models\PaymentType;
 use App\Models\Seo;
-use App\Models\TermsConditions;
 use Log;
-use Illuminate\Support\Facades\Session;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Http\Request;
-use Modules\Articles\Http\Requests\CreateRequest;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use DougSisk\CountryState\CountryState;
-use Response;
-use SEOMeta;
-use OpenGraph;
-use Twitter;
 use URL;
 use App\Helpers\SeoPage;
 
@@ -35,7 +26,11 @@ class ArticlesController extends Controller {
         if ($model_seo) {
             $this->seoIndex($model_seo);
         }
-        $model = Articles::where("status_disable","=",0)->orderBy("order_count", "DESC")->orderBy("view_count", "DESC")->get();
+        $model = Articles::where("status_disable","=",0)
+                ->where("status_stock","=",1)
+                ->orderBy("order_count", "DESC")
+                ->orderBy("view_count", "DESC")
+                ->get();
         return view('articles::articles.index', compact("model"));
     }
 

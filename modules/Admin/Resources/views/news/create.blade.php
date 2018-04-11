@@ -43,7 +43,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label >Select Product</label>
-                                    <input class="typeahead form-control" type="text" value="{{ (isset($model)) ? $model->getProduct->title : 0 }}">
+                                    <input class="typeahead form-control" type="text" value="{{ (isset($model->getProduct)) ? $model->getProduct->title : 0 }}">
                                     <input class="form-control" type="hidden" id="id_product" name="product_id" value="{{ (isset($model)) ? $model->product_id : 0 }}">
                                 </div>
                             </div>
