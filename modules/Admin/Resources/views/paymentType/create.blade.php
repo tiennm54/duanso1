@@ -28,21 +28,28 @@
                 @include('validator.validator-input')
                 <form method="POST"  action="" enctype="multipart/form-data" id="form-payment-type">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Image</label>
                                 <input type="file" class="form-control border-input" name="txt_image">
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Title</label>
                                 <input type="text" class="form-control border-input" placeholder="Title..." name="txt_title" required>
                             </div>
                         </div>
                         
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Code</label>
+                                <input type="text" class="form-control border-input" placeholder="Code..." name="txt_code" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" class="form-control border-input" placeholder="Email..." name="txt_email" required>
@@ -91,6 +98,13 @@
                             <div class="form-group">
                                 <label>Plus</label>
                                 <input type="number"  step="any" class="form-control border-input" placeholder="Plus..." name="txt_plus" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Payment ID</label>
+                                <input type="text"  class="form-control border-input" placeholder="Payment ID..." name="txt_payment_id">
                             </div>
                         </div>
 

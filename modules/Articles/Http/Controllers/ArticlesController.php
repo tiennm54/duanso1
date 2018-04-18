@@ -14,18 +14,9 @@ use App\Helpers\SeoPage;
 
 
 class ArticlesController extends Controller {
-
-    public function seoIndex($model_seo){
-        $url_page = URL::route('frontend.articles.index');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
+    
     public function index() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoIndex($model_seo);
-        }
+        SeoPage::seoPage($this);
         $model = Articles::where("status_disable","=",0)
                 ->where("status_stock","=",1)
                 ->orderBy("order_count", "DESC")
@@ -35,10 +26,7 @@ class ArticlesController extends Controller {
     }
 
     public function getListProduct() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoIndex($model_seo);
-        }
+        SeoPage::seoPage($this);
         $model = Articles::where("status_disable","=",0)->orderBy("position", "ASC")->get();
         return view('articles::articles.index_list_product', compact("model"));
     }

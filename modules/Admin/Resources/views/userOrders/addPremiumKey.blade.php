@@ -97,7 +97,7 @@
                                         <span class="label  {{ ($item->date_sent) ? "label-primary" : "label-danger" }}">
                                             {{ ($item->date_sent) ? $item->date_sent : "None" }}
                                         </span>
-                                        
+
                                     </td>
                                     <td>
                                         <span class="label {{ ($item->user_email) ?  "label-primary" : "label-danger" }}">

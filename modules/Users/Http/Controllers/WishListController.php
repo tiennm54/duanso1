@@ -58,20 +58,7 @@ class WishListController extends CheckMemberController  {
         }
     }
 
-    public function seoWishList($model_seo){
-        $url_page = URL::route('users.getWishList');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     public function getWishList(){
-
-        $model_seo = Seo::where("type","=","index")->first();
-
-        if ($model_seo) {
-            $this->seoWishList($model_seo);
-        }
-
         $model_user = $this->checkMember();
         if ($model_user) {
             $model = UserWishList::where("user_id","=",$model_user->id)->get();

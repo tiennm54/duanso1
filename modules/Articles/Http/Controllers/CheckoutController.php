@@ -24,12 +24,6 @@ use App\Helpers\SeoPage;
 
 class CheckoutController extends ShoppingCartController {
 
-    public function seoIndexCheckOut($model_seo) {
-        $url_page = URL::route('frontend.checkout.index');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     //[Paypal payment]Gửi mail có khách orders 
     public function sendMailPaypal($model_orders, $model_user, $password) {
         Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
@@ -45,6 +39,21 @@ class CheckoutController extends ShoppingCartController {
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_AMAZON_PAYMENT . $model_orders->order_no);
         });
     }
+    //[WMZ payment] Gửi mail cho khách hàng sử dụng phương thức WEBMONEY
+    public function sendMailWebMoney($model_orders, $model_user, $password) {
+        Mail::send('articles::checkout.wmz-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_WMZ_PAYMENT . $model_orders->order_no);
+        });
+    }
+    //[PERFECT MONEY payment] Gửi mail cho khách hàng sử dụng phương thức PERFECT MONEY
+    public function sendMailPerfectMoney($model_orders, $model_user, $password) {
+        Mail::send('articles::checkout.perfect-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PERFECT_PAYMENT . $model_orders->order_no);
+        });
+    }
+    
 
     //[My money payment] Gửi mail cho khách hàng sử dụng phương thức my money
     public function sendMailChooseBonus($model_orders, $model_user, $password) {
@@ -70,10 +79,7 @@ class CheckoutController extends ShoppingCartController {
 
     ///MUA SẢN PHẨM
     public function index(Request $request) {
-        $model_seo = Seo::where("type", "=", "checkout")->first();
-        if ($model_seo) {
-            $this->seoIndexCheckOut($model_seo);
-        }
+        SeoPage::seoPage($this);
         $money_user = 0;
         $model_terms = Information::find(5);
         $model_payment_type = PaymentType::orderBy("position", "ASC")->get();
@@ -325,6 +331,12 @@ class CheckoutController extends ShoppingCartController {
                                         break;
                                     case "BONUS":
                                         $this->sendMailChooseBonus($model_orders, $model_user, $password);
+                                        break;
+                                    case "WEBMONEY":
+                                        $this->sendMailWebMoney($model_orders, $model_user, $password);
+                                        break;
+                                    case "PERFECT_MO":
+                                        $this->sendMailPerfectMoney($model_orders, $model_user, $password);
                                         break;
                                 }
                                 

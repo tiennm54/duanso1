@@ -31,17 +31,8 @@ class UsersController extends CheckMemberController {
         $obj_shopping_cart->setSession($array_orders);
     }
 
-    public function seoLogin($model_seo) {
-        $url_page = URL::route('users.getLogin');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     public function getLogin() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoLogin($model_seo);
-        }
+        SeoPage::seoPage($this);
         return view('users::user.login');
     }
 
@@ -73,18 +64,9 @@ class UsersController extends CheckMemberController {
             }
         }
     }
-
-    public function seoRegister($model_seo) {
-        $url_page = URL::route('users.getRegister');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
+    
     public function getRegister() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoRegister($model_seo);
-        }
+        SeoPage::seoPage($this);
         return view('users::user.register');
     }
 
@@ -143,18 +125,9 @@ class UsersController extends CheckMemberController {
             return redirect()->route('users.getRegister');
         }
     }
-
-    public function seoRegisterSuccess($model_seo) {
-        $url_page = URL::route('users.getRegisterSuccess');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
+    
     public function getRegisterSuccess() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoRegisterSuccess($model_seo);
-        }
+        SeoPage::seoPage($this);
         $model = $this->checkMember();
         if ($model) {
             return view('users::user.register-success');
@@ -163,17 +136,8 @@ class UsersController extends CheckMemberController {
         }
     }
 
-    public function seoAfterLogout($model_seo) {
-        $url_page = URL::route('users.afterLogout');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     public function afterLogout() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoAfterLogout($model_seo);
-        }
+        SeoPage::seoPage($this);
         return view('users::user.logout');
     }
 
@@ -183,18 +147,9 @@ class UsersController extends CheckMemberController {
         return redirect()->route('users.afterLogout');
     }
 
-    public function seoForgotten($model_seo) {
-        $url_page = URL::route('users.getForgotten');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     //Hiển thị trang khi người dùng quên mật khẩu
     public function getForgotten() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoForgotten($model_seo);
-        }
+        SeoPage::seoPage($this);
         return view('users::user.forgotten');
     }
 
@@ -223,19 +178,9 @@ class UsersController extends CheckMemberController {
             }
         }
     }
-
-    public function seoResetPassword($model_seo) {
-        $url_page = URL::route('users.getForgotten');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
+    
     public function getResetPassword($email, $key_forgotten, Request $request) {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoResetPassword($model_seo);
-        }
-
+        SeoPage::seoPage($this);
         $model = User::where("email", "=", $email)->where("key_forgotten", "=", trim($key_forgotten))->first();
         if ($model) {
             return view('users::user.reset-password', compact('email', 'key_forgotten'));

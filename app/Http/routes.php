@@ -7,6 +7,8 @@ define('EMAIL_RECEIVE_AMAZON','driverxheqadni@gmail.com');
 
 define('SUBJECT_PAYPAL_PAYMENT','[Paypal payment] Paypal Invoice for Order #');
 define('SUBJECT_AMAZON_PAYMENT','[Amazon payment] Amazon Invoice for Order #');
+define('SUBJECT_WMZ_PAYMENT','[Webmoney payment] Webmoney Invoice for Order #');
+define('SUBJECT_PERFECT_PAYMENT','[Webmoney payment] PerfectMoney Invoice for Order #');
 define('SUBJECT_BONUS_PAYMENT','[Your money payment] Invoice for Order #');
 define('SUBJECT_LOCK_ACCOUNT','Your account was has been locked');
 

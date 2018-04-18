@@ -26,19 +26,9 @@ class UsersProfileController extends CheckMemberController  {
     public function __construct(){
         $this->middleware("member");
     }
-
-    public function seoMyAccount($model_seo){
-        $url_page = URL::route('users.getMyAccount');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
+    
     //Hiển thị trang quản lý của khách hàng
     public function getMyAccount(){
-        $model_seo = Seo::where("type","=","index")->first();
-        if ($model_seo) {
-            $this->seoMyAccount($model_seo);
-        }
         $model = $this->checkMember();
         if ($model) {
             
@@ -68,19 +58,8 @@ class UsersProfileController extends CheckMemberController  {
         }
         return redirect()->route('users.getLogin');
     }
-
-    public function seoEditProfile($model_seo){
-        $url_page = URL::route('users.getEditProfile');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     ///CẦN LÀM THÊM MIDDWARE
     public function getEditProfile(){
-        $model_seo = Seo::where("type","=","index")->first();
-        if ($model_seo) {
-            $this->seoEditProfile($model_seo);
-        }
         $model = $this->checkMember();
         if ($model){
             $country = "US";
@@ -154,18 +133,8 @@ class UsersProfileController extends CheckMemberController  {
         }
     }
 
-    public function seoChangePassword($model_seo){
-        $url_page = URL::route('users.getChangePassword');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     //Thay đổi password
     public function getChangePassword(){
-        $model_seo = Seo::where("type","=","index")->first();
-        if ($model_seo) {
-            $this->seoChangePassword($model_seo);
-        }
         $model = $this->checkMember();
         if ($model){
             return view('users::profile.change-password');

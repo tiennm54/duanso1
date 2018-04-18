@@ -30,18 +30,8 @@ class ShippingAddressController extends CheckMemberController  {
     public function __construct(){
         $this->middleware("member");
     }
-
-    public function seoShippingAddress($model_seo){
-        $url_page = URL::route('users.shippingAddress.getShippingAddress');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
+    
     public function getShippingAddress(){
-        $model_seo = Seo::where("type","=","index")->first();
-        if ($model_seo) {
-            $this->seoShippingAddress($model_seo);
-        }
         $model_user = $this->checkMember();
         if ($model_user) {
             $model = UserShippingAddress::where("user_id", "=", $model_user->id)->get();

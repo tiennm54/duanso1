@@ -52,15 +52,6 @@
                                     <input class="form-control border-input" placeholder="Search Title"
                                            name="txt_title"/>
                                 </th>
-                                <!--<th>
-                                    <input class="form-control border-input" placeholder="Search Code"
-                                           name="txt_code"/>
-                                </th>
-                                <th>
-                                    <input class="form-control border-input" placeholder="Search Brand"
-                                           name="txt_brand"/>
-                                </th>-->
-
                                 <th>
                                     <select class="form-control border-input" name="int_status_stock">
                                         <option value="">Select Status</option>

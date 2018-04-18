@@ -17,19 +17,9 @@ class OrderHistoryController extends CheckMemberController {
         $this->middleware("member");
     }
 
-    public function seoOrderHistory($model_seo) {
-        $url_page = URL::route('users.orderHistory');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     // Khi login thì đã set session rồi
     public function listOrder(Request $request) {
         $data = $request->all();
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoOrderHistory($model_seo);
-        }
         $model_user = $this->checkMember();
         if ($model_user) {
             $model = UserOrders::where("users_id", "=", $model_user->id)->orderBy("id", "DESC");
@@ -47,22 +37,12 @@ class OrderHistoryController extends CheckMemberController {
         }
     }
 
-    public function seoViewOrderHistory($model_seo, $model) {
-        $url_page = URL::route('users.orderHistoryView', ['id' => $model->id, 'order_no' => $model->order_no]);
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-
     public function view($id, Request $request) {
-        $model_seo = Seo::where("type", "=", "index")->first();
         $model_user = $this->checkMember();
         if ($model_user) {
             $model = UserOrders::find($id);
             if ($model) {
                 if ($model->users_id == $model_user->id) {
-                    if ($model_seo) {
-                        $this->seoViewOrderHistory($model_seo, $model);
-                    }
                     $model_order = UserOrdersDetail::where("user_orders_id", "=", $model->id)
                             ->where("users_id", "=", $model_user->id)
                             ->get();

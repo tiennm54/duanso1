@@ -11,17 +11,8 @@ use App\Helpers\SeoPage;
 
 class ContactController extends Controller {
 
-    public function seoContact($model_seo) {
-        $url_page = URL::route('users.contact.getContact');
-        $image_page = url('theme_frontend/image/logo.png');
-        SeoPage::createSeo($model_seo, $url_page, $image_page);
-    }
-    
     public function getContact() {
-        $model_seo = Seo::where("type", "=", "index")->first();
-        if ($model_seo) {
-            $this->seoContact($model_seo);
-        }
+        SeoPage::seoPage($this);
         $attributes = [
             'data-theme' => 'light',
             'data-type' => 'image',

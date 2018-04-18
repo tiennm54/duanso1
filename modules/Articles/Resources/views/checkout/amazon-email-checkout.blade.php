@@ -30,7 +30,7 @@
                                     <li>2. Set the amount in your order: <b>${{ $model_orders->total_price }}</b></li>
                                     <li>3. Set the "Recipient E-mail": <b>{{ $model_orders->payment_type->email }}</b></li>
                                     <li>4. Set the "Message": <span style="color: red">(You must correct this message)</span> <br>
-                                        <b>{{ $model_orders->order_no }} - {{ $model_orders->email }}</b>
+                                        <b>{{ $model_orders->order_no }}</b>
                                     </li>
                                     <li>5. Click the "Proceed to checkout" button to pay</li>
                                 </ul>

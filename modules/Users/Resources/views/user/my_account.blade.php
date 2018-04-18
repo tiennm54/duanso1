@@ -22,8 +22,7 @@
                             </div><!-- /input-group -->
                         </div>
                         <div class="col-lg-6">
-                            <span style="font-size: 14px; vertical-align: middle; color: red; font-weight: bold">Bonus {{ $model_bonus_config->bonus_sponsor }}% for sponsor and {{ $model_bonus_config->bonus_reg }}% for buyers per order is successfully transacted.</span>
-
+                            <span style="font-size: 14px; vertical-align: middle; color: red; font-weight: bold">Bonus {{ ($model_bonus_config) ? $model_bonus_config->bonus_sponsor : 0 }}% for sponsor and {{ ($model_bonus_config) ? $model_bonus_config->bonus_reg : 0 }}% for buyers per order is successfully transacted.</span>
                         </div>
                     </div>
                 </div>

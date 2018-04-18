@@ -29,11 +29,15 @@ class BackendPaymentTypeController extends Controller {
 
             $model = new PaymentType();
             $model->title = $request->txt_title;
+            $model->code = $request->txt_code;
             $model->status_disable = $request->int_status_disable;
             $model->status_selected = $request->int_status_selected;
             $model->position = $request->txt_position;
             $model->fees = $request->txt_fees;
             $model->plus = $request->txt_plus;
+            if (isset($request->txt_payment_id)) {
+                $model->payment_id = $request->txt_payment_id;
+            }
 
             if (isset($request->txt_description)) {
                 $model->description = $request->txt_description;
@@ -77,11 +81,15 @@ class BackendPaymentTypeController extends Controller {
                 $old_image = $model->image;
 
                 $model->title = $request->txt_title;
+                $model->code = $request->txt_code;
                 $model->status_disable = $request->int_status_disable;
                 $model->status_selected = $request->int_status_selected;
                 $model->position = $request->txt_position;
                 $model->fees = $request->txt_fees;
                 $model->plus = $request->txt_plus;
+                if (isset($request->txt_payment_id)) {
+                    $model->payment_id = $request->txt_payment_id;
+                }
 
                 if (isset($request->txt_description)) {
                     $model->description = $request->txt_description;

@@ -41,23 +41,53 @@
                     <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
                 </li>
 
-                <li>
-                    <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
-                </li>
-                <li>
-                    <a href="{{ URL::route('admin.information.index') }}">Information</a>
-                </li>
+            </ul>
+        </li>
+
+        <li id="menu-catalog">
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>News Manager</span></a>
+            <ul class="collapse">
                 <li>
                     <a href="{{ URL::route('admin.news.index') }}">News</a>
                 </li>
+
                 <li>
-                    <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
-                    <a href="#">Reviews</a>
+                    <a href="{{ URL::route('config.image.getCreate') }}">Image</a>
                 </li>
 
                 <li>
-                    <!--Review comment hoặc review đánh giá sản phẩm của khách hàng-->
+                    <a href="{{ URL::route('admin.faq.index') }}">FAQs</a>
+                </li>
+
+            </ul>
+        </li>
+
+        <li id="menu-catalog">
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>Config</span></a>
+            <ul class="collapse">
+                <li>
+                    <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
+                </li>
+
+                <li>
+                    <a href="{{ URL::route('config.bonusConfig.getCreate') }}">Bonus Config</a>
+                </li>
+
+                <li>
+                    <a href="{{ URL::route('admin.information.index') }}">Information</a>
+                </li>
+            </ul>
+        </li>
+
+        <li id="menu-catalog">
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>SEO Manager</span></a>
+            <ul class="collapse">
+                <li>
                     <a href="{{ URL::route('config.seo.index') }}">SEO</a>
+                </li>
+
+                <li>
+                    <a href="{{ URL::route('config.seopage.getCreate') }}">Create Page</a>
                 </li>
             </ul>
         </li>
@@ -80,17 +110,6 @@
             </ul>
         </li>
 
-        <li id="menu-articles">
-            <a class="parent"><i class="fa fa-tags fw"></i> <span>Articles</span></a>
-            <ul class="collapse">
-                <li>
-                    <a href="{{ URL::route('admin.faq.index') }}">FAQs</a>
-                </li>
-                <li>
-                    <a href="{{ URL::route('admin.news.index') }}">News</a>
-                </li>
-            </ul>
-        </li>
 
         <li id="menu-marketing">
             <a class="parent"><i class="fa fa-share-alt fw"></i> <span>Marketing</span></a>
