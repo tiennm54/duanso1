@@ -116,12 +116,12 @@ class UserOrders extends Model {
     }
 
     public function getOrderPending() {
-        $model = UserOrders::where("payment_status", "pending")->paginate(5);
+        $model = UserOrders::where("payment_status", "pending")->orderBy('id','DESC')->paginate(5);
         return $model;
     }
 
     public function getOrderPaid() {
-        $model = UserOrders::where("payment_status", "paid")->paginate(5);
+        $model = UserOrders::where("payment_status", "paid")->orderBy('id','DESC')->paginate(5);
         return $model;
     }
 
@@ -137,11 +137,10 @@ class UserOrders extends Model {
             "money_order" => $money_order,
             "money" => $money
         );
-        //Log::info($money_order);
-        //Log::info($charge);
-        //Log::info($money);
-        
         return $data;
     }
+    
+    
+    
 
 }

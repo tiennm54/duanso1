@@ -13,29 +13,37 @@
                         </tr>
                         <tr>
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
-                                <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span></p>
-                                Your order has been placed! Orders: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span><br/>
-                                <?php if ($model_orders->total_price == 0) { ?>
-                                    <span style="font-weight: bold; color: blue">This order has been charging on your available balance. Please wait us to verify again, then we will send you an email to confirm that your payment is valid. If your payment is not valid, transaction will be canceled.</span>
+                                <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span>
+                                    <span>Your order has been placed! Orders: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span></span><br/>
+                                    <?php if ($model_orders->total_price == 0) { ?>
+                                        <span style="font-weight: bold; color: blue">
+                                            This order has been charging on your available balance. 
+                                            Please wait us to verify again, then we will send you an email to confirm that your payment is valid. 
+                                            If your payment is not valid, transaction will be canceled.
+                                        </span><br/>
+                                    <?php } ?>
+                                    <span>You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.</span><br/>
+                                </p>
+                                <p>
+                                    <span>Your account: {{ $model_user->email }}</span><br/>
+                                    <?php if ($password != "") { ?>
+                                        <span>Password: {{ $password }}</span><br/>
+                                        <span>Click <a href="{{ URL::route('users.getChangePassword') }}">here</a> to change your password</span><br/>
+                                    <?php } ?>
+                                </p>
+                                <?php if ($model_orders->total_price > 0) { ?>
+                                    <p style="background-color: yellow"><b>Amazon Gift Cards Instructions</b></p>
+                                    <ul>
+                                        <li>1. Click <a href="https://www.amazon.com/gp/product/B004LLIKVU/">https://www.amazon.com/gp/product/B004LLIKVU/</a></li>
+                                        <li>2. Set the amount in your order: <b>${{ $model_orders->total_price }}</b></li>
+                                        <li>3. Set the "Recipient E-mail": <b>{{ $model_orders->payment_type->email }}</b></li>
+                                        <li>4. Set the "Message": <span style="color: red">(You must correct this message)</span> <br>
+                                            <b>{{ $model_orders->order_no }}</b>
+                                        </li>
+                                        <li>5. Click the "Proceed to checkout" button to pay</li>
+                                    </ul>
+                                    <a href="https://youtu.be/-yHq2W0BmUQ" style="font-weight: bold">Video : How To Send Amazon E-mail Gift Cards</a>
                                 <?php } ?>
-                                You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.<br/>
-                                <p>Your account: {{ $model_user->email }}</p>
-                                <?php if ($password != "") { ?>
-                                    <p>Password: {{ $password }}</p>
-                                    <p>Click <a href="{{ URL::route('users.getChangePassword') }}">here</a> to change your password</p>
-                                <?php } ?>
-                                <p style="background-color: yellow"><b>Amazon Gift Cards Instructions</b></p>
-                                <ul>
-                                    <li>1. Click <a href="https://www.amazon.com/gp/product/B004LLIKVU/">https://www.amazon.com/gp/product/B004LLIKVU/</a></li>
-                                    <li>2. Set the amount in your order: <b>${{ $model_orders->total_price }}</b></li>
-                                    <li>3. Set the "Recipient E-mail": <b>{{ $model_orders->payment_type->email }}</b></li>
-                                    <li>4. Set the "Message": <span style="color: red">(You must correct this message)</span> <br>
-                                        <b>{{ $model_orders->order_no }}</b>
-                                    </li>
-                                    <li>5. Click the "Proceed to checkout" button to pay</li>
-                                </ul>
-                                <a href="https://youtu.be/-yHq2W0BmUQ" style="font-weight: bold">Video : How To Send Amazon E-mail Gift Cards</a>
-
                             </td>
                         </tr>
 

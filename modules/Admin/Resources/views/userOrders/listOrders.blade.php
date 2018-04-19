@@ -59,6 +59,7 @@
                             <div class="form-group">
                                 <label class="control-label">Status</label>
                                 <select name="payment_status" class="form-control">
+
                                     <option value="">Select status</option>
                                     <option value="pending" {{ (app('request')->input('payment_status') == "pending") ? "selected" : "" }} >
                                         Pending
@@ -70,6 +71,15 @@
                                     <option value="completed" {{ (app('request')->input('payment_status') == "completed") ? "selected" : "" }}>
                                         Completed
                                     </option>
+
+                                    <option value="cancel" {{ (app('request')->input('payment_status') == "cancel") ? "selected" : "" }}>
+                                        Cancel
+                                    </option>
+                                    
+                                    <option value="refund" {{ (app('request')->input('payment_status') == "refund") ? "selected" : "" }}>
+                                        Refund
+                                    </option>
+
                                 </select>
                             </div>
                         </div>
@@ -77,31 +87,42 @@
 
                         <div class='col-sm-4'>
                             <div class="form-group">
-                                <div class='input-group date datetimepicker'>
-                                    <input type='text' class="form-control" name="start_created_at" placeholder="Start Date Added" value="{{ app('request')->input('start_created_at')}}"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
+                                <label class="control-label">Used bonus</label>
+                                <select name="used_bonus" class="form-control">
+                                    <option value="">Select type...</option>
+                                    <option value="yes" {{ (app('request')->input('used_bonus') == "yes") ? "selected" : "" }} >
+                                        Yes
+                                    </option>
+                                </select>
                             </div>
                         </div>
 
                         <div class='col-sm-4'>
                             <div class="form-group">
-                                <div class='input-group date datetimepicker'>
-                                    <input type='text' class="form-control" name="end_created_at" placeholder="End Date Added" value="{{ app('request')->input('end_created_at')}}"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
+                                <label class="control-label">Payment Type</label>
+                                <select name="payment_type" class="form-control">
+                                    <option value="">Select payment type...</option>
+                                    <?php foreach ($model_payment_type as $item): ?>
+                                        <option value="{{ $item->id }}" {{ (app('request')->input('payment_type') == $item->id) ? "selected" : "" }} >
+                                            {{$item->title}}
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                         </div>
 
 
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-2">
                             <div class="form-group ">
-                                <button type="submit" class="btn btn-primary pull-right">Search</button>
+                                <label class="control-label">Search</label>
+                                <button type="submit" class="btn btn-primary form-control">Search</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group ">
+                                <label class="control-label">Reset</label>
+                                <a href="{{ URL::route('adminUserOrders.listOrders') }}" class="btn btn-primary form-control">Reset</a>
                             </div>
                         </div>
 
@@ -138,15 +159,15 @@
                                             #{{ $item->order_no }}
                                         </a>
                                     </td>
-                                    
+
                                     <td>
-                                        <span class="label {{ ($item->used_bonus == 0) ? "label-primary" : "label-danger" }}">{{ $item->used_bonus }}$</span>
+                                        <span class="label {{ ($item->used_bonus == 0) ? "label-primary" : "label-danger" }}">{{ ($item->used_bonus) ? $item->used_bonus : 0  }}$</span>
                                     </td>
-                                    
+
                                     <td>{{ $item->total_price }}$</td>
                                     <td>
                                         <span class="label {{($item->payment_type->code == "BONUS") ? "label-danger" : "label-success"}}">{{ $item->payment_type->title }}</span>
-                                        
+
                                     </td>
                                     <td>{{ $item->email }}</td>
                                     <td>{{ $item->payment_status }}</td>

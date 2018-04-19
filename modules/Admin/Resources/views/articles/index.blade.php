@@ -55,8 +55,8 @@
                                 <th>
                                     <select class="form-control border-input" name="int_status_stock">
                                         <option value="">Select Status</option>
-                                        <option value="1">In Stock</option>
-                                        <option value="0">Not In Stock</option>
+                                        <option value="1" {{ (app('request')->input('int_status_stock') == "1") ? "selected" : "" }}>In Stock</option>
+                                        <option value="0" {{ (app('request')->input('int_status_stock') == "0") ? "selected" : "" }}>Not In Stock</option>
                                     </select>
                                 </th>
                                 <th></th>

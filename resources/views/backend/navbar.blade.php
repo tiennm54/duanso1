@@ -10,8 +10,9 @@
     </div>
     <ul id="menu">
         <li id="menu-dashboard">
-            <a href="#">
-                <i class="fa fa-dashboard fw"></i> <span>Dashboard</span></a>
+            <a href="{{ URL::route('admin.index') }}">
+                <i class="fa fa-dashboard fw"></i><span>Dashboard</span>
+            </a>
         </li>
 
         <li id="menu-sale">

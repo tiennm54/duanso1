@@ -12,6 +12,7 @@ use App\Models\UserRef;
 use App\Models\User;
 use App\Models\BonusConfig;
 use App\Models\BonusHistory;
+use App\Models\PaymentType;
 use Carbon\Carbon;
 use DougSisk\CountryState\CountryState;
 use Illuminate\Http\Request;
@@ -38,11 +39,17 @@ class AdminUserOrdersController extends Controller {
         if (isset($data["payment_status"]) && $data["payment_status"] != "") {
             $model = $model->where("payment_status", "=", $data["payment_status"]);
         }
-        if (isset($data["start_created_at"]) && $data["start_created_at"] != "" && isset($data["end_created_at"]) && $data["end_created_at"] != "") {
-            $model = $model->where("created_at", ">", $data["start_created_at"])->where("created_at", "<", $data["end_created_at"]);
+        if(isset($data['used_bonus']) && $data['used_bonus'] != ""){
+            $model = $model->where('used_bonus', ">" , 0);
         }
-        $model = $model->paginate(20);
-        return view('admin::userOrders.listOrders', compact('model'));
+        
+        if(isset($data['payment_type']) && $data['payment_type'] != ""){
+            $model = $model->where('payments_type_id','=', $data['payment_type']);
+        }
+        
+        $model = $model->paginate(NUMBER_PAGE);
+        $model_payment_type = PaymentType::orderBy('id','asc')->get();
+        return view('admin::userOrders.listOrders', compact('model','model_payment_type'));
     }
 
     //Xem thông tin chi tiết order

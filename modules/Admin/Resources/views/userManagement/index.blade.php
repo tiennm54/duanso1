@@ -48,8 +48,8 @@
                                     <label class="control-label" for="input-email">Status lock</label>
                                     <select class="form-control" name="filter_status">
                                         <option value="">Select status</option>
-                                        <option value="0">OKIE</option>
-                                        <option value="1">LOCKED</option>
+                                        <option value="0" {{ (app('request')->input('filter_status') == "0") ? "selected" : "" }}>OKIE</option>
+                                        <option value="1" {{ (app('request')->input('filter_status') == "1") ? "selected" : "" }}>LOCKED</option>
                                     </select>
                                 </div>
                             </div>
