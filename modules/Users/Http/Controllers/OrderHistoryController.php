@@ -7,8 +7,6 @@ use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
 use App\Models\UserOrdersHistory;
 use Illuminate\Http\Request;
-use URL;
-use App\Models\Seo;
 use App\Helpers\SeoPage;
 
 class OrderHistoryController extends CheckMemberController {
@@ -19,6 +17,7 @@ class OrderHistoryController extends CheckMemberController {
 
     // Khi login thì đã set session rồi
     public function listOrder(Request $request) {
+        SeoPage::seoPage($this);
         $data = $request->all();
         $model_user = $this->checkMember();
         if ($model_user) {

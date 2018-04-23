@@ -13,7 +13,7 @@
                         </tr>
                         <tr>
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
-                                <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span>
+                                <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span><br/>
                                     <span>Your order has been placed! Orders: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span></span><br/>
                                     <?php if ($model_orders->total_price == 0) { ?>
                                         <span style="font-weight: bold; color: blue">

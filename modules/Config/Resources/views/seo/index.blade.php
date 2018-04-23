@@ -44,7 +44,7 @@
                     <tbody>
                         <?php foreach ($model as $key => $item): ?>
                             <tr>
-                                <td><?php echo $item->getPage->name; ?></td>
+                                <td><?php echo ($item->getPage) ? $item->getPage->name : "N/A"; ?></td>
                                 <td><img src="<?php echo url('images/seo/' . $item->image); ?>" width="100px"></td>
                                 <td class="text-left">{{ $item->seo_title }}</td>
                                 <td class="text-left">{{ $item->seo_description }}</td>

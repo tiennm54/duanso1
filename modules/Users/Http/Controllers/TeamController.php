@@ -10,10 +10,12 @@ namespace Modules\Users\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\UserRef;
+use App\Helpers\SeoPage;
 
 class TeamController extends CheckMemberController {
 
     public function listTeam(Request $request) {
+        SeoPage::seoPage($this);
         $data = $request->all();
         $model_user = $this->checkMember();
         if ($model_user) {

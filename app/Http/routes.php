@@ -1,4 +1,5 @@
 <?php
+define('HTTP','http://');
 define('DOMAIN_SITE','buypremiumkey.com');
 define('NAME_COMPANY','BuyPremiumKey Authorized Reseller');
 define('EMAIL_BUYPREMIUMKEY','buypremiumkey@gmail.com');

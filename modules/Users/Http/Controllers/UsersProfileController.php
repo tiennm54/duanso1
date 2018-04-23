@@ -12,6 +12,7 @@ use Hash;
 use Modules\Users\Http\Requests\ChangePasswordRequest;
 use DougSisk\CountryState\CountryState;
 use DB;
+use App\Helpers\SeoPage;
 
 class UsersProfileController extends CheckMemberController {
 
@@ -21,6 +22,7 @@ class UsersProfileController extends CheckMemberController {
 
     //Hiển thị trang quản lý của khách hàng.
     public function getMyAccount() {
+        SeoPage::seoPage($this);
         $model = $this->checkMember();
         if ($model) {
 
@@ -30,7 +32,7 @@ class UsersProfileController extends CheckMemberController {
             $total_bonus = $model->getMoneyBonus();
             $total_spending = $model->getSpendingMoney();
             $total_money = number_format($total_bonus - $total_spending, 2);
-            $link_ref = $_SERVER['SERVER_NAME'] . "/users/register?ref=" . $model->email;
+            $link_ref = HTTP . $_SERVER['SERVER_NAME'] . "/users/register?ref=" . $model->email;
             $data = array(
                 "total_order" => $total_order,
                 "total_wish" => $total_wish,

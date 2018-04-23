@@ -3,14 +3,13 @@
 namespace Modules\Users\Http\Controllers;
 use Modules\Users\Http\Requests\FeedBackRequest;
 use Pingpong\Modules\Routing\Controller;
-use URL;
-use App\Models\Seo;
 use App\Helpers\SeoPage;
 use App\Models\FeedBack;
 
 class FeedBackController extends Controller {
     
     public function getFeedBack() {
+        SeoPage::seoPage($this);
         $attributes = [
             'data-theme' => 'light',
             'data-type' => 'image',

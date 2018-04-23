@@ -5,12 +5,6 @@ namespace Modules\Users\Http\Controllers;
 use App\Models\ArticlesType;
 use App\Models\UserWishList;
 use Illuminate\Http\Request;
-use Hash;
-use SEOMeta;
-use OpenGraph;
-use Twitter;
-use URL;
-use App\Models\Seo;
 use App\Helpers\SeoPage;
 
 class WishListController extends CheckMemberController  {
@@ -59,6 +53,7 @@ class WishListController extends CheckMemberController  {
     }
 
     public function getWishList(){
+        SeoPage::seoPage($this);
         $model_user = $this->checkMember();
         if ($model_user) {
             $model = UserWishList::where("user_id","=",$model_user->id)->get();

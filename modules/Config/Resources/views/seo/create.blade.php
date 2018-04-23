@@ -56,7 +56,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Meta Tag Title (<span class="count-seo-title"></span>)/65-70</label>
-                        <input type="text" value="{{ (isset($model)) ? $model->seo_title : "" }}" onkeyup="countCharactersSeoTitle()" class="form-control border-input seo-title" placeholder="Meta Tag Title..." name="seo_title" required>
+                        <input type="text" style="width: 200%" value="{{ (isset($model)) ? $model->seo_title : "" }}" onkeyup="countCharactersSeoTitle()" class="form-control border-input seo-title" placeholder="Meta Tag Title..." name="seo_title" required>
                     </div>
                 </div>
             </div>
