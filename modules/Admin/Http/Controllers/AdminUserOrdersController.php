@@ -31,7 +31,7 @@ class AdminUserOrdersController extends Controller {
         $data = $request->all();
         $model = UserOrders::orderBy("id", "DESC");
         if (isset($data["order_id"]) && $data["order_id"] != "") {
-            $model = $model->where("id", "=", $data["order_id"]);
+            $model = $model->where("order_no", "=", $data["order_id"])->orWhere("id", "=", $data["order_id"]);
         }
         if (isset($data["email"]) && $data["email"] != "") {
             $model = $model->where("email", "LIKE", "%" . $data["email"] . "%");
@@ -88,7 +88,7 @@ class AdminUserOrdersController extends Controller {
         if ($model_orders) {
             $model_key = $this->getPremiumKeySend($model_orders);
             if ($model_key) {
-
+                //Trường hợp gửi lại key cho khách hàng và khách hàng không thể nhận thêm bonus
                 if ($model_orders->payment_status == "completed") {
                     $this->sendProductEmail($model_orders, $model_key);
                     $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
@@ -122,10 +122,10 @@ class AdminUserOrdersController extends Controller {
                             }
                         }
                     } else {//Làm thêm chức năng bonus cho khách hàng thường
-                        Log::info("Nguoi dung khong co sponsor");
+                        //Log::info("Nguoi dung khong co sponsor");
                         $check_bonus_basic = $this->bonusBasic($model_orders, $model_user, $model_money);
                         if ($check_bonus_basic == 1) {// lock user
-                            Log::info("Nguoi dung bị khoa tai khoan");
+                            //Log::info("Nguoi dung bị khoa tai khoan");
                             DB::rollBack();
                             $model_user->saveLockStatus();
                             $request->session()->flash('alert-warning', 'Warning: Hãy kiểm tra lại tài khoản của BUYER!');
@@ -179,6 +179,7 @@ class AdminUserOrdersController extends Controller {
                     $total_money_user = $model_user->getMoneyForUser();
                     //Log::info("Updated: " . $total_money_user);
                     $model_user->updateMoneyForUser($total_money_user);
+                    $this->sendMailBonus($model_orders, $model_user, $money_user);
                 } else {
                     return 1;
                 }
@@ -193,6 +194,7 @@ class AdminUserOrdersController extends Controller {
                     $obj_bonus_his->saveBonusHistory($model_orders, $model_user->id, $model_sponsor->id, $money_sponsor, "Sponser", $model_money->bonus_sponsor);
                     $total_money_sponsor = $model_sponsor->getMoneyForUser();
                     $model_sponsor->updateMoneyForUser($total_money_sponsor);
+                    $this->sendMailBonus($model_orders, $model_sponsor, $money_sponsor);
                 } else {
                     return 2;
                 }
@@ -215,6 +217,7 @@ class AdminUserOrdersController extends Controller {
                         $total_money_user = $model_user->getMoneyForUser();
                         //Log::info("Updated: " . $total_money_user);
                         $model_user->updateMoneyForUser($total_money_user);
+                        $this->sendMailBonus($model_orders, $model_user, $money_basic);
                     } else {
                         return 1;
                     }
@@ -503,6 +506,14 @@ class AdminUserOrdersController extends Controller {
         Mail::send('admin::userOrders.email-send-cancel', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
             $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+        });
+    }
+    
+    public function sendMailBonus($model_orders, $model_user, $money){
+        $subject_email = SUBJECT_EMAIL_BONUS . $model_orders->order_no;
+        Mail::send('admin::userOrders.email-send-bonus', ['model_orders' => $model_orders, 'model_user' => $model_user, 'money' => $money], function ($m) use ($model_user, $subject_email) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_user->email, $model_user->first_name . " " . $model_user->last_name)->subject($subject_email);
         });
     }
 

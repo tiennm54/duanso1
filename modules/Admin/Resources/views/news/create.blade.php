@@ -40,6 +40,19 @@
                     <div id="general" class="tab-pane fade  in active">
 
                         <div class="row">
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label >Category</label>
+                                    <select class="form-control" name="category_id">
+                                        <option value="">Select category</option>
+                                        <?php foreach($model_cate as $item):?>
+                                            <option value="<?php echo $item->id; ?>" <?php echo (isset($model) && $model->category_id == $item->id) ? "selected" : ""?>><?php echo $item->name; ?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label >Select Product</label>

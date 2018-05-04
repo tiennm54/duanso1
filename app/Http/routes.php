@@ -22,6 +22,8 @@ define('SUBJECT_CANCEL','[BuyPremiumKey.Com] Canceled Orders #');
 define('SUBJECT_CONTACT','[BuyPremiumKey.Com] Contact by customer');
 define('SUBJECT_FORGOT','[BuyPremiumKey.Com] Forgot password');
 
+define('SUBJECT_EMAIL_BONUS','[BuyPremiumKey.Com] You received a bonus from order #');
+
 define('NUMBER_PAGE',20);
 
 

@@ -29,6 +29,12 @@
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="col-sm-4">
                             <div class="form-group">
+                                <label class="control-label">Title</label>
+                                <input type="text" class="form-control border-input" name="title" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
                                 <label class="control-label">Image</label>
                                 <input type="file" class="form-control border-input" name="image">
                                 {!! $errors->first('image','<span class="control-label color-red" style="color: red">*:message</span>') !!}
@@ -50,11 +56,23 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <td class="text-center">No</td>
-                            <td class="text-center">Image</td>
-                            <td class="text-center">Link</td>
-                            <td class="text-center">Create at</td>
-                            <td class="text-center">Action</td>
+                            <td width="20%">Title</td>
+                            <td width="20%">Image</td>
+                            <td>Link</td>
+                            <td width="12%">Action</td>
+                        </tr>
+                        <tr>
+                            <form action="" method="get">
+                                <td>
+                                    <input class="form-control" name="search_title" value="<?php (Request::get('search_title') != "") ? Request::get('search_title') : "" ?>"/>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary btn-xs">Search</button>
+                                    <a href="<?php echo URL::route('config.image.getCreate'); ?>" class="btn btn-default pull-right btn-xs">Reset</a>
+                                </td>
+                            </form>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,12 +84,14 @@
 
                         <?php foreach ($model as $key => $item): ?>
                             <tr>
-                                <td class="text-center">{{ $key + 1 }}</td>
+                                <td>
+                                    {{ $item->title }} <br> <span>({{ $item->created_at }})</span>
+                                </td>
                                 <td class="text-center"><img src="<?php echo url('images/news/' . $item->image); ?>" width="150px"></td>
                                 <td class="text-center">
                                     <input value="<?php echo url('images/news/' . $item->image); ?>" class="form-control">
                                 </td>
-                                <td class="text-center">{{ $item->created_at }} </td>
+                                
                                 <td class="text-center">
                                     <a class="btn btn-danger"
                                        onclick="return confirm('Are you sure you want to delete this item?');"
@@ -82,6 +102,7 @@
                             </tr>
                         <?php endforeach; ?>
                 </table>
+                <?php echo $model->appends(['search_title' => Request::get('search_title')])->render(); ?>
             </div>
         </div>
     </div>

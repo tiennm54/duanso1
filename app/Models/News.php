@@ -9,4 +9,8 @@ class News extends Model{
     public function getProduct(){
         return $this->hasOne('App\Models\ArticlesType', 'id' ,'product_id');
     }
+    
+    public function getCategory(){
+        return $this->hasOne('App\Models\Category', 'id' ,'category_id');
+    }
 }

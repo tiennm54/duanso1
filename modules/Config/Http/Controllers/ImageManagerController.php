@@ -7,19 +7,27 @@ use Illuminate\Http\Request;
 use App\Models\ImageManager;
 use Modules\Config\Http\Requests\ImageRequest;
 
+
 class ImageManagerController extends Controller {
 
     public function __construct() {
         $this->middleware("role");
     }
 
-    public function getCreate() {
-        $model = ImageManager::orderBy('id', 'desc')->paginate(NUMBER_PAGE);
+    public function getCreate(Request $request) {
+        $model = new ImageManager();
+        if(isset($request->search_title) && $request->search_title != ""){
+            $model = $model->where("title","LIKE", "%" . $request->search_title . "%");
+        }
+        $model = $model->orderBy('id', 'desc')->paginate(NUMBER_PAGE);
         return view('config::imageManager.create', compact('model'));
     }
 
     public function postCreate(ImageRequest $request) {
         $model = new ImageManager();
+        if(isset($request->title)){
+            $model->title = $request->title;
+        }
         if (isset($request->image)) {
             if ($request->hasFile('image')) {
                 $image = $request->file('image');

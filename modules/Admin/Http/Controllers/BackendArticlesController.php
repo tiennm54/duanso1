@@ -38,10 +38,7 @@ class BackendArticlesController extends Controller {
         if (isset($request->int_status_stock)){
             $model = $model->where("status_stock","=", $request->int_status_stock);
         }
-
-        if (isset($request->int_category)){
-            $model = $model->where("category.id","=", $request->int_category);
-        }
+        
         $model = $model->get();
         return view('admin::articles.index', compact('model'));
     }
@@ -61,7 +58,6 @@ class BackendArticlesController extends Controller {
             $model->title = $request->txt_title;
             $model->code = $request->txt_code;
             $model->url_title = str_slug($request->txt_title, '-').'-'.'premium-key-reseller';
-            //$model->category_id = $request->int_category;
             $model->status_stock = $request->int_instock;
             $model->status_disable = $request->status_disable;
 
@@ -127,8 +123,6 @@ class BackendArticlesController extends Controller {
 
                 $model->title = $request->txt_title;
                 $model->code = $request->txt_code;
-
-                //$model->category_id = $request->int_category;
                 $model->status_stock = $request->int_instock;
                 $model->status_disable = $request->status_disable;
 

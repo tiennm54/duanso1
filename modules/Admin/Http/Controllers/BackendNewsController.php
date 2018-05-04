@@ -1,11 +1,10 @@
 <?php
 
 namespace Modules\Admin\Http\Controllers;
-use App\Models\Articles;
 use App\Models\News;
+use App\Models\Category;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Http\Request;
-use Input;
 use Auth;
 
 class BackendNewsController extends Controller
@@ -17,7 +16,8 @@ class BackendNewsController extends Controller
     }
 
     public function getCreate(){
-        return view('admin::news.create');
+        $model_cate = Category::get();
+        return view('admin::news.create', compact('model_cate'));
     }
 
     public function postCreate(Request $request){
@@ -29,6 +29,7 @@ class BackendNewsController extends Controller
             $model->title = $data["title"];
             $model->url_title = str_slug($data["title"], '-');
             $model->description = $data["description"];
+            $model->category_id = $data["category_id"];
 
             $model->seo_description = $data["seo_description"];
             $model->seo_title = $data["seo_title"];
@@ -42,8 +43,9 @@ class BackendNewsController extends Controller
 
     public function getEdit($id){
         $model = News::find($id);
+        $model_cate = Category::get();
         if ($model){
-            return view('admin::news.create',compact('model'));
+            return view('admin::news.create',compact('model','model_cate'));
         }
     }
 
@@ -59,14 +61,23 @@ class BackendNewsController extends Controller
                 $model->seo_title = $data["seo_title"];
                 $model->seo_keyword = $data["seo_keyword"];
                 $model->updated_by = Auth::user()->id;
+                $model->category_id = $data["category_id"];
                 $model->save();
                 return redirect()->route('admin.news.getEdit', ["id" => $model->id]);
             }
         }
     }
 
-    public function index(){
-        $model = News::orderBy("id","DESC")->get();
-        return view('admin::news.index', compact('model'));
+    public function index(Request $request){
+        $model_cate = Category::get();
+        $model = new News();
+        if(isset($request->filter_title) && $request->filter_title != ""){
+            $model = $model->where("title","LIKE","%". $request->filter_title . "%");
+        }
+        if(isset($request->filter_category) && $request->filter_category != ""){
+            $model = $model->where("category_id","=",$request->filter_category);
+        }
+        $model = $model->orderBy('id','DESC')->paginate(NUMBER_PAGE);
+        return view('admin::news.index', compact('model','model_cate'));
     }
 }

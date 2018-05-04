@@ -8,14 +8,10 @@
                 <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
                 <li>Login</li>
             </ul>
-
             @include('validator.flash-message')
-
             <div class="row">
                 <div id="content" class="col-sm-9">
                     <div class="row">
-
-
                         <div class="col-sm-6">
                             <div class="well">
                                 <h2>New Customer</h2>
@@ -55,7 +51,6 @@
                                             <button type="submit" class="btn btn-primary">Login</button>
                                         </div>
                                     </div>
-
                                 </form>
                             </div>
                         </div>

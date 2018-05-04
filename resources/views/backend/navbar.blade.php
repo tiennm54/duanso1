@@ -19,20 +19,11 @@
             <a class="parent"><i class="fa fa-shopping-cart fw"></i> <span>Sales</span></a>
             <ul class="collapse">
                 <li><a href="{{ URL::route('adminUserOrders.listOrders') }}">Orders</a></li>
-                <li><a href="#">RecurringProfiles</a></li>
-                <li><a href="#">Returns</a></li>
-                <li>
-                    <a class="parent">Gift Vouchers</a>
-                    <ul class="collapse">
-                        <li><a href="#">Gift Vouchers</a></li>
-                        <li><a href="#">Voucher Themes</a></li>
-                    </ul>
-                </li>
             </ul>
         </li>
 
         <li id="menu-catalog">
-            <a class="parent"><i class="fa fa-tags fw"></i> <span>Catalog</span></a>
+            <a class="parent"><i class="fa fa-tags fw"></i> <span>Product manager</span></a>
             <ul class="collapse">
                 <li>
                     <a href="{{ URL::route('articles.index') }}">Products</a>
@@ -69,11 +60,9 @@
                 <li>
                     <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
                 </li>
-
                 <li>
                     <a href="{{ URL::route('config.bonusConfig.getCreate') }}">Bonus Config</a>
                 </li>
-
                 <li>
                     <a href="{{ URL::route('admin.information.index') }}">Information</a>
                 </li>
@@ -86,7 +75,6 @@
                 <li>
                     <a href="{{ URL::route('config.seo.index') }}">SEO</a>
                 </li>
-
                 <li>
                     <a href="{{ URL::route('config.seopage.getCreate') }}">Create Page</a>
                 </li>
@@ -105,20 +93,11 @@
             <a class="parent"><i class="fa fa-tags fw"></i> <span>Category</span></a>
             <ul class="collapse">
                 <li>
+                    <a href="{{ URL::route('category.index') }}">Category News</a>
+                </li>
+                <li>
                     <a href="{{ URL::route('admin.categoryFaq.index') }}">Category FAQ</a>
                 </li>
-
-            </ul>
-        </li>
-
-
-        <li id="menu-marketing">
-            <a class="parent"><i class="fa fa-share-alt fw"></i> <span>Marketing</span></a>
-            <ul class="collapse">
-                <li><a href="#">Marketing</a></li>
-                <li><a href="#">Affiliates</a></li>
-                <li><a href="#">Coupons</a></li>
-                <li><a href="#">Mail</a></li>
             </ul>
         </li>
 

@@ -14,16 +14,6 @@
                             <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
                                 <p>This is your product for the invoice # <b>{{ $model_orders->order_no }}</b></p>
-                                <p>
-                                    Please check your key as soon as possible.
-                                    If your key has a problem please contact us within 48 hours, we will resolve the problem for you. 
-                                    After 48 hours we will not be able to help you resolve any issues for you.
-                                </p>
-                                <p>You can view your order history by going to the
-                                    <a href="{{ URL::route('users.getMyAccount') }}">my account</a>
-                                    page and by clicking on
-                                    <a href="{{ URL::route('users.orderHistory') }}">history</a>. Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.
-                                </p>
                             </td>
                         </tr>
 
@@ -190,7 +180,16 @@
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
-                                            <p>Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.</p>
+                                            <p>
+                                                Please check your key as soon as possible.
+                                                If your key has a problem please contact us within 48 hours, we will resolve the problem for you. 
+                                                After 48 hours we will not be able to help you resolve any issues for you.
+                                            </p>
+                                            <p>You can view your order history by going to the
+                                                <a href="{{ URL::route('users.getMyAccount') }}">my account</a>
+                                                page and by clicking on
+                                                <a href="{{ URL::route('users.orderHistory') }}">history</a>. Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.
+                                            </p>
                                             <p style="font-weight: bold">Thanks in advance, <br/> Reseller Team <?php echo NAME_COMPANY; ?></p>
                                         </td>
                                     </tr>

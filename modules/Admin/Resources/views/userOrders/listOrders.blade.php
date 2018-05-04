@@ -111,8 +111,6 @@
                             </div>
                         </div>
 
-
-
                         <div class="col-sm-2">
                             <div class="form-group ">
                                 <label class="control-label">Search</label>
@@ -181,7 +179,14 @@
                     </tbody>
                 </table>
             </div>
-            <?php echo $model->render(); ?>
+            <?php echo $model->appends(
+                    [
+                        'order_id' => Request::get('order_id'), 
+                        'email' => Request::get('email'), 
+                        'payment_status' => Request::get('payment_status'),
+                        'used_bonus' => Request::get('used_bonus'),
+                        'payment_type' => Request::get('payment_type'),
+                    ])->render(); ?>
 
         </div>
     </div>
