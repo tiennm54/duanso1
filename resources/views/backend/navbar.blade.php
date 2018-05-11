@@ -42,6 +42,10 @@
                 <li>
                     <a href="{{ URL::route('admin.news.index') }}">News</a>
                 </li>
+                
+                <li>
+                    <a href="{{ URL::route('admin.comment.index') }}">Comment</a>
+                </li>
 
                 <li>
                     <a href="{{ URL::route('config.image.getCreate') }}">Image</a>

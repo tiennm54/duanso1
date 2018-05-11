@@ -4,21 +4,9 @@ namespace Modules\Articles\Http\Controllers;
 
 use App\Models\Articles;
 use App\Models\ArticlesType;
-use App\Models\PaymentType;
-use App\Models\TermsConditions;
 use App\Models\UserReview;
-use Illuminate\Support\Facades\Session;
 use Modules\Articles\Http\Requests\ReviewProductRequest;
 use Modules\Users\Http\Controllers\CheckMemberController;
-use Pingpong\Modules\Routing\Controller;
-use Illuminate\Http\Request;
-use Modules\Articles\Http\Requests\CreateRequest;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use DougSisk\CountryState\CountryState;
-use Response;
-use SEOMeta;
-use OpenGraph;
-use Twitter;
 use URL;
 use App\Helpers\SeoPage;
 

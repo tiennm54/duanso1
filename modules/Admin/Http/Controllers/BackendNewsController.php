@@ -37,6 +37,7 @@ class BackendNewsController extends Controller
             $model->created_by = Auth::user()->id;
 
             $model->save();
+            $request->session()->flash('alert-success', 'Success: Create success!');
             return redirect()->route('admin.news.getEdit', ["id" => $model->id]);
         }
     }
@@ -63,9 +64,21 @@ class BackendNewsController extends Controller
                 $model->updated_by = Auth::user()->id;
                 $model->category_id = $data["category_id"];
                 $model->save();
+                $request->session()->flash('alert-success', 'Success: Edit success!');
                 return redirect()->route('admin.news.getEdit', ["id" => $model->id]);
             }
         }
+    }
+    
+    public function delete($id, Request $request){
+        $model = News::find($id);
+        if($model){
+            $model->delete();
+            $request->session()->flash('alert-success', 'Success: Delete success!');
+        }else{
+            $request->session()->flash('alert-warning', 'Warning: Delete news error !');
+        }
+        return back();
     }
 
     public function index(Request $request){

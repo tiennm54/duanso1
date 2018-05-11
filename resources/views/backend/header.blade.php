@@ -20,7 +20,8 @@
                 <i class="fa fa-bell fa-lg"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-right alerts-dropdown">
-                <li class="dropdown-header">Orders (Processing)</li>
+                
+                <li class="dropdown-header">Notification</li>
                 <li>
                     <?php $payment_bonus_id = $statisticCount["payment_bonus_id"]; ?>
                     <a href="<?php echo URL::route('adminUserOrders.listOrders') . "?payment_status=pending&payment_type=". $payment_bonus_id; ?>" style="display: block; overflow: auto;">
@@ -38,6 +39,24 @@
                         Used bonus
                     </a>
                 </li>
+                <li>
+                    <a href="<?php echo URL::route('admin.userManagement.index') . "?filter_status=1"; ?>">
+                        <span class="label  <?php echo ($statisticCount["count_user_lock"] > 0) ? "label-danger" : "label-success";?>  pull-right">
+                            <?php echo $statisticCount["count_user_lock"];?>
+                        </span>User locked
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo URL::route('admin.comment.index'); ?>">
+                        <span class="label  <?php echo ($statisticCount["count_comment"] > 0) ? "label-danger" : "label-success";?>  pull-right">
+                            <?php echo $statisticCount["count_comment"];?>
+                        </span>User Comment
+                    </a>
+                </li>
+                
+                <li class="divider"></li>
+                <li class="dropdown-header">Orders (Processing)</li>
                 <li>
                     <a href="<?php echo URL::route('adminUserOrders.listOrders') . "?payment_status=paid"; ?>">
                         <span class="label label-danger pull-right">
@@ -64,15 +83,6 @@
                     </a>
                 </li>
                 
-                <li class="divider"></li>
-                <li class="dropdown-header">Customers</li>
-                <li>
-                    <a href="<?php echo URL::route('admin.userManagement.index') . "?filter_status=1"; ?>">
-                        <span class="label  <?php echo ($statisticCount["count_user_lock"] > 0) ? "label-danger" : "label-success";?>  pull-right">
-                            <?php echo $statisticCount["count_user_lock"];?>
-                        </span>User locked
-                    </a>
-                </li>
                 <li class="divider"></li>
                 <li class="dropdown-header">Affiliates</li>
                 <li>

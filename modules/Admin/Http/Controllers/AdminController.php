@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Articles;
 use App\Models\FeedBack;
 use App\Models\PaymentType;
+use App\Models\NewsComment;
 use Pingpong\Modules\Routing\Controller;
 use Session;
 
@@ -67,6 +68,7 @@ class AdminController extends Controller {
         $count_user_lock = $obj_user->getModelUserLock()->count();
         $count_product_no_stock = Articles::where("status_stock", "=", 0)->orWhere("status_disable", "=", 1)->count();
         $count_feedback = FeedBack::where("status_fix", "=", "NO")->count();
+        $count_comment = NewsComment::where("parent_id",0)->where("status_admin_reply",0)->count();
         $model_payment = PaymentType::where("code","=","BONUS")->first();
         if($model_payment != null){
             $payment_bonus_id = $model_payment->id;
@@ -82,7 +84,8 @@ class AdminController extends Controller {
             "count_user_lock" => $count_user_lock,
             "count_product_no_stock" => $count_product_no_stock,
             "count_feedback" => $count_feedback,
-            "count_noti" => ($count_used_bonus_pending + $count_bonus_payment + $count_user_lock + $count_feedback),
+            "count_comment" => $count_comment,
+            "count_noti" => ($count_used_bonus_pending + $count_bonus_payment + $count_user_lock + $count_feedback + $count_comment),
             "payment_bonus_id" => $payment_bonus_id
         );
 

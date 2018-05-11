@@ -31,6 +31,14 @@
                        required>
                 {!! $errors->first('email','<span class="control-label color-red" style="color: red">*:message</span>') !!}
             </div>
-
+    </div>
+    
+    <div class="col-md-12 well">
+        <span>
+            When your friends register via the <a href="<?php echo URL::route('users.getMyAccount');?>">link you shared</a> and buy premium key,  you will receive 2% of the total value of the order, and your friend will also receive 2% of the value of the order. 
+            This amount will be stored in your account, you can use it to buy any products on our website. 
+            If you are a normal buyer, you will still receive 1% bonus from us.
+            Share now to receive special offers from BuyPremiumKey reseller
+        </span>
     </div>
 </div>

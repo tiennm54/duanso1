@@ -116,9 +116,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('index', ['as' => 'admin.news.index', 'uses' => 'BackendNewsController@index']);
         Route::get('create', ['as' => 'admin.news.getCreate', 'uses' => 'BackendNewsController@getCreate']);
         Route::post('create', ['as' => 'admin.news.postCreate', 'uses' => 'BackendNewsController@postCreate']);
-
         Route::get('edit/{id?}', ['as' => 'admin.news.getEdit', 'uses' => 'BackendNewsController@getEdit']);
         Route::post('edit/{id?}', ['as' => 'admin.news.postEdit', 'uses' => 'BackendNewsController@postEdit']);
+        Route::get('delete/{id?}', ['as' => 'admin.news.delete', 'uses' => 'BackendNewsController@delete']);
     });
     
     Route::group(['prefix' => 'feedback'], function() {
@@ -126,4 +126,15 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('view/{id}', ['as' => 'admin.feedback.view', 'uses' => 'FeedbackManagerController@view']);
         Route::post('saveFinish/{id}', ['as' => 'admin.feedback.saveFinish', 'uses' => 'FeedbackManagerController@saveFinish']);
     });
+    
+    Route::group(['prefix' => 'comment'], function() {
+        Route::get('index', ['as' => 'admin.comment.index', 'uses' => 'CommentManagerController@index']);
+        Route::get('view/{id}', ['as' => 'admin.comment.view', 'uses' => 'CommentManagerController@view']);
+        Route::post('reply/{id}', ['as' => 'admin.comment.reply', 'uses' => 'CommentManagerController@reply']);
+        Route::post('editComment', ['as' => 'admin.comment.editComment', 'uses' => 'CommentManagerController@editComment']);
+        Route::post('disableComment/{id}', ['as' => 'admin.comment.disableComment', 'uses' => 'CommentManagerController@disableComment']);
+        Route::get('delete/{id}', ['as' => 'admin.comment.delete', 'uses' => 'CommentManagerController@deleteComment']);
+        
+    });
+    
 });

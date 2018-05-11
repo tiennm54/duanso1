@@ -2,25 +2,29 @@
 
     <div id="review">
 
-        <?php if (count($model->getReview) == 0){?>
+        <?php if (count($model->getReview) == 0) { ?>
             <p>There are no reviews for this product.</p>
-        <?php }else{?>
+        <?php } else { ?>
 
             <?php foreach ($model->getReview as $item): ?>
-            <div>
-                <b>{{ $item->full_name }}: </b><span> {{ $item->created_at }} </span>
-                <div class="rating">
-                    <span>{{ $item->description }}</span>
-                    <span>
-                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 2) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                        <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 5) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                    </span>
+                <div class="well">
+                    <p>
+                        <b>{{ $item->full_name }}: </b><span> {{ $item->created_at }} </span>
+                    </p>
+                    <p>
+                        <span>{{ $item->description }}</span>
+                    </p>
+                    <div class="rating">
+
+                        <span>
+                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i></span>
+                            <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 2) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                            <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                            <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                            <span class="fa fa-stack"><i class="fa {{ ($item->rate >= 5) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                        </span>
+                    </div>
                 </div>
-                <hr/>
-            </div>
             <?php endforeach; ?>
 
         <?php } ?>

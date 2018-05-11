@@ -27,6 +27,7 @@
             <h3 class="panel-title"><i class="fa fa-list"></i> List News</h3>
         </div>
         <div class="panel-body">
+            @include('validator.flash-message')
             <div class="well">
                 <div class="row">
                     <form action="" method="get">
@@ -94,6 +95,10 @@
                                 <td>
                                     <a href="{{ URL::route('admin.news.getEdit', ['id' => $item->id]) }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit">
                                         <i class="fa fa-pencil"></i>
+                                    </a>
+                                    
+                                    <a href="{{ URL::route('admin.news.delete', ['id' => $item->id]) }}" class="btn btn-danger" data-toggle="confirmation">
+                                        <i class="glyphicon glyphicon-trash"></i>
                                     </a>
                                 </td>
                             </tr>

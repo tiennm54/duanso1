@@ -95,7 +95,7 @@
                             </div>
                         </div>
 
-
+                        @include('validator.validator-input')
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
                             <li><a href="#tab-specific" data-toggle="tab">Specification</a></li>

@@ -21,6 +21,7 @@ define('SUBJECT_REFUND','[BuyPremiumKey.Com] Refunded Orders #');
 define('SUBJECT_CANCEL','[BuyPremiumKey.Com] Canceled Orders #');
 define('SUBJECT_CONTACT','[BuyPremiumKey.Com] Contact by customer');
 define('SUBJECT_FORGOT','[BuyPremiumKey.Com] Forgot password');
+define('SUBJECT_REPLY_COMMENT','[BuyPremiumKey.Com] Your comment has been replied');
 
 define('SUBJECT_EMAIL_BONUS','[BuyPremiumKey.Com] You received a bonus from order #');
 
