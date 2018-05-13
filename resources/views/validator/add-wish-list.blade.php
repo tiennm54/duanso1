@@ -15,7 +15,7 @@
                 Success: You have added
             @endif
 
-            <a href="{{ URL::route('frontend.articles.view', $model->id) }}">{{ $model->title }}</a> to your
+            <a href="{{ $model->getUrl() }}">{{ $model->title }}</a> to your
             <a href="#">wish list</a>!
             <button type="button" class="close" data-dismiss="alert">×</button>
 

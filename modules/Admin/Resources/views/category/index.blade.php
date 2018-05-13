@@ -31,7 +31,7 @@
                             <th>Description</th>
                             <th>SEO Title</th>
                             <th>SEO Description</th>
-                            <th>Action</th>
+                            <th width="10%">Action</th>
                         </tr></thead>
                     <tbody>
 
@@ -46,8 +46,12 @@
                                 <td><?php echo $item->seo_description; ?></td>
 
                                 <td>
-                                    <a style="cursor: pointer" href="<?php echo URL::route('category.getEdit', $item->id); ?>">Edit | </a>
-                                    <a onclick="return confirm('Are you sure you want to delete this item?');" href="<?php echo URL::route('category.delete', $item->id); ?>" style="cursor: pointer">Delete</a>
+                                    <a class="btn btn-primary" href="<?php echo URL::route('category.getEdit', $item->id); ?>">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </a>
+                                    <a class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');" href="<?php echo URL::route('category.delete', $item->id); ?>">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

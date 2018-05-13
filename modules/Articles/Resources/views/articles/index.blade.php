@@ -17,7 +17,7 @@
                     <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="product-thumb transition">
                             <div class="image">
-                                <a href="{{ URL::route('frontend.articles.pricing', ['id' => $item->id, 'url' => $item->url_title.".html" ]) }}">
+                                <a href="{{ $item->getUrlPricing() }}">
                                     <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" title="{{ $item->title }} ({{$item->view_count}} views)"
                                          class="img-responsive" style="width: 100%">
                                 </a>

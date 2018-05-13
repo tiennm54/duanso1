@@ -46,7 +46,7 @@ class SeoController extends Controller {
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
                     $input['image_name'] = time() . '.' . $image->getClientOriginalExtension();
-                    $destinationPath = public_path('/images/feedback');
+                    $destinationPath = public_path('/images/seo');
                     $image->move($destinationPath, $input['image_name']);
                     $model->image = $input['image_name'];
                 }

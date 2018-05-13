@@ -1,121 +1,129 @@
 @extends('frontend.master')
 @section('content')
-    <div class="container">
+<div class="container">
 
-        <ul class="breadcrumb">
-            <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
-            <li><a href="{{ URL::route('frontend.articles.pricing', ['id' => $model->id, 'url'=> $model->url_title.".html"] ) }}">{{ $model->title }}</a></li>
-        </ul>
+    <ul class="breadcrumb">
+        <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
+        <li><a href="{{ $model->getUrlPricing() }}">{{ $model->title }}</a></li>
+    </ul>
 
 
-        <div class="row">
-            <div class="col-md-4">
-                <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive" style="width: 100%">
-            </div>
-            <div class="col-md-8">
-                <h1 style="margin-top: 0px;"><span style="color: #337ab7">Buy {{ $model->title }} Premium Key</span> - BuyPremiumKey Are Best Official Reseller {{ $model->title }} Premium</h1>
-            </div>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive" style="width: 100%">
         </div>
-        <hr/>
+        <div class="col-md-8">
+            <h1 style="margin-top: 0px;"><span style="color: #337ab7">Buy {{ $model->title }} Premium Key</span> - BuyPremiumKey Are Best Official Reseller {{ $model->title }} Premium</h1>
+        </div>
+    </div>
+    <hr/>
 
-        <div class="row">
-            <input id="_token" type="hidden" name="_token" value="{{ csrf_token() }}">
-                <?php foreach ($model_type as $key=>$item):?>
-                <div class="col-md-4 whole">
-                    <div class="type
-                        <?php switch ($key){
-                        case 0 : echo "standard"; break;
-                        case 1 : echo "ultimate"; break;
-                        default : echo ""; break;
-                    }?>">
+    <div class="row">
+        <input id="_token" type="hidden" name="_token" value="{{ csrf_token() }}">
+        <?php foreach ($model_type as $key => $item): ?>
+            <div class="col-md-4 whole">
+                <div class="type
+                <?php
+                switch ($key) {
+                    case 0 : echo "standard";
+                        break;
+                    case 1 : echo "ultimate";
+                        break;
+                    default : echo "";
+                        break;
+                }
+                ?>">
 
                     <p>
-                        <a style="color: white" href="{{ URL::route('frontend.articles.view', ['id'=>$item->id, 'url'=>$item->url_title.".html"]) }}" title="Read more...">{{ $item->title }}</a>
+                        
+                        <a style="color: white" href="{{ $item->getUrl() }}" title="Read more...">{{ $item->title }}</a>
                     </p>
+                </div>
+                <div class="plan">
+
+                    <div class="header-pricing">
+                        <?php if ($item->status_stock == 1) { ?>
+                            <p class="month">${{ $item->price_order }}</p>
+                        <?php } else { ?>
+                            <p class="month">NOT IN STOCK</p>
+                        <?php } ?>
                     </div>
-                    <div class="plan">
 
-                        <div class="header-pricing">
-                            <?php if($item->status_stock == 1){?>
-                                <p class="month">${{ $item->price_order }}</p>
-                            <?php }else{?>
-                                <p class="month">NOT IN STOCK</p>
-                            <?php }?>
-                        </div>
+                    <div class="content">
+                        <ul>
+                            <?php if ($item->getDescription != null && count($item->getDescription) != 0) { ?>
+                                <?php foreach ($item->getDescription as $spe): ?>
+                                    <li class="li-content">{{ $spe->description }}</li>
+                                <?php endforeach; ?>
+                            <?php }else { ?>
+                                <li class="li-content">No specifications</li>
+                            <?php } ?>
+                        </ul>
+                    </div>
 
-                        <div class="content">
-                            <ul>
-                                <?php if($item->getDescription != null && count($item->getDescription) != 0){?>
-                                    <?php foreach ($item->getDescription as $spe):?>
-                                        <li class="li-content">{{ $spe->description }}</li>
-                                    <?php endforeach; ?>
-                                <?php }else{?>
-                                    <li class="li-content">No specifications</li>
-                                <?php }?>
-                            </ul>
-                        </div>
-
-                        <div class="price">
-                            <a onclick="addToCart({{ $item->id }})" class="btn btn-primary" data-toggle="modal" data-target="#myModal" <?php echo ($item->status_stock == 0) ? "disabled" : ""?>>
-                                <img src="{{url('theme_frontend/image/cart-1.png')}}" alt="Add to cart">
-                                ADD TO CART
-                            </a>
-                        </div>
+                    <div class="price">
+                        <a onclick="addToCart({{ $item->id }})" class="btn btn-primary" data-toggle="modal" data-target="#myModal" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
+                            <img src="{{url('theme_frontend/image/cart-1.png')}}" alt="Add to cart">
+                            ADD TO CART
+                        </a>
                     </div>
                 </div>
-                <?php endforeach; ?>
-        </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-        <hr/>
+    <hr/>
 
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a data-toggle="tab" href="#description">Description</a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href="#comment">Comment</a>
-                    </li>
-                </ul>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#description">Description</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#comment">Comment</a>
+                </li>
+            </ul>
 
-                <div class="tab-content">
+            <div class="tab-content">
 
-                    <div id="description" class="tab-pane fade  in active">
-                        {!! $model->description !!}
-                    </div>
+                <div id="description" class="tab-pane fade  in active">
+                    {!! $model->description !!}
+                </div>
 
-                    <div id="comment" class="tab-pane fade row">
-                        <div class="col-md-8">
-                            <div class="fb-comments" data-href="{{ URL::route('frontend.articles.pricing', ['id' => $item->id, 'url' => $item->url_title.".html" ]) }}" data-numposts="6"></div>
-                        </div>
+                <div id="comment" class="tab-pane fade row">
+                    <div class="col-md-8">
+                        <div class="fb-comments" data-href="{{ $model->getUrlPricing() }}" data-numposts="6"></div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <hr/>
+    <hr/>
 
-        <a href="{{ URL::route('frontend.articles.pricing', ['id' => $model->id, 'url'=> $model->url_title.".html"] ) }}"><img src="{{url('images/icon/step-buy-key.png')}}" alt="step buy premium key" width="100%"></a>
+    <a href="{{ $model->getUrlPricing() }}">
+        <img src="{{url('images/icon/step-buy-key.png')}}" alt="step buy premium key" width="100%">
+    </a>
 
-        <hr/>
+    <hr/>
 
-        <div class="row">
-            <div class="col-md-12">
-                <h2 style="color: #1f90bb">Product List</h2>
-            </div>
-
-            <?php if(count($model_all_product)){?>
-                <?php foreach ($model_all_product as $item_product):?>
-                    <div class="col-md-3">
-                        <a href="{{ URL::route('frontend.articles.pricing', ['id' => $item_product->id, 'url' => $item_product->url_title.".html" ]) }}">{{ $item_product->title }}</a>
-                    </div>
-                <?php endforeach;?>
-            <?php }?>
-
+    <div class="row">
+        <div class="col-md-12">
+            <h2 style="color: #1f90bb">Product List</h2>
         </div>
 
+        <?php if (count($model_all_product)) { ?>
+            <?php foreach ($model_all_product as $item_product): ?>
+                <div class="col-md-3">
+                    <a href="{{ $item_product->getUrlPricing() }}">{{ $item_product->title }}</a>
+                </div>
+            <?php endforeach; ?>
+        <?php } ?>
 
     </div>
+
+
+</div>
 @stop
 

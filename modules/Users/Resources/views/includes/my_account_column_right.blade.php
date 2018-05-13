@@ -9,6 +9,6 @@
         <a href="{{ URL::route('users.getLogout') }}" class="list-group-item">Logout</a>
     </div>
 
-    <div class="fb-page" data-href="https://www.facebook.com/buypremiumkey/" data-tabs="timeline" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/buypremiumkey/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/buypremiumkey/">Buy Premium Key</a></blockquote></div>
+    <div class="fb-page" data-href="https://www.facebook.com/buypremiumkeycom" data-tabs="timeline" data-height="300" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/buypremiumkeycom" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/buypremiumkeycom">Buypremiumkey.com</a></blockquote></div>
 
 </aside>

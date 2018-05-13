@@ -39,8 +39,8 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label class="control-label">Code</label>
-                                <input type="text" name="code" placeholder="Code" class="form-control" required>
+                                <label class="control-label">Router</label>
+                                <input type="text" name="code" placeholder="Router" class="form-control" required>
                                 {!! $errors->first('code','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                         <tr>
                             <td class="text-left">No</td>
                             <td class="text-left">Name</td>
-                            <td class="text-left">Code</td>
+                            <td class="text-left">Router</td>
                             <td class="text-left">Create at</td>
                             <td class="text-right">Action</td>
                         </tr>

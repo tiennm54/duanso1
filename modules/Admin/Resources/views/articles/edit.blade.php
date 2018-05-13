@@ -6,7 +6,7 @@
 
             <div class="pull-right">
                 <button type="submit" form="form-edit-product" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Save"><i class="fa fa-save"></i></button>
-                <a href="<?php echo URL::route('frontend.articles.pricing', ['id' => $model->id, 'url' => $model->url_title.'.html']); ?>" target="_blank" data-toggle="tooltip" class="btn btn-primary" data-original-title="View"><i class="fa fa-eye"></i></a>
+                <a href="<?php echo $model->getUrlPricing(); ?>" target="_blank" data-toggle="tooltip" class="btn btn-primary" data-original-title="View Frontend"><i class="fa fa-eye"></i></a>
                 <a href="<?php echo URL::route('articles.view', ['id' => $model->id, 'url' => $model->url_title.'.html']); ?>" target="_blank" data-toggle="tooltip" class="btn btn-default" data-original-title="View"><i class="fa fa-eye"></i></a>
                 <a href="<?php echo URL::route('articles.index'); ?>" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i class="fa fa-reply"></i></a>
             </div>

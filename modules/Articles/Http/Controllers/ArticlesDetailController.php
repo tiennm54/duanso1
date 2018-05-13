@@ -24,7 +24,7 @@ class ArticlesDetailController extends CheckMemberController {
     }
 
     public function seoView($model) {
-        $url_page = URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title . '.html']);
+        $url_page = $model->getUrl();
         $image_page = url('images/' . $model->getArticles->image);
         SeoPage::createSeo($model, $url_page, $image_page);
     }
@@ -42,7 +42,7 @@ class ArticlesDetailController extends CheckMemberController {
             $this->seoView($model);
             $sum_rate = $this->sumRateProduct($model);
             $model_related = ArticlesType::where("articles_id", "=", $model->articles_id)->where("id", "!=", $model->id)->get();
-            $model_list_product = Articles::where("status_disable", "=", 0)->orderBy("title", "ASC")->get();
+            $model_list_product = Articles::where("status_disable", "=", 0)->where("status_stock",1)->orderBy("title", "ASC")->get();
             return view('articles::articles.view', compact("model", "model_related", "model_user", "attributes", "sum_rate", "model_list_product"));
         }
         return redirect()->route('frontend.articles.index');

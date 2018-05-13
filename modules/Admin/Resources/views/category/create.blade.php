@@ -69,6 +69,14 @@
                 <div id="seo" class="tab-pane fade">
 
                     <div class="row">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Image</label>
+                                <input type="file" class="form-control border-input" name="image">
+                            </div>
+                        </div>
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Meta Tag Title (<span class="count-seo-title"></span>)/65-70</label>
@@ -104,6 +112,24 @@
                             </div>
                         </div>
                     </div>
+
+                    <?php if (isset($model)): ?>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Image Current</label>
+                                    <?php if ($model->image != "") { ?>
+                                        <img src="<?php echo url('images/news/' . $model->image); ?>" width="300px">
+                                        <?php
+                                    } else {
+                                        echo "Chưa có IMAGE cho SEO";
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
                 </div>
             </div>
         </form>

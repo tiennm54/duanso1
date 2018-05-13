@@ -32,7 +32,7 @@ class ArticlesController extends Controller {
     }
 
     public function seoPricing($model){
-        $url_page = URL::route('frontend.articles.pricing', ['id' => $model->id, 'url' => $model->url_title . '.html']);
+        $url_page = $model->getUrlPricing();
         $image_page = url('images/' . $model->image);
         SeoPage::createSeo($model, $url_page, $image_page);
     }

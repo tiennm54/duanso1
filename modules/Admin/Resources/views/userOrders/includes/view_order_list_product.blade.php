@@ -24,7 +24,7 @@
                 <tbody>
                     <tr>
                         <td class="text-left">
-                            <a href="{{URL::route('frontend.articles.view',[ 'id' => $item->articles_type->id, 'url' => $item->articles_type->url_title.".html" ])}}" target="_blank">
+                            <a href="{{ $item->articles_type->getUrl() }}" target="_blank">
                                 {{ $item->articles_type->title }}
                             </a>
                         </td>

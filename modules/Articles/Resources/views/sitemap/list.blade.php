@@ -52,7 +52,19 @@
     <url>
         <loc>{{ URL::route('users.contact.getContact') }}</loc>
     </url>
-
+    
+    <url>
+        <loc>{{ URL::route('users.feedback.getFeedBack') }}</loc>
+    </url>
+    
+    <url>
+        <loc>{{ URL::route('users.guestOrder.guestGetKey') }}</loc>
+    </url>
+    
+    <url>
+        <loc>{{ URL::route('frontend.news.index') }}</loc>
+    </url>
+    
     @foreach($model_information as $info)
         <url>
             <loc>{{ URL::route('frontend.information.view',["id"=> $info->id, 'url'=>$info->url_title.".html"]) }}</loc>
@@ -61,14 +73,27 @@
 
     @foreach($model_product as $product)
         <url>
-            <loc>{{ URL::route('frontend.articles.pricing',["id"=> $product->id, 'url'=>$product->url_title.".html"]) }}</loc>
+            <loc>{{ $product->getUrlPricing() }}</loc>
         </url>
     @endforeach
 
 
     @foreach($model_product_detail as $product_detail)
         <url>
-            <loc>{{ URL::route('frontend.articles.view',["id"=> $product_detail->id, 'url'=>$product_detail->url_title.".html"]) }}</loc>
+            <loc>{{ $product_detail->getUrl() }}</loc>
+        </url>
+    @endforeach
+    
+    
+    @foreach($model_cate as $cate)
+        <url>
+            <loc>{{ $cate->getUrl() }}</loc>
+        </url>
+    @endforeach
+    
+    @foreach($model_news as $news)
+        <url>
+            <loc>{{ $news->getUrl() }}</loc>
         </url>
     @endforeach
 

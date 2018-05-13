@@ -35,12 +35,7 @@
                         <tr>
                             <td>News title</td>
                             <td>
-                                <a href="<?php
-                                echo URL::route('frontend.news.view', [
-                                    'id' => $model->getNews->id,
-                                    'cate' => $model->getNews->getCategory->path_url,
-                                    'url' => $model->getNews->url_title . ".html"]);
-                                ?>">
+                                <a href="<?php echo $model->getNews->getUrl(); ?>">
                                        <?php echo $model->getNews->title; ?>
                                 </a>
                             </td>

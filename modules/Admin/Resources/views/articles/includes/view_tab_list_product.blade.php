@@ -30,7 +30,7 @@
                     ?></td>
                 <td>
                     <a href="<?php echo URL::route('articlesChildren.getEdit', ['id' => $item->id, 'url' => $item->url_title.'.html' ]); ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-                    <a  href="<?php echo URL::route('frontend.articles.view', ['id' => $item->id, 'url' => $item->url_title.'.html' ]); ?>" target="_blank" class="btn btn-primary"> <i class="fa fa-eye"></i></a>
+                    <a  href="<?php echo $item->getUrl(); ?>" target="_blank" class="btn btn-primary"> <i class="fa fa-eye"></i></a>
                     <a onclick="return confirm('Are you sure you want to delete this item?');" href="<?php echo URL::route('articlesChildren.delete', $item->id); ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>
                 </td>
             </tr>

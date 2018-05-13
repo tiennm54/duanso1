@@ -17,22 +17,12 @@
                                     <span>Your comment has been replied!</span>
                                 </p>
                                 <p>
-                                    <span>News title: <a href="<?php
-                                        echo URL::route('frontend.news.view', [
-                                            'id' => $model_news->id,
-                                            'cate' => $model_news->getCategory->path_url,
-                                            'url' => $model_news->url_title . ".html"]);
-                                        ?>"><?php echo $model_news->title; ?></a></span><br/>
+                                    <span>News title: <a href="<?php echo $model_news->getUrl(); ?>"><?php echo $model_news->title; ?></a></span><br/>
                                     <span>Your comment: <?php echo $model_comment->comment; ?></span><br/>
                                     <span>Email reply: <?php echo $model_reply->email; ?></span><br/>
                                     <span>Reply: <?php echo $model_reply->comment; ?></span><br/>
                                     <span>Date reply: <?php echo $model_reply->created_at; ?></span><br/>
-                                    <span>Please see details <a href="<?php
-                                        echo URL::route('frontend.news.view', [
-                                            'id' => $model_news->id,
-                                            'cate' => $model_news->getCategory->path_url,
-                                            'url' => $model_news->url_title . ".html"]);
-                                        ?>">here</a></span>
+                                    <span>Please see details <a href="<?php echo $model_news->getUrl(); ?>">here</a></span>
                                 </p>
                                 <p>
                                     <b>Best Regards</b>

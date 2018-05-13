@@ -40,12 +40,7 @@
                         <form method="post" action="<?php echo URL::route('admin.comment.disableComment', ['id' => $item->id]); ?>">
                             <tr>
                                 <td>
-                                    <a href="<?php
-                                    echo URL::route('frontend.news.view', [
-                                        'id' => $item->getNews->id,
-                                        'cate' => $item->getNews->getCategory->path_url,
-                                        'url' => $item->getNews->url_title . ".html"]);
-                                    ?>">
+                                    <a href="<?php echo $item->getNews->getUrl(); ?>">
                                            <?php echo substr($item->getNews->title, 0, 30) . "..."; ?>
                                     </a>
                                 </td>

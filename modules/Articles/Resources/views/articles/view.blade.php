@@ -4,8 +4,8 @@
 
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
-            <li><a href="{{ URL::route('frontend.articles.pricing', ['id' => $model->getArticles->id, 'url'=> $model->getArticles->url_title.".html"] ) }}">{{ $model->getArticles->title }}</a></li>
-            <li><a href="{{ URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title.".html" ] ) }}">{{ $model->title }}</a></li>
+            <li><a href="{{ $model->getArticles->getUrlPricing() }}">{{ $model->getArticles->title }}</a></li>
+            <li><a href="{{ $model->getUrl() }}">{{ $model->title }}</a></li>
         </ul>
 
         @include('validator.flash-message')
@@ -20,7 +20,7 @@
 
                                 <ul class="thumbnails" style="margin-top: 30px">
                                     <li>
-                                        <a href="{{ URL::route('frontend.articles.pricing', ['id'=>$model->getArticles->id, 'url'=>$model->getArticles->url_title.".html"] ) }}">
+                                        <a href="{{ $model->getArticles->getUrlPricing() }}">
                                             <img src="{{url('images/'.$model->getArticles->image)}}" title="{{ $model->title }}" alt="{{ $model->title }}">
                                         </a>
 
@@ -31,8 +31,8 @@
                             <div class="col-sm-5">
 
                                 <ul class="list-unstyled">
-                                    <li>Brand: <a href="{{ URL::route('frontend.articles.pricing', ['id'=>$model->getArticles->id, 'url'=>$model->getArticles->url_title.".html"] ) }}"> {{ $model->getArticles->title }}</a></li>
-                                    <li>Product Code: {{ $model->code }}</li>
+                                    <li>Brand: <a href="{{ $model->getArticles->getUrlPricing() }}"> {{ $model->getArticles->title }}</a></li>
+                                    <li>Product Code: <b>{{ $model->code }}</b></li>
                                     <li>Availability:
                                         <?php if ($model->status_stock == 1){?>
                                             <div class="label label-primary badge">
@@ -82,13 +82,13 @@
                                 <hr/>
                                 <div>
                                     <div id="fb-root" class="col-sm-3">
-                                        <div class="fb-like" data-href="{{ URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title.".html" ]) }}" data-layout="button" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
+                                        <div class="fb-like" data-href="{{ $model->getUrl() }}" data-layout="button" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="g-follow" data-annotation="bubble" data-height="20" data-href="//plus.google.com/u/0/107279642922867219348" data-rel="publisher"></div>
                                     </div>
                                     <div class="col-sm-3">
-                                        <div class="g-plus" data-action="share" data-href="{{ URL::route('frontend.articles.view', ['id' => $model->id, 'url' => $model->url_title.".html" ]) }}"></div>
+                                        <div class="g-plus" data-action="share" data-href="{{ $model->getUrl() }}"></div>
                                     </div>
 
                                 </div>

@@ -8,7 +8,7 @@
                 <a href="{{ URL::route('frontend.news.index')}}">News all</a>
             </li>
             <li>
-                <a href="{{ URL::route('frontend.news.cate', ['id'=> $cate->id, "url" => $cate->path_url . ".html"]) }}">
+                <a href="{{ $cate->getUrl() }}">
                     <?php echo $cate->name; ?>
                 </a>
             </li>
@@ -22,16 +22,13 @@
                 <?php } ?>
                 <?php foreach ($model as $item): ?>
                     <div>
+                        
                         <h2>
-                            <a href="<?php
-                            echo URL::route('frontend.news.view', [
-                                'id' => $item->id,
-                                'cate' => $item->getCategory->path_url,
-                                'url' => $item->url_title . ".html"]);
-                            ?>">
-                                   <?php echo $item->title; ?>
+                            <a href="<?php echo $item->getUrl(); ?>">
+                                <?php echo $item->title; ?>
                             </a>
                         </h2>
+                        
                         <span class="badge">
                             <i class="glyphicon glyphicon-calendar"></i>
                             <?php echo $item->created_at ?>
@@ -42,12 +39,7 @@
                             <?php echo ($item->view) ? $item->view : 0; ?> view
                         </span>
 
-                        <a href="<?php
-                        echo URL::route('frontend.news.view', [
-                            'id' => $item->id,
-                            'cate' => $item->getCategory->path_url,
-                            'url' => $item->url_title . ".html"]);
-                        ?>" class="btn btn-xs btn-primary pull-right">Read more</a>
+                        <a href="<?php echo $item->getUrl(); ?>" class="btn btn-xs btn-primary pull-right">Read more</a>
 
                         <hr>
                     </div>

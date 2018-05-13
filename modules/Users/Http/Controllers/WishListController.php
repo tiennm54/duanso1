@@ -6,6 +6,7 @@ use App\Models\ArticlesType;
 use App\Models\UserWishList;
 use Illuminate\Http\Request;
 use App\Helpers\SeoPage;
+use URL;
 
 class WishListController extends CheckMemberController  {
 
@@ -27,7 +28,7 @@ class WishListController extends CheckMemberController  {
                         }
                         $string = '<i class="fa fa-check-circle"></i>' .
                             ' Success: You have added' .
-                            ' <a href="' . URL::route('frontend.articles.view', $model_product->id) . '">' . $model_product->title . '</a>' .
+                            ' <a href="' . $model_product->getUrl() . '">' . $model_product->title . '</a>' .
                             ' to your ' .
                             ' <a href="' . URL::route('users.getWishList') . '">wish list</a>!';
 
@@ -40,7 +41,7 @@ class WishListController extends CheckMemberController  {
                             ' You must'.
                             ' <a href="'.URL::route('users.getLogin').'">login</a> or'.
                             ' <a href="'.URL::route('users.getRegister').'">create an account</a> to save' .
-                            ' <a href="' . URL::route('frontend.articles.view', $model_product->id) . '">' . $model_product->title . '</a>' .
+                            ' <a href="' . $model_product->getUrl() . '">' . $model_product->title . '</a>' .
                             ' to your ' .
                             ' <a href="' . URL::route('users.getWishList') . '">wish list</a>!';
 

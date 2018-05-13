@@ -10,11 +10,32 @@ use Modules\Blog\Http\Requests\CommentReplyRequest;
 use Modules\Blog\Http\Requests\EditCommentRequest;
 use Modules\Users\Http\Controllers\CheckMemberController;
 use App\Http\Controllers\SendEmailCommentController;
+use App\Helpers\SeoPage;
+use URL;
 use Log;
 
 class NewsController extends CheckMemberController {
 
+    public function seoNewsCate($model) {
+        $url_page = $model->getUrl();
+        $image_page = "";
+        if ($model->image) {
+            $image_page = url('images/news/' . $model->image);
+        }
+        SeoPage::createSeo($model, $url_page, $image_page);
+    }
+
+    public function seoNewsView($model) {
+        $url_page = $model->getUrl();
+        $image_page = "";
+        if ($model->image) {
+            $image_page = url('images/news/' . $model->image);
+        }
+        SeoPage::createSeo($model, $url_page, $image_page);
+    }
+
     public function index() {
+        SeoPage::seoPage($this);
         $model_cate = Category::orderBy("id", "ASC")->get();
         $model = News::orderBy("id", "DESC")->paginate(NUMBER_PAGE);
         return view('blog::news.index', compact("model", "model_cate"));
@@ -25,6 +46,7 @@ class NewsController extends CheckMemberController {
         if ($cate) {
             $model = News::where("category_id", "=", $id)->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
             $model_cate = Category::orderBy("id", "ASC")->get();
+            $this->seoNewsCate($cate);
             return view('blog::news.news_cate', compact("model", "model_cate", "cate"));
         }
         return redirect()->route('frontend.news.index');
@@ -34,9 +56,10 @@ class NewsController extends CheckMemberController {
         $model_cate = Category::orderBy("id", "ASC")->get();
         $model = News::find($id);
         if ($model) {
+            $this->seoNewsView($model);
+
             $model->view = $model->view + 1;
             $model->save();
-
             $attributes = [
                 'data-theme' => 'light',
                 'data-type' => 'image',

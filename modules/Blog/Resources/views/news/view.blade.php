@@ -9,7 +9,7 @@
             <a href="{{ URL::route('frontend.news.index')}}">News all</a>
         </li>
         <li>
-            <a href="{{ URL::route('frontend.news.cate', ['id'=> $model->getCategory->id, "url" => $model->getCategory->path_url . ".html"]) }}">{{ $model->getCategory->name }}</a>
+            <a href="{{ $model->getCategory->getUrl() }}">{{ $model->getCategory->name }}</a>
         </li>
         <li>
             <a>News detail</a>

@@ -44,8 +44,18 @@ class BackendCategoryController extends Controller {
             $model->seo_keyword = $data["txt_seo_keyword"];
         }
 
+        if (isset($request->image)) {
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $input['image_name'] = time() . '.' . $image->getClientOriginalExtension();
+                $destinationPath = public_path('/images/news');
+                $image->move($destinationPath, $input['image_name']);
+                $model->image = $input['image_name'];
+            }
+        }
+
         $model->save();
-        return redirect()->route('category.index');
+        return redirect()->route('category.getEdit', ['id' => $model->id]);
         // }
     }
 
@@ -64,6 +74,8 @@ class BackendCategoryController extends Controller {
         $model = Category::find($id);
 
         if ($model) {
+            $old_image = $model->image;
+
             if (isset($data["txt_name"]) && isset($data["txt_description"])) {
                 $model->name = $data["txt_name"];
                 $model->description = $data["txt_description"];
@@ -81,9 +93,21 @@ class BackendCategoryController extends Controller {
                 $model->seo_keyword = $data["txt_seo_keyword"];
             }
 
-            $model->save();
+            if (isset($request->image)) {
+                if ($request->hasFile('image')) {
+                    $image = $request->file('image');
+                    $input['image_name'] = time() . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('/images/news');
+                    $image->move($destinationPath, $input['image_name']);
+                    $model->image = $input['image_name'];
+                    if ($old_image && file_exists('images/news/' . $old_image)) {
+                        unlink('images/news/' . $old_image);
+                    }
+                }
+            }
 
-            return redirect()->route('category.index');
+            $model->save();
+            return back();
         }
     }
 
@@ -92,6 +116,10 @@ class BackendCategoryController extends Controller {
         if ($model != null) {
             $count_news = News::where("category_id", "=", $id)->count();
             if ($count_news == 0) {
+                $old_image = $model->image;
+                if ($old_image && file_exists('images/news/' . $old_image)) {
+                    unlink('images/news/' . $old_image);
+                }
                 $model->delete();
                 return redirect()->route('category.index');
             } else {

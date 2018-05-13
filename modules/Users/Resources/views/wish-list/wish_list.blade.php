@@ -41,13 +41,13 @@
                                 <?php foreach ($model as $item): ?>
                                     <tr>
                                         <td class="text-center">
-                                            <a href="{{ URL::route('frontend.articles.view', [ "id" => $item->articles_type_id, "url" => $item->getArticlesType->url_title.".html" ]) }}">
+                                            <a href="{{ $item->getArticlesType->getUrl() }}">
                                                 <img src="{{url('images/'.$item->getArticlesType->getArticles->image)}}" alt="{{ $item->getArticlesType->title }}" title="{{ $item->getArticlesType->title.".html" }}" width="200px">
                                             </a>
                                         </td>
 
                                         <td class="text-left">
-                                            <a href="{{ URL::route('frontend.articles.view', [ "id" => $item->articles_type_id, "url" => $item->getArticlesType->url_title.".html" ]) }}">{{ $item->getArticlesType->title.".html" }}</a>
+                                            <a href="{{ $item->getArticlesType->getUrl() }}">{{ $item->getArticlesType->title.".html" }}</a>
                                         </td>
 
                                         <td class="text-center" style="vertical-align: middle">

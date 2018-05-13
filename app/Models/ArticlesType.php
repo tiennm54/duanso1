@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use URL;
 
 class ArticlesType extends Model{
     protected $table = 'articles_type';
@@ -16,5 +17,9 @@ class ArticlesType extends Model{
 
     public function getDescription(){
         return $this->hasMany('App\Models\ArticlesTypeDes','product_id','id');
+    }
+    
+    public function getUrl(){
+        return URL::route('frontend.articles.view', ['id' => $this->id, 'url' => $this->url_title.'.html' ]);
     }
 }

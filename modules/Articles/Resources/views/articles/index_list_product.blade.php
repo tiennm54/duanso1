@@ -16,7 +16,7 @@
                     <?php foreach ($model as $key=>$item): ?>
                     <div class="col-md-4">
                         <div class="product-thumb">
-                            <a href="{{ URL::route('frontend.articles.pricing', ['id' => $item->id, 'url' => $item->url_title.".html" ]) }}">
+                            <a href="{{ $item->getUrlPricing() }}">
                                 <h3>{{ $item->title }} Premium Key</h3>
                             </a>
                         </div>

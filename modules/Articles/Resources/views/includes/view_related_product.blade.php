@@ -6,14 +6,14 @@
             <div class="col-xs-6 col-sm-3">
                 <div class="product-thumb transition" style="border: 1px solid #ddd;">
                     <div class="image" style="margin: 10;">
-                        <a href="{{ URL::route('frontend.articles.view', [ 'id'=>$item->id, 'url'=>$item->url_title.".html" ]) }}">
+                        <a href="{{ $item->getUrl() }}">
                             <img src="{{url('images/'.$item->getArticles->image)}}" alt="{{ $item->title }}"
                                  title="{{ $item->title }}" class="img-responsive">
                         </a>
                     </div>
                     <div class="caption">
                         <h4>
-                            <a href="{{ URL::route('frontend.articles.view', [ 'id'=>$item->id, 'url'=>$item->url_title.".html" ]) }}">{{ $item->title }}</a>
+                            <a href="{{ $item->getUrl() }}">{{ $item->title }}</a>
                         </h4>
                         <p class="">
                             <span style="font-size: 30px">${{ $item->price_order }}</span>
