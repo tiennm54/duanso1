@@ -19,7 +19,11 @@
     <div class="row">
         @include('blog::news.includes.list_cate')
         <div id="content" class="col-sm-9">
-            <h1>{{ $model->title }}</h1>
+            <h1><span style="color: threedshadow">{{ $model->title }}</span></h1>
+            <p>
+                <span><?php echo date("F j, Y, g:i a", strtotime($model->created_at));?></span><br/>
+                <span>Tag: <a href="{{ $model->getCategory->getUrl() }}" style="cursor: pointer"><?php echo $model->getCategory->name; ?></a></span>
+            </p>
             <p>
                 {!! $model->description !!}
             </p>

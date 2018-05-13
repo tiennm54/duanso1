@@ -93,10 +93,10 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <div class="form-group">
-                                <label>Meta Tag Title</label>
-                                <input type="text" value="{{ (isset($model)) ? $model->seo_title : "" }}" class="form-control border-input" placeholder="Meta Tag Title..." name="seo_title">
+                                <label>SEO Title (<span class="count-seo-title"></span>)/65-70</label>
+                                <input type="text" value="{{ (isset($model)) ? $model->seo_title : "" }}" class="form-control border-input seo-title" onkeyup="countCharactersSeoTitle()" placeholder="Meta Tag Title..." name="seo_title">
                             </div>
                         </div>
                     </div>
@@ -104,8 +104,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Meta Tag Description</label>
-                                <textarea class="form-control border-input" name="seo_description" rows="5">{{ (isset($model)) ? $model->seo_description : "" }}</textarea>
+                                <label for="exampleInputEmail1">SEO Description (<span class="count-seo-des"></span>)/120-160</label>
+                                <textarea class="form-control border-input seo-des" onkeyup="countCharactersSeoDescription()" name="seo_description" rows="5">{{ (isset($model)) ? $model->seo_description : "" }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -113,8 +113,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Meta Tag Keyword</label>
-                                <textarea class="form-control border-input" name="seo_keyword" rows="5">{{ (isset($model)) ? $model->seo_keyword : "" }}</textarea>
+                                <label for="exampleInputEmail1">SEP Keyword (<span class="count-seo-keyword"></span>)</label>
+                                <textarea class="form-control border-input seo-keyword" onkeyup="countCharactersSeoKeyword()" name="seo_keyword" rows="5">{{ (isset($model)) ? $model->seo_keyword : "" }}</textarea>
                             </div>
                         </div>
                     </div>

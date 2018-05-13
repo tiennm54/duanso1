@@ -95,7 +95,7 @@
                                 <td class="text-center">
                                     <a class="btn btn-danger"
                                        onclick="return confirm('Are you sure you want to delete this item?');"
-                                       href="<?php echo URL::route('config.image.delete', $item->id); ?>">
+                                       href="<?php echo URL::route('config.image.delete', ['id' => $item->id]); ?>">
                                         <i class="fa fa-trash-o"></i>
                                     </a>
                                 </td>

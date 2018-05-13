@@ -81,7 +81,7 @@
                             <td>Category</td>
                             <td>Product</td>
                             <td>Created at</td>
-                            <td>Action</td>
+                            <td width="10%">Action</td>
                         </tr>
                     </thead>
                     <tbody>
