@@ -9,32 +9,93 @@
         </div>
     </div>
     <ul id="menu">
-        <li id="menu-dashboard">
-            <a href="{{ URL::route('admin.index') }}">
-                <i class="fa fa-dashboard fw"></i><span>Dashboard</span>
-            </a>
-        </li>
+        <?php if (!Auth::guest() && Auth::user()->role->alias == "admin") { ?>
 
-        <li id="menu-sale">
-            <a class="parent"><i class="fa fa-shopping-cart fw"></i> <span>Sales</span></a>
-            <ul class="collapse">
-                <li><a href="{{ URL::route('adminUserOrders.listOrders') }}">Orders</a></li>
-            </ul>
-        </li>
+            <li id="menu-dashboard">
 
-        <li id="menu-catalog">
-            <a class="parent"><i class="fa fa-tags fw"></i> <span>Product manager</span></a>
-            <ul class="collapse">
-                <li>
-                    <a href="{{ URL::route('articles.index') }}">Products</a>
-                </li>
+                <a href="{{ URL::route('admin.index') }}">
+                    <i class="fa fa-dashboard fw"></i><span>Dashboard</span>
+                </a>
+            </li>
 
-                <li>
-                    <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
-                </li>
+            <li id="menu-sale">
+                <a class="parent"><i class="fa fa-shopping-cart fw"></i> <span>Sales</span></a>
+                <ul class="collapse">
+                    <li><a href="{{ URL::route('adminUserOrders.listOrders') }}">Orders</a></li>
+                </ul>
+            </li>
 
-            </ul>
-        </li>
+            <li id="menu-catalog">
+                <a class="parent"><i class="fa fa-tags fw"></i> <span>Product manager</span></a>
+                <ul class="collapse">
+                    <li>
+                        <a href="{{ URL::route('articles.index') }}">Products</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li id="menu-catalog">
+                <a class="parent"><i class="fa fa-tags fw"></i> <span>Config</span></a>
+                <ul class="collapse">
+                    <li>
+                        <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::route('config.bonusConfig.getCreate') }}">Bonus Config</a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::route('admin.information.index') }}">Information</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li id="menu-catalog">
+                <a class="parent"><i class="fa fa-tags fw"></i> <span>SEO Manager</span></a>
+                <ul class="collapse">
+                    <li>
+                        <a href="{{ URL::route('config.seo.index') }}">SEO</a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::route('config.seopage.getCreate') }}">Create Page</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li id="menu-customer">
+                <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>
+                <ul class="collapse">
+                    <li><a href="{{ URL::route('admin.userManagement.index') }}">List User</a></li>
+                </ul>
+            </li>
+
+            <li id="menu-report">
+                <a class="parent"><i class="fa fa-bar-chart-o fw"></i> <span>Reports</span></a>
+                <ul class="collapse">
+                    <li>
+                        <a class="parent">Sales</a>
+                        <ul class="collapse">
+                            <li><a href="">Orders</a></li>
+                            <li><a href="">Tax</a></li>
+                            <li><a href="">Shipping</a></li>
+                            <li><a href="">Returns</a></li>
+                            <li><a href="">Coupons</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="parent">Products</a>
+                        <ul class="collapse">
+                            <li><a href="">Viewed</a></li>
+                            <li><a href="">Purchased</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        <?php } ?>
 
         <li id="menu-catalog">
             <a class="parent"><i class="fa fa-tags fw"></i> <span>News Manager</span></a>
@@ -42,7 +103,7 @@
                 <li>
                     <a href="{{ URL::route('admin.news.index') }}">News</a>
                 </li>
-                
+
                 <li>
                     <a href="{{ URL::route('admin.comment.index') }}">Comment</a>
                 </li>
@@ -58,41 +119,6 @@
             </ul>
         </li>
 
-        <li id="menu-catalog">
-            <a class="parent"><i class="fa fa-tags fw"></i> <span>Config</span></a>
-            <ul class="collapse">
-                <li>
-                    <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
-                </li>
-                <li>
-                    <a href="{{ URL::route('config.bonusConfig.getCreate') }}">Bonus Config</a>
-                </li>
-                <li>
-                    <a href="{{ URL::route('admin.information.index') }}">Information</a>
-                </li>
-            </ul>
-        </li>
-
-        <li id="menu-catalog">
-            <a class="parent"><i class="fa fa-tags fw"></i> <span>SEO Manager</span></a>
-            <ul class="collapse">
-                <li>
-                    <a href="{{ URL::route('config.seo.index') }}">SEO</a>
-                </li>
-                <li>
-                    <a href="{{ URL::route('config.seopage.getCreate') }}">Create Page</a>
-                </li>
-            </ul>
-        </li>
-
-        <li id="menu-customer">
-            <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>
-            <ul class="collapse">
-                <li><a href="{{ URL::route('admin.userManagement.index') }}">List User</a></li>
-            </ul>
-        </li>
-
-
         <li id="menu-category">
             <a class="parent"><i class="fa fa-tags fw"></i> <span>Category</span></a>
             <ul class="collapse">
@@ -101,29 +127,6 @@
                 </li>
                 <li>
                     <a href="{{ URL::route('admin.categoryFaq.index') }}">Category FAQ</a>
-                </li>
-            </ul>
-        </li>
-
-        <li id="menu-report">
-            <a class="parent"><i class="fa fa-bar-chart-o fw"></i> <span>Reports</span></a>
-            <ul class="collapse">
-                <li>
-                    <a class="parent">Sales</a>
-                    <ul class="collapse">
-                        <li><a href="">Orders</a></li>
-                        <li><a href="">Tax</a></li>
-                        <li><a href="">Shipping</a></li>
-                        <li><a href="">Returns</a></li>
-                        <li><a href="">Coupons</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="parent">Products</a>
-                    <ul class="collapse">
-                        <li><a href="">Viewed</a></li>
-                        <li><a href="">Purchased</a></li>
-                    </ul>
                 </li>
             </ul>
         </li>

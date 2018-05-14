@@ -11,7 +11,7 @@ use Auth;
 class BackendNewsController extends Controller {
 
     public function __construct() {
-        $this->middleware("role");
+        $this->middleware("editor");
     }
 
     public function getCreate() {

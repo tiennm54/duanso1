@@ -126,6 +126,7 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#total_bonus">Bonus</a></li>
                 <li><a data-toggle="tab" href="#spending">Spending</a></li>
+                <li><a data-toggle="tab" href="#role">Role (<?php echo $model->role->title?>)</a></li>
             </ul>
 
             <div class="tab-content">
@@ -134,6 +135,9 @@
                 </div>
                 <div id="spending" class="tab-pane fade">
                     @include('admin::userManagement.includes.tab_admin_spending')
+                </div>
+                <div id="role" class="tab-pane fade">
+                    @include('admin::userManagement.includes.tab_role')
                 </div>
             </div>
         </div>

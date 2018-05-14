@@ -11,7 +11,7 @@ use Modules\Config\Http\Requests\ImageRequest;
 class ImageManagerController extends Controller {
 
     public function __construct() {
-        $this->middleware("role");
+        $this->middleware("editor");
     }
 
     public function getCreate(Request $request) {

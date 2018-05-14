@@ -12,7 +12,7 @@ use Log;
 class CommentManagerController extends Controller {
 
     public function __construct() {
-        $this->middleware("role");
+        $this->middleware("editor");
     }
 
     public function index() {

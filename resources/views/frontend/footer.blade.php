@@ -4,12 +4,9 @@
             <div class="col-sm-3">
                 <h5>Information</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{{ URL::route('frontend.information.view',['id'=>1,'url'=>'delivery-information'.'.html']) }}">Delivery Information</a></li>
-                    <li><a href="{{ URL::route('frontend.information.view',['id'=>2,'url'=>'privacy-policy'.'.html']) }}">Privacy Policy</a></li>
-                    <li><a href="{{ URL::route('frontend.information.view',['id'=>3,'url'=>'cancellations-returns'.'.html']) }}">Cancellations & Returns</a></li>
-                    <li><a href="{{ URL::route('frontend.information.view',['id'=>4,'url'=>'sercurity-information'.'.html']) }}">Sercurity Information</a></li>
-                    <li><a href="{{ URL::route('frontend.information.view',['id'=>5,'url'=>'terms-condition'.'.html']) }}">Terms & Condition</a></li>
-                    <li><a href="{{ URL::route('frontend.information.view',['id'=>6,'url'=>'about-us'.'.html']) }}">About Us</a></li>
+                    <?php foreach ($model_inform as $inform):?>
+                    <li><a href="{{ $inform->getUrl() }}"><?php echo $inform->title; ?></a></li>
+                    <?php endforeach;?>
                 </ul>
             </div>
             <div class="col-sm-3">

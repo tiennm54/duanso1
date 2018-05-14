@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Middleware;
-
 use App\Models\User;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth;
+
 use Closure;
 
-class LoginMiddleware {
+class EditorMiddleware
+{
 
     /**
      * The Guard implementation.
@@ -22,9 +23,11 @@ class LoginMiddleware {
      * @param  Guard  $auth
      * @return void
      */
-    public function __construct(Guard $auth) {
+    public function __construct(Guard $auth)
+    {
         $this->auth = $auth;
     }
+
 
     /**
      * Handle an incoming request.
@@ -33,19 +36,18 @@ class LoginMiddleware {
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
         if (Auth::check()) {
             $user = $this->auth->user();
             if ($user) {
                 $model_user = User::find($user->id);
-                if ($model_user->role->alias == "admin" || $model_user->role->alias == "editor" || $model_user->role->alias == "member") {
+                if ($model_user->role->alias == "admin" || $model_user->role->alias == "editor") {
                     return $next($request);
                 }
             }
         }
-
-
         return redirect()->route('users.getLogin');
-    }
 
+    }
 }

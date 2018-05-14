@@ -54,6 +54,9 @@ class UsersController extends CheckMemberController {
                         case "member" :
                             $this->getInfoUser($user);
                             return redirect()->route('users.getMyAccount');
+                        case "editor" : 
+                            $this->getInfoUser($user);
+                            return redirect()->route('admin.news.index');
                         default:
                             return view('users::user.login');
                     }

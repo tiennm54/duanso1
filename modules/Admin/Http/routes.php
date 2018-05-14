@@ -110,6 +110,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('index', ['as' => 'admin.userManagement.index', 'uses' => 'UserManagementController@index']);
         Route::get('view/{id}', ['as' => 'admin.userManagement.view', 'uses' => 'UserManagementController@view']);
         Route::post('updateMoney/{id}', ['as' => 'admin.userManagement.updateMoney', 'uses' => 'UserManagementController@updateMoney']);
+        Route::post('changeRole/{id}', ['as' => 'admin.userManagement.changeRole', 'uses' => 'UserManagementController@changeRole']);
     });
 
     Route::group(['prefix' => 'news'], function() {
