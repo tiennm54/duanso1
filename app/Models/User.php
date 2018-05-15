@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Session;
 use Log;
+use App\Models\UserRef;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
@@ -209,16 +210,31 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function updateSessionMoney($money) {
         Session::set('user_money', $money);
     }
-    
-    
-    public function countTotalUser(){
+
+    public function countTotalUser() {
         $count = User::count();
         return $count;
     }
-    
-    public function getModelUserLock(){
-        $model = User::where("status_lock","=",1)->get();
+
+    public function getModelUserLock() {
+        $model = User::where("status_lock", "=", 1)->get();
         return $model;
+    }
+
+    public function saveSponsor($model_user, $sponser_email) {
+        $model_sponser = User::where("email", "=", $sponser_email)->first();
+        if ($model_sponser && $model_user->id != $model_sponser->id) {
+            $model_ref = UserRef::where("user_id", "=", $model_user->id)->first();//một người dùng chỉ có 1 sponsor
+            if ($model_ref == null) {
+                $model_ref = new UserRef();
+                $model_ref->user_id = $model_user->id;
+                $model_ref->user_sponser_id = $model_sponser->id;
+                $model_ref->save();
+                return $model_ref;
+            }
+        } else {
+            return null;
+        }
     }
 
 }

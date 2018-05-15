@@ -78,8 +78,8 @@ class UsersController extends CheckMemberController {
             try {
                 DB::beginTransaction();
                 $data = $request->all();
-                $check_user_exits = User::where("email", "=", trim($data["email"]))->count();
-                if ($check_user_exits == 0) {
+                $check_user_exits = User::where("email", "=", trim($data["email"]))->first();
+                if ($check_user_exits == null) {
                     $model = new User();
                     $model->first_name = $data["first_name"];
                     $model->last_name = $data["last_name"];
@@ -98,8 +98,9 @@ class UsersController extends CheckMemberController {
 
                     //Save sponsor
                     if (isset($data["sponsor"])) {
-                        $sponsor_email = $data["sponsor"];
-                        $model_ref = MinhTien::saveSponser($model, $sponsor_email);
+                        $sponsor_email = trim($data["sponsor"]);
+                        $model_sponsor = new User();
+                        $model_ref = $model_sponsor->saveSponsor($model, $sponsor_email);
                         if ($model_ref == null) {
                             $request->session()->flash('alert-warning', 'Warning: Sponsor ' . $sponsor_email . ' is not exist!');
                             return redirect()->route('users.getRegister', ['ref' => $sponsor_email]);
