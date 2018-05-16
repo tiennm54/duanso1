@@ -21,6 +21,7 @@
             <h3 class="panel-title"><i class="fa fa-list"></i> Feedback List</h3>
         </div>
         <div class="panel-body">
+            @include('validator.flash-message')
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>

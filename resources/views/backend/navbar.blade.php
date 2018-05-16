@@ -72,29 +72,6 @@
                     <li><a href="{{ URL::route('admin.userManagement.index') }}">List User</a></li>
                 </ul>
             </li>
-
-            <li id="menu-report">
-                <a class="parent"><i class="fa fa-bar-chart-o fw"></i> <span>Reports</span></a>
-                <ul class="collapse">
-                    <li>
-                        <a class="parent">Sales</a>
-                        <ul class="collapse">
-                            <li><a href="">Orders</a></li>
-                            <li><a href="">Tax</a></li>
-                            <li><a href="">Shipping</a></li>
-                            <li><a href="">Returns</a></li>
-                            <li><a href="">Coupons</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a class="parent">Products</a>
-                        <ul class="collapse">
-                            <li><a href="">Viewed</a></li>
-                            <li><a href="">Purchased</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
         <?php } ?>
 
         <li id="menu-catalog">
@@ -131,32 +108,4 @@
             </ul>
         </li>
     </ul>
-    <div id="stats">
-        <ul>
-            <li>
-                <div>Orders Completed <span class="pull-right">100%</span></div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100"
-                         aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span class="sr-only">100%</span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>Orders Processing <span class="pull-right">100%</span></div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100"
-                         aria-valuemin="0" aria-valuemax="100" style="width: 100%"><span class="sr-only">100%</span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div>Other Statuses <span class="pull-right">0%</span></div>
-                <div class="progress">
-                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="0"
-                         aria-valuemin="0" aria-valuemax="100" style="width: 0%"><span class="sr-only">0%</span>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
 </nav>

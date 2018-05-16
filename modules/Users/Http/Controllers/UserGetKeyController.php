@@ -1,18 +1,11 @@
 <?php
-
 namespace Modules\Users\Http\Controllers;
-
 use App\Helpers\SeoPage;
 use App\Models\ArticlesTypeKey;
-use App\Models\Seo;
 use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
-use Hash;
-use Illuminate\Support\Facades\URL;
-use Modules\Users\Http\Requests\GetKeyRequest;
+use Illumies\Users\Http\Requests\GetKeyRequest;
 use Pingpong\Modules\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class UserGetKeyController extends Controller {
 

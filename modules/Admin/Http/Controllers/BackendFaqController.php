@@ -90,6 +90,17 @@ class BackendFaqController extends Controller {
             return redirect()->route('admin.faq.getEdit', ["id" => $model->id]);
         }
     }
+    
+    public function delete($id, Request $request){
+        $model = Faq::find($id);
+        if($model){
+            $model->delete();
+            $request->session()->flash('alert-success', ' Success: Delete success!');
+        }else{
+            $request->session()->flash('alert-warning', ' Warning: Delete error!');
+        }
+        return back();
+    }
 }
 
 ?>

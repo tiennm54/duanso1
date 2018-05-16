@@ -13,6 +13,7 @@
                 <h5>Customer Service</h5>
                 <ul class="list-unstyled">
                     <li><a href="{{ URL::route('users.contact.getContact') }}">Contact Us</a></li>
+                    <li><a href="{{ URL::route('users.guestOrder.guestGetKey') }}">Get Key</a></li>
                     <li><a href="{{ URL::route('frontend.sitemap.index') }}">Site Map</a></li>
                 </ul>
             </div>

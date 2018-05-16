@@ -28,7 +28,7 @@
                 <h3 class="panel-title"><i class="fa fa-list"></i> Create/Edit Category FAQ</h3>
             </div>
             <form class="panel-body" method="POST"  action="" enctype="multipart/form-data" id="form-category-faq">
-
+                @include('validator.flash-message')
                 <ul class="nav nav-tabs">
                     <li class="active">
                         <a data-toggle="tab" href="#general">General</a>

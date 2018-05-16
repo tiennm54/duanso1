@@ -23,6 +23,7 @@
                 <h3 class="panel-title"><i class="fa fa-list"></i> List Category FAQ</h3>
             </div>
             <div class="panel-body">
+                @include('validator.flash-message')
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -30,7 +31,7 @@
                                 <td class="text-left"><a class="asc">No</a></td>
                                 <td class="text-left"><a class="asc">Title</a></td>
                                 <td class="text-left"><a class="asc">Description</a></td>
-                                <td class="text-right">Action</td>
+                                <td class="text-right" width="10%">Action</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,6 +43,10 @@
                                 <td class="text-right">
                                     <a href="{{ URL::route('admin.categoryFaq.getEdit', ['id' => $item->id, 'url' => $item->url_title.'.html']) }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit">
                                         <i class="fa fa-pencil"></i>
+                                    </a>
+                                    
+                                    <a href="{{ URL::route('admin.categoryFaq.delete', ['id' => $item->id]) }}" data-toggle="confirmation" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete">
+                                        <i class="fa fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>

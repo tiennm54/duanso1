@@ -14,7 +14,7 @@ class CommentRequest extends Request {
         return [
             'email' => 'required|email',
             'comment' => 'required|min:10',
-            //'g-recaptcha-response' => 'required|captcha'
+            'g-recaptcha-response' => 'required|captcha'
         ];
     }
 
