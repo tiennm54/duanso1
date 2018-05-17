@@ -43,7 +43,7 @@ class FaqController extends Controller {
     public function cateFaq($id) {
         $cate = CategoryFaq::find($id);
         if ($cate) {
-            $model = Faq::where("category_faq_id", "=", $id)->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
+            $model = Faq::where("category_faq_id", "=", $id)->orderBy("id", "ASC")->paginate(NUMBER_PAGE);
             $model_cate = CategoryFaq::orderBy("id", "ASC")->get();
             $this->seoFaqCate($cate);
             return view('blog::faq.index', compact("model", "model_cate", "cate"));
