@@ -24,6 +24,19 @@
                         <a href="<?php echo URL::route('frontend.news.index');?>" class="see-all">Show All</a> 
                     </div>
                 </li>
+                
+                <li class="dropdown"><a href="<?php echo URL::route('frontend.faq.index');?>" class="dropdown-toggle" data-toggle="dropdown">FAQ's</a>
+                    <div class="dropdown-menu" style="">
+                        <div class="dropdown-inner">
+                            <ul class="list-unstyled">
+                                <?php foreach ($model_cate_faq as $menu_faq):?>
+                                    <li><a href="<?php echo $menu_faq->getUrl(); ?>"><?php echo $menu_faq->title; ?></a></li>
+                                <?php endforeach;?>
+                            </ul>
+                        </div>
+                        <a href="<?php echo URL::route('frontend.faq.index');?>" class="see-all">Show All</a> 
+                    </div>
+                </li>
 
                 <li>
                     <a href="{{ URL::route('users.contact.getContact') }}">Contact</a>

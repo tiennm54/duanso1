@@ -9,3 +9,12 @@ Route::group(['prefix' => 'news', 'namespace' => 'Modules\Blog\Http\Controllers'
     Route::post('commentReply/{id}',['as'=>'frontend.news.commentReply','uses'=>'NewsController@postCommentReply']);
     Route::post('editComment',['as'=>'frontend.news.editComment','uses'=>'NewsController@editComment']);
 });
+
+
+Route::group(['prefix' => 'faq', 'namespace' => 'Modules\Blog\Http\Controllers'], function()
+{
+    Route::get('all',['as'=>'frontend.faq.index','uses'=>'FaqController@index']);
+    Route::get('view-{id}/{url?}',['as'=>'frontend.faq.view','uses'=>'FaqController@view']);
+    Route::get('category-{id}/{url?}',['as'=>'frontend.faq.cate','uses'=>'FaqController@cateFaq']);
+    
+});

@@ -96,5 +96,17 @@
             <loc>{{ $news->getUrl() }}</loc>
         </url>
     @endforeach
+    
+    @foreach($model_cate_faq as $cate_faq)
+        <url>
+            <loc>{{ $cate_faq->getUrl() }}</loc>
+        </url>
+    @endforeach
+    
+    @foreach($model_faq as $faq)
+        <url>
+            <loc>{{ $faq->getUrl() }}</loc>
+        </url>
+    @endforeach
 
 </urlset>
