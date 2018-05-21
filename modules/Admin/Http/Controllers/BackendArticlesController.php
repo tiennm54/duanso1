@@ -197,6 +197,16 @@ class BackendArticlesController extends Controller {
             return view('errors.503');
         }
     }
+    
+    public function autoComplete(Request $request){
+        if (isset($request)) {
+            $data = Articles::select(
+                "id",
+                "title as name"
+            )->where("title", "LIKE", "%{$request->input('query')}%")->get();
+            return response()->json($data);
+        }
+    }
 
 }
 

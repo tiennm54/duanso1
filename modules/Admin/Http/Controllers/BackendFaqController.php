@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class BackendFaqController extends Controller {
 
     public function __construct(){
-        $this->middleware("role");
+        $this->middleware("editor");
     }
 
     public function index(Request $request){

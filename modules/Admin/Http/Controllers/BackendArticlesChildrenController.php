@@ -5,12 +5,9 @@ use App\Models\Articles;
 use App\Models\ArticlesType;
 use App\Models\ArticlesTypeDes;
 use App\Models\ArticlesTypeKey;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Modules\Admin\Http\Requests\ArticlesChildrenRequest;
-use Modules\Admin\Http\Requests\ArticlesRequest;
 use Pingpong\Modules\Routing\Controller;
-use Input;
 use DB;
 
 class BackendArticlesChildrenController extends Controller {

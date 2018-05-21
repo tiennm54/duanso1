@@ -56,8 +56,8 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label >Select Product</label>
-                                <input class="typeahead form-control" type="text" value="{{ (isset($model->getProduct)) ? $model->getProduct->title : 0 }}">
-                                <input class="form-control" type="hidden" id="id_product" name="product_id" value="{{ (isset($model)) ? $model->product_id : 0 }}">
+                                <input class="typeahead-product form-control" type="text" value="{{ (isset($model->getProduct)) ? $model->getProduct->title : 0 }}">
+                                <input class="form-control" type="hidden" id="id_product_select" name="product_id" value="{{ (isset($model)) ? $model->product_id : 0 }}">
                             </div>
                         </div>
                     </div>
@@ -140,4 +140,20 @@
         </form>
     </div>
 </div>
+
+<script>
+    var pathProduct = "{{ URL::route('articles.autoComplete') }}";
+    $('input.typeahead-product').typeahead({
+        source: function (query, process) {
+            return $.get(pathProduct, {query: query}, function (data) {
+                return process(data);
+            });
+        },
+        updater: function (item) {
+            $('#id_product_select').val(item.id);
+            return item;
+        }
+    });
+</script>
+
 @stop

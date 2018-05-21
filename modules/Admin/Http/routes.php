@@ -12,6 +12,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('view/{id}/{url?}', ['as' => 'articles.view', 'uses' => 'BackendArticlesController@view']);
         Route::get('edit/{id}/{url?}', ['as' => 'articles.getEdit', 'uses' => 'BackendArticlesController@getEdit']);
         Route::post('edit/{id}/{url?}', ['as' => 'articles.postEdit', 'uses' => 'BackendArticlesController@postEdit']);
+        Route::get('autoComplete', ['as' => 'articles.autoComplete', 'uses' => 'BackendArticlesController@autoComplete']);
     });
     //ARTICLES CHILDREN
     Route::group(['prefix' => 'sub-product'], function() {

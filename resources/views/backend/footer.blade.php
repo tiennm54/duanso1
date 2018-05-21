@@ -16,7 +16,6 @@
                 });
             },
             updater: function(item) {
-                console.log(item.id);
                 $('#id_product').val(item.id);
                 $("#text_product_id").text(item.id);
                 return item;

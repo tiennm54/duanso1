@@ -8,7 +8,7 @@ class News extends Model{
     public $timestamps = true;
 
     public function getProduct(){
-        return $this->hasOne('App\Models\ArticlesType', 'id' ,'product_id');
+        return $this->hasOne('App\Models\Articles', 'id' ,'product_id');
     }
     
     public function getCategory(){

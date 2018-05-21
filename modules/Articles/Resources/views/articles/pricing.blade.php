@@ -13,7 +13,9 @@
             <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive" style="width: 100%">
         </div>
         <div class="col-md-8">
-            <h1 style="margin-top: 0px;"><span style="color: #337ab7">Buy {{ $model->title }} Premium Key</span> - BuyPremiumKey Are Best Official Reseller {{ $model->title }} Premium</h1>
+            <h1 style="margin-top: 0px;"><span style="color: #337ab7">
+                    <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey Reseller get 2% bonus</span>
+            </h1> 
         </div>
     </div>
     <hr/>
@@ -35,7 +37,7 @@
                 ?>">
 
                     <p>
-                        
+
                         <a style="color: white" href="{{ $item->getUrl() }}" title="Read more...">{{ $item->title }}</a>
                     </p>
                 </div>
