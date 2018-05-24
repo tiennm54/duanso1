@@ -22,29 +22,32 @@ class BackendArticlesController extends Controller {
 
         $model = new Articles();
 
-        if (isset($request->txt_title)) {
+        if (isset($request->txt_title) && $request->txt_title != "") {
             $model = $model->where("title", "LIKE", "%" . $request->txt_title . "%");
         }
 
-        if (isset($request->txt_code)) {
+        if (isset($request->txt_code) && $request->txt_code != "") {
             $model = $model->where("code", "LIKE", "%" . $request->txt_code . "%");
         }
 
-        if (isset($request->txt_brand)) {
+        if (isset($request->txt_brand) && $request->txt_brand != "") {
             $model = $model->where("brand", "LIKE", "%" . $request->txt_brand . "%");
         }
 
-        if (isset($request->int_status_stock)) {
+        if (isset($request->int_status_stock) && $request->int_status_stock != "") {
             $model = $model->where("status_stock", "=", $request->int_status_stock);
         }
+        
+        if (isset($request->reseller_status ) && $request->reseller_status  != "") {
+            $model = $model->where("reseller_status", "=", $request->reseller_status);
+        }
 
-        $model = $model->get();
+        $model = $model->orderBy('reseller_status',"DESC")->orderBy('order_count',"DESC")->paginate(NUMBER_PAGE);
         return view('admin::articles.index', compact('model'));
     }
 
     public function getCreate() {
         $model_cate = Category::get();
-
         return view('admin::articles.create', compact('model_cate'));
     }
 
@@ -150,6 +153,14 @@ class BackendArticlesController extends Controller {
                 }
                 if (isset($request->order_count)) {
                     $model->order_count = $request->order_count;
+                }
+                
+                if (isset($request->reseller_page) && $request->reseller_page != "") {
+                    $model->reseller_page = $request->reseller_page;
+                    $model->reseller_status = 1;
+                }else{
+                    $model->reseller_page = $request->reseller_page;
+                    $model->reseller_status = 0;
                 }
 
 

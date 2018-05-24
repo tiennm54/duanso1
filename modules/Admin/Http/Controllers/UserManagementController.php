@@ -27,7 +27,7 @@ class UserManagementController extends Controller {
             if (isset($data["filter_status"]) && $data["filter_status"] != "") {
                 $model = $model->where("status_lock", $data["filter_status"]);
             }
-            $model = $model->orderBy("status_lock", "DESC")->orderBy("id", "DESC")->paginate(20);
+            $model = $model->orderBy("status_lock", "DESC")->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
             return view('admin::userManagement.index', compact('model'));
         }
         return back();

@@ -22,6 +22,7 @@
                 <td><?php echo $item->code;?></td>
                 <td><?php echo $model->brand;?></td>
                 <td><?php echo $item->price_order."$";?></td>
+                <td><?php echo (($item->price_reseller) ? $item->price_reseller : "0") ."$";?></td>
                 <td><?php
                     switch ($item->status_stock){
                         case 1: echo "In Stock"; break;

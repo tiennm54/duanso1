@@ -66,15 +66,15 @@
                                     <label>Stock</label>
                                     <select class="form-control border-input" name="int_instock">
                                         <option value="1" <?php
-                                                if ($model->status_stock == 1) {
-                                                    echo "selected";
-                                                }
-                                                ?>>In Stock</option>
+                                        if ($model->status_stock == 1) {
+                                            echo "selected";
+                                        }
+                                        ?>>In Stock</option>
                                         <option value="0" <?php
-                                                if ($model->status_stock == 0) {
-                                                    echo "selected";
-                                                }
-                                                ?>>Not In Stock</option>
+                                        if ($model->status_stock == 0) {
+                                            echo "selected";
+                                        }
+                                        ?>>Not In Stock</option>
                                     </select>
                                 </div>
                             </div>
@@ -124,6 +124,14 @@
                                     <input type="number" class="form-control border-input" placeholder="Order count..." name="order_count" value="<?php echo ($model->order_count) ? $model->order_count : ''; ?>">
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Reseller Page</label>
+                                    <input type="text" class="form-control border-input" placeholder="Reseller Page..." name="reseller_page" value="<?php echo ($model->reseller_page) ? $model->reseller_page : ''; ?>">
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="row">

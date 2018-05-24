@@ -104,6 +104,7 @@ class BackendArticlesChildrenController extends Controller {
                     }*/
                     $model->code = $request->txt_code;
                     $model->price_order = $request->decimal_price_order;
+                    $model->price_reseller = $request->price_reseller;
                     $model->description = $request->txt_description;
                     $model->status_stock = $request->int_instock;
                     $model->seo_title = $request->txt_seo_title;
