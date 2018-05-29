@@ -257,6 +257,9 @@
                                         <span style="font-weight: bold; color: blue">This order has been charging on your available balance.</span>
                                     <?php } ?>
                                 </p>
+                                <p>
+                                    <b style="color: red">After you have paid successfully, please send us the transaction ID and  full name of your PayPal account at this email.</b>
+                                </p>
                                 <p>If you do not receive premium in maximum 6 hours, please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and send you the premium key/account </p>
                                 <p>Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.</p>
                                 <p style="font-weight: bold">Thanks in advance, <br/> Reseller Team <?php echo NAME_COMPANY; ?></p>

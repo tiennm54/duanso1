@@ -32,6 +32,14 @@
                 {!! $errors->first('email','<span class="control-label color-red" style="color: red">*:message</span>') !!}
             </div>
     </div>
+    <div class="col-md-12 well">
+        <span>
+            <b>Note: </b>If you pay with Paypal, please fill your information as your information on paypal. This will help us provide the earliest key for you.
+        </span><br/>
+        <span>
+            If you buy the product uploadgig premium key, please provide us your account on the website uploadgig.com, we will upgrade your account after you make payment completed.
+        </span>
+    </div>
     
     <div class="col-md-12 well">
         <span>

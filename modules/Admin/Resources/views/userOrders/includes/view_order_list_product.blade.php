@@ -2,9 +2,8 @@
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-
+                <td class="text-left">Product Image</td>
                 <td class="text-left">Product Name</td>
-                <td class="text-left">Model</td>
                 <td class="text-right">Quantity</td>
                 <td class="text-center">Premium key</td>
                 <td class="text-right">Price</td>
@@ -24,11 +23,15 @@
                 <tbody>
                     <tr>
                         <td class="text-left">
+                            <a href="{{ $item->articles_type->getArticles->reseller_page }}" target="_blank">
+                                <img src="{{ $item->articles_type->getArticles->getImage() }}" style="width: 200px"/>
+                            </a>
+                        </td>
+                        <td class="text-left">
                             <a href="{{ $item->articles_type->getUrl() }}" target="_blank">
                                 {{ $item->articles_type->title }}
                             </a>
                         </td>
-                        <td class="text-left">{{ $item->articles_type->getArticles->title }}</td>
                         <td class="text-right">{{ $item->quantity }}</td>
                         <td class="text-center">
                             <a href="{{URL::route('adminUserOrders.getAddPremiumKey',[ 'product_id' => $item->articles_type->id, 'order_detail_id' => $item->id ])}}" 
@@ -63,13 +66,13 @@
                     <span class="label {{ ($model->used_bonus == 0) ? "label-success" : "label-danger"}}">${{ $model->used_bonus }}</span>
                 </td>
             </tr>
-            
+
             <tr>
                 <td colspan="4"></td>
                 <td class="text-right"><b>Total</b></td>
                 <td class="text-right">${{ $model->total_price }}</td>
             </tr>
-            
+
             <tr>
                 <td colspan="4"></td>
                 <td class="text-right"><b>Thực nhận</b></td>

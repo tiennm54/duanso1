@@ -44,14 +44,16 @@
 
 
                     <div class="row">
-
+                        
                         <?php if (count($model_cate) != 0): ?>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Category</label>
                                     <select class="form-control border-input" name="category_faq_id" required>
                                         <?php foreach ($model_cate as $item): ?>
-                                            <option value="<?php echo $item->id; ?>"><?php echo $item->title; ?></option>
+                                            <option value="<?php echo $item->id; ?>" <?php echo (isset($model) && $item->id == $model->category_faq_id) ? "selected" : ""?>>
+                                                <?php echo $item->title; ?>
+                                            </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>

@@ -19,7 +19,7 @@
                             <div class="image">
                                 <a href="{{ $item->getUrlPricing() }}">
                                     <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" title="{{ $item->title }} ({{$item->view_count}} views)"
-                                         class="img-responsive" style="width: 100%">
+                                         class="img-responsive" style="width: 100%; max-height: 71px">
                                 </a>
                             </div>
                         </div>

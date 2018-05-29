@@ -27,5 +27,9 @@ class Articles extends Model {
     public function getUrlPricing(){
         return URL::route('frontend.articles.pricing', ['id' => $this->id, 'url' => $this->url_title.'.html']);
     }
+    
+    public function getImage(){
+        return url('images/'.$this->image);
+    }
 
 }
