@@ -18,6 +18,10 @@ class BackendFaqController extends Controller {
         if (isset($data["category"]) && $data["category"] != 0) {
             $model = $model->where("category_faq_id","=",$data["category"]);
         }
+        if(isset($data["filter_title"]) && $data["filter_title"] != ""){
+            $model = $model->where("title","LIKE","%" . $data["filter_title"] . "%");
+        }
+        
         $model = $model->get();
         $model_cate = CategoryFaq::get();
         if($model && $model_cate) {

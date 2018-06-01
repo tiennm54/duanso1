@@ -29,6 +29,7 @@
                     <?php if (count($model_cate) != 0): ?>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label class="control-label">Categories</label>
                                 <select class="form-control border-input" name="category">
                                     <option value="0">All</option>
                                     <?php foreach ($model_cate as $item): ?>
@@ -39,9 +40,16 @@
                         </div>
                     <?php endif; ?>
 
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Title</label>
+                            <input type="text" name="filter_title" value="{{Request::get('filter_title')}}" placeholder="Search title..." class="form-control">
+                        </div>
+                    </div>
 
                     <div class="col-md-4">
                         <div class="form-group">
+                            <label class="control-label">Search</label><br>
                             <button type="submit" form="form-search-faq" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Search">Search</button>
                         </div>
                     </div>
@@ -56,7 +64,7 @@
                             <td class="text-left">Category FAQ</td>
                             <td class="text-left">Title</td>
                             <td class="text-left">URL Title</td>
-                            <td class="text-right" width="10%">Action</td>
+                            <td class="text-right" width="15%">Action</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,6 +75,11 @@
                                 <td class="text-left">{{ $item->title }}</td>
                                 <td class="text-left">{{ $item->url_title }}</td>
                                 <td class="text-right">
+                                    
+                                    <a href="{{ $item->getUrl() }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="View" target="_blank">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    
                                     <a href="{{ URL::route('admin.faq.getEdit', ['id' => $item->id, 'url' => $item->url_title.'.html']) }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit">
                                         <i class="fa fa-pencil"></i>
                                     </a>

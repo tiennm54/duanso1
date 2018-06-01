@@ -4,8 +4,11 @@
     <div class="container-fluid">
 
         <div class="pull-right">
-            <button type="submit" form="form-category-faq" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Save"><i class="fa fa-save"></i></button>
-            <a href="{{ URL::route('admin.faq.index') }}" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i class="fa fa-reply"></i></a>
+            <button type="submit" form="form-category-faq" data-toggle="tooltip" title="Save" class="btn btn-primary" data-original-title="Save"><i class="fa fa-save"></i></button>
+            <?php if (isset($model)): ?>
+                <a href="{{ $model->getUrl() }}" data-toggle="tooltip" title="View" class="btn btn-success" data-original-title="View" target="_blank"><i class="fa fa-eye"></i></a>
+            <?php endif; ?>
+            <a href="{{ URL::route('admin.faq.index') }}" data-toggle="tooltip" title="Back" class="btn btn-default" data-original-title="Back"><i class="fa fa-reply"></i></a>
         </div>
         <h1>Articles FAQ</h1>
         <ul class="breadcrumb">
@@ -44,14 +47,14 @@
 
 
                     <div class="row">
-                        
+
                         <?php if (count($model_cate) != 0): ?>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Category</label>
                                     <select class="form-control border-input" name="category_faq_id" required>
                                         <?php foreach ($model_cate as $item): ?>
-                                            <option value="<?php echo $item->id; ?>" <?php echo (isset($model) && $item->id == $model->category_faq_id) ? "selected" : ""?>>
+                                            <option value="<?php echo $item->id; ?>" <?php echo (isset($model) && $item->id == $model->category_faq_id) ? "selected" : "" ?>>
                                                 <?php echo $item->title; ?>
                                             </option>
                                         <?php endforeach; ?>
