@@ -23,6 +23,9 @@
             <p>
                 <span><?php echo date("F j, Y, g:i a", strtotime($model->created_at)); ?></span><br/>
                 <span>Category: <a href="{{ $model->getCategory->getUrl() }}" style="cursor: pointer"><?php echo $model->getCategory->name; ?></a></span>
+                <?php if ($model->getProduct): ?>
+                    <span>Product: <a href="{{ $model->getProduct->getUrlPricing() }}" style="cursor: pointer"><?php echo $model->getProduct->title; ?></a></span>
+                <?php endif; ?>
             </p>
             <p>
                 {!! $model->description !!}
@@ -49,6 +52,21 @@
             </div>
         </div>
     </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Related articles</h2>
+        </div>
+        <?php if (count($model_related)) { ?>
+            <?php foreach ($model_related as $item_article): ?>
+                <div class="col-md-6">
+                    <a href="{{ $item_article->getUrl() }}">{{ $item_article->title }}</a>
+                </div>
+            <?php endforeach; ?>
+        <?php } ?>
+
+    </div>
+    
 </div>
 
 @include('blog::news.includes.modal_reply')

@@ -66,7 +66,10 @@ class NewsController extends CheckMemberController {
             ];
             $model_comment = NewsComment::where("news_id", $id)->orderBy("flag", "ASC")->get();
             $model_user = $this->checkMember();
-            return view('blog::news.view', compact("model", "model_cate", "attributes", "model_comment", "model_user"));
+
+            $model_related = News::where("category_id", $model->category_id)->where("id", "!=", $model->id)->get();
+
+            return view('blog::news.view', compact("model", "model_cate", "attributes", "model_comment", "model_user","model_related"));
         }
         return redirect()->route('frontend.news.index');
     }

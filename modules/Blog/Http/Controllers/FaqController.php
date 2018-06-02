@@ -35,7 +35,10 @@ class FaqController extends Controller {
             $this->seoFaqView($model);
             $model->view = $model->view + 1;
             $model->save();
-            return view('blog::faq.view', compact("model", "model_cate"));
+            
+            $model_related = Faq::where("category_faq_id","=",$model->category_faq_id)->where("id","!=",$model->id)->get();
+            
+            return view('blog::faq.view', compact("model", "model_cate","model_related"));
         }
         return redirect()->route('frontend.news.index');
     }
