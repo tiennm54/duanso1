@@ -77,7 +77,6 @@ class BackendFaqController extends Controller {
 
         if ($model){
             $model->title = $data["title"];
-            $model->url_title = str_slug($data["title"], '-');
             $model->description = $data["description"];
             $model->category_faq_id = $data["category_faq_id"];
 

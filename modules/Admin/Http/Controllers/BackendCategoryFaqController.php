@@ -28,6 +28,7 @@ class BackendCategoryFaqController extends Controller {
             $data = $request->all();
             $model = new CategoryFaq();
             $model->title = $data["title"];
+            $model->code = $data["code"];
             $model->url_title = str_slug($data["title"], '-');
             $model->description = $data["description"];
             if (isset($data["seo_description"])) {
@@ -59,6 +60,7 @@ class BackendCategoryFaqController extends Controller {
 
         if ($model) {
             $model->title = $data["title"];
+            $model->code = $data["code"];
             $model->description = $data["description"];
             if (isset($data["seo_description"])) {
                 $model->seo_description = $data["seo_description"];

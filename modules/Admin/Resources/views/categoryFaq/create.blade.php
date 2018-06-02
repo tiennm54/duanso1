@@ -49,6 +49,14 @@
                                     <input type="text" value="{{ (isset($model)) ? $model->title : "" }}" class="form-control border-input" placeholder="Title..." name="title" required>
                                 </div>
                             </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Code</label>
+                                    <input type="text" value="{{ (isset($model)) ? $model->code : "" }}" class="form-control border-input" placeholder="Code..." name="code" required>
+                                </div>
+                            </div>
+                            
                         </div>
 
                         <div class="row">
