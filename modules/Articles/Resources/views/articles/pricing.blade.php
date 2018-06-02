@@ -79,9 +79,17 @@
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-tabs">
-                <li class="active">
+
+                <?php if (isset($model_faq) && $model_faq != null): ?>
+                    <li class="active">
+                        <a data-toggle="tab" href="#howToActive">How to activate</a>
+                    </li>
+                <?php endif; ?>
+
+                <li class="<?php echo (isset($model_faq) && $model_faq != null) ? "" : "active" ?>">
                     <a data-toggle="tab" href="#description">Description</a>
                 </li>
+
                 <li>
                     <a data-toggle="tab" href="#comment">Comment</a>
                 </li>
@@ -89,7 +97,15 @@
 
             <div class="tab-content">
 
-                <div id="description" class="tab-pane fade  in active">
+                <?php if (isset($model_faq) && $model_faq != null): ?>
+                    <div id="howToActive" class="tab-pane fade in active">
+                        <h1><?php echo $model_faq->title; ?></h1>
+                        {!! $model_faq->description !!}
+                        <a href="<?php echo $model_faq->getUrl(); ?>">Read more...</a>
+                    </div>
+                <?php endif; ?>
+
+                <div id="description" class="tab-pane fade  <?php echo (isset($model_faq) && $model_faq != null) ? "" : "in active" ?>">
                     {!! $model->description !!}
                 </div>
 

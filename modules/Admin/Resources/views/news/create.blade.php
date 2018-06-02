@@ -5,6 +5,11 @@
 
         <div class="pull-right">
             <button type="submit" form="form-news" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Save"><i class="fa fa-save"></i></button>
+
+            <?php if (isset($model)): ?>
+                <a href="{{ $model->getUrl() }}" data-toggle="tooltip" title="" class="btn btn-success" data-original-title="View" target="_blank"><i class="fa fa-eye"></i></a>
+            <?php endif; ?>
+
             <a href="{{ URL::route('admin.news.index') }}" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i class="fa fa-reply"></i></a>
         </div>
         <h1>News</h1>
@@ -140,20 +145,4 @@
         </form>
     </div>
 </div>
-
-<script>
-    var pathProduct = "{{ URL::route('articles.autoComplete') }}";
-    $('input.typeahead-product').typeahead({
-        source: function (query, process) {
-            return $.get(pathProduct, {query: query}, function (data) {
-                return process(data);
-            });
-        },
-        updater: function (item) {
-            $('#id_product_select').val(item.id);
-            return item;
-        }
-    });
-</script>
-
 @stop

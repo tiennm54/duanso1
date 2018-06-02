@@ -28,9 +28,10 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <td class="text-left"><a class="asc">No</a></td>
-                                <td class="text-left"><a class="asc">Title</a></td>
-                                <td class="text-left"><a class="asc">Description</a></td>
+                                <td class="text-left">No</td>
+                                <td class="text-left">Title</td>
+                                <td class="text-left">Code</td>
+                                <td class="text-left">Description</td>
                                 <td class="text-right" width="10%">Action</td>
                             </tr>
                         </thead>
@@ -39,6 +40,7 @@
                             <tr>
                                 <td class="text-left">{{ $key + 1 }}</td>
                                 <td class="text-left">{{ $item->title }}</td>
+                                <td class="text-left">{{ $item->code }}</td>
                                 <td class="text-left">{!! $item->description !!}</td>
                                 <td class="text-right">
                                     <a href="{{ URL::route('admin.categoryFaq.getEdit', ['id' => $item->id, 'url' => $item->url_title.'.html']) }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit">

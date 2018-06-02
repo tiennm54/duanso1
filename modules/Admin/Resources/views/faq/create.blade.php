@@ -62,8 +62,16 @@
                                 </div>
                             </div>
                         <?php endif; ?>
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label >Select Product</label>
+                                <input class="typeahead-product form-control" type="text" value="{{ (isset($model->getProduct)) ? $model->getProduct->title : 0 }}">
+                                <input class="form-control" type="hidden" id="id_product_select" name="product_id" value="{{ (isset($model)) ? $model->product_id : 0 }}">
+                            </div>
+                        </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Title</label>
                                 <input type="text" value="{{ (isset($model)) ? $model->title : "" }}" class="form-control border-input" placeholder="Title..." name="title" required>

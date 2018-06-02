@@ -10,14 +10,27 @@
     <script type="text/javascript">
         var path = "{{ URL::route('articlesChildren.autoComplete') }}";
         $('input.typeahead').typeahead({
-            source:  function (query, process) {
-                return $.get(path, { query: query }, function (data) {
+            source: function (query, process) {
+                return $.get(path, {query: query}, function (data) {
                     return process(data);
                 });
             },
-            updater: function(item) {
+            updater: function (item) {
                 $('#id_product').val(item.id);
                 $("#text_product_id").text(item.id);
+                return item;
+            }
+        });
+
+        var pathProduct = "{{ URL::route('articles.autoComplete') }}";
+        $('input.typeahead-product').typeahead({
+            source: function (query, process) {
+                return $.get(pathProduct, {query: query}, function (data) {
+                    return process(data);
+                });
+            },
+            updater: function (item) {
+                $('#id_product_select').val(item.id);
                 return item;
             }
         });
@@ -41,7 +54,7 @@
             $(".count-seo-keyword").text(count)
         }
 
-        $( document ).ready(function() {
+        $(document).ready(function () {
             if ($(".seo-title")[0]) {
                 countCharactersSeoTitle();
                 countCharactersSeoDescription();

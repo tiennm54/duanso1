@@ -45,6 +45,7 @@ class BackendFaqController extends Controller {
             $model->url_title = str_slug($data["title"], '-');
             $model->description = $data["description"];
             $model->category_faq_id = $data["category_faq_id"];
+            $model->product_id = $data["product_id"];
 
             if(isset($data["seo_description"])) {
                 $model->seo_description = $data["seo_description"];
@@ -79,6 +80,7 @@ class BackendFaqController extends Controller {
             $model->title = $data["title"];
             $model->description = $data["description"];
             $model->category_faq_id = $data["category_faq_id"];
+            $model->product_id = $data["product_id"];
 
             if(isset($data["seo_description"])) {
                 $model->seo_description = $data["seo_description"];

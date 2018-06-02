@@ -81,7 +81,7 @@
                             <td>Category</td>
                             <td>Product</td>
                             <td>Created at</td>
-                            <td width="10%">Action</td>
+                            <td width="15%">Action</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,6 +93,11 @@
                                 <td>{{ ($item->getProduct) ?  $item->getProduct->title : "N/A" }}</td>
                                 <td>{{ $item->created_at }}</td>
                                 <td>
+                                    
+                                    <a href="{{ $item->getUrl() }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="View">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    
                                     <a href="{{ URL::route('admin.news.getEdit', ['id' => $item->id]) }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit">
                                         <i class="fa fa-pencil"></i>
                                     </a>

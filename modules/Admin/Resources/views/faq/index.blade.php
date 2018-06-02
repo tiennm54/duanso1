@@ -61,9 +61,10 @@
                     <thead>
                         <tr>
                             <td class="text-left">No</td>
-                            <td class="text-left">Category FAQ</td>
                             <td class="text-left">Title</td>
-                            <td class="text-left">URL Title</td>
+                            <td class="text-left">Category FAQ</td>
+                            <td class="text-left">Product</td>
+                            <td class="text-left">Created at</td>
                             <td class="text-right" width="15%">Action</td>
                         </tr>
                     </thead>
@@ -71,15 +72,16 @@
                         <?php foreach ($model as $key => $item): ?>
                             <tr>
                                 <td class="text-left">{{ $key + 1 }}</td>
-                                <td class="text-left"><?php echo ($item->getCategoryFaq) ? $item->getCategoryFaq->title : ""; ?></td>
                                 <td class="text-left">{{ $item->title }}</td>
-                                <td class="text-left">{{ $item->url_title }}</td>
+                                <td class="text-left"><?php echo ($item->getCategoryFaq) ? $item->getCategoryFaq->title : ""; ?></td>
+                                <td class="text-left">{{ ($item->getProduct) ? $item->getProduct->title : "N/A" }}</td>
+                                <td class="text-left">{{ $item->created_at }}</td>
                                 <td class="text-right">
-                                    
+
                                     <a href="{{ $item->getUrl() }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="View" target="_blank">
                                         <i class="fa fa-eye"></i>
                                     </a>
-                                    
+
                                     <a href="{{ URL::route('admin.faq.getEdit', ['id' => $item->id, 'url' => $item->url_title.'.html']) }}" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Edit">
                                         <i class="fa fa-pencil"></i>
                                     </a>

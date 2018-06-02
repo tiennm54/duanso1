@@ -4,13 +4,12 @@ namespace Modules\Articles\Http\Controllers;
 
 use App\Models\Articles;
 use App\Models\ArticlesType;
-use App\Models\Seo;
-use Log;
+use App\Models\Faq;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Http\Request;
 use DougSisk\CountryState\CountryState;
-use URL;
 use App\Helpers\SeoPage;
+use DB;
 
 
 class ArticlesController extends Controller {
@@ -45,11 +44,21 @@ class ArticlesController extends Controller {
             $model->saveViewCount();
             $model_type = ArticlesType::where("articles_id", "=", $id)->orderBy('status_stock','DESC')->orderBy("price_order", "ASC")->get();
             $model_all_product = Articles::where("status_disable","=",0)->get();
+            
+            $model_active = DB::table('faq')
+                    ->join('category_faq', 'faq.category_faq_id', '=', 'category_faq.id')
+                    ->select('faq.id','category_faq.code')
+                    ->where('category_faq.code',"=","APK")->where("product_id","=",$model->id)->first();
+            
+            if($model_active){
+                $model_faq = Faq::find($model_active->id);
+            }
+            
             if (count($model_type) != 0) {
                 foreach ($model_type as &$product) {
                     $product["image"] = $model->image;
                 }
-                return view('articles::articles.pricing', compact("model", "model_type", "model_all_product"));
+                return view('articles::articles.pricing', compact("model", "model_type", "model_all_product","model_faq"));
             }
         }
         return redirect()->route('frontend.articles.index');
