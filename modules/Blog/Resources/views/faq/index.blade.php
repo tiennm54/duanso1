@@ -51,7 +51,12 @@
                     </div>
                 <?php endforeach; ?>
 
-                <?php echo $model->render(); ?>
+                <?php
+                echo $model->appends([
+                    'type' => Request::get('type'),
+                    'keyword' => Request::get('keyword'),
+                ])->render();
+                ?>
             </div>
         </div>
     </div>

@@ -80,11 +80,12 @@ class ArticlesController extends Controller {
 
     public function getSearch(Request $request) {
         $data = $request->all();
-        if (isset($data["keyword"]) && $data["keyword"] != "") {
+        if (isset($data["keyword"]) && $data["keyword"] != "" && isset($data["type"]) && $data["type"] != "") {
             $keyword = $data["keyword"];
             $type = $data["type"];
             if ($keyword != "" && $type != "") {
                 $keyword = preg_replace('/[^a-zA-Z0-9 ]/', '', $keyword);
+                
                 if ($type == "news") {
                     $model_cate = Category::orderBy("id", "ASC")->get();
                     $model = News::where("title", "LIKE", "%" . $keyword . "%")->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
