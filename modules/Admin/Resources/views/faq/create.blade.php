@@ -62,7 +62,7 @@
                                 </div>
                             </div>
                         <?php endif; ?>
-                        
+
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label >Select Product</label>
@@ -70,8 +70,10 @@
                                 <input class="form-control" type="hidden" id="id_product_select" name="product_id" value="{{ (isset($model)) ? $model->product_id : 0 }}">
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label>Title</label>
                                 <input type="text" value="{{ (isset($model)) ? $model->title : "" }}" class="form-control border-input" placeholder="Title..." name="title" required>
@@ -93,7 +95,7 @@
                 <div id="seo" class="tab-pane fade">
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label>Meta Tag Title (<span class="count-seo-title"></span>)/65-70</label>
                                 <input type="text" value="{{ (isset($model)) ? $model->seo_title : "" }}"

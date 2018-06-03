@@ -10,9 +10,24 @@
                 </div>
             </div>
             <div class="col-sm-5">
+                <?php
+                $type = Route::getCurrentRoute()->getName();
+                if (app('request')->input('type') != "") {
+                    $type = app('request')->input('type');
+                } else {
+                    if ($type == "frontend.news.index" || $type == "frontend.news.cate") {
+                        $type = "news";
+                    } else if ($type == "frontend.faq.index" || $type == "frontend.faq.cate") {
+                        $type = "faq";
+                    } else {
+                        $type = "product";
+                    }
+                }
+                ?>
                 <form action="{{ URL::route('frontend.articles.getSearch') }}" method="get">
                     <div id="search" class="input-group">
-                        <input type="text" name="keyword" value="{{ app('request')->input('keyword') }}" placeholder="Search" class="form-control input-lg">
+                        <input class="form-control" type="hidden" name="type" value="<?php echo $type ?>">
+                        <input type="text" name="keyword" value="{{ app('request')->input('keyword') }}" placeholder="Search Product or News or FAQ's" class="form-control input-lg">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-default btn-lg"><i class="fa fa-search"></i></button>
                         </span>
@@ -30,16 +45,16 @@
             </div>
         </div>
     </div>
-   {{-- @include('articles::modal.shoppingCart')--}}
+    {{-- @include('articles::modal.shoppingCart')--}}
 </header>
 
 <script>
-    function viewCartModal(){
+    function viewCartModal() {
         var token = $("#_token").val();
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.shoppingCart.viewCartModal') ?>",
-            data: {"_token" : token},
+            data: {"_token": token},
             success: function (data) {
                 $("#list_order").html(data);
             },
@@ -50,12 +65,12 @@
     }
 
     function emptyCart() {
-        if(confirm("Are you sure you want to empty your shopping cart?")){
+        if (confirm("Are you sure you want to empty your shopping cart?")) {
             var token = $("#_token").val();
             $.ajax({
                 type: 'POST',
                 url: "<?php echo URL::route('frontend.shoppingCart.emptyCart') ?>",
-                data: {"_token" : token},
+                data: {"_token": token},
                 success: function (data) {
                     $("#sub-total-order").text("$0.00")
                     window.location.replace('<?php echo URL::route('frontend.articles.index') ?>');

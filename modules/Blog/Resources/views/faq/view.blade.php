@@ -32,21 +32,19 @@
             </p>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Related articles</h2>
-        </div>
 
+    <div class="row">
         <?php if (count($model_related)) { ?>
+            <div class="col-md-12">
+                <h2>Related articles</h2>
+            </div>
             <?php foreach ($model_related as $item_article): ?>
                 <div class="col-md-6">
                     <a href="{{ $item_article->getUrl() }}">{{ $item_article->title }}</a>
                 </div>
             <?php endforeach; ?>
-        <?php } ?>
+        </div>
+    <?php } ?>
 
-    </div>
-    
 </div>
 @stop
