@@ -14,6 +14,7 @@ class CheckoutRequest extends Request {
         return [
             'first_name' => 'required',
             'last_name' => 'required',
+            'check_term' => 'required',
             'email' => 'required|email',
         ];
     }

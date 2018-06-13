@@ -23,7 +23,6 @@
                     <?php endif; ?>
 
                     <?php foreach ($data as $item): ?>
-
                         <tr>
                             <td>{{ $item["title"] }}</td>
                             <td align="center">
@@ -56,7 +55,7 @@
                         <td align="center">$<span id="payment_charges">{{ $totalOrder['charges'] }}</span></td>
                     </tr>
                     <?php if (Auth::check()) { ?>
-                    <tr id="tr-use-bonus">
+                        <tr id="tr-use-bonus">
                             <td>Use my bonus ({{ $money_user }}$)</td>
                             <td align="center">
                                 <input type="checkbox" value="{{ $money_user }}" name="use_my_bonus" id="cb-my-bonus" onclick="chooseBonusMoney()">
@@ -70,14 +69,20 @@
                 </tbody>
             </table>
 
-
             <label class="checkbox-inline">
-                <input type="checkbox" value="1" name="check_term" required id="cb-terms" checked>
-                <a style="color: black; cursor: pointer" data-toggle="modal" data-target="#termsConditions">I've read and agree the Terms and Conditions</a>
+                <input type="checkbox" value="1" name="check_term" id="cb-terms" required checked>
+                <a style="color: black; cursor: pointer" data-toggle="modal" data-target="#termsConditions">I've read and agree the Terms and Conditions</a><br>
+                {!! $errors->first('check_term','<span class="control-label color-red" style="color: red">*:message</span>') !!}
             </label>
 
-            <button type="submit" class="btn btn-primary pull-right" id="confirm_order" style="margin-top: 20px"
-                    data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">Confirm Order</button>
+            <a onclick="saveOrder()" 
+               class="btn btn-primary pull-right" 
+               id="confirm_order" 
+               style="margin-top: 20px"
+               data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">
+                Confirm Order
+            </a>
+
 
         </div>
 

@@ -32,6 +32,13 @@ class CheckoutController extends ShoppingCartController {
         });
     }
 
+    public function sendMailVisa($model_orders, $model_user, $password) {
+        Mail::send('articles::checkout.visa-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_VISA_PAYMENT . $model_orders->order_no);
+        });
+    }
+
     //[Amazon payment] Gửi mail cho khách hàng sử dụng phương thức amazon
     public function sendMailAmazon($model_orders, $model_user, $password) {
         Mail::send('articles::checkout.amazon-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
@@ -39,6 +46,7 @@ class CheckoutController extends ShoppingCartController {
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_AMAZON_PAYMENT . $model_orders->order_no);
         });
     }
+
     //[WMZ payment] Gửi mail cho khách hàng sử dụng phương thức WEBMONEY
     public function sendMailWebMoney($model_orders, $model_user, $password) {
         Mail::send('articles::checkout.wmz-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
@@ -46,6 +54,7 @@ class CheckoutController extends ShoppingCartController {
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_WMZ_PAYMENT . $model_orders->order_no);
         });
     }
+
     //[PERFECT MONEY payment] Gửi mail cho khách hàng sử dụng phương thức PERFECT MONEY
     public function sendMailPerfectMoney($model_orders, $model_user, $password) {
         Mail::send('articles::checkout.perfect-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
@@ -53,7 +62,6 @@ class CheckoutController extends ShoppingCartController {
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PERFECT_PAYMENT . $model_orders->order_no);
         });
     }
-    
 
     //[My money payment] Gửi mail cho khách hàng sử dụng phương thức my money
     public function sendMailChooseBonus($model_orders, $model_user, $password) {
@@ -69,7 +77,7 @@ class CheckoutController extends ShoppingCartController {
             $m->to(EMAIL_RECEIVE_ORDER, "Minh Tiến")->subject(SUBJECT_USED_BONUS . $model_orders->order_no);
         });
     }
-    
+
     public function sendMailLockAccount($model_orders) {
         Mail::send('articles::checkout.email-lock-account', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
             $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
@@ -204,7 +212,7 @@ class CheckoutController extends ShoppingCartController {
     public function changeQuantity(Request $request) {
         if (isset($request)) {
             $data = $request->all();
-            Log::info($data);
+            //Log::info($data);
             if (isset($data["id"]) && isset($data["number"])) {
                 $id = $data["id"];
                 $number = $data["number"];
@@ -292,7 +300,6 @@ class CheckoutController extends ShoppingCartController {
                         }
 
                         if ($model_user != null) {//TÌM THẤY NGƯỜI DÙNG TỒN TẠI TRÊN HỆ THỐNG
-                            
                             $money_user = $model_user->getMoneyForUser();
                             if (isset($data["use_my_bonus"]) && $model_payment_type->code != "BONUS") {
                                 $used_bonus = $money_user;
@@ -339,14 +346,14 @@ class CheckoutController extends ShoppingCartController {
                                         $this->sendMailPerfectMoney($model_orders, $model_user, $password);
                                         break;
                                 }
-                                
-                                if($model_orders->total_price == 0 || $model_orders->payment_type->code == "BONUS"){
+
+                                if ($model_orders->total_price == 0 || $model_orders->payment_type->code == "BONUS") {
                                     $this->sendMailUsedBonus($model_orders);
                                 }
 
                                 DB::commit();
                                 return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
-                            }else{
+                            } else {
                                 $request->session()->flash('alert-warning', 'Warning: Your account has been lock! Please use another email to purchase your product.');
                             }
                         } else {
@@ -412,6 +419,76 @@ class CheckoutController extends ShoppingCartController {
             }
         }
         return response()->json("Delete error !!!", 404);
+    }
+
+    public function createOrderVisa(Request $request) {
+        DB::beginTransaction();
+        $data = $request->all();
+        
+        Log::info("VISA CHECKOUT");
+        Log::info($data);
+         
+        $array_orders = Session::get('array_orders', []);
+        $used_bonus = 0;
+        $password = "";
+        $model_payment = PaymentType::where("code", "VISA")->first();
+        if ($model_payment) {
+            if (count($array_orders) > 0) {
+                $data["payments_type_id"] = $model_payment->id;
+                $model_user = $this->checkMember();
+                //Tìm user qua email
+                if ($model_user == null) {
+                    $model_user = $this->findUserForCheckout($data['email']);
+                }
+                //Tạo user nếu chưa tồn tại
+                if ($model_user == null) {
+                    $obj_user = new User();
+                    $result = $obj_user->createUser($data);
+                    if ($result) {
+                        $user_id = $result["user_id"];
+                        $password = $result["password"];
+                        $model_user = User::find($user_id);
+                        Auth::loginUsingId($model_user->id);
+                        Session::set('user_email_login', $model_user->email);
+                    }
+                }
+                if ($model_user) {
+                    $money_user = $model_user->getMoneyForUser();
+                    if (isset($data["use_my_bonus"]) && $data["use_my_bonus"] == 1) {
+                        $used_bonus = $money_user;
+                    }
+                    $totalOrder = $this->getTotalOrder($array_orders, $model_payment->id, $used_bonus);
+                    //Tạo order
+                    $obj_model_orders = new UserOrders();
+                    $model_orders = $obj_model_orders->createOrder($model_user, $money_user, $data, $array_orders, $totalOrder);
+                    if ($model_orders && $totalOrder["total"] >= VISA_PAYMENT_MIN) {
+                        //SAVE LỊCH SỬ CHI TIÊU CỦA KHÁCH HÀNG - SPENDING
+                        $obj_bonus_history = new BonusPaymentHistory();
+                        if ($used_bonus > 0) {
+                            $obj_bonus_history->saveHistorySpending($model_orders, $model_user, "NA");
+                        }
+                        //SAVE LỊCH SỬ TRẠNG THÁI CỦA ORDER
+                        $model_history = new UserOrdersHistory();
+                        $model_history->saveHistoryOrder($model_orders);
+                        $this->changeStatusAfterCheckout($model_user);
+                        $this->sendMailVisa($model_orders, $model_user, $password);
+                        //SEND MAIL
+                        $visa = array(
+                            "status" => 1,
+                            "total_price" => $totalOrder["total"],
+                            "order_id" => $model_orders->id,
+                            "order_no" => $model_orders->order_no,
+                        );
+                        DB::commit();
+                        return $visa;
+                    }
+                }
+            }
+        }
+        $visa = array(
+            "status" => 0,
+        );
+        return $visa;
     }
 
 }

@@ -15,8 +15,10 @@
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
 
                                 <p>
-                                    We have received your payment for order #{{ $model_orders->order_no }}. You will be received your premium key/account within 6->8 hours.
-                                    We're sorry for the delay in delivery.
+                                    <span>We have received your payment for order #{{ $model_orders->order_no }}.</span><br>
+                                    <span>Our working time is: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span><br>
+                                    <span>If you pay within this period, you will receive premium key/voucher within 1 hours.</span><br>
+                                    <span>In contrast, you will be received your premium key/voucher within 6->8 hours. We're sorry for the delay in delivery.</span><br>
                                 </p>
 
                                 <p>
@@ -30,7 +32,7 @@
 
                                 <p>
                                     <b>Best Regards</b>
-                                    <p>Support Team BuyPremiumKey.Com</p>
+                                <p>Support Team BuyPremiumKey.Com</p>
                                 </p>
                             </td>
                         </tr>

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Log;
+use URL;
 
 class UserOrders extends Model {
 
@@ -40,8 +41,8 @@ class UserOrders extends Model {
 
         if ($totalOrder['payment_code'] == "BONUS" || $totalOrder["used_bonus"] > 0) {
             $check_money = $model_user->getMoneyAccountCurrent();
-            Log::info($check_money);
-            Log::info($money_user);
+            //Log::info($check_money);
+            //Log::info($money_user);
             if ($check_money != $money_user) {
                 $model_user->saveLockStatus();
                 return null;
@@ -140,6 +141,10 @@ class UserOrders extends Model {
         return $data;
     }
     
+    
+    public function getUrl(){
+        return URL::route('users.orderHistoryView', ["id" => $this->id , "order_no" => $this->order_no ]);
+    }
     
     
 

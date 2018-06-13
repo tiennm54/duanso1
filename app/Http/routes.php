@@ -5,11 +5,13 @@ define('NAME_COMPANY','BuyPremiumKey Authorized Reseller');
 define('EMAIL_BUYPREMIUMKEY','buypremiumkey@gmail.com');
 define('EMAIL_RECEIVE_ORDER','driverxheqadni@gmail.com');
 define('EMAIL_RECEIVE_AMAZON','driverxheqadni@gmail.com');
+define('EMAIL_RECEIVE_VISA','driverxheqadni@gmail.com');
 
 define('SUBJECT_PAYPAL_PAYMENT','[Paypal payment] Paypal Invoice for Order #');
+define('SUBJECT_VISA_PAYMENT','[Visa payment] Visa Invoice for Order #');
 define('SUBJECT_AMAZON_PAYMENT','[Amazon payment] Amazon Invoice for Order #');
 define('SUBJECT_WMZ_PAYMENT','[Webmoney payment] Webmoney Invoice for Order #');
-define('SUBJECT_PERFECT_PAYMENT','[Webmoney payment] PerfectMoney Invoice for Order #');
+define('SUBJECT_PERFECT_PAYMENT','[PerfectMoney payment] PerfectMoney Invoice for Order #');
 define('SUBJECT_BONUS_PAYMENT','[Your money payment] Invoice for Order #');
 define('SUBJECT_LOCK_ACCOUNT','Your account was has been locked');
 
@@ -26,6 +28,13 @@ define('SUBJECT_REPLY_COMMENT','[BuyPremiumKey.Com] Your comment has been replie
 define('SUBJECT_EMAIL_BONUS','[BuyPremiumKey.Com] You received a bonus from order #');
 
 define('NUMBER_PAGE',20);
+
+
+define('VISA_ERROR_PRICE',"We only accept payment with TOTAL PRICE >= $2. Or there was an error processing the payment. Please try again!");
+define('VISA_ERROR_CHECKOUT',"There was an error processing the payment. Please try again.");
+define('VISA_PAYMENT_MIN',2);
+define('VISA_CODE',"we2ue7ku3ge1pru5ro5pu6mi4pra7pri1chu4cle8pho7go0no9stu6pe6cli0ti");
+
 
 
 

@@ -13,20 +13,12 @@
                            name="payments_type_id"
                            <?php if ($item->status_disable == 1){ echo "disabled"; } ?>
                            <?php if ($item->status_selected == 1){ echo "checked='checked'"; } ?>
-                           onclick="selectTypePayment({{ $item }})"
-                    />
+                           onclick="selectTypePayment({{ $item }})"/>
                     <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" style="width: 80px"/>
                     <span style="font-weight: bold">
                         {{ $item->title }} 
                         <?php if($item->code == "BONUS"){ echo "(".$money_user."$)"; }?>
                     </span>
-                    <!--<p style="margin-top: 5px">
-                        <span>Charges: </span>
-                        <span>{{ $item->fees}}</span><span>%</span>
-                        <span>+</span>
-                        <span>$</span><span>{{ $item->plus }}</span>
-                    </p>-->
-
                 </label>
             </div>
 

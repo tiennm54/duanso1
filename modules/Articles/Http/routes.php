@@ -33,6 +33,8 @@ Route::group(['prefix' => 'checkout', 'namespace' => 'Modules\Articles\Http\Cont
 
     Route::get('success/{email?}/{password?}',['as'=>'frontend.checkout.success','uses'=>'CheckoutController@checkoutSuccess']);
     Route::get('sendMail',['as'=>'frontend.checkout.sendMail','uses'=>'CheckoutController@sendMail']);
+    
+    Route::post('createOrderVisa',['as'=>'frontend.checkout.createOrderVisa','uses'=>'CheckoutController@createOrderVisa']);
 
 });
 
@@ -44,4 +46,11 @@ Route::group(['prefix' => '', 'namespace' => 'Modules\Articles\Http\Controllers'
 
 Route::group(['prefix' => 'sitemap', 'namespace' => 'Modules\Articles\Http\Controllers'], function() {
     Route::get('site-map.xml',['as'=>'frontend.sitemap.index','uses'=>'SiteMapController@index']);
+});
+
+Route::group(['prefix' => 'checkout-visa', 'namespace' => 'Modules\Articles\Http\Controllers'], function() {
+    Route::get('success',['as'=>'frontend.checkoutVisa.success','uses'=>'VisaController@checkoutSuccess']);
+    Route::get('failure',['as'=>'frontend.checkoutVisa.failure','uses'=>'VisaController@checkoutFailure']);
+    Route::post('callback',['as'=>'frontend.checkoutVisa.callback','uses'=>'VisaController@checkoutCallback']);
+    Route::get('callback',['as'=>'frontend.checkoutVisa.getCallback','uses'=>'VisaController@getCallback']);
 });
