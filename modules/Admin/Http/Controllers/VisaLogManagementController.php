@@ -22,7 +22,7 @@ class VisaLogManagementController extends Controller {
     public function index(Request $request) {
         if (isset($request)) {
             $data = $request->all();
-            Log::info($data);
+            //Log::info($data);
             $model = new VisaPaymentLog();
             if(isset($data["buyer"]) && $data["buyer"] != "") {
                 $model = $model->where("buyer","LIKE", "%" . $data["buyer"] . "%");
