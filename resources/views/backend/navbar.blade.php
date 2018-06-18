@@ -22,6 +22,7 @@
                 <a class="parent"><i class="fa fa-shopping-cart fw"></i> <span>Sales</span></a>
                 <ul class="collapse">
                     <li><a href="{{ URL::route('adminUserOrders.listOrders') }}">Orders</a></li>
+                    <li><a href="{{ URL::route('admin.visaLog.index') }}">Visa Payment Log</a></li>
                 </ul>
             </li>
 

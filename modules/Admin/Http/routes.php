@@ -139,4 +139,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         
     });
     
+    
+    Route::group(['prefix' => 'visa-log'], function() {
+        Route::get('index', ['as' => 'admin.visaLog.index', 'uses' => 'VisaLogManagementController@index']);
+    });
+    
 });
