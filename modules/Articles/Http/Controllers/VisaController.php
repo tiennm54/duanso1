@@ -60,8 +60,8 @@ class VisaController extends Controller {
             $signature = (isset($data["signature"])) ? $data["signature"] : "";
 
             $checkSignature = md5(VISA_CODE . $action . $buyer . $comment . $orderid . $pid . $pname . $quantity . $status . $total);
-            Log::info("Signature: " . $signature);
-            Log::info("CheckSignature: " . $checkSignature);
+            //Log::info("Signature: " . $signature);
+            //Log::info("CheckSignature: " . $checkSignature);
             if ($signature == $checkSignature) {
                 Log::info("Signature OKIEEEE");
                 $model_log = new VisaPaymentLog();
@@ -85,6 +85,8 @@ class VisaController extends Controller {
                 } else {
                     Log::info("ERORR!!! KHONG TIM THAY ORDER CÓ ID LA: " . $orderid);
                 }
+                //Check Signature thi co the save log
+                DB::commit();
             } else {
                 Log::info("Signature ERRROR");
             }
