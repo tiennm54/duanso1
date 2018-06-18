@@ -4,7 +4,7 @@ use App\Helpers\SeoPage;
 use App\Models\ArticlesTypeKey;
 use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
-use Illumies\Users\Http\Requests\GetKeyRequest;
+use Modules\Users\Http\Requests\GetKeyRequest;
 use Pingpong\Modules\Routing\Controller;
 
 class UserGetKeyController extends Controller {

@@ -21,8 +21,8 @@
             <input type=hidden name=member value="buypremiumkey">
             <input type=hidden name=id value="1207">
             <input id="visa-total-price" type=hidden name=price value="{{ $totalOrder['total'] }}">
-            <input id="visa-order-id" type=hidden name=order_id value="0">
-            <input id="visa-order-no" type="hidden" name="product" value="">
+            <input id="visa-order-id" type=hidden name=orderid value="0"><!--ORDER ID-->
+            <input id="visa-order-no" type="hidden" name=name value=""><!--ORDER NO-->
             <input type=hidden name=tax value="0">
             <input type=hidden name=ureturn value="http://buypremiumkey.com/checkout-visa/success">
             <input type=hidden name=unotify value="http://buypremiumkey.com/checkout-visa/callback">

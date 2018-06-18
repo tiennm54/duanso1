@@ -41,13 +41,13 @@ class VisaController extends Controller {
           status = 'Transaction Success' OR 'Transaction Failed'
           total = Total amount received by the Merchant (USD)
           signature = this is a security implementation to allow users to verify that the IPN is from Qwikpay Servers (as a legitimate payment notification). */
-        
+
         if (isset($request)) {
             DB::beginTransaction();
             $data = $request->all();
             Log::info("DATA CALBACK CUA DON HANG: " . $data["orderid"]);
             Log::info($data);
-            
+
             $action = (isset($data["action"])) ? $data["action"] : "";
             $buyer = (isset($data["buyer"])) ? $data["buyer"] : "";
             $comment = (isset($data["comment"])) ? $data["comment"] : "";
@@ -63,38 +63,35 @@ class VisaController extends Controller {
             Log::info("Signature: " . $signature);
             Log::info("CheckSignature: " . $checkSignature);
             if ($signature == $checkSignature) {
-                Log::info("OKIEEEE");
-            }else{
-                Log::info("MA BI SAI");
-            }
-
-            $model_log = new VisaPaymentLog();
-            $model_log->saveLog($data);
-            $orderid_int = (int) $orderid;
-            $model = UserOrders::find($orderid_int);
-            if ($model) {
-                if ($status == "Transaction Success" && $model->total_price == $total) {
-                    $this->paymentByBonusVisa($model);
-                    $model->payment_status = "paid";
-                    $model->save();
-                    $model_orders_history = new UserOrdersHistory();
-                    $model_orders_history->saveHistoryOrder($model);
-                    $this->sendMailPaid($model);
-                    $this->sendEmailNotifyAdmin($model);
-                    DB::commit();
-                    return redirect()->route('frontend.checkoutVisa.success');
+                Log::info("Signature OKIEEEE");
+                $model_log = new VisaPaymentLog();
+                $model_log->saveLog($data);
+                $orderid_int = (int) $orderid;
+                $model = UserOrders::find($orderid_int);
+                if ($model) {
+                    if ($status == "Transaction Success" && $model->total_price == $total) {
+                        $this->paymentByBonusVisa($model);
+                        $model->payment_status = "paid";
+                        $model->save();
+                        $model_orders_history = new UserOrdersHistory();
+                        $model_orders_history->saveHistoryOrder($model);
+                        $this->sendMailPaid($model);
+                        $this->sendEmailNotifyAdmin($model);
+                        DB::commit();
+                        return redirect()->route('frontend.checkoutVisa.success');
+                    } else {
+                        Log::info("ERORR!!! TRANG THAI DON HANG TRA VE LOI: " . $status . " TOTAL PRICE LA: " . $total);
+                    }
                 } else {
-                    Log::info("ERORR!!! TRANG THAI DON HANG TRA VE LOI: " . $status . " TOTAL PRICE LA: " . $total);
+                    Log::info("ERORR!!! KHONG TIM THAY ORDER CÓ ID LA: " . $orderid);
                 }
             } else {
-                Log::info("ERORR!!! KHONG TIM THAY ORDER CÓ ID LA: " . $orderid);
+                Log::info("Signature ERRROR");
             }
         } else {
             Log::info("ERORR!!! ERROR KHONG NHAN DUOC REQUEST");
         }
-
         Log::info("ERORR!!!");
-
         return redirect()->route('frontend.checkoutVisa.failure');
     }
 
