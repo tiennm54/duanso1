@@ -36,7 +36,7 @@
                       enctype="multipart/form-data">
                     <div class="row">
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
 
                             <div class="form-group">
                                 <label class="control-label">Order ID</label>
@@ -46,7 +46,7 @@
 
                         </div>
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Email</label>
                                 <input type="text" name="email" placeholder="Email orders"
@@ -54,8 +54,16 @@
                             </div>
                         </div>
 
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label">Full Name</label>
+                                <input type="text" name="full_name" placeholder="Full Name"
+                                       class="typeahead form-control" value="{{ app('request')->input('full_name')}}">
+                            </div>
+                        </div>
 
-                        <div class="col-sm-4">
+
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="control-label">Status</label>
                                 <select name="payment_status" class="form-control">
@@ -75,7 +83,7 @@
                                     <option value="cancel" {{ (app('request')->input('payment_status') == "cancel") ? "selected" : "" }}>
                                         Cancel
                                     </option>
-                                    
+
                                     <option value="refund" {{ (app('request')->input('payment_status') == "refund") ? "selected" : "" }}>
                                         Refund
                                     </option>
@@ -85,7 +93,7 @@
                         </div>
 
 
-                        <div class='col-sm-4'>
+                        <div class='col-sm-3'>
                             <div class="form-group">
                                 <label class="control-label">Used bonus</label>
                                 <select name="used_bonus" class="form-control">
@@ -97,7 +105,7 @@
                             </div>
                         </div>
 
-                        <div class='col-sm-4'>
+                        <div class='col-sm-3'>
                             <div class="form-group">
                                 <label class="control-label">Payment Type</label>
                                 <select name="payment_type" class="form-control">
@@ -133,10 +141,11 @@
                         <tr>
                             <th>Order ID</th>
                             <th>Invoice</th>
+                            <th>Email</th>
+                            <th>Full Name</th>
                             <th>Used bonus</th>
                             <th>Total</th>
                             <th>Payment</th>
-                            <th>Email</th>
                             <th>Status</th>
                             <th>Date Added</th>
                             <th>Action</th>
@@ -157,17 +166,16 @@
                                             #{{ $item->order_no }}
                                         </a>
                                     </td>
-
+                                    <td>{{ $item->email }}</td>
+                                    <td>{{ $item->full_name }}</td>
                                     <td>
                                         <span class="label {{ ($item->used_bonus == 0) ? "label-primary" : "label-danger" }}">{{ ($item->used_bonus) ? $item->used_bonus : 0  }}$</span>
                                     </td>
-
                                     <td>{{ $item->total_price }}$</td>
                                     <td>
                                         <span class="label {{($item->payment_type->code == "BONUS") ? "label-danger" : "label-success"}}">{{ $item->payment_type->title }}</span>
 
                                     </td>
-                                    <td>{{ $item->email }}</td>
                                     <td>{{ $item->payment_status }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     <td><a class="btn btn-primary"
@@ -179,14 +187,16 @@
                     </tbody>
                 </table>
             </div>
-            <?php echo $model->appends(
+            <?php
+            echo $model->appends(
                     [
-                        'order_id' => Request::get('order_id'), 
-                        'email' => Request::get('email'), 
+                        'order_id' => Request::get('order_id'),
+                        'email' => Request::get('email'),
                         'payment_status' => Request::get('payment_status'),
                         'used_bonus' => Request::get('used_bonus'),
                         'payment_type' => Request::get('payment_type'),
-                    ])->render(); ?>
+            ])->render();
+            ?>
 
         </div>
     </div>

@@ -29,7 +29,8 @@ class AdminUserOrdersController extends Controller {
 
     public function listOrders(Request $request) {
         $data = $request->all();
-        $model = UserOrders::orderBy("id", "DESC");
+        $model = UserOrders::select("*", DB::raw('CONCAT(first_name," ",last_name) AS full_name'));
+        
         if (isset($data["order_id"]) && $data["order_id"] != "") {
             $model = $model->where("order_no", "=", $data["order_id"])->orWhere("id", "=", $data["order_id"]);
         }
@@ -47,7 +48,12 @@ class AdminUserOrdersController extends Controller {
             $model = $model->where('payments_type_id','=', $data['payment_type']);
         }
         
-        $model = $model->paginate(NUMBER_PAGE);
+        if(isset($data["full_name"]) && $data["full_name"] != ""){
+            $model = $model->where(DB::raw('CONCAT(first_name," ",last_name)'),"LIKE", "%" . $data["full_name"] . "%");
+        }
+        
+        $model = $model->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
+        
         $model_payment_type = PaymentType::orderBy('id','asc')->get();
         return view('admin::userOrders.listOrders', compact('model','model_payment_type'));
     }
