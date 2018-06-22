@@ -69,4 +69,5 @@ Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controller
 Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controllers'], function() {
     Route::get('feed-back', ['as' => 'users.feedback.getFeedBack', 'uses' => 'FeedBackController@getFeedBack']);
     Route::post('feed-back', ['as' => 'users.feedback.postFeedBack', 'uses' => 'FeedBackController@postFeedBack']);
+    Route::get('review.html', ['as' => 'users.review.index', 'uses' => 'ReviewController@index']);
 });
