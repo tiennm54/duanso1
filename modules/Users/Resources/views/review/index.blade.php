@@ -48,7 +48,7 @@
 
             <div class="fb-comments" data-href="<?php echo URL::route('users.review.index'); ?>" data-numposts="20"></div>
         </div>
-        @include('users::includes.login_column_right')
+        @include('users::includes.review_column_right')
     </div>
 </div>
 @stop
