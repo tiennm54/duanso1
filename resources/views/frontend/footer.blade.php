@@ -52,6 +52,7 @@
 
     <script src="{{url('theme_frontend/js/bootstrap.min.js')}}" type="text/javascript"></script>
     <script src="{{url('theme_frontend/js/bootstrap-confirmation.min.js')}}" type="text/javascript" ></script>
+    <script src="{{url('theme_frontend/js/star-rating.js')}}" type="text/javascript"></script>
     <script type="text/javascript">
 
         $(document).ready(function () {

@@ -25,21 +25,28 @@
 
 <div class="row">
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label>Price Order</label>
             <input type="number" step="any" class="form-control border-input" placeholder="Price..." name="decimal_price_order" value="{{ ($model->price_order) ? $model->price_order : 0 }}">
         </div>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Old price</label>
+            <input type="number" step="any" class="form-control border-input" placeholder="Old Price..." name="old_price" value="{{ ($model->old_price) ? $model->old_price : 0 }}">
+        </div>
+    </div>
+    
+    <div class="col-md-3">
         <div class="form-group">
             <label>Price Reseller</label>
             <input type="number" step="any" class="form-control border-input" placeholder="Price Reseller..." name="price_reseller" value="{{ ($model->price_reseller) ? $model->price_reseller : 0 }}">
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label>Stock</label>
             <select class="form-control border-input" name="int_instock">

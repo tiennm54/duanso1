@@ -35,17 +35,21 @@
                         break;
                 }
                 ?>">
-
                     <p>
-
                         <a style="color: white" href="{{ $item->getUrl() }}" title="Read more...">{{ $item->title }}</a>
                     </p>
+
                 </div>
                 <div class="plan">
-
                     <div class="header-pricing">
                         <?php if ($item->status_stock == 1) { ?>
-                            <p class="month">${{ $item->price_order }}</p>
+                            <p class="month">
+                                <?php if (isset($item->old_price) && $item->old_price != 0): ?>
+                                    <span class="old-price">$<?php echo $item->old_price; ?></span>
+                                    <span class="sale-box"></span>
+                                <?php endif; ?>
+                                <span>${{ $item->price_order }}</span>
+                            </p>
                         <?php } else { ?>
                             <p class="month">NOT IN STOCK</p>
                         <?php } ?>

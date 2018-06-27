@@ -9,6 +9,7 @@
                 <th>Brand</th>
                 <th>Price Reseller</th>
                 <th>Price</th>
+                <th>Old Price</th>
                 <th>Status Stock</th>
                 <th width="15%">Action</th>
             </tr>
@@ -24,6 +25,7 @@
                 <td><?php echo $model->brand;?></td>
                 <td><?php echo (($item->price_reseller) ? $item->price_reseller : "0") ."$";?></td>
                 <td><?php echo $item->price_order."$";?></td>
+                <td><?php echo $item->old_price."$";?></td>
                 <td><?php
                     switch ($item->status_stock){
                         case 1: echo "In Stock"; break;

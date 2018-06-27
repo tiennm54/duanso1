@@ -99,9 +99,7 @@ class BackendArticlesChildrenController extends Controller {
                 if ($model_articles != null){
                     DB::beginTransaction();
                     $model->title = $request->txt_title;
-                    /*if (isset($request->txt_url_title)) {
-                        $model->url_title = $request->txt_url_title;
-                    }*/
+                    
                     $model->code = $request->txt_code;
                     $model->price_order = $request->decimal_price_order;
                     $model->price_reseller = $request->price_reseller;
@@ -110,6 +108,11 @@ class BackendArticlesChildrenController extends Controller {
                     $model->seo_title = $request->txt_seo_title;
                     $model->seo_description = $request->txt_seo_description;
                     $model->seo_keyword = $request->txt_seo_keyword;
+                    
+                    if (isset($request->old_price)) {
+                        $model->old_price = $request->old_price;
+                    }
+                    
                     $model->save();
 
                     //Save description for articles type

@@ -14,6 +14,7 @@
         <link href="{{url('theme_frontend/css/stylesheet.css')}}" rel="stylesheet">
         <link href="{{url('theme_frontend/css/style_pricing.css')}}" rel="stylesheet">
         <link href="{{url('theme_frontend/css/my-account.css')}}" rel="stylesheet">
+        <link href="{{url('theme_frontend/css/star-rating.css')}}" rel="stylesheet">
         <link href="{{url('theme_frontend/image/favicon.png')}}" rel="icon">
         <link rel="alternate" hreflang="en" href="{{ URL::route('frontend.articles.index') }}" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css">
