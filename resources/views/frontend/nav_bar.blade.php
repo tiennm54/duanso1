@@ -42,9 +42,9 @@
                     <a href="{{ URL::route('users.contact.getContact') }}">Contact</a>
                 </li>
 
-                <li>
+                <!--<li>
                     <a href="{{ URL::route('users.feedback.getFeedBack') }}">Feedback</a>
-                </li>
+                </li>-->
 
                 <?php if (!Auth::check()): ?>
 

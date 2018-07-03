@@ -8,13 +8,15 @@
         {!! SEO::generate() !!}
         <base href="{{ URL::route('frontend.articles.index') }}">
         <meta name="robots" content="INDEX,FOLLOW">
-        <script src="{{url('theme_frontend/js/jquery-2.1.1.min.js')}}" type="text/javascript"></script>
+        
         <link href="{{url('theme_frontend/css/bootstrap.css')}}" rel="stylesheet" media="screen">
         <link href="{{url('theme_frontend/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
         <link href="{{url('theme_frontend/css/stylesheet.css')}}" rel="stylesheet">
         <link href="{{url('theme_frontend/css/style_pricing.css')}}" rel="stylesheet">
         <link href="{{url('theme_frontend/css/my-account.css')}}" rel="stylesheet">
         <link href="{{url('theme_frontend/css/star-rating.css')}}" rel="stylesheet">
+        <script src="{{url('theme_frontend/js/jquery-2.1.1.min.js')}}" type="text/javascript"></script>
+        
         <link href="{{url('theme_frontend/image/favicon.png')}}" rel="icon">
         <link rel="alternate" hreflang="en" href="{{ URL::route('frontend.articles.index') }}" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css">
@@ -22,16 +24,15 @@
         <!-- Global Site Tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106635648-1"></script>
         <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments)
-    }
-    ;
-    gtag('js', new Date());
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments)
+            }
+            ;
+            gtag('js', new Date());
 
-    gtag('config', 'UA-106635648-1');
+            gtag('config', 'UA-106635648-1');
         </script>
-
         <!-- Facebook Pixel Code -->
         <script>
             !function (f, b, e, v, n, t, s) {
@@ -58,12 +59,10 @@
             fbq('track', 'PageView');
         </script>
         <noscript>
-    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=360509441070327&ev=PageView&noscript=1"/>
-    </noscript>
-    <!-- DO NOT MODIFY -->
-    <!-- End Facebook Pixel Code -->
-
-
+            <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=360509441070327&ev=PageView&noscript=1"/>
+        </noscript>
+        <!-- DO NOT MODIFY -->
+        <!-- End Facebook Pixel Code -->
 </head>
 <body class="common-home">
     <input id="_token" type="hidden" name="_token" value="{{ csrf_token() }}">

@@ -13,7 +13,7 @@
     height: 25px;
     font-size: 0;
     color: #fff;
-   /* background: transparent url('../img/loading.gif') top left no-repeat;*/
+    /* background: transparent url('../img/loading.gif') top left no-repeat;*/
     border: none;
 }
 
@@ -178,6 +178,24 @@
 .rating-rtl .caption {
     margin-right: 5px;
     margin-left: 0;
+}
+
+.form-review{
+    display: flex;
+    background-color: #fff;
+    text-align: left;
+    padding: 30px 16px 30px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    box-shadow: 0 0px 2px 0 #d4d4d4;
+    border-radius: 5px;
+    border: none;
+
+}
+.form-review .review-now{
+    font-size: 30px; 
+    margin-right: 30px; 
+    padding-top: 6px
 }
 
 /**

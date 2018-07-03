@@ -10,11 +10,11 @@
 
     <div class="row">
         <div class="col-md-4">
-            <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive" style="width: 100%">
+            <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive img-pricing">
         </div>
         <div class="col-md-8">
-            <h1 style="margin-top: 0px;"><span style="color: #337ab7">
-                    <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey Reseller get 2% bonus</span>
+            <h1 style="margin-top: 0px;">
+                <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey Reseller get 2% bonus</span>
             </h1> 
         </div>
     </div>
@@ -113,17 +113,15 @@
                     {!! $model->description !!}
                 </div>
 
-                <div id="comment" class="tab-pane fade row">
-                    <div class="col-md-8">
+                <div id="comment" class="tab-pane fade">
+                   
                         <div class="fb-comments" data-href="{{ $model->getUrlPricing() }}" data-numposts="6"></div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
-
-    <hr/>
-
+    <br/>
     <a href="{{ $model->getUrlPricing() }}">
         <img src="{{url('images/icon/step-buy-key.png')}}" alt="step buy premium key" width="100%">
     </a>

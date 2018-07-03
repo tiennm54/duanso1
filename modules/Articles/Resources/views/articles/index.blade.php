@@ -18,9 +18,14 @@
                         <div class="product-thumb transition">
                             <div class="image">
                                 <a href="{{ $item->getUrlPricing() }}">
-                                    <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" title="{{ $item->title }} ({{$item->view_count}} views)"
+                                    <img src="{{url('images/'.$item->image)}}" alt="Buy {{ $item->title }} Premium via Paypal, Visa/Master card" title="{{ $item->title }} ({{$item->view_count}} views)"
                                          class="img-responsive" style="width: 100%; max-height: 71px">
                                 </a>
+                            </div>
+                            <div class="">
+                                <h4 style="text-align: center;">
+                                    <a href="{{ $item->getUrlPricing() }}">{{ $item->title }}</a>
+                                </h4>
                             </div>
                         </div>
                     </div>

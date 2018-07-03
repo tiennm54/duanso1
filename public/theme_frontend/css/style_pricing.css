@@ -157,7 +157,7 @@ ul{
 .sale-box{
     background: url(../image/best_deal.png) no-repeat scroll center center transparent;
     height: 132px;
-    right: -5px;
+    right: -15px;
     position: absolute;
     top: 17px;
     width: 127px;
@@ -176,3 +176,8 @@ ul{
     color: white;
 }
 
+.img-pricing{
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}

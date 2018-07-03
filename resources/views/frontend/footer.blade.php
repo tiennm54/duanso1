@@ -34,7 +34,7 @@
                 <h5>Contact Information</h5>
                 <ul class="list-unstyled">
                     <li><span style="color: #ccc">Address: Ha Noi - Viet Nam</span></li>
-                    <li><span style="color: #ccc">Email: <a href="mailto:buypremiumkey.com@gmail.com">buypremiumkey.com@gmail.com</a></span></li>
+                    <li><span style="color: #ccc">Email: <a href="mailto:buypremiumkey@gmail.com">buypremiumkey@gmail.com</a></span></li>
                     <li><span style="color: #ccc">Working Days/Hours: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span></li>
                     <li><span style="color: #ccc">Skype: <a href="skype:tiennm54?chat">
                                 <i class="fa fa-skype"></i>
@@ -48,8 +48,6 @@
         <p>Powered By <a href="{{ URL::route('frontend.articles.index') }}">BuyPremiumKey</a><br> buypremiumkey.com © 2017</p>
 
     </div>
-
-
     <script src="{{url('theme_frontend/js/bootstrap.min.js')}}" type="text/javascript"></script>
     <script src="{{url('theme_frontend/js/bootstrap-confirmation.min.js')}}" type="text/javascript" ></script>
     <script src="{{url('theme_frontend/js/star-rating.js')}}" type="text/javascript"></script>

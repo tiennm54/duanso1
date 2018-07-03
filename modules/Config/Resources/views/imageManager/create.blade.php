@@ -26,7 +26,7 @@
         <div class="panel-body">
             <div class="well">
                 <div class="row">
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form action="<?php echo URL::route('config.image.postCreate');?>" method="post" enctype="multipart/form-data">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label">Title</label>

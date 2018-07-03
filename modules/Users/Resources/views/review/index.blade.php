@@ -2,7 +2,6 @@
 @section('content')
 <div class="product">
     <div class="container">
-
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
             <li><a>Review</a></li>
@@ -10,9 +9,19 @@
         @include('validator.flash-message')
         <div id="content" class="col-sm-9">
             <div>
-                <p style="font-size: 18px">
-                    <b>Review BuyPremiumKey.com Reseller</b>
+                <p style="font-size: 25px">
+                    <b>Review BuyPremiumKey.com Official Reseller</b>
                 </p>
+            </div>
+            <div class="view-rating">
+                <span >
+                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 1) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 2) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 3) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 4) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 5) ? "" : "fa-star-o" }}"></i>
+                </span>
+                <span>Reviews (<?php echo $data_reviews["count"]; ?>)</span>
             </div>
             <hr>
             <div>
@@ -38,17 +47,13 @@
                     </li>
                 </ul>
             </div>
-            <hr>
+            
+            @include('users::includes.review_widget')
+           
 
-            <p style="font-size: 16px">
-                Please let us know the evaluation from you, so that we can improve our service better. Sincerely thank.
-            </p>
-
-            <hr>
-
-            <div class="fb-comments" data-href="<?php echo URL::route('users.review.index'); ?>" data-numposts="20"></div>
         </div>
         @include('users::includes.review_column_right')
     </div>
 </div>
+
 @stop
