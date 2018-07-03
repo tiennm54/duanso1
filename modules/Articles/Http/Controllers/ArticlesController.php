@@ -85,7 +85,7 @@ class ArticlesController extends Controller {
             $type = $data["type"];
             if ($keyword != "" && $type != "") {
                 $keyword = preg_replace('/[^a-zA-Z0-9 ]/', '', $keyword);
-                
+
                 if ($type == "news") {
                     $model_cate = Category::orderBy("id", "ASC")->get();
                     $model = News::where("title", "LIKE", "%" . $keyword . "%")->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
@@ -98,11 +98,23 @@ class ArticlesController extends Controller {
                 }
 
                 if ($type == "product") {
-                    $model = Articles::where("title", "LIKE", "%" . $keyword . "%")->orderBy("position", "ASC")->get();
+                    $model = Articles::where("title", "LIKE", "%" . $keyword . "%")
+                            ->where("status_disable", "=", 0)
+                            ->where("status_stock", "=", 1)
+                            ->orderBy("order_count", "DESC")
+                            ->orderBy("view_count", "DESC")
+                            ->get();
+                    
                     if (count($model) == 0) {
                         $keyword = str_replace(' ', '', $keyword);
+                        $model = Articles::where("title", "LIKE", "%" . $keyword . "%")
+                                ->where("status_disable", "=", 0)
+                                ->where("status_stock", "=", 1)
+                                ->orderBy("order_count", "DESC")
+                                ->orderBy("view_count", "DESC")
+                                ->get();
                     }
-                    $model = Articles::where("title", "LIKE", "%" . $keyword . "%")->orderBy("position", "ASC")->get();
+
                     return view('articles::articles.index', compact("model"));
                 }
             }

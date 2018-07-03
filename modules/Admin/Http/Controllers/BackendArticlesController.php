@@ -180,10 +180,8 @@ class BackendArticlesController extends Controller {
 
                 $model->save();
 
-                if ($model->status_stock == 0) {
+                if ($model->status_stock == 0) {//Neu het hang thi update toan bo het hang
                     ArticlesType::where("articles_id", "=", $model->id)->update(['status_stock' => 0]);
-                } else {
-                    ArticlesType::where("articles_id", "=", $model->id)->update(['status_stock' => 1]);
                 }
 
                 DB::commit();
