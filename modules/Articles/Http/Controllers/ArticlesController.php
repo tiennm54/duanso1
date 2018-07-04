@@ -29,7 +29,7 @@ class ArticlesController extends Controller {
 
     public function getListProduct() {
         SeoPage::seoPage($this);
-        $model = Articles::where("status_disable", "=", 0)->orderBy("position", "ASC")->get();
+        $model = Articles::where("status_disable", "=", 0)->where("status_stock", "=", 1)->orderBy("id", "DESC")->get();
         return view('articles::articles.index_list_product', compact("model"));
     }
 

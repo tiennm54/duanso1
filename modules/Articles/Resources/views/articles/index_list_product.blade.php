@@ -17,7 +17,7 @@
                     <div class="col-md-4">
                         <div class="product-thumb">
                             <a href="{{ $item->getUrlPricing() }}">
-                                <h3>{{ $item->title }} Premium Key</h3>
+                                <h3 style="text-align: center; margin-bottom: 20px;">{{ $item->title }}</h3>
                             </a>
                         </div>
                     </div>
