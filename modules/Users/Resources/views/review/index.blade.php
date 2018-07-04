@@ -15,11 +15,11 @@
             </div>
             <div class="view-rating">
                 <span >
-                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 0) ? "" : "fa-star-o" }}"></i>
-                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 1) ? "" : "fa-star-o" }}"></i>
-                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 2) ? "" : "fa-star-o" }}"></i>
-                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 3) ? "" : "fa-star-o" }}"></i>
-                    <i class="fa fa-star {{ ($data_reviews["sum"] >= 4) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] > 0) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] > 1) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] > 2) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] > 3) ? "" : "fa-star-o" }}"></i>
+                    <i class="fa fa-star {{ ($data_reviews["sum"] > 4) ? "" : "fa-star-o" }}"></i>
                 </span>
                 <span>Reviews (<?php echo $data_reviews["count"]; ?>)</span>
             </div>

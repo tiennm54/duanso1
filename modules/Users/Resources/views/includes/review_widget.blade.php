@@ -9,11 +9,11 @@
             <p>
                 <b><?php echo $item->review_name; ?></b>
                 <span class="rating">
-                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate >= 0) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate >= 1) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate >= 2) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate >= 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate >= 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 0) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 1) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 2) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                 </span>
                 <span> <?php echo $item->created_at; ?> </span>
             </p>
