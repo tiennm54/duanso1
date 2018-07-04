@@ -12,6 +12,7 @@ use Pingpong\Modules\Routing\Controller;
 use App\Helpers\SeoPage;
 use Illuminate\Http\Request;
 use App\Models\Reviews;
+use Modules\Users\Http\Controllers\CheckMemberController;
 use URL;
 use Log;
 
@@ -20,7 +21,7 @@ use Log;
  *
  * @author minht
  */
-class ReviewController extends Controller {
+class ReviewController extends CheckMemberController {
 
     //put your code here
     public function index(Request $request) {
@@ -29,7 +30,8 @@ class ReviewController extends Controller {
         $review_url = "/".$request->path();
         $model_reviews = $obj_review->getReviews($review_url);
         $data_reviews = $obj_review->countReviews($review_url);
-        return view("users::review.index", compact('model_reviews','data_reviews'));
+        $model_user = $this->checkMember();
+        return view("users::review.index", compact('model_reviews','data_reviews','model_user'));
     }
 
     public function rateWebsite(Request $request) {
