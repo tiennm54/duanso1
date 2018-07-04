@@ -65,6 +65,10 @@
         <loc>{{ URL::route('frontend.news.index') }}</loc>
     </url>
     
+    <url>
+        <loc>{{ URL::route('users.review.index') }}</loc>
+    </url>
+    
     @foreach($model_information as $info)
         <url>
             <loc>{{ URL::route('frontend.information.view',["id"=> $info->id, 'url'=>$info->url_title.".html"]) }}</loc>

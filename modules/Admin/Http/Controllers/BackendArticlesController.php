@@ -42,7 +42,11 @@ class BackendArticlesController extends Controller {
             $model = $model->where("reseller_status", "=", $request->reseller_status);
         }
 
-        $model = $model->orderBy('reseller_status',"DESC")->orderBy('order_count',"DESC")->paginate(NUMBER_PAGE);
+        $model = $model
+                ->orderBy('status_stock',"DESC")
+                ->orderBy('reseller_status',"DESC")
+                ->orderBy('order_count',"DESC")
+                ->paginate(NUMBER_PAGE);
         return view('admin::articles.index', compact('model'));
     }
 

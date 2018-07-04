@@ -26,6 +26,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::post('addKeyToProduct/{id?}', ['as' => 'articlesChildren.addKeyToProduct', 'uses' => 'BackendArticlesChildrenController@addKeyToProduct']);
 
         Route::get('delete/{id}', ['as' => 'articlesChildren.delete', 'uses' => 'BackendArticlesChildrenController@delete']);
+        Route::post('savePriceStatus/{id}', ['as' => 'articlesChildren.savePriceStatus', 'uses' => 'BackendArticlesChildrenController@savePriceStatus']);
+        
     });
     //CATEGORY
     Route::group(['prefix' => 'category'], function() {

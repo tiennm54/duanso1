@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\Admin\Http\Controllers;
+
 use App\Models\Articles;
 use App\Models\ArticlesType;
 use App\Models\ArticlesTypeDes;
@@ -9,27 +10,28 @@ use Illuminate\Http\Request;
 use Modules\Admin\Http\Requests\ArticlesChildrenRequest;
 use Pingpong\Modules\Routing\Controller;
 use DB;
+use Log;
 
 class BackendArticlesChildrenController extends Controller {
 
-    public function __construct(){
+    public function __construct() {
         $this->middleware("role");
     }
 
-    public function getCreate($articles_id){
+    public function getCreate($articles_id) {
         $model_articles = Articles::find($articles_id);
-        if ($model_articles != null){
-            return view('admin::articlesChildren.create',compact('model_articles'));
-        }else{
+        if ($model_articles != null) {
+            return view('admin::articlesChildren.create', compact('model_articles'));
+        } else {
             return view('errors.503');
         }
     }
 
-    public function postCreate(ArticlesChildrenRequest $request, $articles_id){
+    public function postCreate(ArticlesChildrenRequest $request, $articles_id) {
 
-        if (isset($request)){
+        if (isset($request)) {
             $model_articles = Articles::find($articles_id);
-            if ($model_articles != null){
+            if ($model_articles != null) {
                 DB::beginTransaction();
                 $model = new ArticlesType();
                 $model->articles_id = $model_articles->id;
@@ -38,7 +40,7 @@ class BackendArticlesChildrenController extends Controller {
                 $model->price_order = $request->decimal_price_order;
                 $model->description = $request->txt_description;
                 $model->status_stock = $request->int_instock;
-                $model->url_title = str_slug($request->txt_title, '-').'-'.'reseller';
+                $model->url_title = str_slug($request->txt_title, '-') . '-' . 'reseller';
                 $model->seo_title = $request->txt_seo_title;
                 $model->seo_description = $request->txt_seo_description;
                 $model->seo_keyword = $request->txt_seo_keyword;
@@ -46,8 +48,8 @@ class BackendArticlesChildrenController extends Controller {
 
                 //Save description for articles type
                 $des = $request->des;
-                foreach ($des as $item){
-                    if($item != "") {
+                foreach ($des as $item) {
+                    if ($item != "") {
                         $model_des = new ArticlesTypeDes();
                         $model_des->product_id = $model->id;
                         $model_des->description = $item;
@@ -57,32 +59,31 @@ class BackendArticlesChildrenController extends Controller {
 
                 DB::commit();
                 return redirect()->route('articlesChildren.getEdit', ["id" => $model->id]);
-
             }
         }
         return view('errors.503');
     }
 
-    public function view($id){
+    public function view($id) {
         $model = ArticlesType::find($id);
-        if ($model != null){
+        if ($model != null) {
             $model_articles = Articles::find($model->articles_id);
-            if ($model_articles != null){
+            if ($model_articles != null) {
 
-                $model_key = ArticlesTypeKey::where("status","=","active")
-                    ->where("articles_type_id","=", $id)
-                    ->orderBy("id","DESC")
-                    ->get();
+                $model_key = ArticlesTypeKey::where("status", "=", "active")
+                        ->where("articles_type_id", "=", $id)
+                        ->orderBy("id", "DESC")
+                        ->get();
 
-                return view('admin::articlesChildren.view',compact('model','model_articles','model_key'));
+                return view('admin::articlesChildren.view', compact('model', 'model_articles', 'model_key'));
             }
         }
         return view('errors.503');
     }
 
-    public function getEdit($id){
+    public function getEdit($id) {
         $model = ArticlesType::find($id);
-        if ($model != null){
+        if ($model != null) {
             $model_articles = Articles::find($model->articles_id);
             if ($model_articles != null) {
                 return view('admin::articlesChildren.edit', compact('model', 'model_articles'));
@@ -91,15 +92,15 @@ class BackendArticlesChildrenController extends Controller {
         return view('errors.503');
     }
 
-    public function postEdit(ArticlesChildrenRequest $request, $id){
-        if (isset($request)){
+    public function postEdit(ArticlesChildrenRequest $request, $id) {
+        if (isset($request)) {
             $model = ArticlesType::find($id);
-            if ($model != null){
+            if ($model != null) {
                 $model_articles = Articles::find($model->articles_id);
-                if ($model_articles != null){
+                if ($model_articles != null) {
                     DB::beginTransaction();
                     $model->title = $request->txt_title;
-                    
+
                     $model->code = $request->txt_code;
                     $model->price_order = $request->decimal_price_order;
                     $model->price_reseller = $request->price_reseller;
@@ -108,18 +109,18 @@ class BackendArticlesChildrenController extends Controller {
                     $model->seo_title = $request->txt_seo_title;
                     $model->seo_description = $request->txt_seo_description;
                     $model->seo_keyword = $request->txt_seo_keyword;
-                    
+
                     if (isset($request->old_price)) {
                         $model->old_price = $request->old_price;
                     }
-                    
+
                     $model->save();
 
                     //Save description for articles type
-                    ArticlesTypeDes::where("product_id","=", $model->id)->delete();
+                    ArticlesTypeDes::where("product_id", "=", $model->id)->delete();
                     $des = $request->des;
-                    foreach ($des as $item){
-                        if($item != "") {
+                    foreach ($des as $item) {
+                        if ($item != "") {
                             $model_des = new ArticlesTypeDes();
                             $model_des->product_id = $model->id;
                             $model_des->description = $item;
@@ -136,54 +137,65 @@ class BackendArticlesChildrenController extends Controller {
         return view('errors.503');
     }
 
-
-    public function addKeyToProduct($id, Request $request)
-    {
-        if (isset($request)){
+    public function addKeyToProduct($id, Request $request) {
+        if (isset($request)) {
             $data = $request->all();
-            if ($data["product_key"]){
+            if ($data["product_key"]) {
                 $model_product = ArticlesType::find($id);
-                if ($model_product){
+                if ($model_product) {
                     $model = new ArticlesTypeKey();
                     $model->articles_type_id = $model_product->id;
                     $model->key = $data["product_key"];
                     $model->save();
                     $request->session()->flash('alert-success', 'Success: Cập nhật key thành công, chúc Minh Tiến một ngày gặt hái được nhiều thành công!');
-                }else{
+                } else {
                     $request->session()->flash('alert-warning', 'Warning: Bị lỗi rồi, Minh Tiến hãy cố gắng và vui lòng thực hiện lại!');
                 }
-            }else{
+            } else {
                 $request->session()->flash('alert-warning', 'Warning: Bị lỗi rồi, Minh Tiến hãy cố gắng và vui lòng thực hiện lại!');
             }
-        }else{
+        } else {
             $request->session()->flash('alert-warning', 'Warning: Bị lỗi rồi, Minh Tiến hãy cố gắng và vui lòng thực hiện lại!');
         }
 
         return back();
     }
 
-
-    public function autoComplete(Request $request){
+    public function autoComplete(Request $request) {
         if (isset($request)) {
             $data = ArticlesType::select(
-                "id",
-                "title as name"
-            )->where("title", "LIKE", "%{$request->input('query')}%")->get();
+                            "id", "title as name"
+                    )->where("title", "LIKE", "%{$request->input('query')}%")->get();
             return response()->json($data);
         }
     }
 
-
-    public function delete($id, Request $request){
+    public function delete($id, Request $request) {
         $model = ArticlesType::find($id);
-        if ($model != null){
+        if ($model != null) {
             $model->delete();
             $request->session()->flash('alert-success', 'Success: Xóa thành công!');
             return back();
-        }else{
+        } else {
             return view('errors.503');
-
         }
+    }
+
+    public function savePriceStatus($id, Request $request) {
+        $model = ArticlesType::find($id);
+        if ($model != null) {
+            $data = $request->all();
+            $model->status_stock = $data["status_stock"];
+            $model->status_show = $data["status_show"];
+            $model->price_reseller = $data["price_reseller"];
+            $model->price_order = $data["price_order"];
+            $model->old_price = $data["old_price"];
+            $model->save();
+            $request->session()->flash('alert-success', 'Success: Save trạng thái cho sản phẩm '. $model->title .' thành công!');
+            return back();
+        }
+        $request->session()->flash('alert-warning', 'Warning: Save trạng thái cho sản phẩm thất bại!');
+        return back();
     }
 
 }

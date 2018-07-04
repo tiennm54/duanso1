@@ -45,7 +45,8 @@ class ArticlesController extends Controller {
         if ($model != null) {
             $this->seoPricing($model);
             $model->saveViewCount();
-            $model_type = ArticlesType::where("articles_id", "=", $id)->orderBy('status_stock', 'DESC')->orderBy("price_order", "ASC")->get();
+            $model_type = ArticlesType::where("articles_id", "=", $id)->where("status_show","!=","hide")
+                    ->orderBy('status_stock', 'DESC')->orderBy("price_order", "ASC")->get();
             $model_all_product = Articles::where("status_disable", "=", 0)->get();
 
             $model_active = DB::table('faq')
