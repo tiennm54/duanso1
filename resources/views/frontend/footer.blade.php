@@ -46,7 +46,13 @@
         </div>
         <hr>
         <p>Powered By <a href="{{ URL::route('frontend.articles.index') }}">BuyPremiumKey</a><br> buypremiumkey.com © 2017</p>
-
+        <!-- Your customer chat code -->
+        <div class="fb-customerchat"
+             greeting_dialog_display="hide"
+             attribution=setup_tool
+             page_id="212425975964390"
+             >
+        </div>
     </div>
     <script src="{{url('theme_frontend/js/bootstrap.min.js')}}" type="text/javascript"></script>
     <script src="{{url('theme_frontend/js/bootstrap-confirmation.min.js')}}" type="text/javascript" ></script>
