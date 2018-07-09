@@ -387,6 +387,7 @@ class CheckoutController extends ShoppingCartController {
     }
 
     public function checkoutSuccess($email = "", $password = "") {
+        SeoPage::seoPage($this);
         return view('articles::checkout.checkout-success', compact('email', 'password'));
     }
 

@@ -30,7 +30,7 @@ class AdminUserOrdersController extends Controller {
     public function listOrders(Request $request) {
         $data = $request->all();
         $model = UserOrders::select("*", DB::raw('CONCAT(first_name," ",last_name) AS full_name'));
-        
+
         if (isset($data["order_id"]) && $data["order_id"] != "") {
             $model = $model->where("order_no", "=", $data["order_id"])->orWhere("id", "=", $data["order_id"]);
         }
@@ -40,22 +40,22 @@ class AdminUserOrdersController extends Controller {
         if (isset($data["payment_status"]) && $data["payment_status"] != "") {
             $model = $model->where("payment_status", "=", $data["payment_status"]);
         }
-        if(isset($data['used_bonus']) && $data['used_bonus'] != ""){
-            $model = $model->where('used_bonus', ">" , 0);
+        if (isset($data['used_bonus']) && $data['used_bonus'] != "") {
+            $model = $model->where('used_bonus', ">", 0);
         }
-        
-        if(isset($data['payment_type']) && $data['payment_type'] != ""){
-            $model = $model->where('payments_type_id','=', $data['payment_type']);
+
+        if (isset($data['payment_type']) && $data['payment_type'] != "") {
+            $model = $model->where('payments_type_id', '=', $data['payment_type']);
         }
-        
-        if(isset($data["full_name"]) && $data["full_name"] != ""){
-            $model = $model->where(DB::raw('CONCAT(first_name," ",last_name)'),"LIKE", "%" . $data["full_name"] . "%");
+
+        if (isset($data["full_name"]) && $data["full_name"] != "") {
+            $model = $model->where(DB::raw('CONCAT(first_name," ",last_name)'), "LIKE", "%" . $data["full_name"] . "%");
         }
-        
+
         $model = $model->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
-        
-        $model_payment_type = PaymentType::orderBy('id','asc')->get();
-        return view('admin::userOrders.listOrders', compact('model','model_payment_type'));
+
+        $model_payment_type = PaymentType::orderBy('id', 'asc')->get();
+        return view('admin::userOrders.listOrders', compact('model', 'model_payment_type'));
     }
 
     //Xem thông tin chi tiết order
@@ -141,6 +141,7 @@ class AdminUserOrdersController extends Controller {
 
 
                 //Nếu người dùng, dùng phương thức thanh toán thông thường thì hệ thống vẫn gửi key cho khách
+                //Không dùng phương thức bonus và không sử dụng tiền được thưởng
                 if ($check_bonus == 0 || ($model_orders->payment_type->code != "BONUS" && $model_orders->used_bonus == 0)) {
 
                     $this->sendProductEmail($model_orders, $model_key);
@@ -171,62 +172,60 @@ class AdminUserOrdersController extends Controller {
 
     public function bonusMoney($model_orders, $model_user, $model_sponsor, $model_money) {
 
-        if ($model_orders->payment_status == "paid") {
-            $money_sponsor = ($model_money->bonus_sponsor * $model_orders->sub_total) / 100;
-            $money_user = ($model_money->bonus_reg * $model_orders->sub_total) / 100;
 
-            //Bonus for user
-            if ($money_user > 0) {
-                $money_user_current = $model_user->getMoneyForUser();
-                $money_user_check = $model_user->getMoneyAccountCurrent();
-                if ($money_user_current == $money_user_check && $model_user->status_lock == 0) {
-                    $obj_bonus_his = new BonusHistory();
-                    $obj_bonus_his->saveBonusHistory($model_orders, $model_user->id, $model_sponsor->id, $money_user, "Buyer", $model_money->bonus_reg);
-                    $total_money_user = $model_user->getMoneyForUser();
-                    //Log::info("Updated: " . $total_money_user);
-                    $model_user->updateMoneyForUser($total_money_user);
-                    $this->sendMailBonus($model_orders, $model_user, $money_user);
-                } else {
-                    return 1;
-                }
-            }
+        $money_sponsor = ($model_money->bonus_sponsor * $model_orders->sub_total) / 100;
+        $money_user = ($model_money->bonus_reg * $model_orders->sub_total) / 100;
 
-            //Bonus for sponsor
-            if ($money_sponsor > 0) {
-                $money_sponsor_current = $model_sponsor->getMoneyForUser();
-                $money_sponsor_check = $model_sponsor->getMoneyAccountCurrent();
-                if ($money_sponsor_current == $money_sponsor_check && $model_sponsor->status_lock == 0) {
-                    $obj_bonus_his = new BonusHistory();
-                    $obj_bonus_his->saveBonusHistory($model_orders, $model_user->id, $model_sponsor->id, $money_sponsor, "Sponser", $model_money->bonus_sponsor);
-                    $total_money_sponsor = $model_sponsor->getMoneyForUser();
-                    $model_sponsor->updateMoneyForUser($total_money_sponsor);
-                    $this->sendMailBonus($model_orders, $model_sponsor, $money_sponsor);
-                } else {
-                    return 2;
-                }
+        //Bonus for user
+        if ($money_user > 0) {
+            $money_user_current = $model_user->getMoneyForUser();
+            $money_user_check = $model_user->getMoneyAccountCurrent();
+            if ($money_user_current == $money_user_check && $model_user->status_lock == 0) {
+                $obj_bonus_his = new BonusHistory();
+                $obj_bonus_his->saveBonusHistory($model_orders, $model_user->id, $model_sponsor->id, $money_user, "Buyer", $model_money->bonus_reg);
+                $total_money_user = $model_user->getMoneyForUser();
+                //Log::info("Updated: " . $total_money_user);
+                $model_user->updateMoneyForUser($total_money_user);
+                $this->sendMailBonus($model_orders, $model_user, $money_user);
+            } else {
+                return 1;
             }
         }
+
+        //Bonus for sponsor
+        if ($money_sponsor > 0) {
+            $money_sponsor_current = $model_sponsor->getMoneyForUser();
+            $money_sponsor_check = $model_sponsor->getMoneyAccountCurrent();
+            if ($money_sponsor_current == $money_sponsor_check && $model_sponsor->status_lock == 0) {
+                $obj_bonus_his = new BonusHistory();
+                $obj_bonus_his->saveBonusHistory($model_orders, $model_user->id, $model_sponsor->id, $money_sponsor, "Sponser", $model_money->bonus_sponsor);
+                $total_money_sponsor = $model_sponsor->getMoneyForUser();
+                $model_sponsor->updateMoneyForUser($total_money_sponsor);
+                $this->sendMailBonus($model_orders, $model_sponsor, $money_sponsor);
+            } else {
+                return 2;
+            }
+        }
+
         return 0;
     }
 
     //Bonus cho người dùng không có sponsor
     public function bonusBasic($model_orders, $model_user, $model_money) {
-        if($model_money) {
-            if ($model_orders->payment_status == "paid") {
-                $money_basic = ($model_money->bonus_basic * $model_orders->sub_total) / 100;
-                if ($money_basic > 0) {
-                    $money_user_current = $model_user->getMoneyForUser();
-                    $money_user_check = $model_user->getMoneyAccountCurrent();
-                    if ($money_user_current == $money_user_check && $model_user->status_lock == 0) {
-                        $obj_bonus_his = new BonusHistory();
-                        $obj_bonus_his->saveBonusHistory($model_orders, $model_user->id, 0, $money_basic, "Buyer", $model_money->bonus_basic);
-                        $total_money_user = $model_user->getMoneyForUser();
-                        //Log::info("Updated: " . $total_money_user);
-                        $model_user->updateMoneyForUser($total_money_user);
-                        $this->sendMailBonus($model_orders, $model_user, $money_basic);
-                    } else {
-                        return 1;
-                    }
+        if ($model_money) {
+            $money_basic = ($model_money->bonus_basic * $model_orders->sub_total) / 100;
+            if ($money_basic > 0) {
+                $money_user_current = $model_user->getMoneyForUser();
+                $money_user_check = $model_user->getMoneyAccountCurrent();
+                if ($money_user_current == $money_user_check && $model_user->status_lock == 0) {
+                    $obj_bonus_his = new BonusHistory();
+                    $obj_bonus_his->saveBonusHistory($model_orders, $model_user->id, 0, $money_basic, "Buyer", $model_money->bonus_basic);
+                    $total_money_user = $model_user->getMoneyForUser();
+                    //Log::info("Updated: " . $total_money_user);
+                    $model_user->updateMoneyForUser($total_money_user);
+                    $this->sendMailBonus($model_orders, $model_user, $money_basic);
+                } else {
+                    return 1;
                 }
             }
         }
@@ -514,8 +513,8 @@ class AdminUserOrdersController extends Controller {
             $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
         });
     }
-    
-    public function sendMailBonus($model_orders, $model_user, $money){
+
+    public function sendMailBonus($model_orders, $model_user, $money) {
         $subject_email = SUBJECT_EMAIL_BONUS . $model_orders->order_no;
         Mail::send('admin::userOrders.email-send-bonus', ['model_orders' => $model_orders, 'model_user' => $model_user, 'money' => $money], function ($m) use ($model_user, $subject_email) {
             $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
