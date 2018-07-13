@@ -12,7 +12,7 @@ class Faq extends Model{
     }
 
     public function getCategoryFaq(){
-        return $this->hasOne('App\Models\CategoryFaq', 'id' ,'category_faq_id')->select('id','title');
+        return $this->hasOne('App\Models\CategoryFaq', 'id' ,'category_faq_id')->select('id','title','url_title');
     }
     
     public function getUrl(){

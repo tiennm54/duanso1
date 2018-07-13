@@ -102,7 +102,9 @@
                                        class="form-control border-input seo-title"
                                        onkeyup="countCharactersSeoTitle()"
                                        placeholder="Meta Tag Title..."
-                                       name="seo_title">
+                                       name="seo_title"
+                                       maxlength="70"
+                                       >
                             </div>
                         </div>
                     </div>
@@ -114,7 +116,9 @@
                                 <textarea class="form-control border-input seo-des"
                                           name="seo_description"
                                           onkeyup="countCharactersSeoDescription()"
-                                          rows="5">{{ (isset($model)) ? $model->seo_description : "" }}</textarea>
+                                          rows="5"
+                                          maxlength="160"
+                                          >{{ (isset($model)) ? $model->seo_description : "" }}</textarea>
                             </div>
                         </div>
                     </div>

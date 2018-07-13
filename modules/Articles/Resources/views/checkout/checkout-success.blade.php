@@ -11,7 +11,7 @@
 
             <div class="row">
                 <div id="content" class="col-sm-12"><h1>Your order has been placed!</h1>
-                    <p>Your order has been successfully processed!</p>
+                    <p>Your order has been successfully processed! We have sent an order to your email. After you pay, we will send the premium key to you.</p>
                     <p>You can view your order history by going to the
                         <a href="{{ URL::route('users.getMyAccount') }}">my account</a>
                         page and by clicking on

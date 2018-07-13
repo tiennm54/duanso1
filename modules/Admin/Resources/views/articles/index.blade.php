@@ -10,7 +10,6 @@
             <a href="" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Rebuild">
                 <i class="fa fa-refresh"></i>
             </a>
-
         </div>
         <h1>Product</h1>
         <ul class="breadcrumb">
