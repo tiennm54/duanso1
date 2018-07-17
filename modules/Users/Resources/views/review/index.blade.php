@@ -4,7 +4,7 @@
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
-            <li><a>Review</a></li>
+            <li><a>Review Website</a></li>
         </ul>
         @include('validator.flash-message')
         <div id="content" class="col-sm-9">
@@ -47,12 +47,19 @@
                     </li>
                 </ul>
             </div>
-            
+
             @include('users::includes.review_widget')
-           
+
 
         </div>
-        @include('users::includes.review_column_right')
+        <div class="col-sm-3">
+            <div class="list-group">
+                <a href="" class="list-group-item active">Reviews Product ({{ count($model_product_reviews) }})</a>
+                <?php foreach ($model_product_reviews as $item): ?>
+                    <a href="{{ $item->getUrl() }}" class="list-group-item">&nbsp;&nbsp;&nbsp;- {{ $item->title }}</a>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </div>
 </div>
 

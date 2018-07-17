@@ -8,6 +8,7 @@ use App\Models\Faq;
 use App\Models\News;
 use App\Models\Category;
 use App\Models\CategoryFaq;
+use App\Models\ArticlesReviews;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Http\Request;
 use DougSisk\CountryState\CountryState;
@@ -29,7 +30,7 @@ class ArticlesController extends Controller {
 
     public function getListProduct() {
         SeoPage::seoPage($this);
-        $model = Articles::where("status_disable", "=", 0)->where("status_stock", "=", 1)->orderBy("id", "DESC")->get();
+        $model = Articles::where("status_disable", "=", 0)->where("status_stock", "=", 1)->orderBy("title", "ASC")->get();
         return view('articles::articles.index_list_product', compact("model"));
     }
 
@@ -45,10 +46,14 @@ class ArticlesController extends Controller {
         if ($model != null) {
             $this->seoPricing($model);
             $model->saveViewCount();
-            $model_type = ArticlesType::where("articles_id", "=", $id)->where("status_show","!=","hide")
-                    ->orderBy('status_stock', 'DESC')->orderBy("price_order", "ASC")->get();
+            $model_type = ArticlesType::where("articles_id", "=", $id)
+                    ->where("status_show","!=","hide")
+                    ->orderBy('status_stock', 'DESC')
+                    ->orderBy("price_order", "ASC")
+                    ->get();
             $model_all_product = Articles::where("status_disable", "=", 0)->get();
-
+            
+            //model huong dan activa cho nguoi dung
             $model_active = DB::table('faq')
                             ->join('category_faq', 'faq.category_faq_id', '=', 'category_faq.id')
                             ->select('faq.id', 'category_faq.code')
@@ -57,12 +62,16 @@ class ArticlesController extends Controller {
             if ($model_active) {
                 $model_faq = Faq::find($model_active->id);
             }
-
+            
+            $model_reviews = ArticlesReviews::where("articles_id",$model->id)->first();
             if (count($model_type) != 0) {
-                foreach ($model_type as &$product) {
-                    $product["image"] = $model->image;
-                }
-                return view('articles::articles.pricing', compact("model", "model_type", "model_all_product", "model_faq"));
+                return view('articles::articles.pricing', compact(
+                        "model", 
+                        "model_type", 
+                        "model_all_product", 
+                        "model_faq",
+                        "model_reviews"
+                        ));
             }
         }
         return redirect()->route('frontend.articles.index');

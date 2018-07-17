@@ -10,7 +10,37 @@
 
     <div class="row">
         <div class="col-md-4">
-            <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive img-pricing">
+            <?php
+            $rate_reviews = 0;
+            if (isset($model_reviews) && $model_reviews != null) {
+                $rate_reviews = $model_reviews->getRate();
+            }
+            ?>
+
+            <ul class="product-thumb">
+                <li>
+                    <a href="<?php echo ($model_reviews != null) ? $model_reviews->getUrl() : ""; ?>">
+                        <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive img-pricing">
+                        <div class="view-rating">
+                            <h4 style="text-align: center;">
+                                <span >
+                                    <i class="fa fa-star {{ ($rate_reviews > 0) ? "" : "fa-star-o" }}"></i>
+                                    <i class="fa fa-star {{ ($rate_reviews > 1) ? "" : "fa-star-o" }}"></i>
+                                    <i class="fa fa-star {{ ($rate_reviews > 2) ? "" : "fa-star-o" }}"></i>
+                                    <i class="fa fa-star {{ ($rate_reviews > 3) ? "" : "fa-star-o" }}"></i>
+                                    <i class="fa fa-star {{ ($rate_reviews > 4) ? "" : "fa-star-o" }}"></i>
+                                </span><br>
+                            </h4>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <?php if (isset($model_reviews) && $model_reviews != null) { ?>
+                <a href="<?php echo $model_reviews->getUrl();?>" class="btn btn-primary btn-lg btn-block">
+                    <i class="glyphicon glyphicon-star"></i>
+                    Reviews {{ $model->title }}
+                </a>
+            <?php } ?>
         </div>
         <div class="col-md-8">
             <h1 style="margin-top: 0px;">
@@ -114,9 +144,9 @@
                 </div>
 
                 <div id="comment" class="tab-pane fade">
-                   
-                        <div class="fb-comments" data-href="{{ $model->getUrlPricing() }}" data-numposts="6"></div>
-                    
+
+                    <div class="fb-comments" data-href="{{ $model->getUrlPricing() }}" data-numposts="6"></div>
+
                 </div>
             </div>
         </div>

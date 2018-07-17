@@ -32,7 +32,9 @@
                     <li>
                         <a href="{{ URL::route('articles.index') }}">Products</a>
                     </li>
-
+                    <li>
+                        <a href="{{ URL::route('admin.reviews.index') }}">Products Reviews</a>
+                    </li>
                     <li>
                         <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
                     </li>
@@ -81,11 +83,11 @@
                 <li>
                     <a href="{{ URL::route('admin.news.index') }}">News</a>
                 </li>
-                
+
                 <li>
                     <a href="{{ URL::route('admin.faq.index') }}">FAQs</a>
                 </li>
-                
+
                 <li>
                     <a href="{{ URL::route('admin.comment.index') }}">Comment</a>
                 </li>

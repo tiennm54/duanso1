@@ -146,4 +146,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('index', ['as' => 'admin.visaLog.index', 'uses' => 'VisaLogManagementController@index']);
     });
     
+    
+    Route::group(['prefix' => 'reviews'], function() {
+        Route::get('insertDb', ['as' => 'admin.reviews.insertDb', 'uses' => 'ArticlesReviewsManagementController@insertDb']);
+        Route::get('index', ['as' => 'admin.reviews.index', 'uses' => 'ArticlesReviewsManagementController@index']);
+        Route::get('getEdit/{id}/{url?}', ['as' => 'admin.reviews.getEdit', 'uses' => 'ArticlesReviewsManagementController@getEdit']);
+        Route::post('postEdit/{id}/{url?}', ['as' => 'admin.reviews.postEdit', 'uses' => 'ArticlesReviewsManagementController@postEdit']);
+    });
+    
 });

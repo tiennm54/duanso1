@@ -12,6 +12,7 @@ use Pingpong\Modules\Routing\Controller;
 use App\Helpers\SeoPage;
 use Illuminate\Http\Request;
 use App\Models\Reviews;
+use App\Models\ArticlesReviews;
 use Modules\Users\Http\Controllers\CheckMemberController;
 use URL;
 use Log;
@@ -23,21 +24,21 @@ use Log;
  */
 class ReviewController extends CheckMemberController {
 
-    //put your code here
+    //Reviews website
     public function index(Request $request) {
         SeoPage::seoPage($this);
         $obj_review = new Reviews();
-        $review_url = "/".$request->path();
+        $review_url = "/" . $request->path();
         $model_reviews = $obj_review->getReviews($review_url);
         $data_reviews = $obj_review->countReviews($review_url);
         $model_user = $this->checkMember();
-        return view("users::review.index", compact('model_reviews','data_reviews','model_user'));
+        $model_product_reviews = ArticlesReviews::all();
+        return view("users::review.index", compact('model_reviews', 'data_reviews', 'model_user','model_product_reviews'));
     }
 
     public function rateWebsite(Request $request) {
         if (isset($request)) {
             $data = $request->all();
-            $url_current = URL::current();
             $model = new Reviews();
             $model->review_name = $data["review_name"];
             $model->review_email = $data["review_email"];
@@ -49,7 +50,40 @@ class ReviewController extends CheckMemberController {
             return back();
         }
         $request->session()->flash('alert-warning', ' Warning: Review Error!');
-         return back();
+        return back();
+    }
+
+    public function listReviews() {
+        SeoPage::seoPage($this);
+        $model = ArticlesReviews::orderBy("title","ASC")->get();
+        return view("users::review.listReviews", compact('model'));
+    }
+    
+    public function seoReviewsProduct($model) {
+        $url_page = $model->getUrl();
+        $image_page = url('images/' . $model->getArticles->image);
+        SeoPage::createSeo($model, $url_page, $image_page);
+    }
+    
+    public function reviewsProduct($id, Request $request) {
+        $model = ArticlesReviews::find($id);
+        $model_product_reviews = ArticlesReviews::all();
+        if ($model != null) {
+            $this->seoReviewsProduct($model);
+            $obj_review = new Reviews();
+            $review_url = "/" . $request->path();
+            $model_reviews = $obj_review->getReviews($review_url);
+            $data_reviews = $obj_review->countReviews($review_url);
+            $model_user = $this->checkMember();
+            return view("users::review.reviewsProduct", compact(
+                    'model',
+                    'model_reviews', 
+                    'data_reviews', 
+                    'model_user',
+                    'model_product_reviews'
+                    ));
+        }
+        return redirect()->route('product.reviews.index');
     }
 
 }

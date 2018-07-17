@@ -62,9 +62,18 @@
 
                 <?php endif; ?>
 
-                <li>
-                    <a href="{{ URL::route('users.review.index') }}">Review</a>
+                <li class="dropdown"><a href="{{ URL::route('users.review.index') }}" class="dropdown-toggle" data-toggle="dropdown">Reviews</a>
+                    <div class="dropdown-menu" style="">
+                        <div class="dropdown-inner">
+                            <ul class="list-unstyled">
+                                <li><a href="<?php echo URL::route('users.review.index') ?>">Reviews Website</a></li>
+                                <li><a href="<?php echo URL::route('product.reviews.index') ?>">Reviews Product</a></li>
+                            </ul>
+                        </div>
+                        <a href="<?php echo URL::route('product.reviews.index'); ?>" class="see-all">Show All</a> 
+                    </div>
                 </li>
+
             </ul>
         </div>
     </nav>

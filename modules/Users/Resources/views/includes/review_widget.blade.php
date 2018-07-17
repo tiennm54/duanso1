@@ -84,7 +84,9 @@
 
 <script>
     jQuery(document).ready(function () {
-        $(".action-rating-review").rating();
+        $(".action-rating-review").rating({
+            step: 1
+        });
         $(".rating-review-show").rating();
     });
 

@@ -72,3 +72,9 @@ Route::group(['prefix' => 'users', 'namespace' => 'Modules\Users\Http\Controller
     Route::get('review.html', ['as' => 'users.review.index', 'uses' => 'ReviewController@index']);
     Route::post('rateWebsite', ['as' => 'users.review.rateWebsite', 'uses' => 'ReviewController@rateWebsite']);
 });
+
+
+Route::group(['prefix' => 'reviews', 'namespace' => 'Modules\Users\Http\Controllers'], function() {
+    Route::get('index.html', ['as' => 'product.reviews.index', 'uses' => 'ReviewController@listReviews']);
+    Route::get('premium-{id}/{url?}', ['as' => 'product.reviews.reviewsProduct', 'uses' => 'ReviewController@reviewsProduct']);
+});
