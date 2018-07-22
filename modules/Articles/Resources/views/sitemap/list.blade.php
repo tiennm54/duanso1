@@ -69,6 +69,10 @@
         <loc>{{ URL::route('users.review.index') }}</loc>
     </url>
     
+    <url>
+        <loc>{{ URL::route('product.reviews.index') }}</loc>
+    </url>
+    
     @foreach($model_information as $info)
         <url>
             <loc>{{ URL::route('frontend.information.view',["id"=> $info->id, 'url'=>$info->url_title.".html"]) }}</loc>
@@ -110,6 +114,12 @@
     @foreach($model_faq as $faq)
         <url>
             <loc>{{ $faq->getUrl() }}</loc>
+        </url>
+    @endforeach
+    
+    @foreach($model_product_reviews as $review)
+        <url>
+            <loc>{{ $review->getUrl() }}</loc>
         </url>
     @endforeach
 

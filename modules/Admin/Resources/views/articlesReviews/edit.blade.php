@@ -6,7 +6,7 @@
 
         <div class="pull-right">
             <button type="submit" form="form-edit-product-reviews" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Save"><i class="fa fa-save"></i></button>
-            <a href="" target="_blank" data-toggle="tooltip" class="btn btn-primary" data-original-title="View Frontend"><i class="fa fa-eye"></i></a>
+            <a href="<?php echo $model->getUrl();?>" target="_blank" data-toggle="tooltip" class="btn btn-primary" data-original-title="View Frontend"><i class="fa fa-eye"></i></a>
             <a href="<?php echo URL::route('admin.reviews.index'); ?>" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i class="fa fa-reply"></i></a>
         </div>
 

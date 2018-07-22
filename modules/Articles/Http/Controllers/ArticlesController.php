@@ -53,7 +53,7 @@ class ArticlesController extends Controller {
                     ->get();
             $model_all_product = Articles::where("status_disable", "=", 0)->get();
             
-            //model huong dan activa cho nguoi dung
+            //model huong dan activate cho nguoi dung
             $model_active = DB::table('faq')
                             ->join('category_faq', 'faq.category_faq_id', '=', 'category_faq.id')
                             ->select('faq.id', 'category_faq.code')

@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\News;
 use App\Models\CategoryFaq;
 use App\Models\Faq;
+use App\Models\ArticlesReviews;
 
 class SiteMapController extends Controller {
 
@@ -21,6 +22,7 @@ class SiteMapController extends Controller {
         $model_news = News::get();
         $model_cate_faq = CategoryFaq::get();
         $model_faq = Faq::get();
+        $model_product_reviews = ArticlesReviews::get();
 
         return response()->view('articles::sitemap.list', compact(
                 'model_product', 
@@ -29,7 +31,8 @@ class SiteMapController extends Controller {
                 'model_cate', 
                 'model_news',
                 'model_cate_faq',
-                'model_faq'
+                'model_faq',
+                'model_product_reviews'
                 ))->header('Content-Type', 'text/xml');
     }
 

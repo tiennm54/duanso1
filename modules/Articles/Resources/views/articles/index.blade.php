@@ -34,11 +34,9 @@
 
             <div class="row">
                 <div class="text-center">
-                    <a href="{{ URL::route('frontend.articles.getListProduct') }}" class="btn btn-primary">Show List Product</a>
+                    <a href="{{ URL::route('frontend.articles.getListProduct') }}" class="btn btn-primary">Sort products A->Z</a>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>

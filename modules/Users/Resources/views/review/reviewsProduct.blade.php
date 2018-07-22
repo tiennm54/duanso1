@@ -38,7 +38,7 @@
             <div class="col-sm-7">
                 <div class="col-sm-12">
                     <h2 style="margin-top: 5px; margin-bottom: 20px;">
-                        {{ $model->title }} premium <span style="font-size: 15px">(<?php echo $data_reviews["count"];?> reviews)</span>
+                        {{ $model->title }} <span style="font-size: 15px">(<?php echo $data_reviews["count"];?> reviews)</span>
                     </h2>
                     <p>{!! $model->description !!}</p>
                 </div>

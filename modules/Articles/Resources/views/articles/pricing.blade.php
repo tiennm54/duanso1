@@ -36,16 +36,23 @@
                 </li>
             </ul>
             <?php if (isset($model_reviews) && $model_reviews != null) { ?>
-                <a href="<?php echo $model_reviews->getUrl();?>" class="btn btn-primary btn-lg btn-block">
+                <a href="<?php echo $model_reviews->getUrl(); ?>" class="btn btn-primary btn-lg btn-block">
                     <i class="glyphicon glyphicon-star"></i>
                     Reviews {{ $model->title }}
                 </a>
             <?php } ?>
         </div>
         <div class="col-md-8">
-            <h1 style="margin-top: 0px;">
-                <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey Reseller get 2% bonus</span>
-            </h1> 
+            <?php if ($model_reviews != null && $model_reviews->description != null) { ?>
+                <h1 style="margin-top: 0px;">
+                    <span style="font-size: 26px;">{{ $model->title }} Premium Features</span>
+                </h1> 
+                <p>{!! $model_reviews->description !!}</p>
+            <?php } else { ?>
+                <h1 style="margin-top: 0px;">
+                    <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey Reseller get 2% bonus</span>
+                </h1> 
+            <?php } ?>
         </div>
     </div>
     <hr/>
