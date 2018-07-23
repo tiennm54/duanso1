@@ -33,7 +33,7 @@ class ReviewController extends CheckMemberController {
         $data_reviews = $obj_review->countReviews($review_url);
         $model_user = $this->checkMember();
         $model_product_reviews = ArticlesReviews::all();
-        return view("users::review.index", compact('model_reviews', 'data_reviews', 'model_user','model_product_reviews'));
+        return view("users::review.index", compact('model_reviews', 'data_reviews', 'model_user', 'model_product_reviews'));
     }
 
     public function rateWebsite(Request $request) {
@@ -55,16 +55,20 @@ class ReviewController extends CheckMemberController {
 
     public function listReviews() {
         SeoPage::seoPage($this);
-        $model = ArticlesReviews::orderBy("title","ASC")->get();
+        $model = ArticlesReviews::orderBy("title", "ASC")->get();
         return view("users::review.listReviews", compact('model'));
     }
-    
+
     public function seoReviewsProduct($model) {
         $url_page = $model->getUrl();
-        $image_page = url('images/' . $model->getArticles->image);
+        if ($model->getArticles->image_seo) {
+            $image_page = url('images/productSeo/' . $model->getArticles->image_seo);
+        } else {
+            $image_page = url('images/' . $model->getArticles->image);
+        }
         SeoPage::createSeo($model, $url_page, $image_page);
     }
-    
+
     public function reviewsProduct($id, Request $request) {
         $model = ArticlesReviews::find($id);
         $model_product_reviews = ArticlesReviews::all();
@@ -76,12 +80,8 @@ class ReviewController extends CheckMemberController {
             $data_reviews = $obj_review->countReviews($review_url);
             $model_user = $this->checkMember();
             return view("users::review.reviewsProduct", compact(
-                    'model',
-                    'model_reviews', 
-                    'data_reviews', 
-                    'model_user',
-                    'model_product_reviews'
-                    ));
+                            'model', 'model_reviews', 'data_reviews', 'model_user', 'model_product_reviews'
+            ));
         }
         return redirect()->route('product.reviews.index');
     }

@@ -189,17 +189,33 @@
                     </div>
                     <div id="image" class="tab-pane fade">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <img src="<?php echo url('images/' . $model->image); ?>">
                                 </div>
                             </div>
+                            <?php if ($model->image_seo) { ?>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <img src="<?php echo url('images/productSeo/' . $model->image_seo); ?>" width="300px">
+                                    </div>
+                                </div>
+                            <?php } ?>
+
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Image</label>
                                     <input type="file" class="form-control border-input" name="txt_image">
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Image SEO</label>
+                                    <input type="file" class="form-control border-input" name="image_seo">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

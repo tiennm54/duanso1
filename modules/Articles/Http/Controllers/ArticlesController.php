@@ -36,7 +36,11 @@ class ArticlesController extends Controller {
 
     public function seoPricing($model) {
         $url_page = $model->getUrlPricing();
-        $image_page = url('images/' . $model->image);
+        if($model->image_seo){
+            $image_page = url('images/productSeo/' . $model->image_seo);
+        }else{
+            $image_page = url('images/' . $model->image);
+        }
         SeoPage::createSeo($model, $url_page, $image_page);
     }
 

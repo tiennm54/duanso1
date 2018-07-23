@@ -122,6 +122,8 @@ class BackendArticlesController extends Controller {
             $model = Articles::find($id);
             if ($model != null) {
                 $old_image = $model->image;
+                $old_image_seo = $model->image_seo;
+                
 
                 $model->title = $request->txt_title;
                 $model->code = $request->txt_code;
@@ -178,6 +180,21 @@ class BackendArticlesController extends Controller {
 
                         if ($old_image && file_exists('images/' . $old_image)) {
                             unlink('images/' . $old_image);
+                        }
+                    }
+                }
+                
+                
+                if (isset($request->image_seo)) {
+                    if ($request->hasFile('image_seo')) {
+                        $image = $request->file('image_seo');
+                        $input['image_name_seo'] = time() . '.' . $image->getClientOriginalExtension();
+                        $destinationPath = public_path('/images/productSeo');
+                        $image->move($destinationPath, $input['image_name_seo']);
+                        $model->image_seo = $input['image_name_seo'];
+
+                        if ($old_image_seo && file_exists('images/productSeo/' . $old_image_seo)) {
+                            unlink('images/productSeo/' . $old_image_seo);
                         }
                     }
                 }
