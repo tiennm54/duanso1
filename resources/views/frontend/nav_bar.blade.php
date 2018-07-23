@@ -62,7 +62,10 @@
 
                 <?php endif; ?>
 
-                <li class="dropdown"><a href="{{ URL::route('users.review.index') }}" class="dropdown-toggle" data-toggle="dropdown">Reviews</a>
+                <li class="dropdown">
+                    <a href="{{ URL::route('users.review.index') }}" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-star-empty"></i> <i class="glyphicon glyphicon-star-empty"></i> <i class="glyphicon glyphicon-star-empty"></i> Reviews
+                    </a>
                     <div class="dropdown-menu" style="">
                         <div class="dropdown-inner">
                             <ul class="list-unstyled">

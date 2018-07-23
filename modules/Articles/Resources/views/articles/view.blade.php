@@ -15,18 +15,26 @@
             <div class="row">
                 <div class="col-sm-9">
                     <div class="row">
-                        <div class="col-sm-7">
-                            <ul class="thumbnails" style="margin-top: 30px">
+                        <div class="col-sm-6">
+                            <ul class="product-thumb">
                                 <li>
                                     <a href="{{ $model->getArticles->getUrlPricing() }}">
-                                        <img src="{{url('images/'.$model->getArticles->image)}}" title="{{ $model->title }}" alt="{{ $model->title }}">
+                                        <img src="{{url('images/'.$model->getArticles->image)}}" title="{{ $model->title }}" alt="{{ $model->title }}" width="100%">
                                     </a>
                                 </li>
+                                <h1 style="text-align: center; font-size: 26px">{{ $model->title }}</h1>
                             </ul>
-                            <h1>{{ $model->title }}</h1>
+                            <div id="product">
+                                <div class="form-group">
+                                    <button type="button" id="button-cart" data-loading-text="Loading..." onclick="addToCart({{ $model->id }})" data-toggle="modal" data-target="#myModal"
+                                            class="btn btn-primary btn-lg btn-block"  <?php echo ($model->status_stock == 0) ? "disabled" : "" ?>>
+                                        <i class="glyphicon glyphicon-shopping-cart"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-sm-5">
+                        <div class="col-sm-6">
 
                             <ul class="list-unstyled">
                                 <li>Brand: <a href="{{ $model->getArticles->getUrlPricing() }}"> {{ $model->getArticles->title }}</a></li>
@@ -55,15 +63,6 @@
                                     </h2>
                                 </li>
                             </ul>
-
-
-                            <div id="product">
-                                <div class="form-group">
-                                    <button type="button" id="button-cart" data-loading-text="Loading..." onclick="addToCart({{ $model->id }})" data-toggle="modal" data-target="#myModal"
-                                            class="btn btn-primary btn-lg btn-block"  <?php echo ($model->status_stock == 0) ? "disabled" : "" ?>>Add to Cart
-                                    </button>
-                                </div>
-                            </div>
                             <div class="rating">
                                 <p>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 1) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
