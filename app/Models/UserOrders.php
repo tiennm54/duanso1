@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Log;
 use URL;
 
 class UserOrders extends Model {
@@ -123,6 +122,14 @@ class UserOrders extends Model {
 
     public function getOrderPaid() {
         $model = UserOrders::where("payment_status", "paid")->orderBy('id','DESC')->paginate(5);
+        return $model;
+    }
+    
+    public function getOrderCompletedDay(){
+        $model = UserOrders::where("payment_status", "completed")
+                ->where('payment_date', '>=', date('Y-m-d').' 00:00:00')
+                ->orderBy('id','DESC')
+                ->get();
         return $model;
     }
 

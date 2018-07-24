@@ -23,16 +23,19 @@ class AdminController extends Controller {
         $obj_user = new User();
         $model_order_pending = $obj_order->getOrderPending();
         $model_order_paid = $obj_order->getOrderPaid();
+        $model_order_completed = $obj_order->getOrderCompletedDay();
         $data_money = $obj_order->getTotalOrderMoney();
         $count_user = $obj_user->countTotalUser();
         $model_user_lock = $obj_user->getModelUserLock();
-
         $this->statisticSession();
         
-        
-
         return view('admin::index', compact(
-                        'model_order_pending', 'model_order_paid', 'data_money', 'count_user', 'model_user_lock'
+                'model_order_pending', 
+                'model_order_paid',
+                'model_order_completed',
+                'data_money', 
+                'count_user', 
+                'model_user_lock'
         ));
     }
 

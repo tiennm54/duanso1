@@ -157,9 +157,61 @@ Danh sách user sử dụng thanh toán bonus trong tuần
             {!! $model_order_paid->render() !!}
         </div>
 
+    </div>
+    <div class="row">
+        <!--DANH SACH ORDER COMPLETED-->
+        <div class="col-lg-6 col-md-12 col-sm-12" style="margin-top: 20px">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-shopping-cart"></i> Order Completed (Today: <?php echo count($model_order_completed); ?> order)</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>Order No</td>
+                                <td>Email</td>
+                                <td>Full Name</td>
+                                <td>Date completed</td>
+                                <td>Total</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (count($model_order_completed) == 0): ?>
+                                <tr>
+                                    <td colspan="4">
+                                        Không có bản ghi nào!
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                            <?php foreach ($model_order_completed as $item): ?>
+                                <tr>
+                                    <td>
+                                        <a href="{{ URL::route('adminUserOrders.viewOrders', ["id" => $item->id])}}">{{$item->id}}</a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ URL::route('admin.userManagement.view', ["id" => $item->users_id])}}">{{$item->email}}</a>
+                                    </td>
+                                    <td>
+                                        <?php echo $item->first_name . " " . $item->last_name; ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        echo $item->payment_date;
+                                        ?>
+                                    </td>
+                                    <td>{{$item->total_price}}$</td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
 
         <!--DANH SACH USER BỊ KHÓA-->
-        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px">
+        <div class="col-lg-6 col-md-12 col-sm-12" style="margin-top: 20px">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-shopping-cart"></i> User locked</h3>
