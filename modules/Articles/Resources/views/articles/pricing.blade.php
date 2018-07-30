@@ -20,7 +20,7 @@
             <ul class="product-thumb">
                 <li>
                     <a href="<?php echo ($model_reviews != null) ? $model_reviews->getUrl() : ""; ?>">
-                        <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive img-pricing">
+                        <img src="{{url('images/'.$model->image)}}" alt="{{ $model->title }}" title="{{ $model->title }}" class="img-responsive img-pricing" width="100%">
                         <div class="view-rating">
                             <h4 style="text-align: center;">
                                 <span >

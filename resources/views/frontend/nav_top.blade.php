@@ -11,12 +11,7 @@
         <div id="top-links" class="nav pull-right">
             <ul class="list-inline">
                 <li>
-                    <?php if (!Auth::check()) { ?>
-                        <a href="skype:tiennm54?chat">
-                            <i class="fa fa-skype"></i>
-                            <span class="hidden-xs hidden-sm hidden-md">tiennm54</span>
-                        </a>
-                    <?php } else { ?>
+                    <?php if (Auth::check()) { ?>
                         <a href="{{ URL::route('users.getMyAccount') }}">
                             <i class="fa fa-money"></i>
                             <span class="hidden-xs hidden-sm hidden-md">
@@ -26,7 +21,6 @@
                             </span>
                         </a>
                     <?php } ?>
-
                 </li>
 
                 <li class="dropdown">
