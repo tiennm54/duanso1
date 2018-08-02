@@ -10,22 +10,7 @@
         </ul>
 
         <div class="row">
-            
-            <!--<form action="" method="post">
-                <input name=action value="Product">
-                <input name=buyer value="buyer">
-                <input name=comment value="comment">
-                <input name=orderid value="orderid">
-                <input name=pid value="pid">
-                <input name=pname value="pname">
-                <input name=quantity value="quantity">
-                <input name=status value="status">
-                <input name=total value="total">
-                <input name=signature value="signature">
-                <button type="submit">POST</button>
-            </form>-->
-            
-            <div id="content" class="col-sm-12"><h1>An error occurred during the payment process, please try again.</h1>
+            <div id="content" class="col-sm-12"><h1>An error occurred during the payment process. Please try a different payment method or try again later.</h1>
                 <p>Thank you for using our service!</p>
                 <p>Buypremiumkey.com reseller</p>
                 <div class="buttons">
