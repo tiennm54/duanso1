@@ -49,6 +49,9 @@
                         <a href="{{ URL::route('paymentType.index') }}">Payment Type</a>
                     </li>
                     <li>
+                        <a href="{{ URL::route('admin.paypal.index') }}">Paypal account manager</a>
+                    </li>
+                    <li>
                         <a href="{{ URL::route('config.bonusConfig.getCreate') }}">Bonus Config</a>
                     </li>
                     <li>

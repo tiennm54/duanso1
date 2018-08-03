@@ -13,35 +13,28 @@
             <div id="content" class="col-sm-9">
                 
                 <h1 style="margin-top: 0px; margin-bottom: 20px;">Get the premium key you bought</h1>
-                <p class="well">
-                    Please enter your email address and order code to get the key you purchased. 
-                    Order code was sent to your email when you successfully order. 
-                    Thank you for buying the premium key at buypremiumkey reseller.
-                </p>
-
                 <form action="{{ URL::route('users.guestOrder.postGuestGetKey') }}" method="post" enctype="multipart/form-data" class="form-horizontal">
-
                     <fieldset>
 
                         <div class="form-group required">
-                            <label class="col-sm-3 control-label">Order Email</label>
-                            <div class="col-sm-9">
-                                <input type="email" name="email" placeholder="Order Email" class="form-control" value="{{ old('email') }}" required>
+                            <label class="col-sm-2">Order Email</label>
+                            <div class="col-sm-6">
+                                <input type="email" name="email" placeholder="Your order email" class="form-control" value="{{ old('email') }}" required>
                                 {!! $errors->first('email','<span class="control-label color-red" style="color: red">:message</span>') !!}
                             </div>
                         </div>
 
                         <div class="form-group required">
-                            <label class="col-sm-3 control-label" for="input-email">Order No</label>
-                            <div class="col-sm-9">
-                                <input type="text" name="order_no" placeholder="BPK-123456" class="form-control" value="{{ old('order_no') }}" required>
+                            <label class="col-sm-2" for="input-email">Order No</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="order_no" placeholder="BPK-12345679. We have sent it to your email." class="form-control" value="{{ old('order_no') }}" required>
                                 {!! $errors->first('order_no','<span class="control-label color-red" style="color: red">:message</span>') !!}
                             </div>
                         </div>
 
                         <div class="form-group required">
-                            <label class="col-sm-3 control-label">Captcha</label>
-                            <div class="col-sm-9">
+                            <label class="col-sm-2">Captcha</label>
+                            <div class="col-sm-6">
 
                                 {!! Captcha::display($attributes) !!}
                                 {!! $errors->first('g-recaptcha-response','<span class="control-label color-red" style="color: red">:message</span>') !!}

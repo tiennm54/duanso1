@@ -154,4 +154,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::post('postEdit/{id}/{url?}', ['as' => 'admin.reviews.postEdit', 'uses' => 'ArticlesReviewsManagementController@postEdit']);
     });
     
+    
+     Route::group(['prefix' => 'paypal'], function() {
+        Route::get('index', ['as' => 'admin.paypal.index', 'uses' => 'PaypalAccountManagerController@index']);
+        Route::get('create', ['as' => 'admin.paypal.getCreate', 'uses' => 'PaypalAccountManagerController@getCreate']);
+        Route::post('create', ['as' => 'admin.paypal.postCreate', 'uses' => 'PaypalAccountManagerController@postCreate']);
+        Route::get('edit/{id}', ['as' => 'admin.paypal.getEdit', 'uses' => 'PaypalAccountManagerController@getEdit']);
+        Route::post('edit/{id}', ['as' => 'admin.paypal.postEdit', 'uses' => 'PaypalAccountManagerController@postEdit']);
+        Route::get('changeStatusActivate/{id}', ['as' => 'admin.paypal.changeStatusActivate', 'uses' => 'PaypalAccountManagerController@changeStatusActivate']);
+        Route::get('delete/{id}', ['as' => 'admin.paypal.delete', 'uses' => 'PaypalAccountManagerController@delete']);
+        
+    });
+    
 });
