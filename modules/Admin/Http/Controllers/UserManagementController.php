@@ -77,6 +77,19 @@ class UserManagementController extends Controller {
         }
         return back();
     }
+    
+    public function delete($id, Request $request){
+        $model = User::find($id);
+        if($model){
+            $model->status_delete = 1;
+            $model->save();
+            $request->session()->flash('alert-success', 'Success: Xóa người dùng thành công!');
+            return back();
+        }else{
+            $request->session()->flash('alert-warning', 'Warning: Xóa người dùng thất bại!');
+            return back();
+        }
+    }
 
 }
 

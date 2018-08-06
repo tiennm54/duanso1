@@ -46,7 +46,7 @@ class UsersController extends CheckMemberController {
 
             if (Auth::attempt($userdata)) {
                 $user = User::find(Auth::user()->id);
-                if ($user->role) {
+                if ($user->role && $user->status_delete != 1) {
                     switch ($user->role->alias) {
                         case "admin" :
                             Session::set('user_email_login', "Admin");
@@ -61,10 +61,9 @@ class UsersController extends CheckMemberController {
                             return view('users::user.login');
                     }
                 }
-            } else {
-                $request->session()->flash('alert-warning', ' Warning: Invalid username and/or password, please try again.');
-                return view('users::user.login');
-            }
+            } 
+            $request->session()->flash('alert-warning', ' Warning: Invalid username and/or password, please try again.');
+            return view('users::user.login');
         }
     }
     
