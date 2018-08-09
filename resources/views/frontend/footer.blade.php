@@ -36,7 +36,7 @@
                 <ul class="list-unstyled">
                     <li><span style="color: #ccc">Address: Ha Noi - Viet Nam</span></li>
                     <li><span style="color: #ccc">Email: <a href="mailto:buypremiumkey@gmail.com"><?php echo EMAIL_BUYPREMIUMKEY; ?></a></span></li>
-                    <li><span style="color: #ccc">Working Days/Hours: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span></li>
+                    <li><span style="color: #ccc">Working Days/Hours: Mon - Sun / 8:00AM - 11:00PM GTM + 7</span></li>
                 </ul>
             </div>
 

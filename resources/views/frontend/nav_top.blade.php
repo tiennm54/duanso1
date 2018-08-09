@@ -1,11 +1,60 @@
 <nav id="top">
+    <script>
+
+        function startTime() {
+            var d = new Date();
+            var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+            var today = new Date(utc + (3600000 * 7));
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            document.getElementById('working_hour_id').innerHTML = h + ":" + m + ":" + s;
+            setTimeout(startTime, 500);
+            var checkWorking = $(".working_class").is(":hidden");
+            var checkOutWorking = $(".out_business_class").is(":hidden");
+
+            if (h >= 7 && h <= 23) {
+                if (checkWorking == true) { // dang an
+                    $(".working_class").show();
+                }
+                if (checkOutWorking != true) { // dang hien
+                    $(".out_business_class").hide();
+                }
+            } else {
+                if (checkWorking != true) { // dang hien
+                    $(".working_class").hide();
+                }
+                if (checkOutWorking == true) { // dang an
+                    $(".out_business_class").show();
+                }
+            }
+        }
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i
+            }
+            return i;
+        }
+        $(document).ready(function () {
+            startTime();
+        });
+    </script>
+
     <div class="container">
         <div id="top-links" class="nav pull-left">
-            <ul class="list-inline">
-                <li>
-                    <a style="color: red; font-weight: bold">Bonus 2% for sponsor and 2% for buyers per order is successfully transacted.</a>
-                </li>
-            </ul>
+            <span style="font-weight: bold;"><i class="fa fa-clock-o"></i></span> <b id="working_hour_id"></b> <b>GTM +7</b>
+            <span class="badge badge-pill badge-info working_class" style="background-color: #8cc152;display: none;" 
+                  data-toggle="tooltip" data-placement="bottom" 
+                  data-original-title="<?php echo NOTI_WORKING; ?>">
+                <i class="fa fa-check-circle"></i> Working
+            </span>
+            <span class="badge badge-pill badge-info out_business_class" style="background-color: #8cc152;display: none;"
+                  data-toggle="tooltip" data-placement="bottom" 
+                  data-original-title="<?php echo NOTI_OUT_WORKING; ?>">
+                <i class="fa fa-check-circle"></i> Delivery within 1-6 hours
+            </span>
         </div>
 
         <div id="top-links" class="nav pull-right">
