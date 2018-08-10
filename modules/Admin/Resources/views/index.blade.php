@@ -119,7 +119,7 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                     <table class="table">
                         <thead>
                             <tr>
-                                <td>Order No</td>
+                                <td>Invoice</td>
                                 <td>Email</td>
                                 <td>Date</td>
                                 <td>Total</td>
@@ -169,7 +169,7 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                     <table class="table">
                         <thead>
                             <tr>
-                                <td>Order No</td>
+                                <td>Invoice</td>
                                 <td>Email</td>
                                 <td>Full Name</td>
                                 <td>Date completed</td>

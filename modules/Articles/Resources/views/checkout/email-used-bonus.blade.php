@@ -1,7 +1,7 @@
 <p>Dear Minh Tiến</p>
 <p>Khác hàng: {{ $model_orders->first_name." ".$model_orders->last_name }}</p>
 <p>Email: {{ $model_orders->email }}</p>
-<p>Đã sử dụng tiền bonus cho order no: <span style="color: #0000cc">#{{ $model_orders->order_no  }}</span></p>
+<p>Đã sử dụng tiền bonus cho invoice: <span style="color: #0000cc">#{{ $model_orders->order_no  }}</span></p>
 <p>Số tiền sử dụng là: 
     <?php
         if($model_orders->payment_type->code == "BONUS"){

@@ -16,8 +16,8 @@ define('SUBJECT_BONUS_PAYMENT','[Your money payment] Invoice for Order #');
 define('SUBJECT_LOCK_ACCOUNT','Your account was has been locked');
 
 define('SUBJECT_USED_BONUS','Thông báo người dùng sử dụng tiền bonus cho thanh toán ');
-define('SUBJECT_SEND_PRODUCT','[BuyPremiumKey.Com] Send product(s) for orders #');
-define('SUBJECT_RESEND_PRODUCT','[BuyPremiumKey.Com] Resend product(s) for orders #');
+define('SUBJECT_SEND_PRODUCT','[BuyPremiumKey.Com] Your premium key/account. Orders #');
+define('SUBJECT_RESEND_PRODUCT','[BuyPremiumKey.Com] Your premium key/account. Orders #');
 define('SUBJECT_CUSTOMER_PAID','[BuyPremiumKey.Com] We received your payment for the order #');
 define('SUBJECT_REFUND','[BuyPremiumKey.Com] Refunded Orders #');
 define('SUBJECT_CANCEL','[BuyPremiumKey.Com] Canceled Orders #');

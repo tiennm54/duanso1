@@ -14,7 +14,7 @@
                         <tr>
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span><br/>
-                                    <span>Your order has been placed! Orders: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span></span><br/>
+                                    <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span></span><br/>
                                     <?php if ($model_orders->total_price == 0) { ?>
                                         <span style="font-weight: bold; color: blue">
                                             This order has been charging on your available balance. 
@@ -22,7 +22,6 @@
                                             If your payment is not valid, transaction will be canceled.
                                         </span><br/>
                                     <?php } ?>
-                                    <span>You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.</span><br/>
                                 </p>
                                 <p>
                                     <span>Your account: {{ $model_user->email }}</span><br/>
@@ -252,6 +251,9 @@
                                     <span>In contrast, you will be received your premium key/voucher within 6->8 hours. We're sorry for the delay in delivery.</span><br>
                                 </p>
                                 <p>If you do not receive premium in maximum 8 hours, please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and send you the premium key/account </p>
+                                <p>
+                                    <span>You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.</span>
+                                </p>
                                 <p>Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.</p>
                                 <p style="font-weight: bold">Thanks in advance, <br/> Reseller Team <?php echo NAME_COMPANY; ?></p>
                             </td>

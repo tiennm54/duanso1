@@ -29,7 +29,7 @@ class UserGetKeyController extends Controller {
             }
         }
 
-        $request->session()->flash('alert-warning', ' Warning: Wrong Email Address or Order No.');
+        $request->session()->flash('alert-warning', ' Warning: Wrong Email Address or Invoice.');
         return back();
     }
 

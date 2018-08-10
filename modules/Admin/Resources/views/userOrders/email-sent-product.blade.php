@@ -8,12 +8,12 @@
                     <!-- COPY -->
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333; padding-top: 30px;" class="padding-copy">Your Premium Key/Account</td>
+                            <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding-copy">Your Premium Key/Account</td>
                         </tr>
                         <tr>
                             <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
-                                <p>This is your product for the invoice # <b>{{ $model_orders->order_no }}</b></p>
+                                <p>This is your premium key/account for the invoice # <b>{{ $model_orders->order_no }}</b></p>
                             </td>
                         </tr>
 
@@ -22,7 +22,7 @@
                                 <table cellspacing="0" cellpadding="0" border="0" width="100%">
                                     <tr>
                                         <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
-                                            <p style="background-color: yellow"><b>Your Product</b></p>
+                                            <p style="background-color: yellow"><b>Your premium key/account</b></p>
                                         </td>
                                     </tr>
                                 </table>

@@ -6,15 +6,15 @@
             </div>
             <table class="table">
                 <tbody>
-
                     <tr>
                         <td>
-                            <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
-                                    data-original-title="Payment Method"><i
-                                    class="fa fa-credit-card fa-fw"></i></button>
+                            <button data-toggle="tooltip" title="" class="btn btn-info btn-xs" data-original-title="Payment Method">
+                                <i class="fa fa-credit-card fa-fw"></i>
+                            </button>
                         </td>
-                        <td><span class="label {{($model->payment_type->code == "BONUS") ? "label-danger" : "label-primary"}}">
-                                {{ $model->payment_type->title }}
+                        <td>
+                            <span class="label {{($model->payment_type->code == "BONUS") ? "label-danger" : "label-primary"}}">
+                                {{ $model->payment_type->title }}: <?php echo $model->payment_type->email; ?>
                             </span>
                         </td>
                     </tr>
@@ -81,7 +81,7 @@
                                     data-original-title="Import Key"><i class="glyphicon glyphicon-grain"></i>
                             </button>
                         </td>
-                        <td>Order No: <b>{{ $model->order_no }}</b></td>
+                        <td>Invoice: <b>{{ $model->order_no }}</b></td>
                     </tr>
 
                     <tr>

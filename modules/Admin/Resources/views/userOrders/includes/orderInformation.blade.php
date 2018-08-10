@@ -75,7 +75,7 @@
                                 data-original-title="Import Key"><i class="glyphicon glyphicon-grain"></i>
                         </button>
                     </td>
-                    <td>Order No: <span class="label label-default">{{ $model->order_no }}</span></td>
+                    <td>Invoice: <span class="label label-default">{{ $model->order_no }}</span></td>
                 </tr>
 
                 <tr>

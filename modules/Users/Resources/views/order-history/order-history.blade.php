@@ -16,7 +16,7 @@
         <div class="row">
             <div id="content" class="col-sm-9">
                 <form class="form-inline" method="GET">
-                    <input type="text" class="form-control" name="searchOrderNo" placeholder="Order No" value="{{ $searchOrderNo }}">
+                    <input type="text" class="form-control" name="searchOrderNo" placeholder="Invoice" value="{{ $searchOrderNo }}">
                     <div class="input-group">
                         <select class="form-control" name="searchStatus">
                             <option value="" selected>Choose status...</option>
@@ -41,7 +41,7 @@
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <td class="text-left">Order No</td>
+                                    <td class="text-left">Invoice</td>
                                     <td class="text-center">Customer</td>
                                     <td class="text-center">No. of Products</td>
                                     <td class="text-center">Status</td>
