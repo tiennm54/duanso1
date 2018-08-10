@@ -246,9 +246,9 @@
                                     <b style="color: red">After you have paid successfully, please let us know by replying to this email.</b>
                                 </p>
                                 <p>
-                                    <span>Our working time is: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span><br>
+                                    <span>Our working time is: Mon - Sun / 8:00AM - 11:00PM GTM + 7</span><br>
                                     <span>If you pay within this period, you will receive premium key/voucher within 30 minute -> 1 hours.</span><br>
-                                    <span>In contrast, you will be received your premium key/voucher within 6->8 hours. We're sorry for the delay in delivery.</span><br>
+                                    <span>In contrast, you will be received your premium key/voucher within 2->8 hours. We're sorry for the delay in delivery.</span><br>
                                 </p>
                                 <p>If you do not receive premium in maximum 8 hours, please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and send you the premium key/account </p>
                                 <p>

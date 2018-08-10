@@ -228,7 +228,7 @@
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 <p style="color: red">
                                     <span>Note: When you receive this email, you are in the process of paying for your order. Please complete the payment process and we will send the premium key to you.</span><br>
-                                    <span>Our working time is: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span><br>
+                                    <span>Our working time is: Mon - Sun / 8:00AM - 11:00PM GTM + 7</span><br>
                                     <span>If you pay within this period, you will receive premium key within 1h.</span>
                                 </p>
                                 <p>If you do not receive premium in maximum 8 hours, please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and send you the premium key/account </p>
