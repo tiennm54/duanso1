@@ -76,7 +76,7 @@
             <tr>
                 <td colspan="4"></td>
                 <td class="text-right"><b>Thực nhận</b></td>
-                <td class="text-right">${{ ($model->total_price - (($model->total_price * 4.4)/100 + 0.3)) }}</td>
+                <td class="text-right">${{ ($model->total_price - (($model->total_price * 4.9)/100 + 0.3)) }}</td>
             </tr>
 
         </tfoot>
