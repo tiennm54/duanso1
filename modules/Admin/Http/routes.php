@@ -114,6 +114,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('view/{id}', ['as' => 'admin.userManagement.view', 'uses' => 'UserManagementController@view']);
         Route::post('updateMoney/{id}', ['as' => 'admin.userManagement.updateMoney', 'uses' => 'UserManagementController@updateMoney']);
         Route::post('changeRole/{id}', ['as' => 'admin.userManagement.changeRole', 'uses' => 'UserManagementController@changeRole']);
+        Route::get('delete/{id}', ['as' => 'admin.userManagement.delete', 'uses' => 'UserManagementController@delete']);
     });
 
     Route::group(['prefix' => 'news'], function() {
@@ -163,7 +164,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::post('edit/{id}', ['as' => 'admin.paypal.postEdit', 'uses' => 'PaypalAccountManagerController@postEdit']);
         Route::get('changeStatusActivate/{id}', ['as' => 'admin.paypal.changeStatusActivate', 'uses' => 'PaypalAccountManagerController@changeStatusActivate']);
         Route::get('delete/{id}', ['as' => 'admin.paypal.delete', 'uses' => 'PaypalAccountManagerController@delete']);
-        
+        Route::post('sellPaypal', ['as' => 'admin.paypal.sellPaypal', 'uses' => 'PaypalAccountManagerController@sellPaypal']);
+        Route::get('index-sell-paypal/{id?}', ['as' => 'admin.sellPaypal.index', 'uses' => 'PaypalAccountManagerController@indexSellPaypal']);
     });
     
 });

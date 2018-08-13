@@ -31,40 +31,48 @@
             @include('validator.flash-message')
             <div class="tab-content">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Email</label>
                             <input type="email" value="{{ (isset($model)) ? $model->email : "" }}" class="form-control border-input" placeholder="Email..." name="email" required>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Password</label>
                             <input type="text" value="{{ (isset($model)) ? $model->password : "" }}" class="form-control border-input" placeholder="Password..." name="password" required>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Full Name</label>
                             <input type="text" value="{{ (isset($model)) ? $model->full_name : "" }}" class="form-control border-input" placeholder="Full Name..." name="full_name" required>
                         </div>
                     </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>VPS IP</label>
+                            <input type="text" value="{{ (isset($model)) ? $model->vps_ip : "" }}" class="form-control border-input" placeholder="VPS IP..." name="vps_ip" required>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Money Activate</label>
                             <input type="number" step="any" value="{{ (isset($model)) ? $model->money_activate : 0 }}" class="form-control border-input" placeholder="Money Activate..." name="money_activate">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Money hold</label>
                             <input type="number" step="any" value="{{ (isset($model)) ? $model->money_hold : 0 }}" class="form-control border-input" placeholder="Money hold..." name="money_hold">
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Status Activate</label>
                             <select class="form-control" name="status_activate">
@@ -74,13 +82,13 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Status Limit</label>
                             <select class="form-control" name="status">
-                                <option value="Work" <?php echo (isset($model) && $model->status_activate == "Work") ? "selected" : ""?>>Work</option>
-                                <option value="Pending" <?php echo (isset($model) && $model->status_activate == "Pending") ? "selected" : ""?>>Pending</option>
-                                <option value="Limit" <?php echo (isset($model) && $model->status_activate == "Limit") ? "selected" : ""?>>Limit</option>
+                                <option value="Work" <?php echo (isset($model) && $model->status == "Work") ? "selected" : ""?>>Work</option>
+                                <option value="Pending" <?php echo (isset($model) && $model->status == "Pending") ? "selected" : ""?>>Pending</option>
+                                <option value="Limit" <?php echo (isset($model) && $model->status == "Limit") ? "selected" : ""?>>Limit</option>
                             </select>
                         </div>
                     </div>
