@@ -37,10 +37,10 @@
                                 <?php if ($model_orders->total_price > 0) { ?>
                                     <p style="background-color: yellow"><b>Notice: please read carefully before you make the payment</b></p>
                                     <ul>
-                                        <li>1. Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)</li>
-                                        <li>2. Your keys/vouchers/account will be delivery within 1-6 hours. If you can not wait, please do not make the payment.</li>
-                                        <li>3. If you do not receive premium in maximum 8 hours => Please contact us first, do not open the disputed!</li>
-                                        <li>4. Your premium key/account will be delivery by email from <?php echo EMAIL_BUYPREMIUMKEY; ?>. Please make sure to check your inbox and Spam(Junk) box to get the key/account.</li>
+                                        <li>Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)</li>
+                                        <li>Your keys/vouchers/account will be delivery within 1-6 hours. If you can not wait, please do not make the payment.</li>
+                                        <li>If you do not receive premium in maximum 8 hours => Please contact us first, do not open the disputed!</li>
+                                        <li>Your premium key/account will be delivery by email from <?php echo EMAIL_BUYPREMIUMKEY; ?>. Please make sure to check your inbox and Spam(Junk) box to get the key/account.</li>
                                     </ul>
                                 <?php } ?>
                             </td>
@@ -253,19 +253,12 @@
                                             <img alt="Buy premium key com" src="{{url('theme_frontend/image/checkout-paypal.png')}}" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px;" border="0">
                                         </a>
                                     <?php } else { ?>
-                                        <span style="font-weight: bold; color: blue">This order has been charging on your available balance.</span>
+                                        <span style="font-weight: bold; color: blue">This order has already been paid.</span>
                                     <?php } ?>
                                 </p>
                                 <p>
                                     <b style="color: red">After you have paid successfully, please send us the transaction ID and  full name of your PayPal account at this email.</b>
                                 </p>
-                                
-                                <p>
-                                    <span>Our working time is: Mon - Sun / 8:00AM - 11:00PM GTM + 7</span><br>
-                                    <span>If you pay within this period, you will receive premium key/voucher within 30 minute -> 1 hours.</span><br>
-                                    <span>In contrast, you will be received your premium key/voucher within 2->8 hours. We're sorry for the delay in delivery.</span><br>
-                                </p>
-                                <p>If you do not receive premium in maximum 8 hours, please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and send you the premium key/account </p>
                                 <p>
                                     <span>You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.</span>
                                 </p>

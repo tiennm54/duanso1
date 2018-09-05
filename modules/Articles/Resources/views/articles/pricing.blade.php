@@ -50,7 +50,7 @@
                 <p>{!! $model_reviews->description !!}</p>
             <?php } else { ?>
                 <h1 style="margin-top: 0px;">
-                    <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey Reseller get 2% bonus</span>
+                    <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey reseller get 2% bonus</span>
                 </h1> 
             <?php } ?>
         </div>
@@ -61,21 +61,10 @@
         <input id="_token" type="hidden" name="_token" value="{{ csrf_token() }}">
         <?php foreach ($model_type as $key => $item): ?>
             <div class="col-md-4 whole">
-                <div class="type
-                <?php
-                switch ($key) {
-                    case 0 : echo "standard";
-                        break;
-                    case 1 : echo "ultimate";
-                        break;
-                    default : echo "";
-                        break;
-                }
-                ?>">
+                <div class="type"><!--standard, ultimate-->
                     <p>
                         <a style="color: white" href="{{ $item->getUrl() }}" title="Read more...">{{ $item->title }}</a>
                     </p>
-
                 </div>
                 <div class="plan">
                     <div class="header-pricing">
@@ -105,8 +94,13 @@
                     </div>
 
                     <div class="price">
+                        <a onclick="location.href = '<?php echo URL::route("frontend.shoppingCart.buyNow",["id" => $model->id, 'code'=>$model->code ]);?>';"
+                            class="btn btn-success" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
+                            <i class="glyphicon glyphicon-shopping-cart"></i>
+                            BUY NOW
+                        </a>
                         <a onclick="addToCart({{ $item->id }})" class="btn btn-primary" data-toggle="modal" data-target="#myModal" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
-                            <img src="{{url('theme_frontend/image/cart-1.png')}}" alt="Add to cart">
+                            <i class="glyphicon glyphicon-shopping-cart"></i>
                             ADD TO CART
                         </a>
                     </div>

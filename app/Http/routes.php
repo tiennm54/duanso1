@@ -2,7 +2,7 @@
 define('HTTP','http://');
 define('DOMAIN_SITE','buypremiumkey.com');
 define('NAME_COMPANY','BuyPremiumKey Authorized Reseller');
-define('EMAIL_BUYPREMIUMKEY','buypremiumkey@gmail.com');
+define('EMAIL_BUYPREMIUMKEY','support@buypremiumkey.com');
 define('EMAIL_RECEIVE_ORDER','driverxheqadni@gmail.com');
 define('EMAIL_RECEIVE_AMAZON','driverxheqadni@gmail.com');
 define('EMAIL_RECEIVE_VISA','driverxheqadni@gmail.com');

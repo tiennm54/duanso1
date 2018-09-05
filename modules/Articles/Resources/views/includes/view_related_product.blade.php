@@ -11,8 +11,8 @@
                                  title="{{ $item->title }}" class="img-responsive">
                         </a>
                     </div>
-                    <div class="caption">
-                        <h4>
+                    <div class="caption" style="text-align: center">
+                        <h4 style="min-height: 30px">
                             <a href="{{ $item->getUrl() }}">{{ $item->title }}</a>
                         </h4>
                         <p class="">
@@ -30,15 +30,13 @@
                     </div>
                     <div class="button-group">
 
-                        <button type="button" onclick="addToCart({{ $item->id }})" data-toggle="modal" data-target="#myModal"
-                                style="height: 40px" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
-                            <span class="hidden-xs hidden-sm hidden-md">Add to Cart</span>
-                            <i class="fa fa-shopping-cart"></i>
+                        <button type="button" onclick="location.href = '<?php echo URL::route("frontend.shoppingCart.buyNow",["id" => $model->id, 'code'=>$model->code ]);?>';" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
+                            <span class="hidden-xs hidden-sm hidden-md">Buy Now</span>
                         </button>
 
-                        <button type="button" data-toggle="tooltip" title="" onclick="addWishlist({{ $item->id }});"
-                                data-original-title="Add to Wish List" style="height: 40px">
-                            <i class="fa fa-heart"></i>
+                        <button type="button" onclick="addToCart({{ $item->id }})" data-toggle="modal" data-target="#myModal"
+                            <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
+                            <span class="hidden-xs hidden-sm hidden-md">Add to Cart</span>
                         </button>
 
                     </div>

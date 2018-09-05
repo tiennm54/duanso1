@@ -26,10 +26,10 @@
                             </ul>
                             <div id="product">
                                 <div class="form-group">
-                                    <button type="button" id="button-cart" data-loading-text="Loading..." onclick="addToCart({{ $model->id }})" data-toggle="modal" data-target="#myModal"
-                                            class="btn btn-primary btn-lg btn-block"  <?php echo ($model->status_stock == 0) ? "disabled" : "" ?>>
-                                        <i class="glyphicon glyphicon-shopping-cart"></i> Add to Cart
-                                    </button>
+                                    <a onclick="location.href = '<?php echo URL::route("frontend.shoppingCart.buyNow",["id" => $model->id, 'code'=>$model->code ]);?>';"
+                                        class="btn btn-success btn-lg btn-block"  <?php echo ($model->status_stock == 0) ? "disabled" : "" ?>>
+                                        <i class="glyphicon glyphicon-shopping-cart"></i> BUY NOW
+                                    </a>
                                 </div>
                             </div>
                         </div>

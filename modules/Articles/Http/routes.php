@@ -20,6 +20,10 @@ Route::group(['prefix' => 'shoppingCart', 'namespace' => 'Modules\Articles\Http\
     Route::post('emptyCart',['as'=>'frontend.shoppingCart.emptyCart','uses'=>'ShoppingCartController@emptyCart']);
 });
 
+Route::group(['prefix' => 'onestepcheckout', 'namespace' => 'Modules\Articles\Http\Controllers'], function(){
+    Route::get('{id}-{code?}',['as'=>'frontend.shoppingCart.buyNow','uses'=>'ShoppingCartController@buyNow']);
+});
+        
 Route::group(['prefix' => 'checkout', 'namespace' => 'Modules\Articles\Http\Controllers'], function()
 {
     Route::get('index.html',['as'=>'frontend.checkout.index','uses'=>'CheckoutController@index']);
@@ -27,15 +31,11 @@ Route::group(['prefix' => 'checkout', 'namespace' => 'Modules\Articles\Http\Cont
     Route::post('changeQuantity',['as'=>'frontend.checkout.changeQuantity','uses'=>'CheckoutController@changeQuantity']);
     Route::post('deleteProductCheckout',['as'=>'frontend.checkout.deleteProductCheckout','uses'=>'CheckoutController@deleteProductCheckout']);
     Route::post('chooseBonusMoney',['as'=>'frontend.checkout.chooseBonusMoney','uses'=>'CheckoutController@chooseBonusMoney']);
-
     Route::post('confirmOrder',['as'=>'frontend.checkout.confirmOrder','uses'=>'CheckoutController@confirmOrder']);
     Route::get('confirmOrder',['as'=>'frontend.checkout.getConfirmOrder','uses'=>'CheckoutController@getConfirmOrder']);
-
     Route::get('success/{email?}/{password?}',['as'=>'frontend.checkout.success','uses'=>'CheckoutController@checkoutSuccess']);
     Route::get('sendMail',['as'=>'frontend.checkout.sendMail','uses'=>'CheckoutController@sendMail']);
-    
     Route::post('createOrderVisa',['as'=>'frontend.checkout.createOrderVisa','uses'=>'CheckoutController@createOrderVisa']);
-
 });
 
 
