@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="price">
-                        <a onclick="location.href = '<?php echo URL::route("frontend.shoppingCart.buyNow",["id" => $model->id, 'code'=>$model->code ]);?>';"
+                        <a onclick="location.href = '<?php echo $item->getUrlBuyNow(); ?>';"
                             class="btn btn-success" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
                             <i class="glyphicon glyphicon-shopping-cart"></i>
                             BUY NOW

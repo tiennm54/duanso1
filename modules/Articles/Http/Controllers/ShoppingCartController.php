@@ -86,7 +86,7 @@ class ShoppingCartController extends CheckMemberController {
                 return view('articles::append.addToCart', compact('data_product', 'subTotal', 'quantityItem'));
             }
         }
-        return redirect()->route('articles.index');
+        return redirect()->route('frontend.articles.index');
     }
 
     public function buyNow($id) {
@@ -102,7 +102,7 @@ class ShoppingCartController extends CheckMemberController {
             $obj_shopping_cart->setSession($array_orders);
             return redirect()->route('frontend.checkout.index');
         }
-        return redirect()->route('articles.index');
+        return redirect()->route('frontend.articles.index');
     }
 
     public function deleteSessionOrderForGuest($model_articles_type) {
@@ -157,7 +157,7 @@ class ShoppingCartController extends CheckMemberController {
             }
         }
 
-        return redirect()->route('articles.index');
+        return redirect()->route('frontend.articles.index');
     }
 
     public function changeNumberProductOrderForGuest($model_articles_type, $number) {
@@ -219,7 +219,7 @@ class ShoppingCartController extends CheckMemberController {
             }
         }
 
-        return redirect()->route('articles.index');
+        return redirect()->route('frontend.articles.index');
     }
 
     //Action: Click vào giở hàng trên header

@@ -30,7 +30,7 @@
                     </div>
                     <div class="button-group">
 
-                        <button type="button" onclick="location.href = '<?php echo URL::route("frontend.shoppingCart.buyNow",["id" => $model->id, 'code'=>$model->code ]);?>';" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
+                        <button type="button" onclick="location.href = '<?php echo $item->getUrlBuyNow(); ?>';" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
                             <span class="hidden-xs hidden-sm hidden-md">Buy Now</span>
                         </button>
 

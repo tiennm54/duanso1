@@ -26,7 +26,7 @@
                             </ul>
                             <div id="product">
                                 <div class="form-group">
-                                    <a onclick="location.href = '<?php echo URL::route("frontend.shoppingCart.buyNow",["id" => $model->id, 'code'=>$model->code ]);?>';"
+                                    <a onclick="location.href = '<?php echo $model->getUrlBuyNow();?>';"
                                         class="btn btn-success btn-lg btn-block"  <?php echo ($model->status_stock == 0) ? "disabled" : "" ?>>
                                         <i class="glyphicon glyphicon-shopping-cart"></i> BUY NOW
                                     </a>

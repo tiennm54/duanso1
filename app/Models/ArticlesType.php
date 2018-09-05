@@ -22,4 +22,8 @@ class ArticlesType extends Model{
     public function getUrl(){
         return URL::route('frontend.articles.view', ['id' => $this->id, 'url' => $this->url_title.'.html' ]);
     }
+    
+    public function getUrlBuyNow(){
+        return URL::route("frontend.shoppingCart.buyNow",["id" => $this->id, 'code'=>$this->code ]);
+    }
 }
