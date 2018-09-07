@@ -57,6 +57,9 @@
 </div>
 
 <style>
+    .media-heading{
+        max-width: 70px;
+    }
     .no-blockshadown {
         background-color: transparent;
         border-radius: 0;
