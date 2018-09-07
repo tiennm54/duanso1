@@ -11,7 +11,9 @@
 
         <div class="row">
             <div id="content" class="col-sm-12">
-                <h1>{{ $model->title }}</h1>
+                <div class="page-title">
+                    <h1>{{ $model->title }}</h1>
+                </div>
                 <p>
                     {!! $model->description !!}
                 </p>

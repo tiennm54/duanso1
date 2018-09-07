@@ -71,6 +71,7 @@
     @include('frontend.header')
     @include('frontend.nav_bar')
     @yield('content')
+    @include('frontend.full_wrapper')
     @include('frontend.footer')
 
 </body>

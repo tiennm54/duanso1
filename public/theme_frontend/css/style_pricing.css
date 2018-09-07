@@ -160,13 +160,13 @@ ul{
     right: -15px;
     position: absolute;
     top: 17px;
-    width: 127px;
+    width: 120px;
     background-size: 60%;
 }
 
 @media (max-width: 600px) {
     .sale-box{
-        right: -40px;
+        right: -50px;
     }
 }
 

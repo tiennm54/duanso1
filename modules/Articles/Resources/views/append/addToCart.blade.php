@@ -35,7 +35,6 @@
 <script>
     //Hàm thực hiện để tính tổng số tiền cần thanh toán cho các sản phẩm
     $(document).ready(function(){
-        console.log("Update total");
         $("#sub-total-order").html("$" + "{{ $subTotal }}");
         $("#quantity_item").html({{ $quantityItem }});
         $("#sub-total-popup").html("$" + "{{ $subTotal }}");

@@ -7,7 +7,6 @@
         <li><a href="{{ $model->getUrlPricing() }}">{{ $model->title }}</a></li>
     </ul>
 
-
     <div class="row">
         <div class="col-md-4">
             <?php
@@ -36,7 +35,7 @@
                 </li>
             </ul>
             <?php if (isset($model_reviews) && $model_reviews != null) { ?>
-                <a href="<?php echo $model_reviews->getUrl(); ?>" class="btn btn-primary btn-lg btn-block">
+                <a href="<?php echo $model_reviews->getUrl(); ?>" class="btn btn-success btn-lg btn-block">
                     <i class="glyphicon glyphicon-star"></i>
                     Reviews {{ $model->title }}
                 </a>
@@ -44,14 +43,19 @@
         </div>
         <div class="col-md-8">
             <?php if ($model_reviews != null && $model_reviews->description != null) { ?>
-                <h1 style="margin-top: 0px;">
-                    <span style="font-size: 26px;">{{ $model->title }} Premium Features</span>
-                </h1> 
+                <div class="page-title">
+                    <h1 style="margin-top: 0px;">
+                        {{ $model->title }} Premium Features
+                    </h1> 
+                </div>
                 <p>{!! $model_reviews->description !!}</p>
             <?php } else { ?>
-                <h1 style="margin-top: 0px;">
-                    <span>Buy {{ $model->title }} Premium Key at BuyPremiumKey reseller get 2% bonus</span>
-                </h1> 
+                <div class="page-title">
+                    <h1>
+                        Buy {{ $model->title }} Premium Key
+                    </h1> 
+                </div>
+                <p>Buy {{ $model->title }} Premium Key, Premium Account at Buypremiumkey.com, you will receive 1% to 2% bonus for your order.</p>
             <?php } ?>
         </div>
     </div>
@@ -95,7 +99,8 @@
 
                     <div class="price">
                         <a onclick="location.href = '<?php echo $item->getUrlBuyNow(); ?>';"
-                            class="btn btn-success" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
+                           class="btn btn-success" <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>
+                           style="min-width: 115px;">
                             <i class="glyphicon glyphicon-shopping-cart"></i>
                             BUY NOW
                         </a>
@@ -152,18 +157,12 @@
             </div>
         </div>
     </div>
-    <br/>
-    <a href="{{ $model->getUrlPricing() }}">
-        <img src="{{url('images/icon/step-buy-key.png')}}" alt="step buy premium key" width="100%">
-    </a>
 
-    <hr/>
+    <div class="page-title">
+        <h1>List premium key</h1>
+    </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <h2 style="color: #1f90bb">Product List</h2>
-        </div>
-
+    <div class="row" style="margin-bottom: 20px">
         <?php if (count($model_all_product)) { ?>
             <?php foreach ($model_all_product as $item_product): ?>
                 <div class="col-md-3">
@@ -171,10 +170,7 @@
                 </div>
             <?php endforeach; ?>
         <?php } ?>
-
     </div>
-
-
 </div>
 @stop
 

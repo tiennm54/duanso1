@@ -5,6 +5,7 @@ namespace Modules\Articles\Http\Controllers;
 use App\Models\Articles;
 use App\Models\ArticlesType;
 use App\Models\UserReview;
+use App\Models\ArticlesReviews;
 use Modules\Articles\Http\Requests\ReviewProductRequest;
 use Modules\Users\Http\Controllers\CheckMemberController;
 use URL;
@@ -34,20 +35,27 @@ class ArticlesDetailController extends CheckMemberController {
     }
 
     public function view($id = 0) {
-
-        $attributes = [
-            'data-theme' => 'light',
-            'data-type' => 'image',
-        ];
-
         $model = ArticlesType::find($id);
         $model_user = $this->checkMember();
         if ($model) {
             $this->seoView($model);
-            $sum_rate = $this->sumRateProduct($model);
             $model_related = ArticlesType::where("articles_id", "=", $model->articles_id)->where("id", "!=", $model->id)->get();
-            $model_list_product = Articles::where("status_disable", "=", 0)->where("status_stock", 1)->orderBy("title", "ASC")->get();
-            return view('articles::articles.view', compact("model", "model_related", "model_user", "attributes", "sum_rate", "model_list_product"));
+            $model_list_product = Articles::where("status_disable", "=", 0)
+                    ->where("status_stock", 1)
+                    ->orderBy("order_count", "DESC")
+                    ->orderBy("title", "ASC")
+                    ->limit(30)
+                    ->get();
+            
+            $model_reviews = ArticlesReviews::where("articles_id",$model->getArticles->id)->first();
+            
+            return view('articles::articles.view', compact(
+                    "model", 
+                    "model_related", 
+                    "model_user", 
+                    "model_list_product",
+                    "model_reviews"
+                    ));
         }
         return redirect()->route('frontend.articles.index');
     }

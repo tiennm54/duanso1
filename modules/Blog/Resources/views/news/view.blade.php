@@ -19,7 +19,9 @@
     <div class="row">
         @include('blog::news.includes.list_cate')
         <div id="content" class="col-sm-9">
-            <h1><span style="color: threedshadow">{{ $model->title }}</span></h1>
+            <div class="page-title">
+                <h1>{{ $model->title }}</h1>
+            </div>
             <p>
                 <span><?php echo date("F j, Y, g:i a", strtotime($model->created_at)); ?></span><br/>
                 <span>Category: <a href="{{ $model->getCategory->getUrl() }}" style="cursor: pointer"><?php echo $model->getCategory->name; ?></a></span>
@@ -52,20 +54,22 @@
             </div>
         </div>
     </div>
-    
-    <div class="row">
+
+    <div class="row" style="margin-bottom: 20px">
         <?php if (count($model_related)) { ?>
-        <div class="col-md-12">
-            <h2>Related articles</h2>
-        </div>
+            <div class="col-md-12">
+                <div class="page-title">
+                    <h1>Related articles</h1>
+                </div>
+            </div>
             <?php foreach ($model_related as $item_article): ?>
                 <div class="col-md-6">
                     <a href="{{ $item_article->getUrl() }}">{{ $item_article->title }}</a>
                 </div>
             <?php endforeach; ?>
+        <?php } ?>
     </div>
-    <?php } ?>
-    
+
 </div>
 
 @include('blog::news.includes.modal_reply')

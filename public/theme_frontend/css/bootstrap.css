@@ -4057,8 +4057,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .tab-content > .tab-pane {
     display: none;
-    border: 1px solid #ddd;
-    padding: 20px;
+    /*border: 1px solid #ddd;
+    padding: 20px;*/
 }
 .tab-content > .active {
     display: block;

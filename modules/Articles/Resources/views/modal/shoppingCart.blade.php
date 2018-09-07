@@ -27,7 +27,7 @@
             </div>
 
             <div class="modal-footer">
-                <a href="{{ URL::route('frontend.checkout.index') }}" type="button" class="btn btn-primary">Checkout</a>
+                <a href="{{ URL::route('frontend.checkout.index') }}" type="button" class="btn btn-success">Checkout</a>
                 <a href="{{ URL::route('frontend.articles.index') }}" type="button" class="btn btn-primary pull-left">Continue shopping</a>
             </div>
         </div>

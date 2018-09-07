@@ -4,35 +4,34 @@
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
-            <li><a href="#">Checkout</a></li>
+            <li><a>Checkout</a></li>
         </ul>
+        @include('frontend.banner')
         @include('validator.flash-message')
-        <h2>Checkout Premium Key</h2>
         <?php if (Auth::guest()): ?>
             <p>
-                <span>Fill in the Fields below to complete your purchase!</span>
-                <span>Already registered ? <a class="" href="{{ URL::route('users.getLogin') }}"> Login here</a></span>
+                <span style="font-weight: bold">Already registered ? <a class="" href="{{ URL::route('users.getLogin') }}"> Login here</a></span>
             </p>
-
         <?php endif; ?>
+        <div class="row">
+            <form method="post" action="<?php echo URL::route('frontend.checkout.confirmOrder'); ?>" id="form-checkout-id">
 
-        <form method="post" action="<?php echo URL::route('frontend.checkout.confirmOrder'); ?>" id="form-checkout-id">
+                <input type=hidden name=member value="buypremiumkey">
+                <input type=hidden name=id value="1207">
+                <input id="visa-total-price" type=hidden name=price value="{{ $totalOrder['total'] }}">
+                <input id="visa-order-id" type=hidden name=orderid value="0"><!--ORDER ID-->
+                <input id="visa-order-no" type="hidden" name=name value=""><!--ORDER NO-->
+                <input type=hidden name=tax value="0">
+                <input type=hidden name=ureturn value="http://buypremiumkey.com/checkout-visa/success">
+                <input type=hidden name=unotify value="http://buypremiumkey.com/checkout-visa/callback">
+                <input type=hidden name=ucancel value="http://buypremiumkey.com/checkout-visa/failure">
 
-            <input type=hidden name=member value="buypremiumkey">
-            <input type=hidden name=id value="1207">
-            <input id="visa-total-price" type=hidden name=price value="{{ $totalOrder['total'] }}">
-            <input id="visa-order-id" type=hidden name=orderid value="0"><!--ORDER ID-->
-            <input id="visa-order-no" type="hidden" name=name value=""><!--ORDER NO-->
-            <input type=hidden name=tax value="0">
-            <input type=hidden name=ureturn value="http://buypremiumkey.com/checkout-visa/success">
-            <input type=hidden name=unotify value="http://buypremiumkey.com/checkout-visa/callback">
-            <input type=hidden name=ucancel value="http://buypremiumkey.com/checkout-visa/failure">
+                @include('articles::checkout.includes.billing_information')
+                @include('articles::checkout.includes.payment_method')
+                @include('articles::checkout.includes.review_order')
 
-            @include('articles::checkout.includes.billing_information')
-            @include('articles::checkout.includes.payment_method')
-            @include('articles::checkout.includes.review_order')
-
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -99,7 +98,7 @@
             var lastName = $("#last_name").val();
             var checkUseBonus = $("#cb-my-bonus").is(':checked');
             var userBonus = 0;
-            if(checkUseBonus == true){
+            if (checkUseBonus == true) {
                 userBonus = 1;
             }
 

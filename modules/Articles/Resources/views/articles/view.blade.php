@@ -7,15 +7,15 @@
         <li><a href="{{ $model->getArticles->getUrlPricing() }}">{{ $model->getArticles->title }}</a></li>
         <li><a href="{{ $model->getUrl() }}">{{ $model->title }}</a></li>
     </ul>
-
+    @include('frontend.banner')
+    @include('validator.validator-input')
     @include('validator.flash-message')
-
     <div class="row">
         <div id="content" class="col-sm-12">
             <div class="row">
                 <div class="col-sm-9">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-5">
                             <ul class="product-thumb">
                                 <li>
                                     <a href="{{ $model->getArticles->getUrlPricing() }}">
@@ -34,10 +34,9 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
-
+                        <div class="col-sm-7">
                             <ul class="list-unstyled">
-                                <li>Brand: <a href="{{ $model->getArticles->getUrlPricing() }}"> {{ $model->getArticles->title }}</a></li>
+                                <li>Brand: <b><a href="{{ $model->getArticles->getUrlPricing() }}"> {{ $model->getArticles->title }}</a></b></li>
                                 <li>Product Code: <b>{{ $model->code }}</b></li>
                                 <li>Availability:
                                     <?php if ($model->status_stock == 1) { ?>
@@ -63,18 +62,22 @@
                                     </h2>
                                 </li>
                             </ul>
+                            
                             <div class="rating">
+                                <?php 
+                                    $sum_rate = 0;
+                                    if(count($model_reviews) != 0){
+                                        $sum_rate = $model_reviews->getRate();
+                                    }
+                                ?>
                                 <p>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 1) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 2) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 5) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-
-                                    <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">{{ count($model->getReview) }} reviews</a> /
-                                    <a href="" onclick="$('a[href=\'#tab-review\']').trigger('click'); return false;">Write a review</a>
+                                    <a href="<?php echo (count($model_reviews) != 0) ? $model_reviews->getUrl() : "#"; ?>"> Write a review</a>
                                 </p>
-
                             </div>
                             <hr/>
                             <div>
@@ -92,11 +95,10 @@
                         </div>
                     </div>
 
-                    @include('validator.validator-input')
+                    
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
                         <li><a href="#tab-specific" data-toggle="tab">Specification</a></li>
-                        <li><a href="#tab-review" data-toggle="tab">Reviews ({{ count( $model->getReview ) }})</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -106,10 +108,6 @@
 
                         <div class="tab-pane" id="tab-specific">
                             @include('articles::includes.view_tab_specific')
-                        </div>
-
-                        <div class="tab-pane" id="tab-review">
-                            @include('articles::includes.view_tab_review', compact('model','attributes'))
                         </div>
                     </div>
                 </div>

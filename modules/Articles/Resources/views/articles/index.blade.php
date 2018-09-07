@@ -1,12 +1,10 @@
 @extends('frontend.master')
-
 @section('content')
-
 <div class="container">
+    @include('frontend.banner')
     @include('validator.flash-message')
     <div class="row">
         <div id="content" class="col-sm-12">
-
             <div class="row">
                 <?php
                 if (count($model) == 0) {
@@ -34,7 +32,7 @@
 
             <div class="row">
                 <div class="text-center">
-                    <a href="{{ URL::route('frontend.articles.getListProduct') }}" class="btn btn-primary">SORT PRODUCTS A -> Z</a>
+                    <a href="{{ URL::route('frontend.articles.getListProduct') }}" class="btn btn-success" style="margin-bottom: 20px">SORT BY NAME A to Z</a>
                 </div>
             </div>
         </div>

@@ -10,6 +10,9 @@
             
             @include('validator.flash-message')
             <div id="content" class="col-sm-9">
+                <div class="page-title">
+                    <h1>CONTACT US</h1>
+                </div>
                 <form action="{{ URL::route('users.contact.postContact') }}" method="post" enctype="multipart/form-data" class="form-horizontal">
                     <fieldset>
                         <div class="form-group required">
@@ -51,7 +54,7 @@
                     <div class="buttons clearfix">
                         <div class="pull-left"><a href="{{ URL::route('users.getLogin') }}" class="btn btn-default">Back</a></div>
                         <div class="pull-right">
-                            <input type="submit" value="Continue" class="btn btn-primary">
+                            <input type="submit" value="Continue" class="btn btn-success">
                         </div>
                     </div>
                 </form>

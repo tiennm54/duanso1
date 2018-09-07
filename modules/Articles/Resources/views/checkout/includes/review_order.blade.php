@@ -33,18 +33,14 @@
                                 <a class="btn btn-danger" onclick="deleteProductCheckout(<?php echo $item['id']; ?>)"><i class="glyphicon glyphicon-trash"></i></a>
                             </td>
                         </tr>
-
                     <?php endforeach; ?>
-
+                        
                 </tbody>
             </table>
-
         </div>
 
         <div class="form-group">
-
             <table class="table table-bordered">
-
                 <tbody>
                     <tr>
                         <td>Sub-Total </td>
@@ -76,16 +72,14 @@
             </label>
 
             <a onclick="saveOrder()" 
-               class="btn btn-primary pull-right" 
+               class="btn btn-success pull-right" 
                id="confirm_order" 
                style="margin-top: 20px"
                data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">
                 Confirm Order
             </a>
 
-
         </div>
-
     </div>
 </div>
 

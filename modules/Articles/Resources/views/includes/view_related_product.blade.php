@@ -1,6 +1,7 @@
 <?php if ($model_related): ?>
-    <hr/>
-    <h2>Related Products</h2>
+    <div class="page-title">
+        <h1>Related Products</h1>
+    </div>
     <div class="row">
         <?php foreach ($model_related as $item): ?>
             <div class="col-xs-6 col-sm-3">
@@ -35,7 +36,7 @@
                         </button>
 
                         <button type="button" onclick="addToCart({{ $item->id }})" data-toggle="modal" data-target="#myModal"
-                            <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
+                                <?php echo ($item->status_stock == 0) ? "disabled" : "" ?>>
                             <span class="hidden-xs hidden-sm hidden-md">Add to Cart</span>
                         </button>
 

@@ -4,14 +4,14 @@
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="{{ URL::route('frontend.articles.index') }}"><i class="fa fa-home"></i></a></li>
-            <li><a>Review Website</a></li>
+            <li><a>Review website</a></li>
         </ul>
+        @include('frontend.banner')
+        @include('validator.validator-input')
         @include('validator.flash-message')
         <div id="content" class="col-sm-9">
-            <div>
-                <p style="font-size: 25px">
-                    <b>Review BuyPremiumKey.com Official Reseller</b>
-                </p>
+            <div class="page-title">
+                <h1>Review BuyPremiumKey.com Official Reseller</h1>
             </div>
             <div class="view-rating">
                 <span >
