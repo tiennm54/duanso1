@@ -14,6 +14,7 @@
                 <ul class="list-unstyled">
                     <li><a href="https://buypremiumkey.com/faq/category-2/how-to-activate-premium-key.html">How to activate premium key</a></li>
                     <li><a href="{{ URL::route('users.contact.getContact') }}">Contact Us</a></li>
+                    <li><a href="{{URL::route('users.feedback.getFeedBack')}}">Comments about this website</a></li>
                     <li><a href="{{ URL::route('users.guestOrder.guestGetKey') }}">Get Premium Key</a></li>
                     <li><a href="{{ URL::route('users.review.index') }}">Reviews</a></li>
                     <li><a href="{{ URL::route('frontend.sitemap.index') }}">Site Map</a></li>

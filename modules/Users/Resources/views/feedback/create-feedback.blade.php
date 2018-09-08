@@ -9,9 +9,11 @@
         </ul>
         @include('validator.flash-message')
         <div id="content" class="col-sm-9">
-            <p style="font-size: 18px; color: blue">
-                Please let us know your feedback so that we can serve you better.
-                If our web site is bug, please send the bug's image to us, we will fix it immediately.
+            <div class="page-title">
+                <h1>FEED BACK</h1>
+            </div>
+            <p>
+                Please let us know your comments about this website. If our website is faulty, please let us know here.<br>
                 Thank you so much!
             </p>
             <hr/>
@@ -32,7 +34,7 @@
                             {!! $errors->first('description','<span class="control-label color-red" style="color: red">:message</span>') !!}
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Image</label>
                         <div class="col-sm-10">
@@ -54,7 +56,7 @@
 
                 <div class="buttons clearfix">
                     <div class="pull-right">
-                        <input type="submit" value="Continue" class="btn btn-primary">
+                        <input type="submit" value="Continue" class="btn btn-success">
                     </div>
                 </div>
             </form>
