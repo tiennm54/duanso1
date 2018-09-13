@@ -300,6 +300,11 @@ class CheckoutController extends ShoppingCartController {
                         }
 
                         if ($model_user != null) {//TÌM THẤY NGƯỜI DÙNG TỒN TẠI TRÊN HỆ THỐNG
+                            if ($model_user->status_delete == 1) {
+                                $request->session()->flash('alert-warning', 'Warning: Your account has been locked!');
+                                return back();
+                            }
+
                             $money_user = $model_user->getMoneyForUser();
                             if (isset($data["use_my_bonus"]) && $model_payment_type->code != "BONUS") {
                                 $used_bonus = $money_user;
@@ -352,7 +357,8 @@ class CheckoutController extends ShoppingCartController {
                                 }
 
                                 DB::commit();
-                                return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
+                                return redirect()->route('frontend.invoice.view', ['id' => $model_orders->id, 'email' => $model_orders->email]);
+                                //return redirect()->route('frontend.checkout.success', ['email' => $model_user->email, "password" => $password]);
                             } else {
                                 $request->session()->flash('alert-warning', 'Warning: Your account has been lock! Please use another email to purchase your product.');
                             }
@@ -425,10 +431,10 @@ class CheckoutController extends ShoppingCartController {
     public function createOrderVisa(Request $request) {
         DB::beginTransaction();
         $data = $request->all();
-        
+
         Log::info("VISA CHECKOUT");
         Log::info($data);
-         
+
         $array_orders = Session::get('array_orders', []);
         $used_bonus = 0;
         $password = "";

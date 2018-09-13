@@ -54,3 +54,8 @@ Route::group(['prefix' => 'checkout-visa', 'namespace' => 'Modules\Articles\Http
     Route::post('callback',['as'=>'frontend.checkoutVisa.callback','uses'=>'VisaController@checkoutCallback']);
     Route::get('callback',['as'=>'frontend.checkoutVisa.getCallback','uses'=>'VisaController@getCallback']);
 });
+
+
+Route::group(['prefix' => 'invoice', 'namespace' => 'Modules\Articles\Http\Controllers'], function() {
+    Route::get('view/{id}/{email}',['as'=>'frontend.invoice.view','uses'=>'InvoiceController@view']);
+});

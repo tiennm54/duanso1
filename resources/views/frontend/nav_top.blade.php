@@ -15,7 +15,7 @@
             var checkWorking = $(".working_class").is(":hidden");
             var checkOutWorking = $(".out_business_class").is(":hidden");
 
-            if (h >= 7 && h <= 23) {
+            if (h >= 7 && h <= 22) {
                 if (checkWorking == true) { // dang an
                     $(".working_class").show();
                 }

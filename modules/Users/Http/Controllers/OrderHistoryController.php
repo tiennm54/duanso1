@@ -37,6 +37,7 @@ class OrderHistoryController extends CheckMemberController {
     }
 
     public function view($id, Request $request) {
+        SeoPage::seoPage($this);
         $model_user = $this->checkMember();
         if ($model_user) {
             $model = UserOrders::find($id);

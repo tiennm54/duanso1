@@ -2,15 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="project_wifi_2.1">
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/resources/views/frontend/banner.blade.php</file>
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/public/theme_frontend/css/stylesheet.css</file>
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/public/theme_frontend/css/star-rating.css</file>
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/resources/views/frontend/nav_bar.blade.php</file>
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/resources/views/frontend/nav_top.blade.php</file>
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/resources/views/frontend/header.blade.php</file>
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/app/Providers/AppServiceProvider.php</file>
-            <file>file:/D:/Dropbox/Dropbox/Project/buypremiumkey/duanso1/app/Models/ArticlesReviews.php</file>
-        </group>
+        <group name="project_wifi_2.1"/>
     </open-files>
 </project-private>

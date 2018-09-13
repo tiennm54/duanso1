@@ -67,7 +67,13 @@
                     <tbody>
                         <tr>
                             <td class="text-left" style="width: 50%;">
-                                <p>Invoice: <span style="font-weight: bold">{{ $model->order_no }}</span></p>
+                                <p>Invoice: 
+                                    <span style="font-weight: bold">
+                                        <a href="<?php echo URL::route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]) ?>" title="View Invoice Detail">
+                                            #{{ $model->order_no }}
+                                        </a>
+                                    </span>
+                                </p>
                                 <p>Date Added: <span style="font-weight: bold">{{ $model->created_at }}</span></p>
                                 <p>Order ID: <span style="font-weight: bold">#{{ $model->id }}</span></p>
                             </td>
