@@ -85,6 +85,25 @@ class CheckoutController extends ShoppingCartController {
         });
     }
 
+    function getLocationInfoByIp() {
+        $client = @$_SERVER['HTTP_CLIENT_IP'];
+        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+        $remote = @$_SERVER['REMOTE_ADDR'];
+
+        if (filter_var($client, FILTER_VALIDATE_IP)) {
+            $ip = $client;
+        } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
+            $ip = $forward;
+        } else {
+            $ip = $remote;
+        }
+        $ip_data = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
+        if ($ip_data && $ip_data->geoplugin_countryName != null) {
+            return $ip_data->geoplugin_countryCode;
+        }
+        return "";
+    }
+
     ///MUA SẢN PHẨM
     public function index(Request $request) {
         SeoPage::seoPage($this);
@@ -106,8 +125,17 @@ class CheckoutController extends ShoppingCartController {
         }
 
         if (count($data) != 0) {
+            
+            $user_country = $this->getLocationInfoByIp();
+            
             return view('articles::checkout.checkout', compact(
-                            "data", "model_payment_type", "model_terms", "model_user", 'totalOrder', 'money_user'
+                    "data", 
+                    "model_payment_type", 
+                    "model_terms", 
+                    "model_user", 
+                    'totalOrder', 
+                    'money_user',
+                    'user_country'
             ));
         } else {
             return view('articles::checkout.checkout-none');
