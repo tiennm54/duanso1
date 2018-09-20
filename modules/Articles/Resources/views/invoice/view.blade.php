@@ -76,6 +76,10 @@
                                     @include('articles::invoice.includes.checkout_perfect')
                                 <?php } ?>
 
+                                <?php if ($model->payment_type->code == "BANK-TRANSFER") { ?>
+                                    @include('articles::invoice.includes.checkout_banktransfer')
+                                <?php } ?>
+
                             </td>
                         </tr>
                     </tbody>
