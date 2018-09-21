@@ -5,7 +5,7 @@
     + Account holder : <b>NGUYEN MINH TIEN</b>
 </p>
 <p>
-    + Account Number : <b>0491000091459</b>
+    + Account Number <span style="color: red">*</span>: <b>0491000091459</b>
 </p>
 
 <p>

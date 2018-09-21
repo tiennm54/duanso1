@@ -125,17 +125,11 @@ class CheckoutController extends ShoppingCartController {
         }
 
         if (count($data) != 0) {
-            
+
             $user_country = $this->getLocationInfoByIp();
-            
+
             return view('articles::checkout.checkout', compact(
-                    "data", 
-                    "model_payment_type", 
-                    "model_terms", 
-                    "model_user", 
-                    'totalOrder', 
-                    'money_user',
-                    'user_country'
+                            "data", "model_payment_type", "model_terms", "model_user", 'totalOrder', 'money_user', 'user_country'
             ));
         } else {
             return view('articles::checkout.checkout-none');
@@ -196,7 +190,7 @@ class CheckoutController extends ShoppingCartController {
             "payment_name" => $payment_name,
             "payment_code" => $payment_code,
             "used_bonus" => $charges_bonus,
-            "total" => $total
+            "total" => round($total,2)
         );
         return $return_data;
     }
@@ -291,6 +285,14 @@ class CheckoutController extends ShoppingCartController {
         return redirect()->route('frontend.checkout.index');
     }
 
+    public function checkEmailPaypal($email) {
+        if (strpos(strtolower($email), 'paypal') !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function confirmOrder(CheckoutRequest $request) {
         if (isset($request)) {
             DB::beginTransaction();
@@ -302,6 +304,16 @@ class CheckoutController extends ShoppingCartController {
             if (isset($data["payments_type_id"])) {
                 $model_payment_type = PaymentType::find($data["payments_type_id"]);
                 if ($model_payment_type != null) {
+
+                    //Check email paypal kiem tra site
+                    if ($model_payment_type->code == "PAYPAL") {
+                        $check_paypal = $this->checkEmailPaypal($data['email']);
+                        if ($check_paypal == true) {
+                            $request->session()->flash('alert-warning', 'Warning: PayPal payment method is being maintained. Please select another payment method!');
+                            return back();
+                        }
+                    }
+
                     if (count($array_orders) > 0) {
                         $model_user = $this->checkMember();
                         if ($model_user == null) {
