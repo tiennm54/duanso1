@@ -14,7 +14,7 @@
                         </td>
                         <td>
                             <span class="label {{($model->payment_type->code == "BONUS") ? "label-danger" : "label-primary"}}">
-                                {{ $model->payment_type->title }}: <?php echo $model->payment_type->email; ?>
+                                {{ $model->payment_type->title }}: <?php echo ($model->paypalAccount != null) ? $model->paypalAccount->email : "N.A"; ?>
                             </span>
                         </td>
                     </tr>

@@ -166,6 +166,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::get('delete/{id}', ['as' => 'admin.paypal.delete', 'uses' => 'PaypalAccountManagerController@delete']);
         Route::post('sellPaypal', ['as' => 'admin.paypal.sellPaypal', 'uses' => 'PaypalAccountManagerController@sellPaypal']);
         Route::get('index-sell-paypal/{id?}', ['as' => 'admin.sellPaypal.index', 'uses' => 'PaypalAccountManagerController@indexSellPaypal']);
+        Route::post('editPaypalSell', ['as' => 'admin.sellPaypal.editPaypalSell', 'uses' => 'PaypalAccountManagerController@editPaypalSell']);
+        Route::get('index-receive-paypal/{id?}', ['as' => 'admin.paypalReceive.index', 'uses' => 'PaypalAccountManagerController@indexPaypalReceive']);
+        Route::post('editPaypalReceive', ['as' => 'admin.paypalReceive.editPaypalReceive', 'uses' => 'PaypalAccountManagerController@editPaypalReceive']);
     });
     
 });

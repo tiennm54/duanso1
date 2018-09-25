@@ -59,6 +59,7 @@ class BackendPaymentTypeController extends Controller {
 
             $model->save();
             DB::commit();
+            $request->session()->flash('alert-success', 'Success: Tạo phương thức thanh toán thành công !!!');
             return redirect()->route('paymentType.index');
         }
     }
@@ -115,6 +116,7 @@ class BackendPaymentTypeController extends Controller {
 
                 $model->save();
                 DB::commit();
+                $request->session()->flash('alert-success', 'Success: Cập nhật phương thức thanh toán thành công !!!');
                 return back();
             }
         }
@@ -129,6 +131,7 @@ class BackendPaymentTypeController extends Controller {
             }
 
             $model->delete();
+            $request->session()->flash('alert-success', 'Success: Xóa phương thức thanh toán thành công !!!');
             return redirect()->route('paymentType.index');
         }
         return view('errors.503');

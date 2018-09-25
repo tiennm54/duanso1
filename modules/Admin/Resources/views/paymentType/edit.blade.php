@@ -27,6 +27,7 @@
             </div>
             <div class="panel-body">
                 @include('validator.validator-input')
+                @include('validator.flash-message')
                 <form method="POST"  action="" enctype="multipart/form-data" id="form-payment-type">
                     <div class="row">
                         <div class="col-md-3">

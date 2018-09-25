@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\BonusConfig;
 use App\Models\BonusHistory;
 use App\Models\PaymentType;
+use App\Models\PaypalReceive;
 use Carbon\Carbon;
 use DougSisk\CountryState\CountryState;
 use Illuminate\Http\Request;
@@ -32,14 +33,15 @@ class AdminUserOrdersController extends Controller {
         $model = UserOrders::select("*", DB::raw('CONCAT(first_name," ",last_name) AS full_name'));
 
         if (isset($data["order_id"]) && $data["order_id"] != "") {
-            $model = $model->where("order_no", "=", $data["order_id"])->orWhere("id", "=", $data["order_id"]);
+            $model = $model->where("order_no", "=", trim($data["order_id"]))->orWhere("id", "=", trim($data["order_id"]));
         }
         if (isset($data["email"]) && $data["email"] != "") {
-            $model = $model->where("email", "LIKE", "%" . $data["email"] . "%");
+            $model = $model->where("email", "LIKE", "%" . trim($data["email"]) . "%");
         }
         if (isset($data["payment_status"]) && $data["payment_status"] != "") {
             $model = $model->where("payment_status", "=", $data["payment_status"]);
         }
+        
         if (isset($data['used_bonus']) && $data['used_bonus'] != "") {
             $model = $model->where('used_bonus', ">", 0);
         }
@@ -49,7 +51,7 @@ class AdminUserOrdersController extends Controller {
         }
 
         if (isset($data["full_name"]) && $data["full_name"] != "") {
-            $model = $model->where(DB::raw('CONCAT(first_name," ",last_name)'), "LIKE", "%" . $data["full_name"] . "%");
+            $model = $model->where(DB::raw('CONCAT(first_name," ",last_name)'), "LIKE", "%" . trim($data["full_name"]) . "%");
         }
 
         $model = $model->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
@@ -145,6 +147,7 @@ class AdminUserOrdersController extends Controller {
                 if ($check_bonus == 0 || ($model_orders->payment_type->code != "BONUS" && $model_orders->used_bonus == 0)) {
 
                     $this->sendProductEmail($model_orders, $model_key);
+                    
                     foreach ($model_key as $item) {
                         $item->status = "sent";
                         $item->date_sent = Carbon::now();
@@ -159,6 +162,9 @@ class AdminUserOrdersController extends Controller {
 
                     $model_orders_history = new UserOrdersHistory();
                     $model_orders_history->saveHistoryOrder($model_orders);
+                    
+                    $obj_paypal_history = new PaypalReceive();
+                    $obj_paypal_history->saveHistoryReceive($model_orders, $request->status_paypal_receive);
 
                     DB::commit();
                     $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');

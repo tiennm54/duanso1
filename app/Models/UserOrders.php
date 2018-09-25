@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use URL;
+use App\Models\PaymentType;
+use App\Models\PaypalAccount;
 
 class UserOrders extends Model {
 
@@ -17,6 +19,10 @@ class UserOrders extends Model {
 
     public function payment_type() {
         return $this->hasOne('App\Models\PaymentType', 'id', 'payments_type_id');
+    }
+    
+    public function paypalAccount() {
+        return $this->hasOne('App\Models\PaypalAccount', 'id', 'paypal_account_id');
     }
 
     public function orders_detail() {
@@ -47,7 +53,13 @@ class UserOrders extends Model {
                 return null;
             }
         }
-
+        
+        $model_payment_type = PaymentType::find($data["payments_type_id"]);
+        if($model_payment_type == null){
+            return null;
+        }
+        $this->paypal_account_id = $model_payment_type->paypal_account_id;
+        
         $this->users_id = $model_user->id;
         $this->users_roles_id = $model_user->roles_id;
         $this->first_name = $model_user->first_name;

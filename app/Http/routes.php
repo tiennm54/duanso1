@@ -28,6 +28,7 @@ define('SUBJECT_REPLY_COMMENT','[BuyPremiumKey.Com] Your comment has been replie
 define('SUBJECT_EMAIL_BONUS','[BuyPremiumKey.Com] You received a bonus from order #');
 
 define('NUMBER_PAGE',20);
+define('RATE_PAYPAL',4.42);
 
 
 define('VISA_ERROR_PRICE',"We only accept payment with TOTAL PRICE >= $2. Or there was an error processing the payment. Please try again!");
