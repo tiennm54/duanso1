@@ -31,14 +31,12 @@ class PaypalReceive extends Model {
             $this->total_receive = ($model_order->total_price - (($model_order->total_price * RATE_PAYPAL) / 100 + 0.3));
             $this->status = $status;
             $this->save();
-            if ($status == "activate") {
+            if ($status == "completed") {
                 $model_paypal_account->money_activate = $model_paypal_account->money_activate + $this->total_receive;
             }else{
                 $model_paypal_account->money_hold = $model_paypal_account->money_hold + $this->total_receive;
             }
             $model_paypal_account->save();
-        }else{
-            Log::info("Vao day");
         }
     }
 

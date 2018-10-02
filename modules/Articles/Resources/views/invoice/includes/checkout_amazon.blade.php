@@ -11,7 +11,7 @@
     4. Set the "Description" (You must correct this message): <b>{{ $model->order_no }}</b>
 </p>
 <p>
-    5. Your keys/vouchers/account will be delivery within 1-6 hours. 
+    5. Your keys/vouchers/account will be delivery within 1-8 hours. 
     If you do not receive premium in maximum 8 hours => Please contact us 
 </p>
 <p>

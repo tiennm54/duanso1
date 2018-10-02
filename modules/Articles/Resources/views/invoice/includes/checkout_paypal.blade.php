@@ -4,7 +4,7 @@
     1. Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)
 </p>
 <p>
-    2. Your keys/vouchers/account will be delivery within 1-6 hours. If you can not wait, please do not make the payment.
+    2. Your keys/vouchers/account will be delivery within 1-8 hours. If you can not wait, please do not make the payment.
 </p>
 <p>
     3. If you do not receive premium in maximum 8 hours => Please contact us first, <b style="color: red">do not open the disputed!</b>

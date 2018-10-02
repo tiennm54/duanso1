@@ -22,8 +22,8 @@
                     </td>
                     <td class="text-left">
                         <select class="form-control" name="status_paypal_receive">
-                            <option value="activate">Activate</option>
-                            <option value="hold">Hold</option>
+                            <option value="completed">Activate</option>
+                            <option value="pending">Hold</option>
                         </select>
                     </td>
                     <td class="text-center">
