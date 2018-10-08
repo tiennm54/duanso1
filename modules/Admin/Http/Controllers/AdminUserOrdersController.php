@@ -41,7 +41,7 @@ class AdminUserOrdersController extends Controller {
         if (isset($data["payment_status"]) && $data["payment_status"] != "") {
             $model = $model->where("payment_status", "=", $data["payment_status"]);
         }
-        
+
         if (isset($data['used_bonus']) && $data['used_bonus'] != "") {
             $model = $model->where('used_bonus', ">", 0);
         }
@@ -147,7 +147,7 @@ class AdminUserOrdersController extends Controller {
                 if ($check_bonus == 0 || ($model_orders->payment_type->code != "BONUS" && $model_orders->used_bonus == 0)) {
 
                     $this->sendProductEmail($model_orders, $model_key);
-                    
+
                     foreach ($model_key as $item) {
                         $item->status = "sent";
                         $item->date_sent = Carbon::now();
@@ -162,7 +162,7 @@ class AdminUserOrdersController extends Controller {
 
                     $model_orders_history = new UserOrdersHistory();
                     $model_orders_history->saveHistoryOrder($model_orders);
-                    
+
                     $obj_paypal_history = new PaypalReceive();
                     $obj_paypal_history->saveHistoryReceive($model_orders, $request->status_paypal_receive);
 
@@ -271,14 +271,16 @@ class AdminUserOrdersController extends Controller {
                             break;
 
                         case 'completed' :
-                            if ($tmp_status == 'paid') {
+                            if ($tmp_status == 'paid' || $tmp_status == 'dispute') {
                                 $checkUpdateCompleted = $this->checkKeyEnough($model);
                                 if ($checkUpdateCompleted == 0) {
                                     $request->session()->flash('alert-warning', 'Warning: Chưa cung cấp premium key cho người dùng');
                                     return back();
                                 } else {
-                                    $request->session()->flash('alert-warning', 'Warning: OKIE...Hãy send key để hoàn thành đơn hàng');
-                                    return back();
+                                    if ($tmp_status != 'dispute') {
+                                        $request->session()->flash('alert-warning', 'Warning: OKIE...Hãy send key để hoàn thành đơn hàng');
+                                        return back();
+                                    }
                                 }
                             } else {
                                 $request->session()->flash('alert-warning', 'Warning: Đơn hàng này chưa hoàn tất thanh toán!');

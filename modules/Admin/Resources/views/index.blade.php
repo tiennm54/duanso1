@@ -121,6 +121,7 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                             <tr>
                                 <td>Invoice</td>
                                 <td>Email</td>
+                                <td>Status</td>
                                 <td>Date</td>
                                 <td>Total</td>
                             </tr>
@@ -140,6 +141,11 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                                     </td>
                                     <td>
                                         <a href="{{ URL::route('admin.userManagement.view', ["id" => $item->users_id])}}">{{$item->email}}</a>
+                                    </td>
+                                    <td>
+                                        <span class="<?php echo ($item->payment_status == 'paid') ? 'label label-primary' : 'label label-danger' ?>">
+                                            <?php echo $item->payment_status; ?>
+                                        </span>
                                     </td>
                                     <td>
                                         <?php

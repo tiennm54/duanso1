@@ -115,6 +115,7 @@
                                         <option value="refund" {{ ($model->payment_status == "refund") ? "selected" : "" }}>Refund</option>
                                         <option value="completed" {{ ($model->payment_status == "completed") ? "selected" :"" }}>Completed</option>
                                         <option value="cancel" {{ ($model->payment_status == "cancel") ? "selected" :"" }}>Canceled</option>
+                                        <option value="dispute" {{ ($model->payment_status == "dispute") ? "selected" :"" }}>Dispute</option>
                                     </select>
                                 </div>
 
