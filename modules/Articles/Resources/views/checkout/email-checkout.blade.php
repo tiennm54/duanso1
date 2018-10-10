@@ -38,7 +38,7 @@
                                     <p style="background-color: yellow"><b>Notice: please read carefully before you make the payment</b></p>
                                     <ul>
                                         <li>Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)</li>
-                                        <li>Your keys/vouchers/account will be delivery within 1-8 hours. If you can not wait, please do not make the payment.</li>
+                                        <li>Your keys/vouchers/account will be delivery within 1-8 hours. Usually you will get it within 30 minutes -> 1 hours.</li>
                                         <li>If you do not receive premium in maximum 8 hours => Please contact us first, do not open the disputed!</li>
                                         <li>Your premium key/account will be delivery by email from <?php echo EMAIL_BUYPREMIUMKEY; ?>. Please make sure to check your inbox and Spam(Junk) box to get the key/account.</li>
                                     </ul>
@@ -255,9 +255,6 @@
                                     <?php } else { ?>
                                         <span style="font-weight: bold; color: blue">This order has already been paid.</span>
                                     <?php } ?>
-                                </p>
-                                <p>
-                                    <b style="color: red">After you have paid successfully, please send us the transaction ID and  full name of your PayPal account at this email.</b>
                                 </p>
                                 <p>
                                     <span>You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.</span>

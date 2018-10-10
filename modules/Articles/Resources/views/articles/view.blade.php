@@ -66,7 +66,7 @@
                             <div class="rating">
                                 <?php 
                                     $sum_rate = 0;
-                                    if(count($model_reviews) != 0){
+                                    if($model_reviews){
                                         $sum_rate = $model_reviews->getRate();
                                     }
                                 ?>
@@ -76,7 +76,7 @@
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                                     <span class="fa fa-stack"><i class="fa {{ ($sum_rate >= 5) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                                    <a href="<?php echo (count($model_reviews) != 0) ? $model_reviews->getUrl() : "#"; ?>"> Write a review</a>
+                                    <a href="<?php echo ($model_reviews) ? $model_reviews->getUrl() : "#"; ?>"> Write a review</a>
                                 </p>
                             </div>
                             <hr/>
