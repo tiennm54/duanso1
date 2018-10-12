@@ -110,7 +110,6 @@ class CheckoutController extends ShoppingCartController {
         $money_user = 0;
         $model_terms = Information::find(5);
         $model_payment_type = PaymentType::orderBy("position", "ASC")->get();
-
         $data = Session::get('array_orders', []);
         $obj_shopping_cart = new UserShoppingCart();
         $subTotal = $obj_shopping_cart->getSubTotal($data);
@@ -129,7 +128,10 @@ class CheckoutController extends ShoppingCartController {
             $user_country = $this->getLocationInfoByIp();
 
             return view('articles::checkout.checkout', compact(
-                            "data", "model_payment_type", "model_terms", "model_user", 'totalOrder', 'money_user', 'user_country'
+                "data", "model_payment_type",
+                "model_terms", "model_user",
+                'totalOrder', 'money_user',
+                'user_country'
             ));
         } else {
             return view('articles::checkout.checkout-none');
@@ -185,11 +187,11 @@ class CheckoutController extends ShoppingCartController {
         }
 
         $return_data = array(
-            "sub_total" => $sub_total,
-            "charges" => $payment_charges,
+            "sub_total" => round($sub_total, 2),
+            "charges" => round($payment_charges, 2),
             "payment_name" => $payment_name,
             "payment_code" => $payment_code,
-            "used_bonus" => $charges_bonus,
+            "used_bonus" => round($charges_bonus, 2),
             "total" => round($total,2)
         );
         return $return_data;

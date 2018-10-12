@@ -14,7 +14,7 @@
                                name="payments_type_id"
                                <?php if ($item->status_disable == 1){ echo "disabled"; } ?>
                                <?php if ($item->status_selected == 1){ echo "checked='checked'"; } ?>
-                               onclick="selectTypePayment({{ $item }})"/>
+                               onclick="selectTypePayment({{ $item->id }})"/>
                         <img src="{{url('images/'.$item->image)}}" alt="{{ $item->title }}" style="width: 80px"/>
                         <span style="font-weight: bold">
                             {{ $item->title }} 

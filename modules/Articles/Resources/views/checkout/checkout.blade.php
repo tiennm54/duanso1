@@ -134,20 +134,23 @@
         }
     }
 
-    function selectTypePayment(item) {
+    function selectTypePayment(id) {
         var token = $("#_token").val();
         var check_bonus = $("#cb-my-bonus").is(':checked');
+        var spinHandle = loadingOverlay().activate();
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.checkout.selectTypePayment') ?>",
-            data: {"payment_id": item.id, "check_bonus": check_bonus, "_token": token},
+            data: {"payment_id": id, "check_bonus": check_bonus, "_token": token},
             success: function (data) {
                 type = data["payment_code"];
                 updateTotalOrder(data);
+                loadingOverlay().cancel(spinHandle);
             },
             error: function (ex) {
                 console.log(ex.responseJSON);
                 location.reload();
+                loadingOverlay().cancel(spinHandle);
             }
         });
     }
@@ -179,21 +182,29 @@
         var check_bonus = $("#cb-my-bonus").is(':checked');
         var number = $("#quantityProduct" + id).val();
         var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
+
+        if(payment_type == "" || typeof payment_type == "undefined"){
+            alert("Please select a payment method. Thank you!") ? "" : location.reload();
+            return 0;
+        }
         if (number <= 0) {
             number = 1;
             $("#quantityProduct" + id).val(1);
         }
         var token = $("#_token").val();
+        var spinHandle = loadingOverlay().activate();
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.checkout.changeQuantity') ?>",
             data: {"id": id, "number": number, "payment_type": payment_type, "check_bonus": check_bonus, "_token": token},
             success: function (data) {
                 updateTotalOrder(data);
+                loadingOverlay().cancel(spinHandle);
             },
             error: function (ex) {
-                console.log(ex.responseJSON);
+                console.log("error change quantity");
                 location.reload();
+                loadingOverlay().cancel(spinHandle);
             }
         });
     }
@@ -203,16 +214,18 @@
             var token = $("#_token").val();
             var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
             var check_bonus = $("#cb-my-bonus").is(':checked');
+            var spinHandle = loadingOverlay().activate();
             $.ajax({
                 type: 'POST',
                 url: "<?php echo URL::route('frontend.checkout.deleteProductCheckout') ?>",
                 data: {"id": id, "payment_type": payment_type, "check_bonus": check_bonus, "_token": token},
                 success: function (data) {
                     $("#list-product-checkout").html(data);
+                    loadingOverlay().cancel(spinHandle);
                 },
                 error: function (ex) {
-                    alert(ex.responseJSON);
                     location.reload();
+                    loadingOverlay().cancel(spinHandle);
                 }
             });
         }
@@ -222,20 +235,32 @@
         var token = $("#_token").val();
         var payment_id = $('input[type="radio"][class="payment-type"]:checked').val();
         var check_bonus = $("#cb-my-bonus").is(':checked');
+        var spinHandle = loadingOverlay().activate();
         $.ajax({
             type: 'POST',
             url: "<?php echo URL::route('frontend.checkout.chooseBonusMoney') ?>",
             data: {"payment_id": payment_id, "check_bonus": check_bonus, "_token": token},
             success: function (data) {
                 updateTotalOrder(data)
+                loadingOverlay().cancel(spinHandle);
             },
             error: function (ex) {
-                alert(ex.responseJSON);
-                //location.reload();
+                loadingOverlay().cancel(spinHandle);
             }
         });
     }
 
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        var $radios = $('input:radio[name=payments_type_id]');
+        if($radios.is(':checked') === false) {
+            $('input:radio[name=payments_type_id]')[0].checked = true;
+            var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
+            if(payment_type != "" && typeof payment_type != "undefined") {
+                selectTypePayment(payment_type);
+            }
+        }
+    });
 </script>
 
 

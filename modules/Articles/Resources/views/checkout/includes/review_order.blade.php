@@ -34,37 +34,33 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                        
+                <tfoot>
+                    <tr>
+                        <td colspan="2" align="right">Sub-Total </td>
+                        <td align="center">$<span id="sub-total">{{ $totalOrder['sub_total'] }}</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="right">Charges <span id="text_payment_selected">{{ $totalOrder['payment_name'] }}</span> </td>
+                        <td align="center">$<span id="payment_charges">{{ $totalOrder['charges'] }}</span></td>
+                    </tr>
+                    <?php if (Auth::check()) { ?>
+                    <tr id="tr-use-bonus">
+                        <td colspan="2" align="right">Use my bonus ({{ $money_user }}$)</td>
+                        <td align="center">
+                            <input type="checkbox" value="{{ $money_user }}" name="use_my_bonus" id="cb-my-bonus" onclick="chooseBonusMoney()">
+                        </td>
+                    </tr>
+                    <?php } ?>
+                    <tr>
+                        <td colspan="2" align="right">Total </td>
+                        <td align="center">$<span id="total">{{ $totalOrder['total'] }}</span></td>
+                    </tr>
+                </tfoot>
                 </tbody>
             </table>
         </div>
 
         <div class="form-group">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <td>Sub-Total </td>
-                        <td align="center">$<span id="sub-total">{{ $totalOrder['sub_total'] }}</span></td>
-                    </tr>
-                    <tr>
-                        <td>Charges <span id="text_payment_selected">{{ $totalOrder['payment_name'] }}</span> </td>
-                        <td align="center">$<span id="payment_charges">{{ $totalOrder['charges'] }}</span></td>
-                    </tr>
-                    <?php if (Auth::check()) { ?>
-                        <tr id="tr-use-bonus">
-                            <td>Use my bonus ({{ $money_user }}$)</td>
-                            <td align="center">
-                                <input type="checkbox" value="{{ $money_user }}" name="use_my_bonus" id="cb-my-bonus" onclick="chooseBonusMoney()">
-                            </td>
-                        </tr>
-                    <?php } ?>
-                    <tr>
-                        <td>Total </td>
-                        <td align="center">$<span id="total">{{ $totalOrder['total'] }}</span></td>
-                    </tr>
-                </tbody>
-            </table>
-
             <label class="checkbox-inline">
                 <input type="checkbox" value="1" name="check_term" id="cb-terms" required checked>
                 <a style="color: black; cursor: pointer" data-toggle="modal" data-target="#termsConditions">I've read and agree the Terms and Conditions</a><br>

@@ -257,6 +257,9 @@
                                     <?php } ?>
                                 </p>
                                 <p>
+                                    <b style="color: red">After you have paid successfully, please send us the transaction ID at this email.</b>
+                                </p>
+                                <p>
                                     <span>You can view your order history by going to the <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page and by clicking on <a href="{{ URL::route('users.orderHistory') }}">history</a>.</span>
                                 </p>
                                 <p>Thanks you for choosing us service. We apologize for any inconvenience this may have caused you.</p>
