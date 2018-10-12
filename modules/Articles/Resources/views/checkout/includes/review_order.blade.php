@@ -6,8 +6,8 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Product name</th>
-                        <th width="10%">Quantity</th>
+                        <th width="20%">Product name</th>
+                        <th>Quantity</th>
                         <th>Unit Price</th>
                     </tr>
                 </thead>
