@@ -135,7 +135,8 @@ class UserOrders extends Model {
     public function getOrderPaid() {
         $model = UserOrders::where(function ($query) {
                 $query->where('payment_status', 'paid')
-                      ->orWhere('payment_status', 'dispute');
+                        ->orWhere('payment_status', 'dispute')
+                        ->orWhere('payment_status', 'echeck');
             })->orderBy('id','DESC')->paginate(10);
         return $model;
     }

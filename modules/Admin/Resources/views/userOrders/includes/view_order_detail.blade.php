@@ -116,6 +116,7 @@
                                         <option value="completed" {{ ($model->payment_status == "completed") ? "selected" :"" }}>Completed</option>
                                         <option value="cancel" {{ ($model->payment_status == "cancel") ? "selected" :"" }}>Canceled</option>
                                         <option value="dispute" {{ ($model->payment_status == "dispute") ? "selected" :"" }}>Dispute</option>
+                                        <option value="echeck" {{ ($model->payment_status == "echeck") ? "selected" :"" }}>eCheck</option>
                                     </select>
                                 </div>
 
