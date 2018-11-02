@@ -88,6 +88,7 @@ class BackendPaymentTypeController extends Controller {
                 $model->position = $request->txt_position;
                 $model->fees = $request->txt_fees;
                 $model->plus = $request->txt_plus;
+                $model->disable_vn = $request->disable_vn;
                 if (isset($request->txt_payment_id)) {
                     $model->payment_id = $request->txt_payment_id;
                 }

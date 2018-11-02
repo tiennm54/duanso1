@@ -44,17 +44,27 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Code</label>
                                 <input type="text" value="<?php echo ($model->code) ? $model->code : ''; ?>" class="form-control border-input" placeholder="Code..." name="txt_code" required>
                             </div>
                         </div>
                         
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" value="<?php echo ($model->email) ? $model->email : ''; ?>" class="form-control border-input" placeholder="Email..." name="txt_email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Disable Việt Nam</label>
+                                <select class="form-control border-input" name="disable_vn">
+                                    <option value="0" <?php if($model->disable_vn == 0){ echo "selected"; } ?>>Show</option>
+                                    <option value="1" <?php if($model->disable_vn == 1){ echo "selected"; } ?>>Hide</option>
+                                </select>
                             </div>
                         </div>
                         

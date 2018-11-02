@@ -2,7 +2,7 @@
     <div class="col-md-12 well">
         <p class="header-check-out"><i class="glyphicon glyphicon-credit-card"></i> Payment Methods</p>
         <?php foreach ($model_payment_type as $item):?>
-            <?php if($item->code == "PAYPAL" && $user_country == "VN" ){
+            <?php if($item->code == "PAYPAL" && $user_country == "VN" && $item->disable_vn == 1){
                 //Khong hien thi phuong thuc thanh toan paypal doi voi VN
             }else{?>
             <div class="form-group col-md-12">
