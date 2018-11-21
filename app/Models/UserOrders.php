@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use URL;
 use App\Models\PaymentType;
 use App\Models\PaypalAccount;
+use Log;
 
 class UserOrders extends Model {
 
@@ -36,6 +37,17 @@ class UserOrders extends Model {
         $year = date("Y", $time);
         $order_no = "BPK-" . $year . $month . $this->id;
         return $order_no;
+    }
+    
+    public function createPaypalToken(){
+        $time = strtotime(Carbon::now());
+        $order_id = $this->id;
+        $total_price = $this->total_price;
+        $private_key = PRIVATE_PAYPAL_KEY;
+        $string_hash = $private_key."-".$order_id."-".$total_price."-".$time;
+        Log::info($string_hash);
+        $paypal_token = base64_encode($string_hash);
+        return $paypal_token;
     }
 
     public function createOrder($model_user, $money_user, $data, $array_orders, $totalOrder) {
@@ -76,6 +88,7 @@ class UserOrders extends Model {
         $this->payment_status = "pending";
         $this->save();
         $this->order_no = $this->getNameOrderNo();
+        $this->paypal_token = $this->createPaypalToken();
         $this->save();
         //Save Order Detail
         foreach ($array_orders as $item) {

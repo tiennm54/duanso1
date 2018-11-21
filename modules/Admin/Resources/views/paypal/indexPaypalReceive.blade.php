@@ -40,7 +40,7 @@
                 <form action="" method="get">
                     <div class="row">
 
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">Email receive</label>
                                 <input type="text" name="paypal_account_email" placeholder="Email Receive" class="form-control"
@@ -48,7 +48,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">Email paid</label>
                                 <input type="text" name="email_paid" placeholder="Email paid" class="form-control"
@@ -56,11 +56,24 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">Order No</label>
                                 <input type="text" name="order_no" placeholder="Order no" class="form-control"
                                        value="{{ app('request')->input('order_no') }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Status receive</label>
+                                <select class="form-control" name="status_receive">
+                                    <option value="">Select status</option>
+                                    <option value="pending" {{ (app('request')->input('status_receive') == "pending") ? "selected" : "" }}>Pending</option>
+                                    <option value="echeck" {{ (app('request')->input('status_receive') == "echeck") ? "selected" : "" }}>eCheck</option>
+                                    <option value="refund" {{ (app('request')->input('status_receive') == "refund") ? "selected" : "" }}>Refund</option>
+                                    <option value="completed" {{ (app('request')->input('status_receive') == "completed") ? "selected" : "" }}>Completed</option>
+                                </select>
                             </div>
                         </div>
 
@@ -137,7 +150,8 @@
             echo $model->appends([
                 'paypal_account_email' => Request::get('paypal_account_email'),
                 'email_paid' => Request::get('email_paid'),
-                'order_no' => Request::get('order_no')
+                'order_no' => Request::get('order_no'),
+                'status_receive' => Request::get('status_receive'),
             ])->render();
             ?>
         </div>

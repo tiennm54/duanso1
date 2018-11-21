@@ -27,22 +27,6 @@
             </li>
 
             <li id="menu-catalog">
-                <a class="parent"><i class="fa fa-tags fw"></i> <span>Product manager</span></a>
-                <ul class="collapse">
-                    <li>
-                        <a href="{{ URL::route('articles.index') }}">Products</a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::route('admin.reviews.index') }}">Products Reviews</a>
-                    </li>
-                    <li>
-                        <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
-                    </li>
-
-                </ul>
-            </li>
-
-            <li id="menu-catalog">
                 <a class="parent"><i class="fa fa-tags fw"></i> <span>Config</span></a>
                 <ul class="collapse">
                     <li>
@@ -57,6 +41,22 @@
                     <li>
                         <a href="{{ URL::route('admin.information.index') }}">Information</a>
                     </li>
+                </ul>
+            </li>
+            
+             <li id="menu-catalog">
+                <a class="parent"><i class="fa fa-tags fw"></i> <span>Product manager</span></a>
+                <ul class="collapse">
+                    <li>
+                        <a href="{{ URL::route('articles.index') }}">Products</a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::route('admin.reviews.index') }}">Products Reviews</a>
+                    </li>
+                    <li>
+                        <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
+                    </li>
+
                 </ul>
             </li>
 

@@ -44,6 +44,13 @@ class PaypalAccountManagerController extends Controller {
         if ($model_payment != null) {
             $model_payment->email = $model->email;
             $model_payment->paypal_account_id = $model->id;
+            if($model->website != "" && $model->status_website == 1){
+                $model_payment->status_website = 1;
+                $model_payment->website = $model->website;
+            }else{
+                $model_payment->status_website = 0;
+                $model_payment->website = "";
+            }
             $model_payment->save();
             //CAP NHAT THOI GIAN BAT DAU NHAN TIEN
             $model->start_date = Carbon::now();
@@ -71,6 +78,8 @@ class PaypalAccountManagerController extends Controller {
             $model->status_activate = $data["status_activate"];
             $model->status = $data["status"];
             $model->description = $data["description"];
+            $model->website = $data["website"];
+            $model->status_website = $data["status_website"];
             $model->save();
 
             if ($model->status_activate == "Activate") {
@@ -110,6 +119,8 @@ class PaypalAccountManagerController extends Controller {
             $model->status_activate = $data["status_activate"];
             $model->status = $data["status"];
             $model->description = $data["description"];
+            $model->website = $data["website"];
+            $model->status_website = $data["status_website"];
             $model->save();
             if ($data["status_activate"] == "Activate") {
                 if ($model->status != "Limit") {
@@ -284,6 +295,10 @@ class PaypalAccountManagerController extends Controller {
         }
         if (isset($data["order_no"]) && $data["order_no"] != "") {
             $model = $model->where("order_no", "LIKE", "%" . trim($data["order_no"]) . "%");
+        }
+        
+        if (isset($data["status_receive"]) && $data["status_receive"] != "") {
+            $model = $model->where("status", $data["status_receive"]);
         }
 
         $model = $model->orderBy("id", "DESC")->paginate(NUMBER_PAGE);

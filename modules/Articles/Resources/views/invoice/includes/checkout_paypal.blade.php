@@ -14,7 +14,12 @@
 </p>
 
 <?php
-$url_checkout = "https://www.paypal.com/cgi-bin/webscr?business=" . $model->payment_type->email . "&cmd=_xclick&currency_code=USD&amount=" . $model->total_price . "&item_name=" . $model->order_no;
+$url_checkout = "";
+if ($model->payment_type->status_website == 1 && $model->payment_type->website != "") {
+    $url_checkout = URL::route("frontend.invoice.paypalPay",["token"=>$model->paypal_token]);
+} else {
+    $url_checkout = "https://www.paypal.com/cgi-bin/webscr?business=" . $model->payment_type->email . "&cmd=_xclick&currency_code=USD&amount=" . $model->total_price . "&item_name=" . $model->order_no;
+}
 ?>
 <a href="{{ $url_checkout }}" target="_blank">
     <img alt="Buy premium key com" src="{{url('theme_frontend/image/checkout-paypal.png')}}" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px;" border="0">

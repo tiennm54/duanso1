@@ -94,6 +94,12 @@ class AdminUserOrdersController extends Controller {
         DB::beginTransaction();
         $model_orders = UserOrders::find($id);
         if ($model_orders) {
+
+            if ($model_orders->payment_status == "cancel" || $model_orders->payment_status == "dispute") {
+                $request->session()->flash('alert-warning', 'Warning: Đơn hàng này đã bị cancel hoặc đang trong tình trạng tranh chấp!');
+                return back();
+            }
+
             $model_key = $this->getPremiumKeySend($model_orders);
             if ($model_key) {
                 //Trường hợp gửi lại key cho khách hàng và khách hàng không thể nhận thêm bonus

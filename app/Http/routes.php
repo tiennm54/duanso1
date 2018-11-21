@@ -39,7 +39,7 @@ define('VISA_CODE',"we2ue7ku3ge1pru5ro5pu6mi4pra7pri1chu4cle8pho7go0no9stu6pe6cl
 
 define('NOTI_WORKING', "We are working in business time! Place your order now, or contact us if you have a problem.");
 define('NOTI_OUT_WORKING', "Your keys/vouchers/account will be delivery within 1-8 hours. If you do not receive premium in maximum 8 hours => Please contact us first, do not open the disputed. We will deliver to you as soon as possible. Thanks you!");
-
+define('PRIVATE_PAYPAL_KEY', "AAABBBCCC");
 
 
 

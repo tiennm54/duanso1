@@ -138,11 +138,24 @@
                                     </b>
                                     <hr>
                                     <?php echo ($item->vps_ip) ? $item->vps_ip : "NONE"; ?>
+                                    <?php
+                                    if ($item->website != "") {
+                                        if ($item->status_website == 1) {
+                                            ?>
+                                            <a class="label label-success" href="<?php echo $item->website; ?>" target="_blank">SITE ON</a>
+                                        <?php } else { ?>
+                                            <a class="label label-danger" href="<?php echo $item->website; ?>" target="_blank">SITE OFF</a>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
                                 </td>
                                 <td><?php echo $item->password; ?></td>
 
                                 <td><?php echo $item->money_activate . "$"; ?></td>
-                                <td><?php echo $item->money_hold . "$"; ?></td>
+                                <td>
+                                    <a href="<?php echo URL::route("admin.paypalReceive.index", ["id" => $item->id]) . "?status_receive=pending"; ?>"><?php echo $item->money_hold . "$"; ?></a>
+                                </td>
                                 <td>
                                     <span class="label {{ ($item->status != "Limit") ? "label-primary" : "label-danger"}}">
                                         <?php echo $item->status; ?>

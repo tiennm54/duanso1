@@ -50,7 +50,16 @@
                                 <td><img src="{{ url('images/'.$item->image) }}" width="80px"></td>
                                 <td><?php echo $item->title; ?></td>
                                 <td><span class="label label-primary"><?php echo ($item->email) ? $item->email : "N/A"; ?></span></td>
-                                <td><span class="label {{ ($item->status_selected == 1) ? "label-primary" : "label-danger"}}"><?php echo ($item->status_selected == 1) ? "ON" : "OFF"; ?></span></td>
+                                <td>
+                                    <span class="label {{ ($item->status_selected == 1) ? "label-primary" : "label-danger"}}"><?php echo ($item->status_selected == 1) ? "ON" : "OFF"; ?></span>
+                                    <?php if($item->code == "PAYPAL" && $item->website != ""){?>
+                                        <?php if($item->status_website == 1){?>
+                                    <a class="label label-success" href="<?php echo $item->website; ?>" target="_blank">SITE ON</a>
+                                        <?php }else{?>
+                                            <a class="label label-danger" href="<?php echo $item->website; ?>">SITE OFF</a>
+                                        <?php }?>
+                                    <?php }?>
+                                </td>
                                 <td><?php echo $item->position; ?></td>
                                 <td><?php echo $item->fees; ?></td>
                                 <td> <span class="label {{ ($item->status_disable == 0) ? "label-primary" : "label-danger"}}"> {{ ($item->status_disable == 0) ? "SHOW" : "HIDE" }}</td>

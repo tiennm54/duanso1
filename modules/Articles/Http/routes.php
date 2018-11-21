@@ -58,4 +58,7 @@ Route::group(['prefix' => 'checkout-visa', 'namespace' => 'Modules\Articles\Http
 
 Route::group(['prefix' => 'invoice', 'namespace' => 'Modules\Articles\Http\Controllers'], function() {
     Route::get('view/{id}/{email}',['as'=>'frontend.invoice.view','uses'=>'InvoiceController@view']);
+    Route::get('pay/{token}',['as'=>'frontend.invoice.paypalPay','uses'=>'InvoiceController@paypalPay']);
+    Route::post('callback',['as'=>'frontend.invoice.callback','uses'=>'InvoiceController@callbackPaypalPay']);
+    Route::get('pay-success',['as'=>'frontend.invoice.paySuccess','uses'=>'InvoiceController@paySuccess']);
 });
