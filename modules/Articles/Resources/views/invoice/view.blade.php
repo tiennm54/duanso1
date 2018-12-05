@@ -31,7 +31,7 @@
                             </td>
                             <td class="text-left" style="width: 50%;">
                                 <p>Orders Status: 
-                                    <span class="label  <?php echo ($model->payment_status == "completed") ? "label-primary" : "label-danger"; ?>">
+                                    <span class="label  <?php echo ($model->payment_status == "completed" || $model->payment_status == "paid") ? "label-success" : "label-danger"; ?>">
                                         {{ $model->payment_status }}
                                     </span>
                                 </p>

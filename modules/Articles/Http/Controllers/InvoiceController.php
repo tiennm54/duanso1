@@ -13,6 +13,7 @@ use App\Models\UserOrders;
 use App\Models\UserOrdersDetail;
 use App\Helpers\SeoPage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Log;
 
 /**
@@ -21,6 +22,14 @@ use Log;
  * @author minht
  */
 class InvoiceController extends Controller {
+    
+    public function sendMailPaid($model_orders) {
+        $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->order_no;
+        Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+        });
+    }
 
     public function view($id, $email) {
         SeoPage::seoPage($this);
@@ -59,12 +68,13 @@ class InvoiceController extends Controller {
                 $order_reponse = $data["item_name"];
                 $explode = explode("-", $order_reponse);
                 $order_id = $explode[1];
-                Log::info($order_id);
+                //Log::info($order_id);
                 if($order_id != null && $order_id != ""){
                     $model = UserOrders::find($order_id);
                     if($model){
-                        $model->payment_status = "completed";
+                        $model->payment_status = "paid";
                         $model->save();
+                        $this->sendMailPaid($model);
                         return redirect()->route('frontend.invoice.paySuccess');
                     }
                 }

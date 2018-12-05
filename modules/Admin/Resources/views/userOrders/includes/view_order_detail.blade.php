@@ -81,7 +81,7 @@
                                     data-original-title="Import Key"><i class="glyphicon glyphicon-grain"></i>
                             </button>
                         </td>
-                        <td>Invoice: <b>{{ $model->order_no }}</b></td>
+                        <td>Invoice: <b><a href="<?php echo URL::route("frontend.invoice.view",['id' => $model->id, 'email' => $model->email]);?>">{{ $model->order_no }}</a></b></td>
                     </tr>
 
                     <tr>
