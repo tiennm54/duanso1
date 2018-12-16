@@ -55,7 +55,7 @@
                             <?php if ($model->payment_status == "pending"): ?>
                                 <button class="btn btn-danger" 
                                         data-toggle="confirmation" 
-                                        data-placement="left" style="float: right" 
+                                        data-placement="left" style="float: right; display: none;" 
                                         data-toggle="tooltip" title="Cancel Order">
                                     Cancel
                                 </button>
@@ -104,6 +104,7 @@
                             </td>
                             <td class="text-left">
                                 <p>Email: <span class="label label-primary">{{ $model->email }}</span></p>
+                                <!--<b style="color: red">After your payment is successful, we will send the premium key to you within 1-8 hours.</b>-->
                             </td>
                         </tr>
                     </tbody>

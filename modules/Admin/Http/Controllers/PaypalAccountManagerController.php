@@ -9,6 +9,7 @@
 namespace Modules\Admin\Http\Controllers;
 
 use Pingpong\Modules\Routing\Controller;
+use Modules\Admin\Http\Requests\PaypalAccountRequest;
 use Illuminate\Http\Request;
 use App\Models\PaypalAccount;
 use App\Models\PaymentType;
@@ -64,7 +65,7 @@ class PaypalAccountManagerController extends Controller {
         return view('admin::paypal.create');
     }
 
-    public function postCreate(Request $request) {
+    public function postCreate(PaypalAccountRequest $request) {
         if (isset($request)) {
             DB::beginTransaction();
             $data = $request->all();
@@ -80,6 +81,7 @@ class PaypalAccountManagerController extends Controller {
             $model->description = $data["description"];
             $model->website = $data["website"];
             $model->status_website = $data["status_website"];
+            $model->phone = $data["phone"];
             $model->save();
 
             if ($model->status_activate == "Activate") {
@@ -105,7 +107,7 @@ class PaypalAccountManagerController extends Controller {
         }
     }
 
-    public function postEdit($id, Request $request) {
+    public function postEdit($id, PaypalAccountRequest $request) {
         $model = PaypalAccount::find($id);
         if ($model) {
             DB::beginTransaction();
@@ -121,6 +123,7 @@ class PaypalAccountManagerController extends Controller {
             $model->description = $data["description"];
             $model->website = $data["website"];
             $model->status_website = $data["status_website"];
+            $model->phone = $data["phone"];
             $model->save();
             if ($data["status_activate"] == "Activate") {
                 if ($model->status != "Limit") {

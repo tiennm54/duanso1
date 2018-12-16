@@ -32,10 +32,11 @@ class UserOrders extends Model {
 
     //LAY ORDER NO CHO ORDER
     public function getNameOrderNo() {
-        $time = strtotime(Carbon::now());
-        $month = date("m", $time);
-        $year = date("Y", $time);
-        $order_no = "BPK-" . $year . $month . $this->id;
+        //$time = strtotime(Carbon::now());
+        //$month = date("m", $time);
+        //$year = date("Y", $time);
+        //$order_no = "BPK-" . $year . $month . $this->id;
+        $order_no = "BPK-" . $this->id;
         return $order_no;
     }
     
@@ -45,7 +46,7 @@ class UserOrders extends Model {
         $total_price = $this->total_price;
         $private_key = PRIVATE_PAYPAL_KEY;
         $string_hash = $private_key."-".$order_id."-".$total_price."-".$time;
-        Log::info($string_hash);
+        //Log::info($string_hash);
         $paypal_token = base64_encode($string_hash);
         return $paypal_token;
     }

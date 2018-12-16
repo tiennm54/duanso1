@@ -35,6 +35,7 @@
                         <div class="form-group">
                             <label>Email</label>
                             <input type="email" value="{{ (isset($model)) ? $model->email : "" }}" class="form-control border-input" placeholder="Email..." name="email" required>
+                            {!! $errors->first('email','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -53,7 +54,8 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>VPS IP</label>
-                            <input type="text" value="{{ (isset($model)) ? $model->vps_ip : "" }}" class="form-control border-input" placeholder="VPS IP..." name="vps_ip" required>
+                            <input type="text" value="{{ (isset($model)) ? $model->vps_ip : "" }}" class="form-control border-input" placeholder="VPS IP..." name="vps_ip">
+                            {!! $errors->first('vps_ip','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
 
@@ -90,6 +92,14 @@
                                 <option value="Pending" <?php echo (isset($model) && $model->status == "Pending") ? "selected" : "" ?>>Pending</option>
                                 <option value="Limit" <?php echo (isset($model) && $model->status == "Limit") ? "selected" : "" ?>>Limit</option>
                             </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input value="{{ (isset($model)) ? $model->phone : "" }}" class="form-control border-input" placeholder="Phone..." name="phone">
+                            {!! $errors->first('phone','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
 
