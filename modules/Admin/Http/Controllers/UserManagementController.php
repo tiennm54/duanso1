@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\UserOrders;
+use Modules\Admin\Http\Requests\UserEditRequest;
+use DB;
 
 class UserManagementController extends Controller {
 
@@ -77,17 +79,33 @@ class UserManagementController extends Controller {
         }
         return back();
     }
-    
-    public function delete($id, Request $request){
+
+    public function delete($id, Request $request) {
         $model = User::find($id);
-        if($model){
+        if ($model) {
             $model->status_delete = 1;
             $model->save();
             $request->session()->flash('alert-success', 'Success: Xóa người dùng thành công!');
             return back();
-        }else{
+        } else {
             $request->session()->flash('alert-warning', 'Warning: Xóa người dùng thất bại!');
             return back();
+        }
+    }
+
+    public function edit(UserEditRequest $request) {
+        if (isset($request)) {
+            $data = $request->all();
+            $id = $data["user_id"];
+            $email = $data["email"];
+            $model = User::find($id);
+            if ($model) {
+                $model->email = $email;
+                $model->save();
+                DB::table('user_orders')->where("users_id", $id)->update(['email' => $model->email]);
+                $request->session()->flash('alert-success', 'Success: Edit email: ' . $data["email"] . ' thành công!');
+                return back();
+            }
         }
     }
 

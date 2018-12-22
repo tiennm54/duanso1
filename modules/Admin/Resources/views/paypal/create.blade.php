@@ -107,6 +107,7 @@
                         <div class="form-group">
                             <label>Website</label>
                             <input value="{{ (isset($model)) ? $model->website : "" }}" class="form-control border-input" placeholder="Website..." name="website">
+                            {!! $errors->first('website','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
                     

@@ -115,6 +115,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::post('updateMoney/{id}', ['as' => 'admin.userManagement.updateMoney', 'uses' => 'UserManagementController@updateMoney']);
         Route::post('changeRole/{id}', ['as' => 'admin.userManagement.changeRole', 'uses' => 'UserManagementController@changeRole']);
         Route::get('delete/{id}', ['as' => 'admin.userManagement.delete', 'uses' => 'UserManagementController@delete']);
+        Route::post('edit', ['as' => 'admin.userManagement.edit', 'uses' => 'UserManagementController@edit']);
     });
 
     Route::group(['prefix' => 'news'], function() {

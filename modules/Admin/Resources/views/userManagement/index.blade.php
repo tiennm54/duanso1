@@ -26,6 +26,7 @@
         </div>
         <div class="panel-body">
             @include('validator.flash-message')
+            @include('validator.validator-input')
             <div class="well">
                 <div class="row">
                     <form action="" method="get">
@@ -111,6 +112,14 @@
                                     <span class="label {{ ($item->status_delete != 1) ? "label-primary" : "label-danger" }}">{{ ($item->status_delete != 1) ? "OKIE" : "DELETED" }}</span>
                                 </td>
                                 <td class="text-right">
+                                    
+                                    <a title="" class="btn btn-primary" 
+                                       data-toggle="modal" data-target="#modal_edit_useremail"
+                                       onclick="editUserEmail('<?php echo $item->id; ?>', '<?php echo $item->email; ?>')"
+                                       data-original-title="Edit">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    
                                     <a href="{{ URL::route('admin.userManagement.view', ["id" => $item->id]) }}" data-toggle="tooltip" title="" class="btn btn-primary"
                                        data-original-title="View">
                                         <i class="fa fa-eye"></i>
@@ -133,6 +142,42 @@
     </div>
 </div>
 
+<div id="modal_edit_useremail" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit email: <span id="header_edit_email"></span></h4>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" class="form-horizontal" method="post" action="<?php echo URL::route('admin.userManagement.edit'); ?>">
+                    <fieldset>
+                        <input id="user_id" name="user_id" type="hidden"/>
+                        <div class="form-group required">
+                            <label class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="email" name="email" required/>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="buttons clearfix">
+                        <div class="pull-right">
+                            <input type="submit" value="Save" class="btn btn-primary">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    function editUserEmail(id, email) {
+        console.log(email);
+        $("#user_id").val(id);
+        $("#header_edit_email").html(email);
+    }
+</script>
 
 @stop
