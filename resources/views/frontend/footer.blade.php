@@ -36,11 +36,11 @@
             <div class="col-sm-3">
                 <h5>Contact Information</h5>
                 <ul class="list-unstyled">
-                    <li><span style="color: #ccc">Address: Ha Noi - Viet Nam</span></li>
+                    <li><span style="color: #ccc">Address: 169874 Chinatown, Singapore</span></li>
                     <li><span style="color: #ccc">Email: <a
                                     href="mailto:<?php echo EMAIL_BUYPREMIUMKEY; ?>"><?php echo EMAIL_BUYPREMIUMKEY; ?></a></span>
                     </li>
-                    <li><span style="color: #ccc">Working Days/Hours: Mon - Sun / 8:00AM - 11:00PM GTM + 7</span></li>
+                    <li><span style="color: #ccc">Working Days/Hours: Mon - Sun / 8:00AM - 11:00PM GTM +8</span></li>
                 </ul>
             </div>
 

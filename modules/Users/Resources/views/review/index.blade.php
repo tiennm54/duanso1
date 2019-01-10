@@ -34,7 +34,7 @@
                     </li>
                     <li>
                         2. Fastest Delivery: We always try to deliver premium key to you as soon as possible. Usually it does not exceed 30 minutes for on-line payments during opening time, maximum 6 hours. <br/>
-                        <span style="color: red">Our working time: 8h00 - 23h00 GMT+7</span>.
+                        <span style="color: red">Our working time: 8h00 - 23h00 GMT +8</span>.
                     </li>
                     <li>
                         3. Easy payment methods: We support more worldwide payment methods: Paypal, Visa/MasterCard, WMZ, Perfect Money, Amazon pay, Bonus pay.

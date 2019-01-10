@@ -22,7 +22,7 @@ use Log;
  * @author minht
  */
 class InvoiceController extends Controller {
-    
+
     public function sendMailPaid($model_orders) {
         $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->order_no;
         Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
@@ -64,25 +64,31 @@ class InvoiceController extends Controller {
         if (isset($request)) {
             $data = $request->all();
             //Log::info($data);
-            if($data["payment_status"] == "Completed"){
+            if ($data["payment_status"] == "Completed") {
                 $order_reponse = $data["item_name"];
                 $explode = explode("-", $order_reponse);
                 $order_id = $explode[1];
                 //Log::info($order_id);
-                if($order_id != null && $order_id != ""){
+                $payment_gross = $data['payment_gross'] + 0;
+                if ($order_id != null && $order_id != "") {
                     $model = UserOrders::find($order_id);
-                    if($model){
-                        $model->payment_status = "paid";
-                        $model->save();
-                        $this->sendMailPaid($model);
-                        return redirect()->route('frontend.invoice.paySuccess');
+                    if ($model) {
+                        if ($model->total_price == $payment_gross) {
+                            $model->payment_status = "paid";
+                            $model->save();
+                            $this->sendMailPaid($model);
+                            return redirect()->route('frontend.invoice.paySuccess');
+                        } else {
+                            $model->payment_status = "echeck";
+                            $model->save();
+                        }
                     }
                 }
             }
         }
     }
-    
-    public function paySuccess(){
+
+    public function paySuccess() {
         return view('articles::invoice.paySuccess');
     }
 

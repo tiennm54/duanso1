@@ -38,17 +38,24 @@
             <div class="well">
                 <form action="{{ URL::route('admin.paypal.index') }}" method="get" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">Email</label>
                                 <input type="text" name="email" placeholder="Email" class="form-control" value="{{ app('request')->input('email') }}">
                             </div>
                         </div>
 
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">VPS</label>
-                                <input type="text" name="vps" placeholder="Email" class="form-control" value="{{ app('request')->input('vps') }}">
+                                <input type="text" name="vps" placeholder="VPS" class="form-control" value="{{ app('request')->input('vps') }}">
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Phone</label>
+                                <input type="text" name="phone" placeholder="Phone" class="form-control" value="{{ app('request')->input('phone') }}">
                             </div>
                         </div>
 
@@ -137,7 +144,8 @@
                                         </a>
                                     </b>
                                     <hr>
-                                    <?php echo ($item->vps_ip) ? $item->vps_ip : "NONE"; ?>
+                                    <?php echo ($item->vps_ip) ? $item->vps_ip : "NONE"; ?> | 
+                                    <?php echo ($item->phone) ? $item->phone : "NONE"; ?>
                                     <?php
                                     if ($item->website != "") {
                                         if ($item->status_website == 1) {

@@ -152,6 +152,11 @@ class PaypalAccountManagerController extends Controller {
             if (isset($data["vps"]) && $data["vps"] != "") {
                 $model = $model->where("vps_ip", "LIKE", "%" . trim($data["vps"]) . "%");
             }
+            
+            if (isset($data["phone"]) && $data["phone"] != "") {
+                $model = $model->where("phone", "LIKE", "%" . trim($data["phone"]) . "%");
+            }
+            
             if (isset($data["status_limit"]) && $data["status_limit"] != "") {
                 $model = $model->where("status", $data["status_limit"]);
             }

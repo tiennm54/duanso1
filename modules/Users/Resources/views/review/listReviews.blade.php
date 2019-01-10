@@ -17,7 +17,7 @@
                 ?>
                 <?php foreach ($model as $key => $item): ?>
                     <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="product-thumb transition">
+                        <div class="product-thumb transition" style="height: 110px">
                             <div class="image">
                                 <a href="<?php echo $item->getUrl();?>">
                                     <img src="{{url('images/'.$item->getArticles->image)}}" alt="Reviews {{ $item->title }} Premium Account" title="Click here to reviews {{ $item->title }}"
