@@ -91,10 +91,12 @@
                                 <option value="Work" <?php echo (isset($model) && $model->status == "Work") ? "selected" : "" ?>>Work</option>
                                 <option value="Pending" <?php echo (isset($model) && $model->status == "Pending") ? "selected" : "" ?>>Pending</option>
                                 <option value="Limit" <?php echo (isset($model) && $model->status == "Limit") ? "selected" : "" ?>>Limit</option>
+                                <option value="Restore" <?php echo (isset($model) && $model->status == "Restore") ? "selected" : "" ?>>Restore</option>
+                                <option value="UnLimit" <?php echo (isset($model) && $model->status == "UnLimit") ? "selected" : "" ?>>UnLimit</option>
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Phone</label>
@@ -110,8 +112,8 @@
                             {!! $errors->first('website','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
-                    
-                     <div class="col-md-3">
+
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Status Website</label>
                             <select class="form-control" name="status_website">
@@ -120,6 +122,31 @@
                             </select>
                         </div>
                     </div>
+
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Document</label>
+                            <input type="file" name="document" class="form-control border-input">
+                            {!! $errors->first('document','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Người gỡ</label>
+                            <input value="{{ (isset($model)) ? $model->user_verify : "" }}" class="form-control border-input" placeholder="User verify..." name="user_verify">
+                            {!! $errors->first('user_verify','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+                    <?php if (isset($model) && $model->document != "" && $model->document != null): ?>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Download document</label><br>
+                                <a class="btn btn-primary" href="<?php echo url('documents//' . $model->document); ?>" download>Download</a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
 
                 </div>
 

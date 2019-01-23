@@ -73,6 +73,12 @@
                                     <option value="Limit" {{ (app('request')->input('status_limit') == "Limit") ? "selected" : "" }}>
                                         Limit
                                     </option>
+                                    <option value="Restore" {{ (app('request')->input('status_limit') == "Restore") ? "selected" : "" }}>
+                                        Restore
+                                    </option>
+                                    <option value="UnLimit" {{ (app('request')->input('status_limit') == "UnLimit") ? "selected" : "" }}>
+                                        UnLimit
+                                    </option>
                                 </select>
                             </div>
                         </div>

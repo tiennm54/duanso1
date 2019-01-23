@@ -45,10 +45,10 @@ class PaypalAccountManagerController extends Controller {
         if ($model_payment != null) {
             $model_payment->email = $model->email;
             $model_payment->paypal_account_id = $model->id;
-            if($model->website != "" && $model->status_website == 1){
+            if ($model->website != "" && $model->status_website == 1) {
                 $model_payment->status_website = 1;
                 $model_payment->website = $model->website;
-            }else{
+            } else {
                 $model_payment->status_website = 0;
                 $model_payment->website = "";
             }
@@ -82,6 +82,18 @@ class PaypalAccountManagerController extends Controller {
             $model->website = $data["website"];
             $model->status_website = $data["status_website"];
             $model->phone = $data["phone"];
+            $model->user_verify = $data["user_verify"];
+
+            if (isset($request->document)) {
+                if ($request->hasFile('document')) {
+                    $file = $request->file('document');
+                    $input['file_name'] = time() . '.' . $file->getClientOriginalExtension();
+                    $destinationPath = public_path('/documents');
+                    $file->move($destinationPath, $input['file_name']);
+                    $model->document = $input['file_name'];
+                }
+            }
+
             $model->save();
 
             if ($model->status_activate == "Activate") {
@@ -112,6 +124,9 @@ class PaypalAccountManagerController extends Controller {
         if ($model) {
             DB::beginTransaction();
             $data = $request->all();
+            
+            $old_file = $model->document;
+            
             $model->email = $data["email"];
             $model->password = $data["password"];
             $model->full_name = $data["full_name"];
@@ -124,6 +139,21 @@ class PaypalAccountManagerController extends Controller {
             $model->website = $data["website"];
             $model->status_website = $data["status_website"];
             $model->phone = $data["phone"];
+            $model->user_verify = $data["user_verify"];
+
+            if (isset($request->document)) {
+                if ($request->hasFile('document')) {
+                    $file = $request->file('document');
+                    $input['file_name'] = time() . '.' . $file->getClientOriginalExtension();
+                    $destinationPath = public_path('/documents');
+                    $file->move($destinationPath, $input['file_name']);
+                    $model->document = $input['file_name'];
+                    if ($old_file && file_exists('documents/' . $old_file)) {
+                        unlink('documents/' . $old_file);
+                    }
+                }
+            }
+
             $model->save();
             if ($data["status_activate"] == "Activate") {
                 if ($model->status != "Limit") {
@@ -152,11 +182,11 @@ class PaypalAccountManagerController extends Controller {
             if (isset($data["vps"]) && $data["vps"] != "") {
                 $model = $model->where("vps_ip", "LIKE", "%" . trim($data["vps"]) . "%");
             }
-            
+
             if (isset($data["phone"]) && $data["phone"] != "") {
                 $model = $model->where("phone", "LIKE", "%" . trim($data["phone"]) . "%");
             }
-            
+
             if (isset($data["status_limit"]) && $data["status_limit"] != "") {
                 $model = $model->where("status", $data["status_limit"]);
             }
@@ -304,7 +334,7 @@ class PaypalAccountManagerController extends Controller {
         if (isset($data["order_no"]) && $data["order_no"] != "") {
             $model = $model->where("order_no", "LIKE", "%" . trim($data["order_no"]) . "%");
         }
-        
+
         if (isset($data["status_receive"]) && $data["status_receive"] != "") {
             $model = $model->where("status", $data["status_receive"]);
         }
