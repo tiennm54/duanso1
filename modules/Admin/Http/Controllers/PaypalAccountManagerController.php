@@ -124,9 +124,9 @@ class PaypalAccountManagerController extends Controller {
         if ($model) {
             DB::beginTransaction();
             $data = $request->all();
-            
+
             $old_file = $model->document;
-            
+
             $model->email = $data["email"];
             $model->password = $data["password"];
             $model->full_name = $data["full_name"];
@@ -279,17 +279,17 @@ class PaypalAccountManagerController extends Controller {
             $model_paypal = PaypalAccount::find($id);
             if ($model_paypal) {
                 $model = $model->where("paypal_account_id", $model_paypal->id);
-                if (isset($request)) {
-                    $data = $request->all();
-                    if (isset($data["email_buyer"]) && $data["email_buyer"] != "") {
-                        $model = $model->where("email_buyer", "LIKE", "%" . trim($data["email_buyer"]) . "%");
-                    }
-                    if (isset($data["paypal_account_email"]) && $data["paypal_account_email"] != "") {
-                        $model = $model->where("paypal_account_email", "LIKE", "%" . trim($data["paypal_account_email"]) . "%");
-                    }
-                }
             } else {
                 $request->session()->flash('alert-warning', 'Warning: Không tồn tại tài khoản paypal có id = ' . $id);
+            }
+        }
+        if (isset($request)) {
+            $data = $request->all();
+            if (isset($data["email_buyer"]) && $data["email_buyer"] != "") {
+                $model = $model->where("email_buyer", "LIKE", "%" . trim($data["email_buyer"]) . "%");
+            }
+            if (isset($data["paypal_account_email"]) && $data["paypal_account_email"] != "") {
+                $model = $model->where("paypal_account_email", "LIKE", "%" . trim($data["paypal_account_email"]) . "%");
             }
         }
         $model = $model->orderBy("id", "DESC")->paginate(NUMBER_PAGE);

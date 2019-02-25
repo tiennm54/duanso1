@@ -1,7 +1,7 @@
 <html dir="ltr" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Buy Premium Key</title>
+    <title>Test Website</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -17,7 +17,7 @@
     <link href="{{url('theme_backend/css/bootstrap-datetimepicker.min.css')}}" type="text/css" rel="stylesheet" media="screen">
     <link type="text/css" href="{{url('theme_backend/css/stylesheet.css')}}" rel="stylesheet" media="screen">
     <script src="{{url('theme_backend/js/common.js')}}" type="text/javascript"></script>
-    <link href="{{url('theme_frontend/image/favicon.png')}}" rel="icon">
+    <link href="{{url('theme_frontend/image/cart.png')}}" rel="icon">
 
     <script type="text/javascript">
 
