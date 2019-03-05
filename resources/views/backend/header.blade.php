@@ -21,6 +21,28 @@ $statisticCount = Session::get('statisticCount', []);
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right alerts-dropdown">
 
+                    <li class="divider"></li>
+
+                    <li class="dropdown-header">Affiliates</li>
+                    
+                    <li>
+                        <a href="<?php echo URL::route('admin.userReviewsManager.index'); ?>">
+                            <span class="label <?php echo ($statisticCount["count_reviews"] > 0 ) ? "label-danger" : "label-success" ?> pull-right">
+                                <?php echo $statisticCount["count_reviews"]; ?>
+                            </span>User Reviews
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="<?php echo URL::route('admin.feedback.index'); ?>">
+                            <span class="label <?php echo ($statisticCount["count_feedback"] > 0 ) ? "label-danger" : "label-success" ?> pull-right">
+                                <?php echo $statisticCount["count_feedback"]; ?>
+                            </span>Feed back
+                        </a>
+                    </li>
+
+                    
+                    <li class="divider"></li>
                     <li class="dropdown-header">Notification</li>
                     <li>
                         <?php $payment_bonus_id = $statisticCount["payment_bonus_id"]; ?>
@@ -57,9 +79,19 @@ $statisticCount = Session::get('statisticCount', []);
 
                     <li class="divider"></li>
                     <li class="dropdown-header">Orders (Processing)</li>
+                    
+                    <li>
+                        <a href="<?php echo URL::route('adminUserOrders.listOrders') . "?payment_status=completed"; ?>">
+                            <span class="label label-primary pull-right">
+                                <?php echo $statisticCount["count_order_completed"]; ?>
+                            </span>
+                            Completed
+                        </a>
+                    </li>
+                    
                     <li>
                         <a href="<?php echo URL::route('adminUserOrders.listOrders') . "?payment_status=paid"; ?>">
-                            <span class="label label-danger pull-right">
+                            <span class="label label-primary pull-right">
                                 <?php echo $statisticCount["count_order_paid"]; ?>
                             </span>
                             Paid
@@ -67,7 +99,7 @@ $statisticCount = Session::get('statisticCount', []);
                     </li>
                     <li>
                         <a href="<?php echo URL::route('adminUserOrders.listOrders') . "?payment_status=pending"; ?>">
-                            <span class="label label-danger pull-right">
+                            <span class="label label-primary pull-right">
                                 <?php echo $statisticCount["count_order_pending"]; ?>
                             </span>
                             Pending
@@ -82,16 +114,16 @@ $statisticCount = Session::get('statisticCount', []);
                             Refund
                         </a>
                     </li>
-
-                    <li class="divider"></li>
-                    <li class="dropdown-header">Affiliates</li>
+                    
                     <li>
-                        <a href="<?php echo URL::route('admin.feedback.index'); ?>">
-                            <span class="label <?php echo ($statisticCount["count_feedback"] > 0 ) ? "label-danger" : "label-success" ?> pull-right">
-                                <?php echo $statisticCount["count_feedback"]; ?>
-                            </span>Feed back
+                        <a href="<?php echo URL::route('adminUserOrders.listOrders') . "?payment_status=cancel"; ?>">
+                            <span class="label label-danger pull-right">
+                                <?php echo $statisticCount["count_order_cancel"]; ?>
+                            </span>
+                            Cancel
                         </a>
                     </li>
+
                     <li class="divider"></li>
                     <li class="dropdown-header">Products</li>
                     <li>

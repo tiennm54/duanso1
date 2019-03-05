@@ -172,4 +172,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
         Route::post('editPaypalReceive', ['as' => 'admin.paypalReceive.editPaypalReceive', 'uses' => 'PaypalAccountManagerController@editPaypalReceive']);
     });
     
+    
+    Route::group(['prefix' => 'userReviewsManager'], function() {
+        Route::get('index', ['as' => 'admin.userReviewsManager.index', 'uses' => 'UserReviewsManagerController@index']);
+        Route::get('delete/{id}', ['as' => 'admin.userReviewsManager.delete', 'uses' => 'UserReviewsManagerController@delete']);
+    });
+    
 });

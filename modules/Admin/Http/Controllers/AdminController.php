@@ -9,6 +9,7 @@ use App\Models\Articles;
 use App\Models\FeedBack;
 use App\Models\PaymentType;
 use App\Models\NewsComment;
+use App\Models\Reviews;
 use Pingpong\Modules\Routing\Controller;
 use Session;
 
@@ -68,10 +69,15 @@ class AdminController extends Controller {
         $count_order_pending = UserOrders::where("payment_status", "=", "pending")->count();
         $count_order_paid = UserOrders::where("payment_status", "=", "paid")->count();
         $count_order_refund = UserOrders::where("payment_status", "=", "refund")->count();
+        $count_order_completed = UserOrders::where("payment_status", "=", "completed")->count();
+        $count_order_cancel = UserOrders::where("payment_status", "=", "cancel")->count();
+        
         $count_user_lock = $obj_user->getModelUserLock()->count();
         $count_product_no_stock = Articles::where("status_stock", "=", 0)->orWhere("status_disable", "=", 1)->count();
         $count_feedback = FeedBack::where("status_fix", "=", "NO")->count();
         $count_comment = NewsComment::where("parent_id",0)->where("status_admin_reply",0)->count();
+        $count_reviews = Reviews::whereDay('created_at', '=', date('d'))->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->count();
+        
         $model_payment = PaymentType::where("code","=","BONUS")->first();
         if($model_payment != null){
             $payment_bonus_id = $model_payment->id;
@@ -84,11 +90,14 @@ class AdminController extends Controller {
             "count_order_pending" => $count_order_pending,
             "count_order_paid" => $count_order_paid,
             "count_order_refund" => $count_order_refund,
+            "count_order_completed" => $count_order_completed,
+            "count_order_cancel" => $count_order_cancel,
             "count_user_lock" => $count_user_lock,
             "count_product_no_stock" => $count_product_no_stock,
             "count_feedback" => $count_feedback,
+            "count_reviews" => $count_reviews,
             "count_comment" => $count_comment,
-            "count_noti" => ($count_used_bonus_pending + $count_bonus_payment + $count_user_lock + $count_feedback + $count_comment),
+            "count_noti" => ($count_reviews + $count_feedback),
             "payment_bonus_id" => $payment_bonus_id
         );
 

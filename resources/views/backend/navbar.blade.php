@@ -56,7 +56,6 @@
                     <li>
                         <a href="{{ URL::route('admin.feedback.index') }}">Feedback</a>
                     </li>
-
                 </ul>
             </li>
 
@@ -76,6 +75,7 @@
                 <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>
                 <ul class="collapse">
                     <li><a href="{{ URL::route('admin.userManagement.index') }}">List User</a></li>
+                    <li><a href="{{ URL::route('admin.userReviewsManager.index') }}">User Reviews</a></li>
                 </ul>
             </li>
         <?php } ?>

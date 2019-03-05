@@ -1,5 +1,5 @@
 <div class="form-review">
-    <span class="review-now">Review now</span>
+    <span class="review-now">WRITE A REVIEW</span>
     <input type="hidden" class="action-rating-review" value="" style="display: block; float: left"/>
 </div>
 

@@ -11,7 +11,7 @@
         @include('validator.flash-message')
         <div id="content" class="col-sm-9">
             <div class="page-title">
-                <h1>Review BuyPremiumKey.com Official Reseller</h1>
+                <h1>Some of our 379,868+ customers used services</h1>
             </div>
             <div class="view-rating">
                 <span >

@@ -9,6 +9,7 @@ use App\Models\News;
 use App\Models\Category;
 use App\Models\CategoryFaq;
 use App\Models\ArticlesReviews;
+use App\Models\Reviews;
 use Pingpong\Modules\Routing\Controller;
 use Illuminate\Http\Request;
 use DougSisk\CountryState\CountryState;
@@ -25,7 +26,10 @@ class ArticlesController extends Controller {
                 ->orderBy("order_count", "DESC")
                 ->orderBy("view_count", "DESC")
                 ->get();
-        return view('articles::articles.index', compact("model"));
+        
+        $model_reviews = Reviews::where("review_rate", ">=", 4)->orderBy("id","DESC")->limit(6)->get();
+        
+        return view('articles::articles.index', compact("model","model_reviews"));
     }
 
     public function getListProduct() {

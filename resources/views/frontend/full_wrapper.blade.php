@@ -1,4 +1,5 @@
-<div class="full-wrapper banner-homepage hidden-sm hidden-xs clearfix"><div class="container">
+<div class="full-wrapper banner-homepage hidden-sm hidden-xs clearfix">
+    <div class="container">
         <div class="col-md-12">
             <div class="row banner-homepage-content">
                 <div class="col-md-3 item item-1">
