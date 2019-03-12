@@ -79,6 +79,12 @@
                                     <option value="UnLimit" {{ (app('request')->input('status_limit') == "UnLimit") ? "selected" : "" }}>
                                         UnLimit
                                     </option>
+                                    <option value="Banked" {{ (app('request')->input('status_limit') == "Banked") ? "selected" : "" }}>
+                                        Banked
+                                    </option>
+                                    <option value="Cancel" {{ (app('request')->input('status_limit') == "Cancel") ? "selected" : "" }}>
+                                        Cancel
+                                    </option>
                                 </select>
                             </div>
                         </div>

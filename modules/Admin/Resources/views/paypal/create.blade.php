@@ -96,6 +96,8 @@
                                 <option value="Limit" <?php echo (isset($model) && $model->status == "Limit") ? "selected" : "" ?>>Limit</option>
                                 <option value="Restore" <?php echo (isset($model) && $model->status == "Restore") ? "selected" : "" ?>>Restore</option>
                                 <option value="UnLimit" <?php echo (isset($model) && $model->status == "UnLimit") ? "selected" : "" ?>>UnLimit</option>
+                                <option value="Banked" <?php echo (isset($model) && $model->status == "Banked") ? "selected" : "" ?>>Banked</option>
+                                <option value="Cancel" <?php echo (isset($model) && $model->status == "Cancel") ? "selected" : "" ?>>Cancel</option>
                             </select>
                         </div>
                     </div>

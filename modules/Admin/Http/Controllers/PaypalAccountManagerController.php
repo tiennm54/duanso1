@@ -136,6 +136,7 @@ class PaypalAccountManagerController extends Controller {
             $old_file = $model->document;
 
             $model->email = $data["email"];
+            $model->prefix = $data["prefix"];
             $model->password = $data["password"];
             $model->full_name = $data["full_name"];
             $model->vps_ip = $data["vps_ip"];
@@ -204,7 +205,7 @@ class PaypalAccountManagerController extends Controller {
         }
 
         $model = $model->orderByRaw("FIELD(status_activate, \"Activate\", \"No_Activate\")")
-                ->orderByRaw("FIELD(status, \"Work\", \"Pending\", \"Limit\")")
+                ->orderByRaw("FIELD(status, \"Work\", \"Restore\", \"Pending\", \"UnLimit\", \"Limit\", \"Banked\", \"Cancel\")")
                 ->paginate(NUMBER_PAGE);
         return view('admin::paypal.index', compact('model'));
     }
