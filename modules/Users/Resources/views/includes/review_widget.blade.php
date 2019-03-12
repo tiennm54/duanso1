@@ -15,7 +15,7 @@
                     <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                     <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
                 </span>
-                <span> <?php echo $item->created_at; ?> </span>
+                <span> <i class="glyphicon glyphicon-time"></i> <?php echo $item->created_at; ?> </span>
             </p>
             <p>
                 <span><?php echo $item->review_des; ?></span>

@@ -21,7 +21,7 @@ class UserOrders extends Model {
     public function payment_type() {
         return $this->hasOne('App\Models\PaymentType', 'id', 'payments_type_id');
     }
-    
+
     public function paypalAccount() {
         return $this->hasOne('App\Models\PaypalAccount', 'id', 'paypal_account_id');
     }
@@ -31,21 +31,23 @@ class UserOrders extends Model {
     }
 
     //LAY ORDER NO CHO ORDER
-    public function getNameOrderNo() {
-        //$time = strtotime(Carbon::now());
-        //$month = date("m", $time);
-        //$year = date("Y", $time);
-        //$order_no = "BPK-" . $year . $month . $this->id;
-        $order_no = "BPK-" . $this->id;
+    public function getNameOrderNo($model_payment_type) {
+        $prefix = "BPK-";
+        if ($model_payment_type != null) {
+            if ($model_payment_type->prefix != null && $model_payment_type->prefix != "") {
+                $prefix = $model_payment_type->prefix . "-";
+            }
+        }
+        $order_no = $prefix . $this->id;
         return $order_no;
     }
-    
-    public function createPaypalToken(){
+
+    public function createPaypalToken() {
         $time = strtotime(Carbon::now());
         $order_id = $this->id;
         $total_price = $this->total_price;
         $private_key = PRIVATE_PAYPAL_KEY;
-        $string_hash = $private_key."-".$order_id."-".$total_price."-".$time;
+        $string_hash = $private_key . "-" . $order_id . "-" . $total_price . "-" . $time;
         //Log::info($string_hash);
         $paypal_token = base64_encode($string_hash);
         return $paypal_token;
@@ -66,13 +68,13 @@ class UserOrders extends Model {
                 return null;
             }
         }
-        
+
         $model_payment_type = PaymentType::find($data["payments_type_id"]);
-        if($model_payment_type == null){
+        if ($model_payment_type == null) {
             return null;
         }
         $this->paypal_account_id = $model_payment_type->paypal_account_id;
-        
+
         $this->users_id = $model_user->id;
         $this->users_roles_id = $model_user->roles_id;
         $this->first_name = $model_user->first_name;
@@ -88,7 +90,7 @@ class UserOrders extends Model {
         $this->quantity_product = count($array_orders);
         $this->payment_status = "pending";
         $this->save();
-        $this->order_no = $this->getNameOrderNo();
+        $this->order_no = $this->getNameOrderNo($model_payment_type);
         $this->paypal_token = $this->createPaypalToken();
         $this->save();
         //Save Order Detail
@@ -142,23 +144,23 @@ class UserOrders extends Model {
     }
 
     public function getOrderPending() {
-        $model = UserOrders::where("payment_status", "pending")->orderBy('id','DESC')->paginate(5);
+        $model = UserOrders::where("payment_status", "pending")->orderBy('id', 'DESC')->paginate(5);
         return $model;
     }
 
     public function getOrderPaid() {
         $model = UserOrders::where(function ($query) {
-                $query->where('payment_status', 'paid')
-                        ->orWhere('payment_status', 'dispute')
-                        ->orWhere('payment_status', 'echeck');
-            })->orderBy('id','DESC')->paginate(10);
+                    $query->where('payment_status', 'paid')
+                            ->orWhere('payment_status', 'dispute')
+                            ->orWhere('payment_status', 'echeck');
+                })->orderBy('id', 'DESC')->paginate(10);
         return $model;
     }
-    
-    public function getOrderCompletedDay(){
+
+    public function getOrderCompletedDay() {
         $model = UserOrders::where("payment_status", "completed")
-                ->where('payment_date', '>=', date('Y-m-d').' 00:00:00')
-                ->orderBy('id','DESC')
+                ->where('payment_date', '>=', date('Y-m-d') . ' 00:00:00')
+                ->orderBy('id', 'DESC')
                 ->get();
         return $model;
     }
@@ -177,12 +179,9 @@ class UserOrders extends Model {
         );
         return $data;
     }
-    
-    
-    public function getUrl(){
-        return URL::route('users.orderHistoryView', ["id" => $this->id , "order_no" => $this->order_no ]);
+
+    public function getUrl() {
+        return URL::route('users.orderHistoryView', ["id" => $this->id, "order_no" => $this->order_no]);
     }
-    
-    
 
 }

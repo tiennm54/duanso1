@@ -44,34 +44,36 @@
 <div class=" banner-homepage banner-homepage-content">
     <div class="container ">
         <div class="row">
-            <div class="page-title">
-                <h2>Some of our 379,868+ customers used services</h2>
-            </div>
+            <div id="content" class="col-sm-12">
+                <div class="page-title">
+                    <h2>Some of our 379,868+ customers used services</h2>
+                </div>
 
-            <div id="review">
-                <?php foreach ($model_reviews as $item): ?>
-                    <div class="well">
-                        <p>
-                            <b><?php echo $item->review_name; ?></b>
-                            <span class="rating">
-                                <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 0) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                                <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 1) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                                <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 2) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                                <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                                <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
-                            </span>
-                            <span><i class="glyphicon glyphicon-time"></i> <?php echo $item->created_at; ?> </span>
-                        </p>
-                        <p>
-                            <span><?php echo $item->review_des; ?></span>
-                        </p>
-                    </div>
-                <?php endforeach; ?>
+                <div id="review">
+                    <?php foreach ($model_reviews as $item): ?>
+                        <div class="well">
+                            <p>
+                                <b><?php echo $item->review_name; ?></b>
+                                <span class="rating">
+                                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 0) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 1) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 2) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 3) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                                    <span class="fa fa-stack"><i class="fa {{ ($item->review_rate > 4) ? "fa-star" : "fa-star-o" }} fa-stack-1x"></i></span>
+                                </span>
+                                <span> <i class="glyphicon glyphicon-time"></i> <?php echo $item->created_at; ?> </span>
+                            </p>
+                            <p>
+                                <span><?php echo $item->review_des; ?></span>
+                            </p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="text-center">
-                <a href="<?php echo URL::route('users.review.index') ?>" class="btn btn-success" style="margin-bottom: 20px">Read more <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+            <div class="row">
+                <div class="text-center">
+                    <a href="<?php echo URL::route('users.review.index') ?>" class="btn btn-success" style="margin-bottom: 20px">Read more <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+                </div>
             </div>
         </div>
     </div>

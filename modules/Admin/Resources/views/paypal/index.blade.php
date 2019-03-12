@@ -51,7 +51,7 @@
                                 <input type="text" name="vps" placeholder="VPS" class="form-control" value="{{ app('request')->input('vps') }}">
                             </div>
                         </div>
-                        
+
                         <div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">Phone</label>
@@ -122,9 +122,10 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>No.</th>
+                            <th>Prefix</th>
                             <th>Email</th>
                             <th>Password</th>
+                            <th>Website</th>
                             <th>Money activate</th>
                             <th>Money hold</th>
                             <th>Status Limit</th>
@@ -141,7 +142,7 @@
 
                             <tr>
                                 <td>
-                                    <?php echo $key + 1; ?>
+                                    <span class="label label-primary"><?php echo ($item->prefix != "") ? $item->prefix : "BPK"; ?></span>
                                 </td>
                                 <td>
                                     <b>
@@ -149,9 +150,14 @@
                                             <?php echo $item->email; ?>
                                         </a>
                                     </b>
+
                                     <hr>
                                     <?php echo ($item->vps_ip) ? $item->vps_ip : "NONE"; ?> | 
                                     <?php echo ($item->phone) ? $item->phone : "NONE"; ?>
+
+                                </td>
+                                <td><?php echo $item->password; ?></td>
+                                <td>
                                     <?php
                                     if ($item->website != "") {
                                         if ($item->status_website == 1) {
@@ -161,11 +167,11 @@
                                             <a class="label label-danger" href="<?php echo $item->website; ?>" target="_blank">SITE OFF</a>
                                             <?php
                                         }
+                                    }else{
+                                        echo "N/A";
                                     }
                                     ?>
                                 </td>
-                                <td><?php echo $item->password; ?></td>
-
                                 <td><?php echo $item->money_activate . "$"; ?></td>
                                 <td>
                                     <a href="<?php echo URL::route("admin.paypalReceive.index", ["id" => $item->id]) . "?status_receive=pending"; ?>"><?php echo $item->money_hold . "$"; ?></a>

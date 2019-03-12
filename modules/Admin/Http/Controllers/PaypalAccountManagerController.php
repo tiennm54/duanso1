@@ -52,6 +52,13 @@ class PaypalAccountManagerController extends Controller {
                 $model_payment->status_website = 0;
                 $model_payment->website = "";
             }
+            
+            if($model->prefix != null && $model->prefix != ""){
+                $model_payment->prefix = $model->prefix;
+            }else{
+                $model_payment->prefix = "BPK";
+            }
+            
             $model_payment->save();
             //CAP NHAT THOI GIAN BAT DAU NHAN TIEN
             $model->start_date = Carbon::now();
@@ -71,6 +78,7 @@ class PaypalAccountManagerController extends Controller {
             $data = $request->all();
             $model = new PaypalAccount();
             $model->email = $data["email"];
+            $model->prefix = $data["prefix"];
             $model->password = $data["password"];
             $model->full_name = $data["full_name"];
             $model->vps_ip = $data["vps_ip"];

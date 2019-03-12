@@ -38,6 +38,15 @@
                             {!! $errors->first('email','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Pre-Fix</label>
+                            <input type="text" value="{{ (isset($model)) ? $model->prefix : "" }}" class="form-control border-input" placeholder="Pre Fix..." name="prefix" required>
+                            {!! $errors->first('prefix','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+                    
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Password</label>
@@ -51,13 +60,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>VPS IP</label>
-                            <input type="text" value="{{ (isset($model)) ? $model->vps_ip : "" }}" class="form-control border-input" placeholder="VPS IP..." name="vps_ip">
-                            {!! $errors->first('vps_ip','<span class="control-label color-red" style="color: red">*:message</span>') !!}
-                        </div>
-                    </div>
+                    
 
                 </div>
 
@@ -129,6 +132,14 @@
                             <label>Document</label>
                             <input type="file" name="document" class="form-control border-input">
                             {!! $errors->first('document','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>VPS IP</label>
+                            <input type="text" value="{{ (isset($model)) ? $model->vps_ip : "" }}" class="form-control border-input" placeholder="VPS IP..." name="vps_ip">
+                            {!! $errors->first('vps_ip','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
 
