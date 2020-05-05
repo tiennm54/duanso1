@@ -13,9 +13,18 @@
                             </button>
                         </td>
                         <td>
-                            <span class="label {{($model->payment_type->code == "BONUS") ? "label-danger" : "label-primary"}}">
-                                {{ $model->payment_type->title }}: <?php echo ($model->paypalAccount != null) ? $model->paypalAccount->email : "N.A"; ?>
-                            </span>
+                            
+                            {{ $model->payment_type->title }}: 
+                            <?php 
+                                if($model->paypalAccount != null){
+                            ?>
+                                   <a class="label label-primary" href="<?php echo URL::route('admin.paypal.getEdit', $model->paypalAccount->id); ?>"> 
+                                        <?php echo ($model->paypalAccount != null) ? $model->paypalAccount->email : "N.A";  ?>
+                                   </a>
+                            <?php
+                                }
+                            ?>
+                            
                         </td>
                     </tr>
 
@@ -39,10 +48,10 @@
                     <tr>
                         <td>
                             <button data-toggle="tooltip" title="" class="btn btn-info btn-xs"
-                                    data-original-title="Shipping Method"><i class="fa fa-truck fa-fw"></i>
+                                    data-original-title="User IP"><i class="fa fa-server"></i>
                             </button>
                         </td>
-                        <td>Send by mail</td>
+                        <td><b><?php echo ($model->user_ip != "") ? $model->user_ip : "N/A"; ?></b></td>
                     </tr>
                 </tbody>
             </table>

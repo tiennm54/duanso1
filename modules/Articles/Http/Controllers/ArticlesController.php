@@ -117,7 +117,7 @@ class ArticlesController extends Controller {
 
                 if ($type == "product") {
                     $model = Articles::where("title", "LIKE", "%" . $keyword . "%")
-                            ->where("status_disable", "=", 0)
+                            //->where("status_disable", "=", 0)
                             ->where("status_stock", "=", 1)
                             ->orderBy("order_count", "DESC")
                             ->orderBy("view_count", "DESC")
@@ -132,8 +132,10 @@ class ArticlesController extends Controller {
                                 ->orderBy("view_count", "DESC")
                                 ->get();
                     }
+                    
+                    $model_reviews = Reviews::where("review_rate", ">=", 4)->orderBy("id","DESC")->limit(6)->get();
 
-                    return view('articles::articles.index', compact("model"));
+                    return view('articles::articles.index', compact("model","model_reviews"));
                 }
             }
         }

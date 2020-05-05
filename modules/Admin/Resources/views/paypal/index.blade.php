@@ -136,6 +136,7 @@
                             <th>Money hold</th>
                             <th>Status Limit</th>
                             <th>Status Activate</th>
+                            <th>Max Payment</th>
                             <th>End date</th>
                             <th>Action</th>
                         </tr>
@@ -191,6 +192,10 @@
                                     <span class="label {{ ($item->status_activate == "Activate") ? "label-primary" : "label-danger"}}"> 
                                         <?php echo $item->status_activate; ?>
                                     </span>
+                                </td>
+                                
+                                <td> 
+                                    <span><?php echo $item->max_money; ?></span>
                                 </td>
 
                                 <td>

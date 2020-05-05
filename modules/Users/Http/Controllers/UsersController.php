@@ -33,7 +33,11 @@ class UsersController extends CheckMemberController {
 
     public function getLogin() {
         SeoPage::seoPage($this);
-        return view('users::user.login');
+        $attributes = [
+            'data-theme' => 'light',
+            'data-type' => 'image',
+        ];
+        return view('users::user.login', compact('attributes'));
     }
 
     public function postLogin(LoginRequest $request) {
@@ -58,18 +62,24 @@ class UsersController extends CheckMemberController {
                             $this->getInfoUser($user);
                             return redirect()->route('admin.news.index');
                         default:
-                            return view('users::user.login');
+                            return redirect()->route('users.getLogin');
+                            //return view('users::user.login');
                     }
                 }
             } 
             $request->session()->flash('alert-warning', ' Warning: Invalid username and/or password, please try again.');
-            return view('users::user.login');
+            return redirect()->route('users.getLogin');
+            //return view('users::user.login');
         }
     }
     
     public function getRegister() {
         SeoPage::seoPage($this);
-        return view('users::user.register');
+        $attributes = [
+            'data-theme' => 'light',
+            'data-type' => 'image',
+        ];
+        return view('users::user.register', compact('attributes'));
     }
 
     public function postRegister(RegisterRequest $request) {

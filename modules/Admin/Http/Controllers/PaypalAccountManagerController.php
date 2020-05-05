@@ -91,6 +91,8 @@ class PaypalAccountManagerController extends Controller {
             $model->status_website = $data["status_website"];
             $model->phone = $data["phone"];
             $model->user_verify = $data["user_verify"];
+            $model->cmnd = $data["cmnd"];
+            $model->max_money = $data["max_money"];
 
             if (isset($request->document)) {
                 if ($request->hasFile('document')) {
@@ -149,6 +151,8 @@ class PaypalAccountManagerController extends Controller {
             $model->status_website = $data["status_website"];
             $model->phone = $data["phone"];
             $model->user_verify = $data["user_verify"];
+            $model->cmnd = $data["cmnd"];
+            $model->max_money = $data["max_money"];
 
             if (isset($request->document)) {
                 if ($request->hasFile('document')) {

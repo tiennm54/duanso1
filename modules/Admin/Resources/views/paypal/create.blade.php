@@ -152,6 +152,23 @@
                             {!! $errors->first('user_verify','<span class="control-label color-red" style="color: red">*:message</span>') !!}
                         </div>
                     </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>CMND ID</label>
+                            <input value="{{ (isset($model)) ? $model->cmnd : "" }}" class="form-control border-input" placeholder="ID cmnd..." name="cmnd">
+                            {!! $errors->first('cmnd','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>MAX Money</label>
+                            <input value="{{ (isset($model)) ? $model->max_money : "" }}" class="form-control border-input" placeholder="Max money..." name="max_money">
+                            {!! $errors->first('max_money','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+                    
                     <?php if (isset($model) && $model->document != "" && $model->document != null): ?>
                         <div class="col-md-3">
                             <div class="form-group">

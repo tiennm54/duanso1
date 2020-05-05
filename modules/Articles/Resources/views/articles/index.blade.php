@@ -5,6 +5,20 @@
     @include('validator.flash-message')
     <div class="row">
         <div id="content" class="col-sm-12">
+            
+            <div class="row">
+                <form>
+                    <div class="search-cate-content">
+                        <select class="form-control select2-container js-example-basic-single" id="quickFindFilehostId" onchange="quickFindFilehost()">
+                            <option value="-1">Quick Find Filehosting</option>
+                            <?php foreach ($model as $key => $item): ?>
+                                <option value="<?php echo $item->getUrlPricing(); ?>"><?php echo $item->title; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
             <div class="row">
                 <?php
                 if (count($model) == 0) {
@@ -78,6 +92,4 @@
         </div>
     </div>
 </div>
-
-
 @stop

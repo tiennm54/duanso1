@@ -18,5 +18,12 @@ class ContactRequest extends Request {
             'g-recaptcha-response' => 'required|captcha'
         ];
     }
+    
+    public function messages () {
+        return [
+            //'email.required'	=> 'Please Enter Username',
+            'g-recaptcha-response.required' => 'The captcha field is required'
+        ];
+    }
 
 }

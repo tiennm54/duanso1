@@ -31,15 +31,53 @@ class UserOrders extends Model {
     }
 
     //LAY ORDER NO CHO ORDER
-    public function getNameOrderNo($model_payment_type) {
+    public function getNameOrderNo($model_paypal_account) {
         $prefix = "BPK-";
-        if ($model_payment_type != null) {
-            if ($model_payment_type->prefix != null && $model_payment_type->prefix != "") {
-                $prefix = $model_payment_type->prefix . "-";
+        if ($model_paypal_account != null) {
+            if ($model_paypal_account->prefix != null && $model_paypal_account->prefix != "") {
+                $prefix = $model_paypal_account->prefix . "-";
             }
         }
         $order_no = $prefix . $this->id;
         return $order_no;
+    }
+    //Tim email se nhan thanh toan tu khach hang dua tren so tien khach hang thanh toan
+    public function getEmailPaypal($total_price, $model_payment_type){
+        
+        $model_acc_1 = PaypalAccount::find($model_payment_type->paypal_account_id);
+        
+        if($model_acc_1 != null){
+            if($model_acc_1->max_money >= $total_price){
+                
+                return $model_acc_1;
+                
+            }else{
+                
+                $model_acc_2 = PaypalAccount::where("max_money", ">=", $total_price)
+                ->where("status", "=", "Work")
+                ->orderBy('money_activate', 'ASC')
+                ->first();
+                
+                if($model_acc_2 != null){
+                    
+                    return $model_acc_2;
+                    
+                }else{
+                    
+                    $model_acc_3 = PaypalAccount::where("status", "=", "Work")
+                    ->orderBy('max_money', 'DESC')
+                    ->orderBy('money_activate', 'ASC')
+                    ->first();
+                    if($model_acc_3 != null){
+                        
+                        return $model_acc_3;
+                    
+                    }
+                }
+            }
+        }
+        
+        return $model_acc_1;
     }
 
     public function createPaypalToken() {
@@ -51,6 +89,25 @@ class UserOrders extends Model {
         //Log::info($string_hash);
         $paypal_token = base64_encode($string_hash);
         return $paypal_token;
+    }
+    
+    function get_client_ip() {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP'))
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        else if (getenv('HTTP_X_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        else if (getenv('HTTP_X_FORWARDED'))
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        else if (getenv('HTTP_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        else if (getenv('HTTP_FORWARDED'))
+            $ipaddress = getenv('HTTP_FORWARDED');
+        else if (getenv('REMOTE_ADDR'))
+            $ipaddress = getenv('REMOTE_ADDR');
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
     }
 
     public function createOrder($model_user, $money_user, $data, $array_orders, $totalOrder) {
@@ -73,7 +130,10 @@ class UserOrders extends Model {
         if ($model_payment_type == null) {
             return null;
         }
-        $this->paypal_account_id = $model_payment_type->paypal_account_id;
+        $model_paypal_account = $this->getEmailPaypal($totalOrder["total"], $model_payment_type);
+        
+        $this->paypal_account_id = $model_paypal_account->id;
+        $this->paypal_email = $model_paypal_account->email;
 
         $this->users_id = $model_user->id;
         $this->users_roles_id = $model_user->roles_id;
@@ -89,8 +149,10 @@ class UserOrders extends Model {
         $this->total_price = $totalOrder["total"];
         $this->quantity_product = count($array_orders);
         $this->payment_status = "pending";
+        $this->user_ip = $this->get_client_ip();
+        
         $this->save();
-        $this->order_no = $this->getNameOrderNo($model_payment_type);
+        $this->order_no = $this->getNameOrderNo($model_paypal_account);
         $this->paypal_token = $this->createPaypalToken();
         $this->save();
         //Save Order Detail

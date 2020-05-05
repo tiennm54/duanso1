@@ -24,7 +24,7 @@
                                     <?php } ?>
                                 </p>
                                 <p>
-                                    <span>Your account: {{ $model_user->email }}</span><br/>
+                                    <span>Your account on Buypremiumkey.com: {{ $model_user->email }}</span><br/>
                                     <?php if ($password != "") { ?>
                                         <span>Password: {{ $password }}</span><br/>
                                         <span>Click <a href="{{ URL::route('users.getChangePassword') }}">here</a> to change your password</span><br/>

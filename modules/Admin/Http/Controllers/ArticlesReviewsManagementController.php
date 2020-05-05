@@ -35,7 +35,12 @@ class ArticlesReviewsManagementController extends Controller {
                 $product_name = $arr[0];
                 $seo_title = $item->title . " Reviews | " . $item->title . " Premium Key Paypal Reseller.";
                 $seo_des = "Do you trust " . $item->title . "? Tell us your reviews about " . $item->title . ". " . $item->title . " official reseller always listen to feedback from you. Buypremiumkey.com.";
-                $seo_keyword = $product_name . " premium key, " . $product_name . " reseller, " . $product_name . "paypal, " . $product_name . "voucher, " . $product_name . " account, " . $product_name . " counpon code, buypremiumkey reseller";
+                $seo_keyword = "Reviews ". $product_name . " premium key,  ". 
+                        "Reviews ". $product_name . " reseller, ".
+                        "Reviews ". $product_name . " paypal, ".
+                        "Reviews ". $product_name . " voucher, ".
+                        "Reviews ". $product_name . " account, ".
+                        "Reviews ". $product_name . " counpon code, buypremiumkey reseller";
 
                 $model = new ArticlesReviews();
                 $model->articles_id = $item->id;

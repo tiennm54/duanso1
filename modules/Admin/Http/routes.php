@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controllers'], function() {
+Route::group(['prefix' => 'adminnmt', 'namespace' => 'Modules\Admin\Http\Controllers'], function() {
     //Route::get('/', 'AdminController@index');
     Route::get('/', ['as' => 'admin.index', 'uses' => 'AdminController@index']);
     //Route::get('/taotieuchi', 'AdminController@taoTieuChi');
@@ -176,6 +176,26 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Modules\Admin\Http\Controller
     Route::group(['prefix' => 'userReviewsManager'], function() {
         Route::get('index', ['as' => 'admin.userReviewsManager.index', 'uses' => 'UserReviewsManagerController@index']);
         Route::get('delete/{id}', ['as' => 'admin.userReviewsManager.delete', 'uses' => 'UserReviewsManagerController@delete']);
+    });
+    
+    
+    Route::group(['prefix' => 'couponsType'], function() {
+        Route::get('index', ['as' => 'admin.couponsType.index', 'uses' => 'CouponsTypeManagementController@index']);
+        Route::get('create', ['as' => 'admin.couponsType.getCreate', 'uses' => 'CouponsTypeManagementController@getCreate']);
+        Route::post('create', ['as' => 'admin.couponsType.postCreate', 'uses' => 'CouponsTypeManagementController@postCreate']);
+        Route::get('edit/{id}', ['as' => 'admin.couponsType.getEdit', 'uses' => 'CouponsTypeManagementController@getEdit']);
+        Route::post('edit/{id}', ['as' => 'admin.couponsType.postEdit', 'uses' => 'CouponsTypeManagementController@postEdit']);
+        Route::get('delete/{id}', ['as' => 'admin.couponsType.delete', 'uses' => 'CouponsTypeManagementController@delete']);
+    });
+    
+    
+    Route::group(['prefix' => 'coupons'], function() {
+        Route::get('index', ['as' => 'admin.coupons.index', 'uses' => 'CouponsManagementController@index']);
+        Route::get('create', ['as' => 'admin.coupons.getCreate', 'uses' => 'CouponsManagementController@getCreate']);
+        Route::post('create', ['as' => 'admin.coupons.postCreate', 'uses' => 'CouponsManagementController@postCreate']);
+        Route::get('edit/{id}', ['as' => 'admin.coupons.getEdit', 'uses' => 'CouponsManagementController@getEdit']);
+        Route::post('edit/{id}', ['as' => 'admin.coupons.postEdit', 'uses' => 'CouponsManagementController@postEdit']);
+        Route::get('delete/{id}', ['as' => 'admin.coupons.delete', 'uses' => 'CouponsManagementController@delete']);
     });
     
 });

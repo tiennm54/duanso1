@@ -8,7 +8,7 @@
             <li><a href="{{ URL::route('users.getMyAccount') }}">Account</a></li>
             <li>Register</li>
         </ul>
-        
+
         @include('validator.flash-message')
 
         <div class="col-md-12 well">
@@ -16,7 +16,8 @@
 
                 <?php
                 $ref = app('request')->input('ref');
-                if ($ref) { ?>
+                if ($ref) {
+                    ?>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Sponsor: </label>
@@ -26,7 +27,7 @@
                         </div>
                     </div>
 
-                <?php } ?>
+<?php } ?>
 
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label"><span style="color: red">*</span>First Name: </label>
@@ -65,6 +66,16 @@
                     <div class="col-sm-4">
                         <input type="password" name="confirm_password" class="form-control" placeholder="Confirm password">
                         {!! $errors->first('confirm_password','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label"><span style="color: red">*</span>Captcha</label>
+                    <div class="col-sm-10">
+
+                        {!! Captcha::display($attributes) !!}
+                        {!! $errors->first('g-recaptcha-response','<span class="control-label color-red" style="color: red">:message</span>') !!}
+
                     </div>
                 </div>
 

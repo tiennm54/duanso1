@@ -16,6 +16,7 @@ class PaypalAccountRequest extends Request {
             'email' => 'required|unique:paypal_account,email,' . $this->id,
             'vps_ip' => 'unique:paypal_account,vps_ip,' . $this->id,
             'website' => 'unique:paypal_account,website,' . $this->id,
+            'cmnd' => 'unique:paypal_account,cmnd,' . $this->id,
         ];
     }
 

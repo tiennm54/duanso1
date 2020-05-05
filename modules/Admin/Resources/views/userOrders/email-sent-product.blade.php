@@ -180,6 +180,10 @@
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
+                                            <p>
+                                                <span style="font-weight: bold">HOW TO ACTIVATE PREMIUM KEY:</span> <a href="https://buypremiumkey.com/faq/category-2/how-to-activate-premium-key.html">Click here</a>
+                                            </p>
+                                            
                                             <p style="color: red">
                                                 When you receive the premium key from us, please check your premium key status. 
                                                 If you can not use it please contact us within 48h. 

@@ -11,6 +11,10 @@
                 <li>
                     <a href="{{ URL::route('frontend.articles.index') }}"><i class="glyphicon glyphicon-home"></i> Home</a>
                 </li>
+                
+                <li>
+                    <a href="{{ URL::route('users.guestOrder.guestGetKey') }}">Order Lookup</a>
+                </li>
 
                 <li class="dropdown"><a href="<?php echo URL::route('frontend.news.index'); ?>" class="dropdown-toggle" data-toggle="dropdown">News &amp; Bonus</a>
                     <div class="dropdown-menu" style="">
@@ -37,13 +41,9 @@
                         <a href="<?php echo URL::route('frontend.faq.index'); ?>" class="see-all">Show All</a> 
                     </div>
                 </li>
-
+                
                 <?php if (!Auth::check()): ?>
-
-                    <li>
-                        <a href="{{ URL::route('users.guestOrder.guestGetKey') }}">Get Key</a>
-                    </li>
-
+                
                     <li>
                         <a href="{{ URL::route('users.getLogin') }}">Login</a>
                     </li>
@@ -72,27 +72,27 @@
                         <a href="<?php echo URL::route('product.reviews.index'); ?>" class="see-all">Show All</a> 
                     </div>
                 </li>
-                
-                <?php if(count($model_product_top) > 0){?>
-                <li class="dropdown">
-                    <a href="#"><i class="glyphicon glyphicon-queen"></i> Top Filehosts</a>
-                    <div class="dropdown-menu" style="margin-left: -250px">
-                        <div class="dropdown-inner">
-                            <?php for ($i = 0; $i < 20; $i = $i + 5) { ?>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <?php foreach ($model_product_top as $key => $item) { ?>
-                                            <?php if ($key >= $i && $key < $i + 5) { ?>
-                                                <a href="<?php echo $item->getUrlPricing(); ?>"><?php echo $item->title ?></a>
+
+                <?php if (count($model_product_top) > 0) { ?>
+                    <li class="dropdown">
+                        <a href="#"><i class="glyphicon glyphicon-queen"></i> Top Filehosts</a>
+                        <div class="dropdown-menu" style="margin-left: -250px">
+                            <div class="dropdown-inner">
+                                <?php for ($i = 0; $i < 20; $i = $i + 5) { ?>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            <?php foreach ($model_product_top as $key => $item) { ?>
+                                                <?php if ($key >= $i && $key < $i + 5) { ?>
+                                                    <a href="<?php echo $item->getUrlPricing(); ?>"><?php echo $item->title ?></a>
+                                                <?php } ?>
                                             <?php } ?>
-                                        <?php } ?>
-                                    </li>
-                                </ul>
-                            <?php } ?>
+                                        </li>
+                                    </ul>
+                                <?php } ?>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <?php }?>
+                    </li>
+                <?php } ?>
 
             </ul>
         </div>

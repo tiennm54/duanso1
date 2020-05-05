@@ -361,6 +361,14 @@ class CheckoutController extends ShoppingCartController {
 
                             //CREATE ORDER
                             $totalOrder = $this->getTotalOrder($array_orders, $data["payments_type_id"], $used_bonus);
+                            
+                            if($totalOrder["total"] >= MAX_PAYMENT){
+                                //Log::info($totalOrder);
+                                //Log::info(MAX_PAYMENT);
+                                $request->session()->flash('alert-warning', 'Warning: The total value of your order is too large. ( Total <= ' . MAX_PAYMENT . ' )');
+                                return back();
+                            }
+                            
                             $obj_model_orders = new UserOrders();
                             $model_orders = $obj_model_orders->createOrder($model_user, $money_user, $data, $array_orders, $totalOrder);
                             if ($model_orders) {

@@ -3,10 +3,10 @@
     <?php
 } else {
     $url_checkout = "";
-    if ($model->payment_type->status_website == 1 && $model->payment_type->website != "") {
+    if ($model->paypalAccount->status_website == 1 && $model->paypalAccount->website != "") {
         $url_checkout = URL::route("frontend.invoice.paypalPay", ["token" => $model->paypal_token]);
     } else {
-        $url_checkout = "https://www.paypal.com/cgi-bin/webscr?business=" . $model->payment_type->email . "&cmd=_xclick&currency_code=USD&amount=" . $model->total_price . "&item_name=" . $model->order_no;
+        $url_checkout = "https://www.paypal.com/cgi-bin/webscr?business=" . $model->paypalAccount->email . "&cmd=_xclick&currency_code=USD&amount=" . $model->total_price . "&item_name=" . $model->order_no;
     }
     ?>
 

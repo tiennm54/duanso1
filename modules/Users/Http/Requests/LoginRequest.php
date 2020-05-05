@@ -14,12 +14,13 @@ class LoginRequest extends Request {
         return [
             'email'	=> 'required|email:users,email',
             'password' => 'required:users,password',
+            'g-recaptcha-response' => 'required|captcha'
         ];
     }
     public function messages () {
         return [
             //'email.required'	=> 'Please Enter Username',
-            //'password.required'	=> 'Please Enter Password',
+            'g-recaptcha-response.required' => 'The captcha field is required'
         ];
     }
 

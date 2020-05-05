@@ -3,12 +3,21 @@
 
 $url = "";
 if ($model != null) {
-    if ($model->payment_type->status_website == 1 && $model->payment_type->website != "") {
+    if ($model->paypalAccount->status_website == 1 && $model->paypalAccount->website != "") {
         if ($model->payment_status == "completed" || $model->payment_status == "paid") {
             echo "Your order has been paid successfully. Thank you for using our service!";
             exit;
         } else {
-            $url = $model->payment_type->website . "/payment.php?hash=" . $model->paypal_token;
+            //Mac dinh lay trong bang payment type
+            $website_paid = $model->payment_type->website;
+            //X? l? trý?ng h?p khách hàng ð?t hàng ? account c? nhýng khi ðó h? th?ng ð? chuy?n sang account m?i
+            if($model->paypalAccount->status != 'Limit'){
+                if ($model->paypalAccount->status_website == 1 && $model->paypalAccount->website != "") {
+                    $website_paid = $model->paypalAccount->website;
+                }
+            }
+            
+            $url = $website_paid . "/payment.php?hash=" . $model->paypal_token;
         }
     } else {
         echo "Your order has expried, please try again!!";

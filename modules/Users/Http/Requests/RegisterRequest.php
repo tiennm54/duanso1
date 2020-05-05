@@ -18,12 +18,13 @@ class RegisterRequest extends Request {
             'password' => 'required:users,password|min:5',
             'confirm_password' => 'required|same:password',
             'sponsor' => 'email',
+            'g-recaptcha-response' => 'required|captcha'
         ];
     }
     public function messages () {
         return [
             //'txt_username.required'	=> 'Please Enter Username',
-            //'txt_password.required'	=> 'Please Enter Password',
+            'g-recaptcha-response.required' => 'The captcha field is required'
         ];
     }
 
