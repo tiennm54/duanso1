@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use URL;
 use App\Models\PaymentType;
 use App\Models\PaypalAccount;
+use App\Models\StripeAccount;
 use Log;
 
 class UserOrders extends Model {
@@ -26,6 +27,10 @@ class UserOrders extends Model {
         return $this->hasOne('App\Models\PaypalAccount', 'id', 'paypal_account_id');
     }
 
+    public function stripeAccount() {
+        return $this->hasOne('App\Models\StripeAccount', 'id', 'stripe_account_id');
+    }
+
     public function orders_detail() {
         return $this->hasMany('App\Models\UserOrdersDetail', 'user_orders_id', 'id');
     }
@@ -41,43 +46,80 @@ class UserOrders extends Model {
         $order_no = $prefix . $this->id;
         return $order_no;
     }
+
+    //Lay tien o trang thai dang "paid" cua acc paypal
+    public function getMoneyPaidPaypal($paypal_account_id) {
+        $total_paid = UserOrders::where("paypal_account_id", "=", $paypal_account_id)
+                ->where("payment_status", "=", "paid")
+                ->sum("total_price");
+        return $total_paid;
+    }
+
     //Tim email se nhan thanh toan tu khach hang dua tren so tien khach hang thanh toan
-    public function getEmailPaypal($total_price, $model_payment_type){
-        
-        $model_acc_1 = PaypalAccount::find($model_payment_type->paypal_account_id);
-        
-        if($model_acc_1 != null){
-            if($model_acc_1->max_money >= $total_price){
-                
-                return $model_acc_1;
-                
-            }else{
-                
-                $model_acc_2 = PaypalAccount::where("max_money", ">=", $total_price)
-                ->where("status", "=", "Work")
-                ->orderBy('money_activate', 'ASC')
-                ->first();
-                
-                if($model_acc_2 != null){
-                    
-                    return $model_acc_2;
-                    
-                }else{
-                    
-                    $model_acc_3 = PaypalAccount::where("status", "=", "Work")
-                    ->orderBy('max_money', 'DESC')
-                    ->orderBy('money_activate', 'ASC')
-                    ->first();
-                    if($model_acc_3 != null){
-                        
-                        return $model_acc_3;
-                    
-                    }
+    public function getEmailPaypal($total_price, $model_payment_type) {
+
+        //CODE MOI
+        //Max_money: so tien nhan gioi han
+        //max_receive: tong so tien nhan gioi han 
+        //Chon danh sach acc dang lam viec theo thu tu uu tien là: so tien nhan gioi han nho nhat duoc uu tien
+        $list_acc_work = PaypalAccount::where("status", "=", "Work")->orderBy('max_money', 'ASC')->get();
+        $check = false;
+
+        $arr_id = array();
+        $max_money = 0;
+        foreach ($list_acc_work as $acc) {
+            //Lay tien da paid cua acc paypal
+            $total_paid = $this->getMoneyPaidPaypal($acc->id);
+
+            //Neu so tien nhan gioi han lon hon so tien khach mua va tong nhan gioi han lon hon so tien da co
+            if ($acc->max_money >= $total_price && $acc->max_receive >= ($acc->money_activate + $acc->money_hold + $total_paid)) {
+                if ($max_money == 0 || $max_money == $acc->max_money) {
+                    $check = true;
+                    $max_money = $acc->max_money;
+                    array_push($arr_id, $acc->id);
+                } else {
+                    break;
+                }
+                //return $acc;
+            }
+        }
+
+        if ($check == true) {
+            shuffle($arr_id);
+            $model_acc_1 = PaypalAccount::find($arr_id[0]);
+            return $model_acc_1;
+        } else {
+            $model_acc_1 = PaypalAccount::find($model_payment_type->paypal_account_id);
+            return $model_acc_1;
+        }
+    }
+
+    public function getAccStripe($total_price) {
+        $list_acc_work = StripeAccount::where("status_activate", "=", 1)->orderBy('max_money', 'ASC')->get();
+        $check = false;
+        $arr_id = array();
+        $max_money = 0;
+        foreach ($list_acc_work as $acc) {
+            //Neu so tien nhan gioi han lon hon so tien khach mua va tong nhan gioi han lon hon so tien da co
+            if ($acc->max_money >= $total_price && $acc->max_receive >= ($acc->total_money + $acc->total_hold)) {
+                if ($max_money == 0 || $max_money == $acc->max_money) {
+                    $check = true;
+                    $max_money = $acc->max_money;
+                    array_push($arr_id, $acc->id);
+                } else {
+                    break;
                 }
             }
         }
-        
-        return $model_acc_1;
+
+        if ($check == true) {
+            shuffle($arr_id);
+            $model_acc_1 = StripeAccount::find($arr_id[0]);
+            return $model_acc_1;
+        } else {
+            $model_acc_1 = StripeAccount::where("status_activate", "=", 1)->orderBy('max_money', 'DESC')->first();
+            return $model_acc_1;
+        }
     }
 
     public function createPaypalToken() {
@@ -90,7 +132,7 @@ class UserOrders extends Model {
         $paypal_token = base64_encode($string_hash);
         return $paypal_token;
     }
-    
+
     function get_client_ip() {
         $ipaddress = '';
         if (getenv('HTTP_CLIENT_IP'))
@@ -110,6 +152,30 @@ class UserOrders extends Model {
         return $ipaddress;
     }
 
+    public function getInfoIP($ip) {
+        $url = 'https://pro.ip-api.com/php/' . $ip . '?key=' . LICENSE_IP . '&fields=' . FIELDS_IP;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = unserialize($result);
+        //Log::info($result);
+        return $result;
+    }
+
+    public function getUserInfo($ip) {
+        $user_info_string = "";
+        $user_info = $this->getInfoIP($ip);
+        if ($user_info['status'] == 'success') {
+            $user_countryCode = $user_info['countryCode'];
+            $user_country = $user_info['country'];
+            $user_ips = $user_info['isp'];
+            $user_info_string = $user_countryCode . " | " . $user_country . " | " . $user_ips;
+        }
+        return $user_info_string;
+    }
+
     public function createOrder($model_user, $money_user, $data, $array_orders, $totalOrder) {
 
         if ($model_user->status_lock == 1) {//Tài khoản đã bị khóa
@@ -126,14 +192,31 @@ class UserOrders extends Model {
             }
         }
 
+        if ($totalOrder['payment_code'] == "VISA_STRIPE") { // Chon acc visa de thuc hien thanh toan
+            $model_stripe_account = $this->getAccStripe($totalOrder["total"]);
+            if ($model_stripe_account != null) {
+                $this->stripe_account_id = $model_stripe_account->id;
+                $this->stripe_url = $model_stripe_account->url_web;
+            }
+        }
+
         $model_payment_type = PaymentType::find($data["payments_type_id"]);
         if ($model_payment_type == null) {
             return null;
         }
-        $model_paypal_account = $this->getEmailPaypal($totalOrder["total"], $model_payment_type);
         
-        $this->paypal_account_id = $model_paypal_account->id;
-        $this->paypal_email = $model_paypal_account->email;
+        $model_paypal_account = null;
+        if ($totalOrder['payment_code'] == "PAYPAL") {// Chon acc paypal de thuc hien thanh toan
+            $model_paypal_account = $this->getEmailPaypal($totalOrder["total"], $model_payment_type);
+        }
+
+        if ($model_paypal_account != null) {
+            $this->paypal_account_id = $model_paypal_account->id;
+            $this->paypal_email = $model_paypal_account->email;
+        }
+
+        $user_ip = $this->get_client_ip();
+        $user_info = $this->getUserInfo($user_ip);
 
         $this->users_id = $model_user->id;
         $this->users_roles_id = $model_user->roles_id;
@@ -149,8 +232,9 @@ class UserOrders extends Model {
         $this->total_price = $totalOrder["total"];
         $this->quantity_product = count($array_orders);
         $this->payment_status = "pending";
-        $this->user_ip = $this->get_client_ip();
-        
+        $this->user_ip = $user_ip;
+        $this->user_info = $user_info;
+
         $this->save();
         $this->order_no = $this->getNameOrderNo($model_paypal_account);
         $this->paypal_token = $this->createPaypalToken();
@@ -244,6 +328,11 @@ class UserOrders extends Model {
 
     public function getUrl() {
         return URL::route('users.orderHistoryView', ["id" => $this->id, "order_no" => $this->order_no]);
+    }
+
+    public function saveEmailDie($status) {
+        $this->email_die = $status;
+        $this->save();
     }
 
 }

@@ -3,12 +3,15 @@
 namespace Modules\Articles\Http\Controllers;
 
 use App\Models\ArticlesType;
+use App\Models\StripeAccount;
 use App\Models\Information;
 use App\Models\PaymentType;
 use App\Models\UserOrders;
+use App\Models\KeyStock;
 use App\Models\UserOrdersHistory;
 use App\Models\UserShippingAddress;
 use App\Models\BonusPaymentHistory;
+use App\Models\BlackListIP;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
@@ -24,65 +27,125 @@ use App\Helpers\SeoPage;
 
 class CheckoutController extends ShoppingCartController {
 
+    public function __construct() {
+        $this->middleware("banListIP");
+    }
+
     //[Paypal payment]Gửi mail có khách orders 
     public function sendMailPaypal($model_orders, $model_user, $password) {
-        Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PAYPAL_PAYMENT . $model_orders->order_no);
-        });
+        try {
+            Mail::send('articles::checkout.email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PAYPAL_PAYMENT . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function sendMailVisa($model_orders, $model_user, $password) {
-        Mail::send('articles::checkout.visa-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_VISA_PAYMENT . $model_orders->order_no);
-        });
+        try {
+            Mail::send('articles::checkout.visa-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_VISA_PAYMENT . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
+    }
+
+    public function sendMailVisaStripe($model_orders, $model_user, $password) {
+        try {
+            Mail::send('articles::checkout.visaStripe-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_VISASTRIPE_PAYMENT . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     //[Amazon payment] Gửi mail cho khách hàng sử dụng phương thức amazon
     public function sendMailAmazon($model_orders, $model_user, $password) {
-        Mail::send('articles::checkout.amazon-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_AMAZON_PAYMENT . $model_orders->order_no);
-        });
+        try {
+            Mail::send('articles::checkout.amazon-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_AMAZON_PAYMENT . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     //[WMZ payment] Gửi mail cho khách hàng sử dụng phương thức WEBMONEY
     public function sendMailWebMoney($model_orders, $model_user, $password) {
-        Mail::send('articles::checkout.wmz-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_WMZ_PAYMENT . $model_orders->order_no);
-        });
+        try {
+            Mail::send('articles::checkout.wmz-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_WMZ_PAYMENT . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     //[PERFECT MONEY payment] Gửi mail cho khách hàng sử dụng phương thức PERFECT MONEY
     public function sendMailPerfectMoney($model_orders, $model_user, $password) {
-        Mail::send('articles::checkout.perfect-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PERFECT_PAYMENT . $model_orders->order_no);
-        });
+        try {
+            Mail::send('articles::checkout.perfect-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_PERFECT_PAYMENT . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     //[My money payment] Gửi mail cho khách hàng sử dụng phương thức my money
     public function sendMailChooseBonus($model_orders, $model_user, $password) {
-        Mail::send('articles::checkout.bonus-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_BONUS_PAYMENT . $model_orders->order_no);
-        });
+        try {
+            Mail::send('articles::checkout.bonus-email-checkout', ['model_orders' => $model_orders, 'model_user' => $model_user, 'password' => $password], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_BONUS_PAYMENT . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function sendMailUsedBonus($model_orders) {
-        Mail::send('articles::checkout.email-used-bonus', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to(EMAIL_RECEIVE_ORDER, "Minh Tiến")->subject(SUBJECT_USED_BONUS . $model_orders->order_no);
-        });
+        try {
+            Mail::send('articles::checkout.email-used-bonus', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to(EMAIL_RECEIVE_ORDER, "Minh Tiến")->subject(SUBJECT_USED_BONUS . $model_orders->id);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function sendMailLockAccount($model_orders) {
-        Mail::send('articles::checkout.email-lock-account', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_LOCK_ACCOUNT);
-        });
+        try {
+            Mail::send('articles::checkout.email-lock-account', ['model_orders' => $model_orders], function ($m) use ($model_orders) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject(SUBJECT_LOCK_ACCOUNT);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
+    }
+
+    //Email canh bao paypal
+    public function sendEmailWarningPaypal($infoIP) {
+        try {
+            $subject_email = "Warning Paypal is checking your website IP: " . $infoIP['query'];
+            Mail::send('articles::checkout.email-warning-paypal', ['infoIP' => $infoIP], function ($m) use ($subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to(EMAIL_RECEIVE_VISA, "Admin")->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     function getLocationInfoByIp() {
@@ -104,12 +167,50 @@ class CheckoutController extends ShoppingCartController {
         return "";
     }
 
+    function get_client_ip() {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP'))
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        else if (getenv('HTTP_X_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        else if (getenv('HTTP_X_FORWARDED'))
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        else if (getenv('HTTP_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        else if (getenv('HTTP_FORWARDED'))
+            $ipaddress = getenv('HTTP_FORWARDED');
+        else if (getenv('REMOTE_ADDR'))
+            $ipaddress = getenv('REMOTE_ADDR');
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
+    }
+
+    public function getInfoIP($ip) {
+        $url = 'https://pro.ip-api.com/php/' . $ip . '?key=' . LICENSE_IP . '&fields=' . FIELDS_IP;
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        $result = unserialize($result);
+        //Log::info($result);
+        return $result;
+    }
+
+    public function error403() {
+        return view('errors.maintained');
+    }
+
     ///MUA SẢN PHẨM
     public function index(Request $request) {
         SeoPage::seoPage($this);
         $money_user = 0;
         $model_terms = Information::find(5);
+        //$model_payment_type = PaymentType::where("status_disable", "=", 0)->orderBy("position", "ASC")->get(); // chú ý đã thay đổi điều kiện ngày 09/03/23
+
         $model_payment_type = PaymentType::orderBy("position", "ASC")->get();
+
         $data = Session::get('array_orders', []);
         $obj_shopping_cart = new UserShoppingCart();
         $subTotal = $obj_shopping_cart->getSubTotal($data);
@@ -124,14 +225,31 @@ class CheckoutController extends ShoppingCartController {
         }
 
         if (count($data) != 0) {
+            $ip = $this->get_client_ip();
+            $infoIP = $this->getInfoIP($ip);
+            $isProxy = "NO";
+            $user_country = "";
 
-            $user_country = $this->getLocationInfoByIp();
+            if ($infoIP['status'] == 'success') {
+                $user_country = $infoIP['countryCode'];
+                $check_isp = strpos(strtolower($infoIP['isp']), 'paypal');
+                $check_proxy = $infoIP['proxy'];
+                $check_hosting = $infoIP['hosting'];
+                if ($check_isp !== false || $check_proxy === true || $check_hosting === true) {
+                    $isProxy = "YES";
+                    if ($check_isp !== false) {
+                        $this->sendEmailWarningPaypal($infoIP);
+                        //return redirect()->route('frontend.checkout.error');
+                    }
+                }
+
+                if ($check_proxy === true || $check_hosting === true) {
+                    $request->session()->flash('alert-warning', 'Please disable VPN / Proxy to see full available payment method');
+                }
+            }
 
             return view('articles::checkout.checkout', compact(
-                "data", "model_payment_type",
-                "model_terms", "model_user",
-                'totalOrder', 'money_user',
-                'user_country'
+                            "data", "model_payment_type", "model_terms", "model_user", 'totalOrder', 'money_user', 'user_country', 'isProxy'
             ));
         } else {
             return view('articles::checkout.checkout-none');
@@ -192,7 +310,7 @@ class CheckoutController extends ShoppingCartController {
             "payment_name" => $payment_name,
             "payment_code" => $payment_code,
             "used_bonus" => round($charges_bonus, 2),
-            "total" => round($total,2)
+            "total" => round($total, 2)
         );
         return $return_data;
     }
@@ -263,6 +381,140 @@ class CheckoutController extends ShoppingCartController {
         return redirect()->route('frontend.articles.index');
     }
 
+    public function checkStripeActivate() {
+        $model = StripeAccount::where("status_activate", "=", 1)->get();
+        foreach ($model as $item) {
+            if ($item->total_money < $item->max_receive) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Kiểm tra sản phẩm được quyền thanh toán Visa (Hiện tại theo logic mới là tất cả các cổng)
+    public function checkProductEnabledVisa() {
+
+        $array_orders = Session::get('array_orders', []);
+        //Log::info($array_orders);
+        foreach ($array_orders as $item) {
+            $articles_id = $item["id"];
+            $model = ArticlesType::find($articles_id);
+            if ($model) {
+                if ($model->status_enabledVisa != 1) {// 1 có nghĩa là sản phẩm được phép thanh toán Visa
+                    //Neu chon them bat ki san pham nao ko duoc phep su dung cong Visa thi tra ve 0
+                    return 0;
+                    //break;
+                }
+            }
+        }
+        return 1;
+    }
+
+    public function countTotalOrderCompleted($email_user) {
+        $check_completed = UserOrders::where("email", "=", trim($email_user))->where(function ($query) {
+                    $query->where("payment_status", "=", "completed")
+                            ->orWhere('payment_status', '=', 'pending');
+                })->count();
+        return $check_completed;
+    }
+
+    //Chặn người dùng sử dụng cổng thanh toán theo Country
+    public function checkDisableForCountry($model_payment_type, $user_country) {
+        $check_country = false;
+        $list_country_disable = $model_payment_type->disable_country;
+        if ($list_country_disable != "" && $user_country != "") {
+            $check_country = strpos($list_country_disable, $user_country);
+        }
+        if ($check_country !== false && $model_payment_type->disable_vn == 1) {// ẩn phương thức thanh toán
+            return 1;
+        } else {
+            return 0; // hiển thị phương thức thanh toán
+        }
+    }
+    
+    //Check điều kiện ẩn hiện của cổng thanh toán
+    public function checkDisablePaymentMethod(Request $request) {
+        if ($request) {
+            $data = $request->all();
+            $data_response = array();
+            $user_country = "";
+            $check_paypal_proxy = "NO";
+            if (isset($data["user_country"])) {
+                $user_country = $data["user_country"];
+            }
+            if(isset($data["check_paypal_proxy"])){
+                $check_paypal_proxy = $data["check_paypal_proxy"];
+            }
+
+            if (isset($data["user_orders_email"])) {
+                $email_user = $data["user_orders_email"];
+                $check_disputes = User::where("email", "=", trim($email_user))->where("status_delete", "=", 1)->count();
+                if ($check_disputes == 0) {// đoạn này sẽ đẩy về trang ERROR
+                    //Đếm số lượng đơn hàng đã completed hoặc pending
+                    $check_completed = $this->countTotalOrderCompleted($email_user);
+
+                    //Check san pham chap nhan thanh toan Visa. Nếu = 1 nghĩa là khách lạ cũng được thanh toán thông qua Visa/Master Card (Hiện tại theo logic mới là tất cả các cổng)
+                    $check_enabledVisa = $this->checkProductEnabledVisa();
+                    
+                    //Log::info("check enable Visa: ".$check_enabledVisa);
+                    
+                    $model_payment = PaymentType::where("status_disable", "=", 0)->get();
+
+                    foreach ($model_payment as $item) {
+
+                        /*
+                         * Mức độ ưu tiên check hiển thị payment method
+                         * 1. Status_disable: Chủ động tắt cổng
+                         * 2. Country: Chủ động chặn theo quốc gian
+                         * 3. Paypal and Proxy: Check chủ động nếu paypal vào website và khách sử dụng proxy
+                         * 3. Sản phẩm dược phép mở full cổng mà ko phụ thuộc vào khách lạ, và khách quen
+                         * 4. Chặn theo khách lạ và khách quen         
+                         *                 */
+
+                        $check_disable_country = $this->checkDisableForCountry($item, $user_country);
+
+                        if ($item->status_disable == 1) {// ẩn cổng thanh toán
+                            $data_check = array(// ẩn phương thức thanh toán
+                                "payment_type_id" => $item->id,
+                                "status_show" => 0,
+                                "payment_name" => $item->title
+                            );
+                        } else if ($check_disable_country == 1) {//ẩn
+                            $data_check = array(// ẩn phương thức thanh toán
+                                "payment_type_id" => $item->id,
+                                "status_show" => 0,
+                                "payment_name" => $item->title
+                            );
+                        }else if($item->check_proxy == 1 && $check_paypal_proxy == "YES"){
+                            $data_check = array(// ẩn phương thức thanh toán
+                                "payment_type_id" => $item->id,
+                                "status_show" => 0,
+                                "payment_name" => $item->title
+                            );
+                        }
+                        else if($item->disable_guests == 1 && $item->total_completed > $check_completed && $check_enabledVisa == 0){//ẩn
+                            $data_check = array(
+                                "payment_type_id" => $item->id,
+                                "status_show" => 0,
+                                "payment_name" => $item->title
+                            );
+                        }else{//show
+                            $data_check = array(
+                                "payment_type_id" => $item->id,
+                                "status_show" => 1,
+                                "payment_name" => $item->title
+                            );
+                        }
+                        array_push($data_response, $data_check);
+                    }
+                }
+            }
+            //Log::info("LOG DATA RESPONSE");
+            //Log::info($data_response);
+            return $data_response;
+        }
+    }
+
     //Thay đổi trạng thái shopping cart của khách hàng
     //Xóa session shopping cart
     public function changeStatusAfterCheckout($model_user) {
@@ -295,6 +547,20 @@ class CheckoutController extends ShoppingCartController {
         }
     }
 
+    public function checkOrderViaIP() {
+        $ip = $this->get_client_ip();
+        $model_order = UserOrders::where("user_ip", "=", trim($ip))->where("payment_status", "=", "pending")->orderBy("id", "DESC")->first();
+        if ($model_order) {
+            $date_now = strtotime(date("Y-m-d H:i:s"));
+            $date_order = ($model_order->created_at) ? strtotime($model_order->created_at) : strtotime(date("Y-m-d H:i:s"));
+            $secs_order = $date_now - $date_order;
+            if ($secs_order <= 3600) {// Khách hàng vừa thanh toán trong 1h
+                return $model_order;
+            }
+        }
+        return null;
+    }
+
     public function confirmOrder(CheckoutRequest $request) {
         if (isset($request)) {
             DB::beginTransaction();
@@ -303,6 +569,17 @@ class CheckoutController extends ShoppingCartController {
             $password = "";
             $used_bonus = 0;
             $check_created_user = false;
+
+            //Check scam
+            if (isset($data['email'])) {
+                $model_scam = new User();
+                $check_scam = $model_scam->checkUserScam($data['email']);
+                if ($check_scam == true) {
+                    DB::commit();
+                    return redirect()->route('frontend.checkout.error');
+                }
+            }
+
             if (isset($data["payments_type_id"])) {
                 $model_payment_type = PaymentType::find($data["payments_type_id"]);
                 if ($model_payment_type != null) {
@@ -342,11 +619,6 @@ class CheckoutController extends ShoppingCartController {
                         }
 
                         if ($model_user != null) {//TÌM THẤY NGƯỜI DÙNG TỒN TẠI TRÊN HỆ THỐNG
-                            if ($model_user->status_delete == 1) {
-                                $request->session()->flash('alert-warning', 'Warning: Your account has been locked!');
-                                return back();
-                            }
-
                             $money_user = $model_user->getMoneyForUser();
                             if (isset($data["use_my_bonus"]) && $model_payment_type->code != "BONUS") {
                                 $used_bonus = $money_user;
@@ -361,14 +633,38 @@ class CheckoutController extends ShoppingCartController {
 
                             //CREATE ORDER
                             $totalOrder = $this->getTotalOrder($array_orders, $data["payments_type_id"], $used_bonus);
-                            
-                            if($totalOrder["total"] >= MAX_PAYMENT){
-                                //Log::info($totalOrder);
-                                //Log::info(MAX_PAYMENT);
-                                $request->session()->flash('alert-warning', 'Warning: The total value of your order is too large. ( Total <= ' . MAX_PAYMENT . ' )');
+
+                            if ($totalOrder["total"] >= MAX_PAYMENT) {
+                                $request->session()->flash('alert-warning', 'Warning: The total value of your order is too large. ( Total <= ' . MAX_PAYMENT . ' ).'
+                                        . ' Please choose another payment method.'
+                                        . ' If you have crypto in your wallet then please buy your products at this website: https://takepremium.com.'
+                                        . ' Thank you so much!');
+                                $model_ban = new User();
+                                $model_ban->addUserScam($data['email']);
+                                DB::commit();
                                 return back();
                             }
-                            
+
+                            if ($model_payment_type->code == "PAYPAL" && $totalOrder["total"] >= $model_payment_type->max_payment) {
+
+                                $request->session()->flash('alert-warning', 'Warning: The total value of your order is too large. ( Total <= ' . $model_payment_type->max_payment . ' ).'
+                                        . ' Please choose another payment method.'
+                                        . ' If you have crypto in your wallet then please buy your products at this website: https://takepremium.com.'
+                                        . ' I apologize for this inconvenience.'
+                                        . ' Thank you so much!');
+
+                                return back();
+                            }
+
+                            //Kiểm tra khách hàng có đặt nhiều đơn hàng một lúc không?
+                            $model_pending = $this->checkOrderViaIP();
+                            if ($model_pending != null) {
+                                $request->session()->flash('alert-warning', 'Warning: Your order #' . $model_pending->id . ' has not been processed successfully, please wait 1 hour before you create a new order. We apologize for this inconvenience.');
+                                return back();
+                            }
+
+
+
                             $obj_model_orders = new UserOrders();
                             $model_orders = $obj_model_orders->createOrder($model_user, $money_user, $data, $array_orders, $totalOrder);
                             if ($model_orders) {
@@ -400,6 +696,8 @@ class CheckoutController extends ShoppingCartController {
                                     case "PERFECT_MO":
                                         $this->sendMailPerfectMoney($model_orders, $model_user, $password);
                                         break;
+                                    case "VISA_STRIPE":
+                                        $this->sendMailVisaStripe($model_orders, $model_user, $password);
                                 }
 
                                 if ($model_orders->total_price == 0 || $model_orders->payment_type->code == "BONUS") {
@@ -482,8 +780,8 @@ class CheckoutController extends ShoppingCartController {
         DB::beginTransaction();
         $data = $request->all();
 
-        Log::info("VISA CHECKOUT");
-        Log::info($data);
+        //Log::info("VISA CHECKOUT");
+        //Log::info($data);
 
         $array_orders = Session::get('array_orders', []);
         $used_bonus = 0;
@@ -546,6 +844,32 @@ class CheckoutController extends ShoppingCartController {
             "status" => 0,
         );
         return $visa;
+    }
+
+    ///Test callback
+    public function testPlatformCallback(Request $request) {
+        $data = $request->all();
+        Log::info("TEST PLATFORM CALLBACK");
+        Log::info($data);
+        $order_id = 385969;
+        $model = UserOrders::find($order_id);
+        DB::beginTransaction();
+        if ($model) {
+            //Update status bonus cho khach hang
+            $updateBonusStatus = new BonusPaymentHistory();
+            $updateBonusStatus->updateStatus($model);
+
+            //Send key toi khach hang
+            $keyStock = new KeyStock();
+            $model_key = $keyStock->sendAndChangeStatusKey($model);
+            if ($model_key != null) {
+                $keyStock->sendProductEmail($model, $model_key);
+            } else {
+                $keyStock->sendMailPaid($model);
+            }
+            DB::commit();
+            return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
+        }
     }
 
 }

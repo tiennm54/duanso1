@@ -1,5 +1,8 @@
 @extends('frontend.master')
 @section('content')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+
 <div class="product">
     <div class="container">
         <ul class="breadcrumb">
@@ -14,17 +17,29 @@
             </p>
         <?php endif; ?>
         <div class="row">
+            
+            <div class="flash-message col-md-12" id="flash_message_visa" hidden>
+                    <p class="alert alert-success">
+                    <?php echo NOTI_NOTE_VISA; ?>
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            </div>
+            
+            
             <form method="post" action="<?php echo URL::route('frontend.checkout.confirmOrder'); ?>" id="form-checkout-id">
-
-                <input type=hidden name=member value="buypremiumkey">
-                <input type=hidden name=id value="1207">
-                <input id="visa-total-price" type=hidden name=price value="{{ $totalOrder['total'] }}">
-                <input id="visa-order-id" type=hidden name=orderid value="0"><!--ORDER ID-->
-                <input id="visa-order-no" type="hidden" name=name value=""><!--ORDER NO-->
-                <input type=hidden name=tax value="0">
-                <input type=hidden name=ureturn value="http://buypremiumkey.com/checkout-visa/success">
-                <input type=hidden name=unotify value="http://buypremiumkey.com/checkout-visa/callback">
-                <input type=hidden name=ucancel value="http://buypremiumkey.com/checkout-visa/failure">
+                
+                
+                <input type = "hidden" name = "seller_id" value="<?php echo VISA_SELLER_ID; ?>" />
+                <input id="visa-order-id" type = "hidden" name = "seller_ref_code" value="" /> 
+                <input id="visa-total-price" type = "hidden" name = "total_price" value="" /> 
+                <input id="visa-order-no" type = "hidden" name = "product" value="" />
+                <input id="visa-order-token" type = "hidden" name = "token" value="" />
+                <input id="visa-order-customerEmail" type = "hidden" name = "customer_email" value="" />
+                <input id="visa-order-customerName" type = "hidden" name = "customer_name" value="" />
+                <input type = "hidden" name = "currency" value="USD" />
+                <input type = "hidden" name = "seller_ipn" value="<?php echo URL::route('frontend.checkoutVisa.callback'); ?>" /> 
+                <input type = "hidden" name = "seller_success_url" value="<?php echo URL::route('frontend.checkoutVisa.success'); ?>" />
+                <input type = "hidden" name = "seller_failed_url" value="<?php echo URL::route('frontend.checkoutVisa.failure'); ?>" />
+                <input type = "hidden" name = "pmethod" value="" /> 
 
                 @include('articles::checkout.includes.billing_information')
                 @include('articles::checkout.includes.payment_method')
@@ -36,7 +51,12 @@
 </div>
 
 <script>
+    var total_money = <?php echo $totalOrder['total']; ?>
+    
     var type = "PAYPAL";
+    var user_country = "";
+    var check_proxy = "";
+    
     function validateEmail(email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
@@ -85,13 +105,15 @@
         }
         return 1;
     }
-
+    
+    //Ham da duoc sua de su dung cho platform
     function saveOrder() {
         var check = eventLoading();
         if (check == 0) {
             return 0;
         }
-        if (type == "VISA") {
+        let check_platform_method = type.indexOf("PREMIUM_");
+        if (check_platform_method >= 0) { // Day la phuong thuc thanh toan thong qua platform
             var token = $("#_token").val();
             var email = $("#user_orders_email").val();
             var firstName = $("#first_name").val();
@@ -104,23 +126,27 @@
 
             $.ajax({
                 type: 'POST',
-                url: "<?php echo URL::route('frontend.checkout.createOrderVisa') ?>",
+                url: "<?php echo URL::route('frontend.platform.platformCreateOrder') ?>",
                 data: {
                     "_token": token,
                     "email": email,
                     "first_name": firstName,
                     "last_name": lastName,
-                    "use_my_bonus": userBonus
+                    "use_my_bonus": userBonus,
+                    "payment_type_code" : type,//code cua phuong thuc thanh toan
                 },
                 success: function (data) {
                     console.log(data);
-                    if (data["status"] == 1) {
-                        $("#visa-total-price").val(data["total_price"]);
-                        $("#visa-order-id").val(data["order_id"]);
-                        $("#visa-order-no").val(data["order_no"]);
-                        $("#form-checkout-id").submit();
+                    if (data["status"] == "success") {
+                        if(data["payment_type"] == "site_fake"){
+                            if(data["payment_url"] != ""){
+                                window.location.replace(data["payment_url"]);
+                            }
+                        }else{
+                            // Hệ thống tự đọng gửi hóa đơn qua email rồi, đoạn này chỉ cần redirect sang hóa đơn của khách
+                           window.location.replace(data["url_invoice"]);
+                        }
                     } else {
-                        alert("<?php echo VISA_ERROR_PRICE; ?>");
                         location.reload();
                     }
                 },
@@ -129,7 +155,7 @@
                     location.reload();
                 }
             });
-        } else {
+        } else { // Phuong thuc thanh toan thong thuong
             $("#form-checkout-id").submit();
         }
     }
@@ -154,21 +180,15 @@
             }
         });
     }
-
+    
     function updateTotalOrder(data) {
+        total_money = data["total"];
         $("#sub-total-order").html("$" + data["sub_total"]);
         $("#sub-total").html(data["sub_total"]);
         $("#payment_charges").html(data["charges"]);
         $("#total").html(data["total"]);
         $("#text_payment_selected").text(data["payment_name"]);
         $("#sub-total-popup").html(data["total"]);
-
-        $("#visa-total-price").val(data["total"]);
-        if (data["payment_code"] == "VISA") {
-            document.getElementById('form-checkout-id').action = 'https://qwikpay.org/process.htm';
-        } else {
-            document.getElementById('form-checkout-id').action = '<?php echo URL::route('frontend.checkout.confirmOrder'); ?>';
-        }
 
         if (data["payment_code"] == "BONUS") {
             $("#tr-use-bonus").hide();
@@ -199,6 +219,8 @@
             data: {"id": id, "number": number, "payment_type": payment_type, "check_bonus": check_bonus, "_token": token},
             success: function (data) {
                 updateTotalOrder(data);
+                //kiem tra hien thi button visa
+                checkDisablePaymentMethod(user_country, check_proxy);
                 loadingOverlay().cancel(spinHandle);
             },
             error: function (ex) {
@@ -249,15 +271,78 @@
             }
         });
     }
+    
+    //Hàm kiểm tra ẩn hiện của phương thức thanh toán đối với người dùng
+    function checkDisablePaymentMethod(check_user_country, check_paypal_proxy){
+        
+        
+        var user_orders_email = $("#user_orders_email").val(); 
+        var user_orders_email_conf = $("#user_orders_email_conf").val();
+        
+        //console.log("USER CONTRY AND CHECK PROXY");
+        //console.log(user_country);
+        //console.log(check_paypal_proxy);
+        
+        user_country = check_user_country;
+        check_proxy = check_paypal_proxy;
+        
+        if(user_orders_email == user_orders_email_conf){
+            var token = $("#_token").val();
+            $.ajax({
+                type: 'POST',
+                url: "<?php echo URL::route('frontend.checkout.checkDisablePaymentMethod') ?>",
+                data: {
+                    "user_orders_email": user_orders_email, 
+                    "user_country" : user_country, 
+                    "check_paypal_proxy" : check_proxy, 
+                    "_token": token
+                },
+                success: function (data_hidden) {
+                    
+                    //console.log(data.length);
+                    if(data_hidden.length != 0){
+                        data_hidden.forEach(function(item, index) {
+                            var payment_type_id = item["payment_type_id"];
+                            var status_show = item["status_show"];
+                            var isIdPaymentType = document.getElementById('payments_type_' + payment_type_id);
+                            if(isIdPaymentType !== null){
+                                var isHidden = $('#payments_type_'+ payment_type_id).is(':hidden');// true là đang ẩn, false là đang hiển thị
+                                if(status_show == 0 && isHidden == false){ // ẩn phương thức thanh toán này đi
+                                    document.getElementById('payments_type_' + payment_type_id).style.display = 'none';
+                                    //document.getElementById('flash_message_visa').style.display = 'none';
+                                    $("input[id="+'payments_type_id_' + payment_type_id+"]:radio").prop( "checked", false );
+
+                                }else if(status_show == 1 && isHidden == true){// mở phương thức thanh toán này lên
+                                    document.getElementById('payments_type_' + payment_type_id).style.display = 'block';
+                                    //document.getElementById('flash_message_visa').style.display = 'block';
+                                }
+                            }
+                        });
+                    }else{// trường hợp này xảy ra khi khách hàng đã mở tranh chấp
+                        window.location.replace('<?php echo URL::route('frontend.checkout.error'); ?>');
+                    }
+                   
+                },
+                error: function (ex) {
+                    console.log(ex.responseJSON);
+                }
+            });
+        }
+    }
 
     $( document ).ready(function() {
         console.log( "ready!" );
+        checkDisablePaymentMethod(user_country, check_proxy);
+        
         var $radios = $('input:radio[name=payments_type_id]');
         if($radios.is(':checked') === false) {
-            $('input:radio[name=payments_type_id]')[0].checked = true;
-            var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
-            if(payment_type != "" && typeof payment_type != "undefined") {
-                selectTypePayment(payment_type);
+            var isClassPaymentType = document.getElementsByClassName('payment-type');//Kiểm tra xem có tồn tại class payment-type không?
+            if (isClassPaymentType !== null){
+                $('input:radio[name=payments_type_id]')[0].checked = true;
+                var payment_type = $('input[type="radio"][class="payment-type"]:checked').val();
+                if(payment_type != "" && typeof payment_type != "undefined") {
+                    selectTypePayment(payment_type);
+                }
             }
         }
     });

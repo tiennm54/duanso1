@@ -58,10 +58,10 @@
                                 <?php } ?>
                                 <?php foreach ($model as $item): ?>
                                     <tr>
-                                        <td class="text-left" style="vertical-align: middle"><span class="label label-default">{{ $item->order_no }}</span></td>
+                                        <td class="text-left" style="vertical-align: middle"><span class="label label-default">#{{ $item->id }}</span></td>
                                         <td class="text-center" style="vertical-align: middle"><span class="label label-success">{{ $item->user->first_name }} {{ $item->user->last_name }}</span></td>
                                         <td class="text-center" style="vertical-align: middle">{{ $item->quantity_product }}</td>
-                                        <td class="text-center" style="vertical-align: middle"><span class="label {{ ($item->payment_status == "completed") ? "label-primary" : "label-danger"}} ">{{ $item->payment_status }}</span></td>
+                                        <td class="text-center" style="vertical-align: middle"><span class="label {{ ($item->payment_status == "completed" || $item->payment_status == "paid") ? "label-primary" : "label-danger"}} ">{{ $item->payment_status }}</span></td>
                                         <td class="text-center" style="vertical-align: middle">${{ $item->total_price }}</td>
                                         <td class="text-center" style="vertical-align: middle"><span class="label label-default">{{ $item->created_at }}</span></td>
                                         <td class="text-center" style="vertical-align: middle">

@@ -16,6 +16,7 @@ class CheckoutRequest extends Request {
             'last_name' => 'required',
             'check_term' => 'required',
             'email' => 'required|email',
+            'email_confirm' => 'required|same:email',
         ];
     }
 

@@ -21,6 +21,7 @@ use App\Models\Seo;
 use Illuminate\Support\Facades\Session;
 use App\Helpers\SeoPage;
 use App\Helpers\MinhTien;
+use Log;
 
 class UsersController extends CheckMemberController {
 
@@ -58,21 +59,21 @@ class UsersController extends CheckMemberController {
                         case "member" :
                             $this->getInfoUser($user);
                             return redirect()->route('users.getMyAccount');
-                        case "editor" : 
+                        case "editor" :
                             $this->getInfoUser($user);
                             return redirect()->route('admin.news.index');
                         default:
                             return redirect()->route('users.getLogin');
-                            //return view('users::user.login');
+                        //return view('users::user.login');
                     }
                 }
-            } 
+            }
             $request->session()->flash('alert-warning', ' Warning: Invalid username and/or password, please try again.');
             return redirect()->route('users.getLogin');
             //return view('users::user.login');
         }
     }
-    
+
     public function getRegister() {
         SeoPage::seoPage($this);
         $attributes = [
@@ -138,7 +139,7 @@ class UsersController extends CheckMemberController {
             return redirect()->route('users.getRegister');
         }
     }
-    
+
     public function getRegisterSuccess() {
         SeoPage::seoPage($this);
         $model = $this->checkMember();
@@ -177,11 +178,14 @@ class UsersController extends CheckMemberController {
                 $key = $obj_key->generate();
                 $model->key_forgotten = $key;
                 $model->save();
-
-                Mail::send('users::email.email-forgotten', ['user' => $model], function ($m) use ($model) {
-                    $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-                    $m->to($model->email, $model->name)->subject(SUBJECT_FORGOT);
-                });
+                try {
+                    Mail::send('users::email.email-forgotten', ['user' => $model], function ($m) use ($model) {
+                        $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                        $m->to($model->email, $model->name)->subject(SUBJECT_FORGOT);
+                    });
+                } catch (\Exception $e) {
+                    Log::info("LOI SEND EMAIL");
+                }
 
                 $request->session()->flash('alert-success', ' Success: If there is an account associated with ' . $model->email . ' you will receive an email with a link to reset your password.!');
                 return redirect()->route('users.getLogin');
@@ -191,7 +195,7 @@ class UsersController extends CheckMemberController {
             }
         }
     }
-    
+
     public function getResetPassword($email, $key_forgotten, Request $request) {
         SeoPage::seoPage($this);
         $model = User::where("email", "=", $email)->where("key_forgotten", "=", trim($key_forgotten))->first();
@@ -231,4 +235,5 @@ class UsersController extends CheckMemberController {
             }
         }
     }
+
 }

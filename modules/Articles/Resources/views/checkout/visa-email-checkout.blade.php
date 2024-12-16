@@ -10,14 +10,14 @@
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 500px;" class="responsive-table">
                         <tr>
                             <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding-copy">
-                                Invoice #{{ $model_orders->order_no }}
+                                Invoice #{{ $model_orders->id }}
                             </td>
                         </tr>
                         <tr>
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span></p>
                                 <p>
-                                    <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span></span><br/>
+                                    <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->id }}</span></span><br/>
                                 </p>
                                 <p>
                                     <span>Your account: {{ $model_user->email }}</span><br/>

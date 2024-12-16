@@ -118,20 +118,35 @@
                                 </select>
                             </div>
                         </div>
+                        
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="control-label">Paypal Email</label>
+                                <input type="text" name="paypal_email" placeholder="Email Business"
+                                       class="typeahead form-control" value="{{ app('request')->input('paypal_email')}}">
+                            </div>
+                        </div>
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-1">
                             <div class="form-group ">
                                 <label class="control-label">Search</label>
                                 <button type="submit" class="btn btn-primary form-control">Search</button>
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-1">
                             <div class="form-group ">
                                 <label class="control-label">Reset</label>
                                 <a href="{{ URL::route('adminUserOrders.listOrders') }}" class="btn btn-primary form-control">Reset</a>
                             </div>
                         </div>
-
+                        <div class="col-sm-1">
+                            <div class="form-group ">
+                                <label class="control-label">Email Die</label>
+                                <a href="{{ URL::route('adminUserOrders.sendEmailDie') }}" 
+                                   class="btn <?php echo ($count_email_die > 0) ? "btn-danger" : "btn-primary"; ?> form-control">
+                                    Email Die (<?php echo $count_email_die; ?>)</a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -195,6 +210,7 @@
                         'payment_status' => Request::get('payment_status'),
                         'used_bonus' => Request::get('used_bonus'),
                         'payment_type' => Request::get('payment_type'),
+                        'paypal_email' => Request::get('paypal_email'),
             ])->render();
             ?>
 

@@ -16,7 +16,7 @@
                                 <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                     <p>Dear {{ $model_user->first_name." ".$model_user->last_name }},</p>
                                     <p>
-                                        <span>You received a bonus from order #<?php echo $model_orders->order_no; ?></span><br/>
+                                        <span>You received a bonus from order #<?php echo $model_orders->id; ?></span><br/>
                                         <span>The bonus you get is: $<?php echo $money; ?></span><br/>
                                         <span>You can view your bonus by going to the
                                         <a href="{{ URL::route('users.getMyAccount') }}">my account</a> page</span>

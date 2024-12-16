@@ -13,18 +13,25 @@
                             </button>
                         </td>
                         <td>
-                            
+
                             {{ $model->payment_type->title }}: 
-                            <?php 
-                                if($model->paypalAccount != null){
-                            ?>
-                                   <a class="label label-primary" href="<?php echo URL::route('admin.paypal.getEdit', $model->paypalAccount->id); ?>"> 
-                                        <?php echo ($model->paypalAccount != null) ? $model->paypalAccount->email : "N.A";  ?>
-                                   </a>
+
                             <?php
-                                }
+                            if ($model->payment_type->code == "VISA_STRIPE" && $model->stripeAccount != null) {
+                                ?>
+                                <a class="label label-primary" href="<?php echo URL::route('admin.stripe.getEdit', $model->stripeAccount->id); ?>"> 
+                                    <?php echo ($model->stripeAccount != null) ? $model->stripeAccount->url_web : "N.A"; ?>
+                                </a>
+                                <?php
+                            } else if ($model->paypalAccount != null) {
+                                ?>
+                                <a class="label label-primary" href="<?php echo URL::route('admin.paypal.getEdit', $model->paypalAccount->id); ?>"> 
+                                    <?php echo ($model->paypalAccount != null) ? $model->paypalAccount->email : "N.A"; ?>
+                                </a>
+                                <?php
+                            }
                             ?>
-                            
+
                         </td>
                     </tr>
 
@@ -34,7 +41,7 @@
                                     data-original-title="Store"><i class="fa fa-shopping-cart fa-fw"></i>
                             </button>
                         </td>
-                        <td><a href="{{ URL::route('frontend.articles.index') }}" target="_blank">Your Store</a></td>
+                        <td>{{ $model->user_info }}</td>
                     </tr>
                     <tr>
                         <td>
@@ -90,7 +97,7 @@
                                     data-original-title="Import Key"><i class="glyphicon glyphicon-grain"></i>
                             </button>
                         </td>
-                        <td>Invoice: <b><a href="<?php echo URL::route("frontend.invoice.view",['id' => $model->id, 'email' => $model->email]);?>">{{ $model->order_no }}</a></b></td>
+                        <td>Invoice: <b><a href="<?php echo URL::route("frontend.invoice.view", ['id' => $model->id, 'email' => $model->email]); ?>">{{ $model->order_no }}</a></b></td>
                     </tr>
 
                     <tr>

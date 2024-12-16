@@ -24,6 +24,7 @@
                     </tr>
                 <?php endif; ?>
                 <?php foreach ($model_bonus as $key => $bonus): ?>
+                    <?php if($bonus->getOrder){?>
                     <tr>
                         <td style="vertical-align: middle">{{ $bonus->getUserBuy->email }}</td>
                         <td style="vertical-align: middle">
@@ -37,6 +38,7 @@
                         <td style="vertical-align: middle"><span class="label label-primary">Bonus for {{ $bonus->bonus_type }}</span></td>
                         <td style="vertical-align: middle">{{ $bonus->created_at }}</td>
                     </tr>
+                    <?php }?>
                 <?php endforeach; ?>
 
             </tbody>

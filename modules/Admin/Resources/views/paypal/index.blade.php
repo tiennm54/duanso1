@@ -79,6 +79,9 @@
                                     <option value="UnLimit" {{ (app('request')->input('status_limit') == "UnLimit") ? "selected" : "" }}>
                                         UnLimit
                                     </option>
+                                    <option value="Rut180D" {{ (app('request')->input('status_limit') == "Rut180D") ? "selected" : "" }}>
+                                        Sent Withdraw 180D
+                                    </option>
                                     <option value="Banked" {{ (app('request')->input('status_limit') == "Banked") ? "selected" : "" }}>
                                         Banked
                                     </option>
@@ -89,7 +92,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-2">
+                        <!--<div class="col-sm-2">
                             <div class="form-group">
                                 <label class="control-label">Status Activate</label>
                                 <select name="status_activate" class="form-control">
@@ -101,6 +104,13 @@
                                         Activate
                                     </option>
                                 </select>
+                            </div>
+                        </div>-->
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Website</label>
+                                <input type="text" name="website" placeholder="Website" class="form-control" value="{{ app('request')->input('website') }}">
                             </div>
                         </div>
 
@@ -144,12 +154,21 @@
                     <tbody>
                         <?php $date_now = strtotime(date("Y-m-d H:i:s")); ?>
                         <?php foreach ($model as $key => $item): ?>
-                            <?php $end_date = ($item->end_date) ? strtotime($item->end_date) : strtotime(date("Y-m-d H:i:s")); ?>
-                            <?php $secs = $date_now - $end_date; ?>
+                            <?php 
+                                $end_date = ($item->end_date) ? strtotime($item->end_date) : strtotime(date("Y-m-d H:i:s")); 
+                                $date_xmdt = ($item->date_xmdt) ? strtotime($item->date_xmdt) : strtotime(date("Y-m-d H:i:s")); 
+                                
+                                $secs = $date_now - $end_date;
+                                $secs_xmdt = $date_now - $date_xmdt;
+                            ?>
 
                             <tr>
                                 <td>
                                     <span class="label label-primary"><?php echo ($item->prefix != "") ? $item->prefix : "BPK"; ?></span>
+                                    <?php if($item->status_xmdt == 1){?>
+                                        <br><br>
+                                        <span class="label label-danger">XMDT (<?php echo round($secs_xmdt / 86400); ?>d)</span>
+                                    <?php }?>
                                 </td>
                                 <td>
                                     <b>
@@ -174,12 +193,12 @@
                                             <a class="label label-danger" href="<?php echo $item->website; ?>" target="_blank">SITE OFF</a>
                                             <?php
                                         }
-                                    }else{
+                                    } else {
                                         echo "N/A";
                                     }
                                     ?>
                                 </td>
-                                <td><?php echo $item->money_activate . "$"; ?></td>
+                                <td><?php echo $item->money_activate . " / " .  $item->max_receive . "$"; ?></td>
                                 <td>
                                     <a href="<?php echo URL::route("admin.paypalReceive.index", ["id" => $item->id]) . "?status_receive=pending"; ?>"><?php echo $item->money_hold . "$"; ?></a>
                                 </td>
@@ -193,7 +212,7 @@
                                         <?php echo $item->status_activate; ?>
                                     </span>
                                 </td>
-                                
+
                                 <td> 
                                     <span><?php echo $item->max_money; ?></span>
                                 </td>

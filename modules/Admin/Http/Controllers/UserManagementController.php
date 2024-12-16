@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\UserOrders;
 use Modules\Admin\Http\Requests\UserEditRequest;
 use DB;
+use Log;
 
 class UserManagementController extends Controller {
 
@@ -33,6 +34,31 @@ class UserManagementController extends Controller {
             return view('admin::userManagement.index', compact('model'));
         }
         return back();
+    }
+
+    public function createUserScam(Request $request) {
+        if (isset($request)) {
+            Log::info($request->customer_scam);
+            if ($request->customer_scam) {
+                $model_order = User::where("email", trim($request->customer_scam))->first();
+                if ($model_order == null) {
+                    $model = new User();
+                    $model->first_name = "Scamer";
+                    $model->last_name = "Scamer";
+                    $model->full_name = "Scamer";
+                    $model->email = $request->customer_scam;
+                    $model->password = "Scamer";
+                    $model->roles_id = 2;
+                    $model->status_delete = 1;
+                    //$model->status_lock = 1;
+                    $model->save();
+                    $request->session()->flash('alert-success', 'Success: Add Scamer thành công!');
+                } else {
+                    $request->session()->flash('alert-warning', 'Warning: Scamer này đã tồn tại!');
+                }
+                return redirect()->route('admin.userManagement.index');
+            }
+        }
     }
 
     public function view($id) {
@@ -106,6 +132,17 @@ class UserManagementController extends Controller {
                 $request->session()->flash('alert-success', 'Success: Edit email: ' . $data["email"] . ' thành công!');
                 return back();
             }
+        }
+    }
+
+    public function reset($id, Request $request) {
+        $model = User::find($id);
+        if ($model) {
+            $model->status_delete = 0;
+            $model->status_lock = 0;
+            $model->save();
+            $request->session()->flash('alert-success', 'Success: Reset User thành công!');
+            return back();
         }
     }
 

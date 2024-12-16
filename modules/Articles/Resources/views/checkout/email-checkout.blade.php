@@ -11,14 +11,14 @@
                         <tr>
                             <td align="center"
                                 style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;"
-                                class="padding-copy">Invoice #{{ $model_orders->order_no }}
+                                class="padding-copy">Invoice #{{ $model_orders->id }}
                             </td>
                         </tr>
                         <tr>
                             <td align="left"
                                 style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span><br/>
-                                    <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span></span><br/>
+                                    <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->id }}</span></span><br/>
                                     <?php if ($model_orders->total_price == 0) { ?>
                                         <span style="font-weight: bold; color: blue">
                                             This order has been charging on your available balance. 
@@ -33,14 +33,18 @@
                                         <span>Password: {{ $password }}</span><br/>
                                         <span>Click <a href="{{ URL::route('users.getChangePassword') }}">here</a> to change your password</span><br/>
                                     <?php } ?>
+                                        <span>
+                                            After your successful payment then please login to your account and get your premium key here 
+                                            <a href="{{ URL::route('users.orderHistoryView', ["id" => $model_orders->id , "order_no" => $model_orders->order_no ]) }}">GET YOUR PREMIUM KEY</a>
+                                        </span><br/>
                                 </p>
                                 <?php if ($model_orders->total_price > 0) { ?>
                                     <p style="background-color: yellow"><b>Notice: please read carefully before you make the payment</b></p>
                                     <ul>
                                         <li>Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)</li>
-                                        <li>Your keys/vouchers/account will be delivery within 1-8 hours. Usually you will get it within 30 minutes -> 1 hours.</li>
-                                        <li>If you do not receive premium in maximum 8 hours => Please contact us first, do not open the disputed!</li>
-                                        <li>Your premium key/account will be delivery by email from <?php echo EMAIL_BUYPREMIUMKEY; ?>. Please make sure to check your inbox and Spam(Junk) box to get the key/account.</li>
+                                        <li>Your product will be delivery within 1-8 hours. Usually you will get it within 30 minutes -> 1 hours.</li>
+                                        <li>If you do not receive product in maximum 8 hours => Please contact us first, do not open the disputed!</li>
+                                        <li>If you cannot find the product in your inbox, please check your spam mailbox. Thank you!</li>
                                     </ul>
                                 <?php } ?>
                             </td>

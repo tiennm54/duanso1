@@ -16,6 +16,7 @@
                 <th>Old Price</th>
                 <th>Status Stock</th>
                 <th>Status Show/Hide</th>
+                <th>Enabled Visa</th>
                 <th width="20%">Action</th>
             </tr>
         </thead>
@@ -47,16 +48,31 @@
                             </select>
                         </td>
                         <td>
+                            <select name="status_enabledVisa">
+                                <option value="1" <?php echo ($item->status_enabledVisa == "1") ? "selected" : ""; ?>>Enabled</option>
+                                <option value="0" <?php echo ($item->status_enabledVisa == "0") ? "selected" : ""; ?>>Disabled</option>
+                            </select>
+                        </td>
+                        <td>
                             <button type="submit" class="btn btn-primary" data-toggle="confirmation">
                                 <i class="fa fa-save"></i>
                             </button>
+                            
                             <a href="<?php echo URL::route('articlesChildren.getEdit', ['id' => $item->id, 'url' => $item->url_title . '.html']); ?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                            
                             <a href="<?php echo $item->getUrl(); ?>" target="_blank" class="btn btn-primary"> 
                                 <i class="fa fa-eye"></i>
                             </a>
+                            
                             <a href="<?php echo URL::route('articlesChildren.delete', $item->id); ?>" class="btn btn-danger" data-toggle="confirmation">
                                 <i class="fa fa-trash-o"></i>
                             </a>
+                            
+                            <a class="btn btn-primary"
+                               href="<?php echo URL::route('admin.keyStock.getCreate', $item->id); ?>" target="_blank">
+                                <i class="glyphicon glyphicon-usd"></i>
+                            </a>
+                            
                         </td>
                     </tr>
                 </form>

@@ -9,7 +9,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label>URL Title</label>
-            <input type="text" class="form-control border-input" placeholder="Title..." name="txt_url_title" value="{{ ($model->url_title) ? $model->url_title : "" }}" disabled>
+            <input type="text" class="form-control border-input" placeholder="Title..." name="txt_url_title" value="{{ ($model->url_title) ? $model->url_title : "" }}">
         </div>
     </div>
 

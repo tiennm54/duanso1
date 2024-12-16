@@ -28,25 +28,39 @@
             @include('validator.flash-message')
             @include('validator.validator-input')
             <div class="well">
+                
+                <div class="row">                    
+                    <form action="<?php echo URL::route('admin.userManagement.createUserScam');?>" method="post" enctype="multipart/form-data">                        
+                        <div class="col-sm-3">                            
+                            <div class="form-group">                                
+                                <label class="control-label">Customer Scam</label>                                
+                                <input type="email" class="form-control border-input" name="customer_scam" required>                            
+                            </div>                        
+                        </div>                       
+                        <div class="col-sm-1">                            
+                            <div class="form-group">                                
+                                <label class="control-label">Create</label>                                
+                                <div>                                    
+                                    <button type="submit" class="btn btn-primary">Create</button>                                
+                                </div>                            
+                            </div>                        
+                        </div>               
+                    </form>                
+                </div>       
+                
+                
                 <div class="row">
                     <form action="" method="get">
+                        
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label class="control-label" for="input-name">Customer Name</label>
-                                <input type="text" name="filter_name" value="{{Request::get('filter_name')}}" placeholder="Customer Name" id="input-name" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label class="control-label" for="input-email">E-Mail</label>
                                 <input type="text" name="filter_email" value="{{Request::get('filter_email')}}" placeholder="E-Mail" id="input-email" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <label class="control-label" for="input-email">Status lock</label>
+                                
                                 <select class="form-control" name="filter_status">
                                     <option value="">Select status</option>
                                     <option value="0" {{ (app('request')->input('filter_status') == "0") ? "selected" : "" }}>OKIE</option>
@@ -57,18 +71,17 @@
 
                         <div class="col-sm-1">
                             <div class="form-group">
-                                <label class="control-label">Search</label>
                                 <div>
-                                    <button type="submit" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-filter"></i> Filter</button>
+                                    <button type="submit" id="button-filter" class="btn btn-primary">Search</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-1">
                             <div class="form-group">
-                                <label class="control-label">Reset</label>
+                                <label class="control-label"></label>
                                 <div>
-                                    <a type="submit" class="btn btn-default pull-right" href="<?php echo URL::route('admin.userManagement.index'); ?>">
-                                        <i class="fa fa-filter"></i> Reset
+                                    <a type="submit" class="btn btn-default" href="<?php echo URL::route('admin.userManagement.index'); ?>">
+                                        Reset
                                     </a>
                                 </div>
                             </div>
@@ -113,6 +126,10 @@
                                 </td>
                                 <td class="text-right">
                                     
+                                    <a href="{{ URL::route('admin.userManagement.reset', ["id" => $item->id]) }}" data-toggle="confirmation" class="btn btn-primary">
+                                        <i class="glyphicon glyphicon-refresh"></i>
+                                    </a>
+                                    
                                     <a title="" class="btn btn-primary" 
                                        data-toggle="modal" data-target="#modal_edit_useremail"
                                        onclick="editUserEmail('<?php echo $item->id; ?>', '<?php echo $item->email; ?>')"
@@ -128,6 +145,7 @@
                                     <a href="{{ URL::route('admin.userManagement.delete', ["id" => $item->id]) }}" data-toggle="confirmation" class="btn btn-danger">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </a>
+                                    
                                 </td>
                             </tr>
                         <?php endforeach; ?>

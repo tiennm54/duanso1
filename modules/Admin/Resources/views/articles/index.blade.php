@@ -39,6 +39,7 @@
                                 <th>Image</th>
                                 <th>Title</th>
                                 <th>Status Stock</th>
+                                <th>Enabled Visa</th>
                                 <th>Site official</th>
                                 <th>Reseller</th>
                                 <th width="15%">Action</th>
@@ -60,6 +61,15 @@
                                         <option value="0" {{ (app('request')->input('int_status_stock') == "0") ? "selected" : "" }}>Not In Stock</option>
                                     </select>
                                 </th>
+                                
+                                <th>
+                                    <select class="form-control border-input" name="status_enabledVisa">
+                                        <option value="">Select Status</option>
+                                        <option value="1" {{ (app('request')->input('status_enabledVisa') == "1") ? "selected" : "" }}>Enabled</option>
+                                        <option value="0" {{ (app('request')->input('status_enabledVisa') == "0") ? "selected" : "" }}>Disabled</option>
+                                    </select>
+                                </th>
+                                
                                 <th></th>
                                 <th>
                                     <select class="form-control border-input" name="reseller_status">
@@ -90,6 +100,18 @@
                                                 break;
                                             case 0:
                                                 echo "Not In Stock";
+                                                break;
+                                        }
+                                        ?>
+                                    </td>
+                                    
+                                    <td><?php
+                                        switch ($item->status_enabledVisa) {
+                                            case 1:
+                                                echo "Enabled";
+                                                break;
+                                            case 0:
+                                                echo "Disabled";
                                                 break;
                                         }
                                         ?>

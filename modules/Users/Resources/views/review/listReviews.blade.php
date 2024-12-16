@@ -16,6 +16,8 @@
                 }
                 ?>
                 <?php foreach ($model as $key => $item): ?>
+                    <?php if($item->getArticles->status_disable == 0 && $item->getArticles->status_stock == 1):?>
+                
                     <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="product-thumb transition" style="height: 110px">
                             <div class="image">
@@ -40,6 +42,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </div>
         </div>

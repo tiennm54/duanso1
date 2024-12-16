@@ -2,11 +2,12 @@
 
 namespace Modules\Admin\Http\Controllers;
 use App\Models\ArticlesType;
-use App\Models\ArticlesTypeKey;
+use App\Models\KeyStock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Pingpong\Modules\Routing\Controller;
 use DB;
+use Log;
 use Input;
 use Excel;
 
@@ -35,21 +36,34 @@ class ImportKeyController extends Controller {
                     $path = Input::file('import_file')->getRealPath();
                     $data = Excel::load($path, function ($reader) {
                     })->get();
+                    
                     if (!empty($data) && $data->count()) {
                         $flag = true;
                         $error = array();
                         $insert = array();
+                        
+                        $count = 0;
                         foreach ($data as $key => $value) {
-                            $check = ArticlesTypeKey::where("key", "=", trim($value->key))->where("articles_type_id","=",$product_id)->count();
+                            //Log::info($value);
+                            //Hàm cũ
+                            //$check = KeyStock::where("premium_key", "=", trim($value->key))->where("articles_type_id","=",$product_id)->count();
+                            //Hàm mới
+                            $check = KeyStock::where("premium_key", "=", trim($value->key))->count();
+                            
                             if ($check == 0) {
+                                
                                 $tmp = array(
                                     "articles_type_id" => $product_id,
-                                    "key" => $value->key,
+                                    "articles_type_title" => $model->title,
+                                    "status_paid" => 0,
+                                    "status" => "Pending",
+                                    "premium_key" => $value->key,
                                     "created_at" => Carbon::now(),
                                     "updated_at" => Carbon::now()
                                 );
 
                                 array_push($insert, $tmp);
+                                $count++;
 
                             } else {
 
@@ -63,15 +77,12 @@ class ImportKeyController extends Controller {
                         }
 
                         if ($flag == true) {
-
-                            ArticlesTypeKey::insert($insert);
-                            $request->session()->flash('alert-success', 'Success: Cập nhật key thành công, chúc Minh Tiến một ngày gặt hái được nhiều thành công!');
-                            return redirect()->route('import.getImport');
-
+                            KeyStock::insert($insert);
+                            $request->session()->flash('alert-success', 'Success: Import thành công: ' . $count . ' key.');
+                            return redirect()->route('admin.keyStock.getCreate', ['id' => $model->id]);
                         } else {
                             return $error;
                         }
-
                     }
                 }
             }

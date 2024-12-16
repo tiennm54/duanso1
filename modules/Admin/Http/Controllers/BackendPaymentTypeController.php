@@ -88,7 +88,16 @@ class BackendPaymentTypeController extends Controller {
                 $model->position = $request->txt_position;
                 $model->fees = $request->txt_fees;
                 $model->plus = $request->txt_plus;
+
+                $model->fees_service = $request->fees_service;
+                $model->plus_service = $request->plus_service;
+
                 $model->disable_vn = $request->disable_vn;
+                $model->disable_country = $request->txt_disable_country;
+                $model->disable_guests = $request->disable_guests;
+                $model->total_completed = $request->total_completed;
+                $model->check_proxy = $request->check_proxy;
+
                 if (isset($request->txt_payment_id)) {
                     $model->payment_id = $request->txt_payment_id;
                 }
@@ -99,6 +108,12 @@ class BackendPaymentTypeController extends Controller {
 
                 if ((isset($request->txt_email))) {
                     $model->email = $request->txt_email;
+                }
+                if ((isset($request->txt_money_current))) {
+                    $model->money_current = $request->txt_money_current;
+                }
+                if ((isset($request->max_payment))) {
+                    $model->max_payment = $request->max_payment;
                 }
 
                 if (isset($request->txt_image)) {
@@ -124,7 +139,7 @@ class BackendPaymentTypeController extends Controller {
         return view('errors.503');
     }
 
-    public function delete($id) {
+    public function delete(Request $request, $id) {
         $model = PaymentType::find($id);
         if ($model != null) {
             if ($model->image && file_exists('images/' . $model->image)) {

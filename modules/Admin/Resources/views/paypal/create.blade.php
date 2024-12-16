@@ -96,6 +96,7 @@
                                 <option value="Limit" <?php echo (isset($model) && $model->status == "Limit") ? "selected" : "" ?>>Limit</option>
                                 <option value="Restore" <?php echo (isset($model) && $model->status == "Restore") ? "selected" : "" ?>>Restore</option>
                                 <option value="UnLimit" <?php echo (isset($model) && $model->status == "UnLimit") ? "selected" : "" ?>>UnLimit</option>
+                                <option value="Rut180D" <?php echo (isset($model) && $model->status == "Rut180D") ? "selected" : "" ?>>Sent Withdraw 180D</option>
                                 <option value="Banked" <?php echo (isset($model) && $model->status == "Banked") ? "selected" : "" ?>>Banked</option>
                                 <option value="Cancel" <?php echo (isset($model) && $model->status == "Cancel") ? "selected" : "" ?>>Cancel</option>
                             </select>
@@ -166,6 +167,25 @@
                             <label>MAX Money</label>
                             <input value="{{ (isset($model)) ? $model->max_money : "" }}" class="form-control border-input" placeholder="Max money..." name="max_money">
                             {!! $errors->first('max_money','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>MAX Receive</label>
+                            <input value="{{ (isset($model)) ? $model->max_receive : "" }}" class="form-control border-input" placeholder="Max receive..." name="max_receive">
+                            {!! $errors->first('max_receive','<span class="control-label color-red" style="color: red">*:message</span>') !!}
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Status XMDT</label>
+                            <select class="form-control" name="status_xmdt">
+                                <option value="0" <?php echo (isset($model) && $model->status_xmdt == "0") ? "selected" : "" ?>>OFF</option>
+                                <option value="1" <?php echo (isset($model) && $model->status_xmdt == "1") ? "selected" : "" ?>>ON</option>
+                            </select>
                         </div>
                     </div>
                     

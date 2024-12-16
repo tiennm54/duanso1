@@ -35,9 +35,27 @@ class FeedBackController extends Controller {
                     $model->image = $input['image_name'];
                 }
             }
+            
+            $check = $this->checkContentEmail($request->description);
+            if($check == true){
+                $request->session()->flash('alert-warning', ' Warning: You are trying to spam my website. Your email will be blocked forever.');
+                return redirect()->route('users.feedback.getFeedBack');
+            }
+            
             $model->save();
             $request->session()->flash('alert-success', ' Success: You have successfully sent your feedback. Thank you so much!');
             return redirect()->route('users.feedback.getFeedBack');
+        }
+    }
+    
+    public function checkContentEmail($content){
+        $blacklistArray = ['http','https'];
+        $content = strtolower($content); // chuyen chu hoa thanh chu thuong neu co
+        $check = str_contains($content, $blacklistArray);
+        if($check == true){
+            return true;
+        }else{
+            return false;
         }
     }
 

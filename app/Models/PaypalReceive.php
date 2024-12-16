@@ -14,7 +14,7 @@ class PaypalReceive extends Model {
     public function getPaypalAccount() {
         return $this->hasOne('App\Models\PaypalAccount', 'id', 'paypal_account_id');
     }
-    
+
     public function getOrder() {
         return $this->hasOne('App\Models\UserOrders', 'id', 'order_id');
     }
@@ -31,12 +31,16 @@ class PaypalReceive extends Model {
             $this->total_receive = ($model_order->total_price - (($model_order->total_price * RATE_PAYPAL) / 100 + 0.3));
             $this->status = $status;
             $this->save();
-            if ($status == "completed") {
-                $model_paypal_account->money_activate = $model_paypal_account->money_activate + $this->total_receive;
-            }else{
-                $model_paypal_account->money_hold = $model_paypal_account->money_hold + $this->total_receive;
+            
+            //Neu la thanh toan paypal thi moi cap nhat so du vao tai khoan
+            if ($model_order->payment_type->code == "PAYPAL") {
+                if ($status == "completed") {
+                    $model_paypal_account->money_activate = $model_paypal_account->money_activate + $this->total_receive;
+                } else {
+                    $model_paypal_account->money_hold = $model_paypal_account->money_hold + $this->total_receive;
+                }
+                $model_paypal_account->save();
             }
-            $model_paypal_account->save();
         }
     }
 

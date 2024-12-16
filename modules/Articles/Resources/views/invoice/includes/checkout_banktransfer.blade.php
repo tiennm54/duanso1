@@ -21,11 +21,11 @@
 </p>
 
 <p>
-    Step 2. Set the amount <span style="color: red">*</span>: <b><?php echo round($model->total_price * 23000) ?> VNĐ</b> or <b>${{ $model->total_price }}</b>
+    Step 2. Set the amount <span style="color: red">*</span>: <b><?php echo round($model->total_price * 25000) ?> VND</b> or <b>${{ $model->total_price }}</b>
 </p>
 
 <p>
-    Step 3. Set the description <span style="color: red">*</span>: <b>{{ $model->order_no }}</b>
+    Step 3. Set the description <span style="color: red">*</span>: <b>VCB-{{ $model->id }}</b>
 </p>
 
 <p style="color: red">

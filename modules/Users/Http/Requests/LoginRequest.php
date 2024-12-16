@@ -14,7 +14,7 @@ class LoginRequest extends Request {
         return [
             'email'	=> 'required|email:users,email',
             'password' => 'required:users,password',
-            'g-recaptcha-response' => 'required|captcha'
+            //'g-recaptcha-response' => 'required|captcha'
         ];
     }
     public function messages () {

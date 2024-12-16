@@ -38,6 +38,10 @@ class BackendArticlesController extends Controller {
             $model = $model->where("status_stock", "=", $request->int_status_stock);
         }
         
+        if (isset($request->status_enabledVisa) && $request->status_enabledVisa != "") {
+            $model = $model->where("status_enabledVisa", "=", $request->status_enabledVisa);
+        }
+        
         if (isset($request->reseller_status ) && $request->reseller_status  != "") {
             $model = $model->where("reseller_status", "=", $request->reseller_status);
         }
@@ -115,6 +119,14 @@ class BackendArticlesController extends Controller {
             return view('errors.503');
         }
     }
+    
+    public function saveSatusEnabledVisa($articles_id,$status_enabledVisa){
+        $model = ArticlesType::where("articles_id", "=", $articles_id)->update(["status_enabledVisa"  => $status_enabledVisa]);
+        /*foreach ($model as $item){
+            $item->status_enabledVisa = $status_enabledVisa;
+            $item->save();
+        }*/
+    }
 
     public function postEdit(ArticlesRequest $request, $id) {
         if (isset($request)) {
@@ -128,6 +140,9 @@ class BackendArticlesController extends Controller {
                 $model->title = $request->txt_title;
                 $model->code = $request->txt_code;
                 $model->status_stock = $request->int_instock;
+                $model->status_enabledVisa =  $request->status_enabledVisa;
+                $this->saveSatusEnabledVisa($id, $request->status_enabledVisa);
+                
                 $model->status_disable = $request->status_disable;
 
                 if (isset($request->txt_brand)) {

@@ -109,6 +109,7 @@ class BackendArticlesChildrenController extends Controller {
                     $model->seo_title = $request->txt_seo_title;
                     $model->seo_description = $request->txt_seo_description;
                     $model->seo_keyword = $request->txt_seo_keyword;
+                    $model->url_title = $request->txt_url_title;
 
                     if (isset($request->old_price)) {
                         $model->old_price = $request->old_price;
@@ -187,6 +188,7 @@ class BackendArticlesChildrenController extends Controller {
             $data = $request->all();
             $model->status_stock = $data["status_stock"];
             $model->status_show = $data["status_show"];
+            $model->status_enabledVisa = $data["status_enabledVisa"];
             $model->price_reseller = $data["price_reseller"];
             $model->price_order = $data["price_order"];
             $model->old_price = $data["old_price"];

@@ -8,13 +8,13 @@
                     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 500px;" class="responsive-table">
                         <tr>
                             <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding-copy">
-                                Invoice #{{ $model_orders->order_no }}
+                                Invoice #{{ $model_orders->id }}
                             </td>
                         </tr>
                         <tr>
                             <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 <p>Dear <span style="font-weight: bold">{{ $model_orders->first_name." ".$model_orders->last_name }}</span><br/>
-                                    <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->order_no }}</span></span><br/>
+                                    <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->id }}</span></span><br/>
                                     <?php if ($model_orders->total_price == 0) { ?>
                                         <span style="font-weight: bold; color: blue">
                                             This order has been charging on your available balance. 
@@ -37,7 +37,7 @@
                                         <li>2. Set the amount in your order: <b>${{ $model_orders->total_price }}</b></li>
                                         <li>3. Set the "Recipient E-mail": <b>{{ $model_orders->payment_type->email }}</b></li>
                                         <li>4. Set the "Description": <span style="color: red">(You must correct this message)</span> <br>
-                                            <b>{{ $model_orders->order_no }}</b>
+                                            <b>{{ $model_orders->id }}</b>
                                         </li>
                                         <li>5. Click the "Proceed to checkout" button to pay</li>
                                     </ul>

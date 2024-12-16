@@ -104,14 +104,14 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>Fees</label>
-                            <input type="number"  step="any" value="<?php echo ($model->fees) ? $model->fees : ''; ?>" class="form-control border-input" placeholder="Fees..." name="txt_fees" required>
+                            <input type="number"  step="any" value="<?php echo ($model->fees) ? $model->fees : 0; ?>" class="form-control border-input" placeholder="Fees..." name="txt_fees" required>
                         </div>
                     </div>
 
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>Plus</label>
-                            <input type="number"  step="any" value="<?php echo ($model->plus) ? $model->plus : ''; ?>" class="form-control border-input" placeholder="Plus..." name="txt_plus" required>
+                            <input type="number"  step="any" value="<?php echo ($model->plus) ? $model->plus : 0; ?>" class="form-control border-input" placeholder="Plus..." name="txt_plus" required>
                         </div>
                     </div>
 
@@ -125,7 +125,7 @@
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label>Disable Việt Nam</label>
+                            <label>Disable Country</label>
                             <select class="form-control border-input" name="disable_vn">
                                 <option value="0" <?php
                                 if ($model->disable_vn == 0) {
@@ -140,9 +140,101 @@
                             </select>
                         </div>
                     </div>
+                    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>List Country Disable</label>
+                            <input type="text" value="<?php echo ($model->disable_country) ? $model->disable_country : ''; ?>" class="form-control border-input" placeholder="List Country Disable..." name="txt_disable_country">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Check Proxy/VPN</label>
+                            <select class="form-control border-input" name="check_proxy">
+                                <option value="0" <?php
+                                if ($model->check_proxy == 0) {
+                                    echo "selected";
+                                }
+                                ?>>No</option>
+                                <option value="1" <?php
+                                if ($model->check_proxy == 1) {
+                                    echo "selected";
+                                }
+                                ?>>Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    
+
+                    <div class="col-md-2" hidden="">
+                        <div class="form-group">
+                            <label>Fees Service (Phí dịch vụ)</label>
+                            <input type="number"  step="any" value="<?php echo ($model->fees_service) ? $model->fees_service : 0; ?>" class="form-control border-input" placeholder="Fees Service..." name="fees_service">
+                        </div>
+                    </div>
+
+                    <div class="col-md-2" hidden="">
+                        <div class="form-group">
+                            <label>Plus Service</label>
+                            <input type="number"  step="any" value="<?php echo ($model->plus_service) ? $model->plus_service : 0; ?>" class="form-control border-input" placeholder="Plus Service..." name="plus_service">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2" hidden="">
+                        <div class="form-group">
+                            <label>Total Money</label>
+                            <input type="number"  step="any" value="<?php echo ($model->money_total) ? $model->money_total : 0; ?>" class="form-control border-input">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2" hidden="">
+                        <div class="form-group">
+                            <label>Total Current</label>
+                            <input type="number"  step="any" value="<?php echo ($model->money_current) ? $model->money_current : 0; ?>" class="form-control border-input" name="txt_money_current">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>MAX Payment</label>
+                            <input type="number"  step="any" value="<?php echo ($model->max_payment) ? $model->max_payment : 0; ?>" class="form-control border-input" name="max_payment">
+                        </div>
+                    </div>
+                    
                 </div>
+
+
+
+
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Disable to guests</label>
+                            <select class="form-control border-input" name="disable_guests">
+                                <option value="0" <?php
+                                if ($model->disable_guests == 0) {
+                                    echo "selected";
+                                }
+                                ?>>Show</option>
+                                <option value="1" <?php
+                                if ($model->disable_guests == 1) {
+                                    echo "selected";
+                                }
+                                ?>>Hide</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Total Order Completed</label>
+                            <input type="number"  step="any" value="<?php echo ($model->total_completed) ? $model->total_completed : 0; ?>" class="form-control border-input" placeholder="Số đơn completed để được hiển thị payment method" name="total_completed">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Description</label>
                             <textarea class="form-control border-input" name="txt_description"><?php echo ($model->description) ? $model->description : ''; ?></textarea>

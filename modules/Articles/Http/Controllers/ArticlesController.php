@@ -19,6 +19,10 @@ use Log;
 
 class ArticlesController extends Controller {
 
+    public function __construct() {
+        $this->middleware("banListIP");
+    }
+    
     public function index() {
         SeoPage::seoPage($this);
         $model = Articles::where("status_disable", "=", 0)

@@ -61,7 +61,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Stock</label>
                                     <select class="form-control border-input" name="int_instock">
@@ -75,6 +75,24 @@
                                             echo "selected";
                                         }
                                         ?>>Not In Stock</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Enabled Visa/Master Card</label>
+                                    <select class="form-control border-input" name="status_enabledVisa">
+                                        <option value="1" <?php
+                                        if ($model->status_enabledVisa == 1) {
+                                            echo "selected";
+                                        }
+                                        ?>>Enabled</option>
+                                        <option value="0" <?php
+                                        if ($model->status_enabledVisa == 0) {
+                                            echo "selected";
+                                        }
+                                        ?>>Disabled</option>
                                     </select>
                                 </div>
                             </div>
@@ -110,7 +128,7 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>View</label>

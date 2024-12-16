@@ -32,26 +32,7 @@
             <p>
                 {!! $model->description !!}
             </p>
-            <hr>
-            <div class="page-header">
-                <h3 class="reviews">Leave your comment</h3>
-            </div>
-            @include('validator.validator-input')
-            @include('validator.flash-message')
-            <div class="comment-tabs">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#comments-logout" role="tab" data-toggle="tab"><h4 class="reviews text-capitalize">Comments</h4></a></li>
-                    <li><a href="#add-comment" role="tab" data-toggle="tab"><h4 class="reviews text-capitalize">Add comment</h4></a></li>
-                </ul>            
-                <div class="tab-content">
-                    <div class="tab-pane active" id="comments-logout">                
-                        @include('blog::news.includes.list_comment')
-                    </div>
-                    <div class="tab-pane" id="add-comment">
-                        @include('blog::news.includes.add_comment')
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 
@@ -72,8 +53,12 @@
 
 </div>
 
-@include('blog::news.includes.modal_reply')
-@include('blog::news.includes.modal_edit_comment')
+<?php
+//Bỏ tính năng này
+//@include('blog::news.includes.modal_reply')
+//@include('blog::news.includes.modal_edit_comment')
+
+?>
 
 <script>
     function replyComment(id, email, comment) {

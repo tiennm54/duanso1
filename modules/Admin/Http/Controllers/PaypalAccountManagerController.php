@@ -93,6 +93,8 @@ class PaypalAccountManagerController extends Controller {
             $model->user_verify = $data["user_verify"];
             $model->cmnd = $data["cmnd"];
             $model->max_money = $data["max_money"];
+            $model->max_receive = $data["max_receive"];
+            $model->status_xmdt = $data["status_xmdt"];
 
             if (isset($request->document)) {
                 if ($request->hasFile('document')) {
@@ -153,6 +155,15 @@ class PaypalAccountManagerController extends Controller {
             $model->user_verify = $data["user_verify"];
             $model->cmnd = $data["cmnd"];
             $model->max_money = $data["max_money"];
+            $model->max_receive = $data["max_receive"];
+            $model->status_xmdt = $data["status_xmdt"];
+            
+            if($data["status_xmdt"] == 1 && strtotime($model->date_xmdt) <= 0){
+                $model->date_xmdt = Carbon::now();
+            }
+            if($data["status_xmdt"] == 0){
+                $model->date_xmdt = NULL;
+            }
 
             if (isset($request->document)) {
                 if ($request->hasFile('document')) {
@@ -169,10 +180,10 @@ class PaypalAccountManagerController extends Controller {
 
             $model->save();
             if ($data["status_activate"] == "Activate") {
-                if ($model->status != "Limit") {
+                if ($model->status != "Limit" && $model->status != "UnLimit") {
                     $this->updatePaypalPayment($model);
                 } else {
-                    $request->session()->flash('alert-warning', 'Warning: Tài khoản này đang hoạt động hoặc đã bị LIMIT!');
+                    $request->session()->flash('alert-warning', 'Warning: Tài khoản paypal này đang ở TOP 1, Xin vui lòng đưa tài khoản paypal khác lên TOP 1 trước khi chuyển trang thái cho tài khoản paypal này!');
                     return back();
                 }
             }
@@ -206,10 +217,13 @@ class PaypalAccountManagerController extends Controller {
             if (isset($data["status_activate"]) && $data["status_activate"] != "") {
                 $model = $model->where("status_activate", $data["status_activate"]);
             }
+            if (isset($data["website"]) && $data["website"] != "") {
+                $model = $model->where("website", "LIKE", "%" . trim($data["website"]) . "%");
+            }
         }
 
         $model = $model->orderByRaw("FIELD(status_activate, \"Activate\", \"No_Activate\")")
-                ->orderByRaw("FIELD(status, \"Work\", \"Restore\", \"Pending\", \"UnLimit\", \"Limit\", \"Banked\", \"Cancel\")")
+                ->orderByRaw("FIELD(status, \"Work\", \"Restore\", \"Pending\", \"UnLimit\", \"Limit\", \"Rut180D\", \"Banked\", \"Cancel\")")
                 ->paginate(NUMBER_PAGE);
         return view('admin::paypal.index', compact('model'));
     }
@@ -271,7 +285,7 @@ class PaypalAccountManagerController extends Controller {
                         $model_paypal->save();
 
                         $request->session()->flash('alert-success', 'Success: Thực hiện giao dịch thành công!');
-                        return redirect()->route('admin.sellPaypal.index');
+                        return back();
                     } else {
                         $request->session()->flash('alert-warning', 'Warning: Số tiên trong tài khoản không đủ để thực hiện giao dịch!');
                         return back();

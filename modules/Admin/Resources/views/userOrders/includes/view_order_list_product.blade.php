@@ -38,6 +38,11 @@
                                class="btn {{ ($item->count_key == $item->quantity) ? "btn-primary" : "btn-danger"}}">
                                 Đã add {{ $item->count_key }} key
                             </a>
+                            
+                            <a href="{{ URL::route('admin.keyStock.getCreate',[ 'id' => $item->articles_type->id]) }}" target="_blank" class="btn btn-primary">
+                                Import Key
+                            </a>
+                            
                         </td>
 
                         <td class="text-right">${{ $item->price_order }}</td>

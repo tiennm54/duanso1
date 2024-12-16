@@ -17,7 +17,7 @@
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
 
                                 <p>
-                                    <span style="font-weight: bold">We have received your payment for order #{{ $model_orders->order_no }}.</span><br>
+                                    <span style="font-weight: bold">We have received your payment for order #{{ $model_orders->id }}.</span><br>
                                     <span>Our working time is: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span><br>
                                     <span>If you pay within this period, you will receive premium key/voucher within 1 hours.</span><br>
                                     <span>In contrast, you will be received your premium key/voucher within 6->8 hours. We're sorry for the delay in delivery.</span><br>

@@ -44,12 +44,21 @@ class BonusPaymentHistory extends Model {
         $this->status = "pending";
         $this->save();
         $model_user->updateSessionMoney($this->total_after);
-        
+
         $money_current = $model_user->user_money;
         $money_update = $money_current - $total_payment;
         $model_user->updateMoneyForUser($money_update);
-        
+
         return $this;
+    }
+
+    public function updateStatus($model_order) {
+        if ($model_order->used_bonus > 0) {
+            $count_order = $this->where("user_orders_id", "=", $model_order->id)->count();
+            if ($count_order > 0) {
+                $this->where("user_orders_id", "=", $model_order->id)->update(["status" => "completed"]);
+            }
+        }
     }
 
 }

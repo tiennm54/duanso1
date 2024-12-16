@@ -21,7 +21,7 @@ class UserGetKeyController extends Controller {
     public function postGuestGetKey(GetKeyRequest $request) {
         if (isset($request)) {
             $data = $request->all();
-            $model = UserOrders::where("email", "=", trim($data["email"]))->where("order_no", "=", trim($data["order_no"]))->first();
+            $model = UserOrders::where("email", "=", trim($data["email"]))->where("id", "=", trim($data["order_no"]))->first();
             if ($model != null) {
                 $model_order = UserOrdersDetail::where("user_orders_id", "=", $model->id)->get();
                 $model_key = ArticlesTypeKey::where("user_orders_id", "=", $model->id)->get();

@@ -46,49 +46,60 @@
                     </div>
                 </div>
 
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                    <form method="post" action="{{ URL::route('users.postCancelOrder',['id'=>$model->id] ) }}">
-                        <td class="text-left" colspan="2">
-                            Order Details
-                            <?php if ($model->payment_status == "pending"): ?>
-                                <button class="btn btn-danger" 
-                                        data-toggle="confirmation" 
-                                        data-placement="left" style="float: right; display: none;" 
-                                        data-toggle="tooltip" title="Cancel Order">
-                                    Cancel
-                                </button>
-                            <?php endif; ?>
-                        </td>
-                    </form>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-left" style="width: 50%;">
-                                <p>Invoice: 
-                                    <span style="font-weight: bold">
-                                        <a href="<?php echo URL::route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]) ?>" title="View Invoice Detail">
-                                            #{{ $model->order_no }}
-                                        </a>
-                                    </span>
-                                </p>
-                                <p>Date Added: <span style="font-weight: bold">{{ $model->created_at }}</span></p>
-                                <p>Order ID: <span style="font-weight: bold">#{{ $model->id }}</span></p>
-                            </td>
-                            <td class="text-left" style="width: 50%;">
-                                <p>Orders Status: 
-                                    <span class="label  <?php echo ($model->payment_status == "completed") ? "label-primary" : "label-danger"; ?>">
-                                        {{ $model->payment_status }}
-                                    </span>
-                                </p>
-                                <p>Payment Method: <span style="font-weight: bold">{{ $model->payment_type->title }}</span></p>
-                                <p>Shipping Method: <span style="font-weight: bold">Send by email.</span></p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="tab-content">
+                    <div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <form method="post" action="{{ URL::route('users.postCancelOrder',['id'=>$model->id] ) }}">
+                                            <td class="text-left" colspan="2">
+                                                Order Details
+                                                <?php if ($model->payment_status == "pending"): ?>
+                                                    <button class="btn btn-danger" 
+                                                            data-toggle="confirmation" 
+                                                            data-placement="left" style="float: right; display: none;" 
+                                                            data-toggle="tooltip" title="Cancel Order">
+                                                        Cancel
+                                                    </button>
+                                                <?php endif; ?>
+                                            </td>
+                                        </form>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left" style="width: 50%;">
+                                            <p>Invoice: 
+                                                <span style="font-weight: bold">
+                                                    <a href="<?php echo URL::route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]) ?>" title="View Invoice Detail">
+                                                        #{{ $model->id }}
+                                                    </a>
+                                                </span>
+                                            </p>
+                                            <p>Date Added: <span style="font-weight: bold">{{ $model->created_at }}</span></p>
+                                            <p>Order ID: <span style="font-weight: bold">#{{ $model->id }}</span></p>
+                                        </td>
+                                        <td class="text-left" style="width: 50%;">
+                                            <p>Orders Status: 
+                                                <span class="label  <?php echo ($model->payment_status == "completed") ? "label-primary" : "label-danger"; ?>">
+                                                    {{ $model->payment_status }}
+                                                </span>
+                                            </p>
+                                            <p>Payment Method: <span style="font-weight: bold">{{ $model->payment_type->title }}</span></p>
+                                            <p>Shipping Method: <span style="font-weight: bold">Send by email.</span></p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div>
+                        <div class="table-responsive">
+
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -109,23 +120,27 @@
                         </tr>
                     </tbody>
                 </table>
+                            
+                        </div>
+                    </div> 
+                </div>
 
                 <h2>Your Products</h2>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#list_order_product"><span style="font-size: 14px">Products</span></a></li>
-                    <li><a data-toggle="tab" href="#list_premium_key"><span style="font-size: 14px">Premium Key</span></a></li>
+                    <li class="active"><a data-toggle="tab" href="#list_premium_key"><span style="font-size: 14px">Premium Key</span></a></li>
+                    <li><a data-toggle="tab" href="#list_order_product"><span style="font-size: 14px">Products</span></a></li>
                 </ul>
 
                 <div class="tab-content">
 
-                    <div id="list_order_product" class="tab-pane fade in active">
-                        <!--THONG TIN ĐƠN HÀNG-->
-                        @include('users::order-history.includes.list_product')
-                    </div>
-
-                    <div id="list_premium_key" class="tab-pane fade">
+                    <div id="list_premium_key" class="tab-pane fade in active">
                         <!--THONG TIN CODE-->
                         @include('users::order-history.includes.premium_key')
+                    </div>
+
+                    <div id="list_order_product" class="tab-pane fade">
+                        <!--THONG TIN ĐƠN HÀNG-->
+                        @include('users::order-history.includes.list_product')
                     </div>
 
                 </div>

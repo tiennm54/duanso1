@@ -40,7 +40,7 @@
                         <td align="center">$<span id="sub-total">{{ $totalOrder['sub_total'] }}</span></td>
                     </tr>
                     <tr>
-                        <td colspan="2" align="right">Charges <span id="text_payment_selected">{{ $totalOrder['payment_name'] }}</span> </td>
+                        <td colspan="2" align="right">Charges <span id="text_payment_selected" hidden="">{{ $totalOrder['payment_name'] }}</span> </td>
                         <td align="center">$<span id="payment_charges">{{ $totalOrder['charges'] }}</span></td>
                     </tr>
                     <?php if (Auth::check()) { ?>

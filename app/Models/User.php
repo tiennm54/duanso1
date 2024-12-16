@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Session;
 use Log;
 use App\Models\UserRef;
+use App\Models\BlackListIP;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
@@ -207,6 +208,21 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
     }
 
+    public function saveDelete() {
+        if ($this->status_delete != 1) {
+            $this->status_delete = 1;
+            $this->save();
+        }
+    }
+
+    public function saveDeleteViaEmail($email) {
+        $model = User::where("email", "=", trim($email))->first();
+        if ($model && $model->status_delete != 1) {
+            $model->status_delete = 1;
+            $model->save();
+        }
+    }
+
     public function updateSessionMoney($money) {
         Session::set('user_money', $money);
     }
@@ -224,7 +240,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function saveSponsor($model_user, $sponser_email) {
         $model_sponser = User::where("email", "=", $sponser_email)->first();
         if ($model_sponser && $model_user->id != $model_sponser->id) {
-            $model_ref = UserRef::where("user_id", "=", $model_user->id)->first();//một người dùng chỉ có 1 sponsor
+            $model_ref = UserRef::where("user_id", "=", $model_user->id)->first(); //một người dùng chỉ có 1 sponsor
             if ($model_ref == null) {
                 $model_ref = new UserRef();
                 $model_ref->user_id = $model_user->id;
@@ -234,6 +250,39 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             }
         } else {
             return null;
+        }
+    }
+
+    public function checkUserScam($email) {
+        $model = User::where("email", "=", $email)->where("status_delete", "=", 1)->first();
+        if ($model) {
+            $model_ban = new BlackListIP();
+            $model_ban->addBlackListIPCurrent();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function addUserScam($email_scamer) {
+        //Ban IP
+        $model_ban = new BlackListIP();
+        $model_ban->addBlackListIPCurrent();
+        //Ban email
+        $model_user = User::where("email", "=", trim($email_scamer))->first();
+        if ($model_user) {
+            $model_user->status_delete = 1;
+            $model_user->save();
+        } else {
+            $model_save = new User();
+            $model_save->first_name = "Scamer";
+            $model_save->last_name = "Scamer";
+            $model_save->full_name = "Scamer";
+            $model_save->email = $email_scamer;
+            $model_save->password = "Scamer";
+            $model_save->roles_id = 2;
+            $model_save->status_delete = 1;
+            $model_save->save();
         }
     }
 

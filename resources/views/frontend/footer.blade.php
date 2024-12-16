@@ -54,12 +54,12 @@
 
             <div id="fb-root"></div>
             <!-- Your customer chat code -->
-            <div class="fb-customerchat"
+            <!--<div class="fb-customerchat"
                  greeting_dialog_display="hide"
                  attribution=setup_tool
                  page_id="212425975964390"
                  theme_color="#0084ff">
-            </div>
+            </div>-->
         </div>
         <script src="{{url('theme_frontend/js/bootstrap.min.js')}}" type="text/javascript"></script>
         <script src="{{url('theme_frontend/js/bootstrap-confirmation.min.js')}}" type="text/javascript"></script>
@@ -195,11 +195,11 @@
 
 
         <!-- Place this tag in your head or just before your close body tag. -->
-        <script src="https://apis.google.com/js/platform.js" async defer>
+        <!--<script src="https://apis.google.com/js/platform.js" async defer>
             {
                 lang: 'en-GB'
             }
-        </script>
+        </script>-->
 
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5974dc1fb28b9513"></script>
+        <!--<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5974dc1fb28b9513"></script>-->
 </footer>

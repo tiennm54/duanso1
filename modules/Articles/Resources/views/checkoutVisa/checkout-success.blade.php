@@ -27,7 +27,7 @@
                     You can view your order history by going to the
                     <a href="{{ URL::route('users.getMyAccount') }}">my account</a>
                     page and by clicking on
-                    <a href="{{ URL::route('users.orderHistory') }}">history</a>. <br>
+                    <a href="{{ URL::route('users.orderHistory') }}"><span class="btn btn-primary">Order History</span></a><br>
                     Thanks you for choosing us service. 
                     We apologize for any inconvenience this may have caused you.
                 </p>

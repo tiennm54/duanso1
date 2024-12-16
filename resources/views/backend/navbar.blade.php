@@ -22,7 +22,12 @@
                 <a class="parent"><i class="fa fa-shopping-cart fw"></i> <span>Sales</span></a>
                 <ul class="collapse">
                     <li><a href="{{ URL::route('adminUserOrders.listOrders') }}">Orders</a></li>
-                    <li><a href="{{ URL::route('admin.visaLog.index') }}">Visa Payment Log</a></li>
+                    <li>
+                        <a href="<?php echo URL::route("admin.report.index"); ?>">Report</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo URL::route("admin.paymentLog.indexStripe", ['code' => "VISA_STRIPE"]); ?>">STRIPE VISA LOG</a>
+                    </li>
                 </ul>
             </li>
 
@@ -35,6 +40,11 @@
                     <li>
                         <a href="{{ URL::route('admin.paypal.index') }}">Paypal account manager</a>
                     </li>
+                    
+                    <li>
+                        <a href="{{ URL::route('admin.stripe.index') }}">Stripe account manager</a>
+                    </li>
+                    
                     <li>
                         <a href="{{ URL::route('config.bonusConfig.getCreate') }}">Bonus Config</a>
                     </li>
@@ -75,6 +85,7 @@
                 <a class="parent"><i class="fa fa-user fw"></i> <span>Customers</span></a>
                 <ul class="collapse">
                     <li><a href="{{ URL::route('admin.userManagement.index') }}">List User</a></li>
+                    <li><a href="{{ URL::route('admin.blackListIp.index') }}">List IP Ban</a></li>
                     <li><a href="{{ URL::route('admin.userReviewsManager.index') }}">User Reviews</a></li>
                 </ul>
             </li>

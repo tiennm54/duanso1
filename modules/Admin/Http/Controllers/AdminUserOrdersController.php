@@ -14,6 +14,7 @@ use App\Models\BonusConfig;
 use App\Models\BonusHistory;
 use App\Models\PaymentType;
 use App\Models\PaypalReceive;
+use App\Models\BlackListIP;
 use Carbon\Carbon;
 use DougSisk\CountryState\CountryState;
 use Illuminate\Http\Request;
@@ -54,10 +55,17 @@ class AdminUserOrdersController extends Controller {
             $model = $model->where(DB::raw('CONCAT(first_name," ",last_name)'), "LIKE", "%" . trim($data["full_name"]) . "%");
         }
 
+        if (isset($data['paypal_email']) && $data['paypal_email'] != "") {
+            $model = $model->where('paypal_email', '=', $data['paypal_email']);
+        }
+
         $model = $model->orderBy("id", "DESC")->paginate(NUMBER_PAGE);
 
         $model_payment_type = PaymentType::orderBy('id', 'asc')->get();
-        return view('admin::userOrders.listOrders', compact('model', 'model_payment_type'));
+
+        $count_email_die = UserOrders::where("email_die", "=", 1)->count();
+
+        return view('admin::userOrders.listOrders', compact('model', 'model_payment_type', 'count_email_die'));
     }
 
     //Xem thông tin chi tiết order
@@ -94,6 +102,12 @@ class AdminUserOrdersController extends Controller {
         DB::beginTransaction();
         $model_orders = UserOrders::find($id);
         if ($model_orders) {
+            
+            if($model_orders->paypalAccount != null && $model_orders->payment_type->code == "PAYPAL" &&
+                    ($model_orders->paypalAccount->status == "Limit" || $model_orders->paypalAccount->status == "UnLimit")){
+                $request->session()->flash('alert-warning', 'Warning: Tài khoản paypal của đơn hàng này đã bị limit!');
+                return back();
+            }
 
             if ($model_orders->payment_status == "cancel" || $model_orders->payment_status == "dispute") {
                 $request->session()->flash('alert-warning', 'Warning: Đơn hàng này đã bị cancel hoặc đang trong tình trạng tranh chấp!');
@@ -105,6 +119,7 @@ class AdminUserOrdersController extends Controller {
                 //Trường hợp gửi lại key cho khách hàng và khách hàng không thể nhận thêm bonus
                 if ($model_orders->payment_status == "completed") {
                     $this->sendProductEmail($model_orders, $model_key);
+                    DB::commit();
                     $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
                     return back();
                 }
@@ -152,7 +167,7 @@ class AdminUserOrdersController extends Controller {
                 //Không dùng phương thức bonus và không sử dụng tiền được thưởng
                 if ($check_bonus == 0 || ($model_orders->payment_type->code != "BONUS" && $model_orders->used_bonus == 0)) {
 
-                    $this->sendProductEmail($model_orders, $model_key);
+
 
                     foreach ($model_key as $item) {
                         $item->status = "sent";
@@ -172,6 +187,14 @@ class AdminUserOrdersController extends Controller {
                     $obj_paypal_history = new PaypalReceive();
                     $obj_paypal_history->saveHistoryReceive($model_orders, $request->status_paypal_receive);
 
+                    //Them moi ngay 22/02/2020
+                    $model_paypal_account = $model_orders->paypalAccount;
+                    if ($model_paypal_account != null) {
+                        $model_paypal_account->start_date = Carbon::now();
+                        $model_paypal_account->end_date = Carbon::now();
+                        $model_paypal_account->save();
+                    }
+                    $this->sendProductEmail($model_orders, $model_key);
                     DB::commit();
                     $request->session()->flash('alert-success', 'Success: Đã gửi premium key thành công tới khách hàng!');
                 }
@@ -295,7 +318,12 @@ class AdminUserOrdersController extends Controller {
                             break;
 
                         case 'refund' :
-                            if ($tmp_status == 'paid') {
+                            if ($tmp_status == 'paid' || $tmp_status == 'completed') {
+
+                                //Cap nhat lai thong so tien cho Payment Type
+                                $model_payment_type = new PaymentType();
+                                $model_payment_type->refundMoney($model->payments_type_id, $model->total_price);
+
                                 $check_refund = $model->cancelRefundOrder("refund", $model_user);
                                 if ($check_refund) {
                                     $this->sendMailRefund($model);
@@ -322,6 +350,22 @@ class AdminUserOrdersController extends Controller {
                                 $request->session()->flash('alert-warning', 'Warning: Không thể hủy đơn hàng này do đơn hàng không ở trạng thái pending!');
                                 return back();
                             }
+                            break;
+
+                        case 'dispute':
+
+                            //Add ip vao black list
+                            $model_IP = new BlackListIP();
+                            $model_IP->addBlackListIP($model->user_ip);
+
+                            //Delete User name
+                            Log::info("DELETE USER...");
+                            $model_user->saveDelete();
+
+                            //Delete user theo email
+                            $model_user_e = new User();
+                            $model_user_e->saveDeleteViaEmail($model->email);
+
                             break;
                     }
 
@@ -492,48 +536,89 @@ class AdminUserOrdersController extends Controller {
         return false;
     }
 
+    public function sendEmailDie(Request $request) {
+        $model_list_die = UserOrders::where("email_die", "=", 1)->get();
+        if (count($model_list_die) > 0) {
+            foreach ($model_list_die as $item) {
+                $model_key = $this->getPremiumKeySend($item);
+                if ($model_key) {
+                    //Trường hợp gửi lại key cho khách hàng và khách hàng không thể nhận thêm bonus
+                    if ($item->payment_status == "completed") {
+                        $this->sendProductEmail($item, $model_key);
+                    }
+                }
+            }
+        }
+        $request->session()->flash('alert-success', 'Success: Send email success!');
+        return back();
+    }
+
     //Gửi mail sản phẩm tới khách hàng
     public function sendProductEmail($model_orders, $model_key) {
-        $subject_email = SUBJECT_SEND_PRODUCT . $model_orders->order_no;
-        if ($model_orders->payment_status == "completed") {
-            $subject_email = SUBJECT_RESEND_PRODUCT . $model_orders->order_no;
+        try {
+            
+            $subject_email = SUBJECT_SEND_PRODUCT . $model_orders->id;
+            if ($model_orders->payment_status == "completed") {
+                $subject_email = SUBJECT_RESEND_PRODUCT . $model_orders->id;
+            }
+            Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders, $subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+            });
+            $model_orders->saveEmailDie(0);
+            
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL 1111111");
+            $model_orders->saveEmailDie(1);
         }
-        Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders, $subject_email) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
-        });
     }
 
     public function sendMailPaid($model_orders) {
-        $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->order_no;
-        Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
-        });
+        try {
+            $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->id;
+            Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function sendMailRefund($model_orders) {
-        $subject_email = SUBJECT_REFUND . $model_orders->order_no;
-        Mail::send('admin::userOrders.email-send-refund', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
-        });
+        try {
+            $subject_email = SUBJECT_REFUND . $model_orders->id;
+            Mail::send('admin::userOrders.email-send-refund', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function sendMailCancel($model_orders) {
-        $subject_email = SUBJECT_CANCEL . $model_orders->order_no;
-        Mail::send('admin::userOrders.email-send-cancel', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
-        });
+        try {
+            $subject_email = SUBJECT_CANCEL . $model_orders->id;
+            Mail::send('admin::userOrders.email-send-cancel', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function sendMailBonus($model_orders, $model_user, $money) {
-        $subject_email = SUBJECT_EMAIL_BONUS . $model_orders->order_no;
-        Mail::send('admin::userOrders.email-send-bonus', ['model_orders' => $model_orders, 'model_user' => $model_user, 'money' => $money], function ($m) use ($model_user, $subject_email) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_user->email, $model_user->first_name . " " . $model_user->last_name)->subject($subject_email);
-        });
+        try {
+            $subject_email = SUBJECT_EMAIL_BONUS . $model_orders->id;
+            Mail::send('admin::userOrders.email-send-bonus', ['model_orders' => $model_orders, 'model_user' => $model_user, 'money' => $money], function ($m) use ($model_user, $subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_user->email, $model_user->first_name . " " . $model_user->last_name)->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function saveOrderCountForProduct($model_order) {

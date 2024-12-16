@@ -32,5 +32,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'member' => \App\Http\Middleware\LoginMiddleware::class,
         'editor' => \App\Http\Middleware\EditorMiddleware::class,
+        'banListIP' => \App\Http\Middleware\BanListIPMiddleware::class,
     ];
 }

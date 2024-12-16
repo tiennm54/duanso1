@@ -4,13 +4,19 @@
 $url = "";
 if ($model != null) {
     if ($model->paypalAccount->status_website == 1 && $model->paypalAccount->website != "") {
-        if ($model->payment_status == "completed" || $model->payment_status == "paid") {
+        
+        if(($model->paypalAccount->money_activate + $model->paypalAccount->money_hold + 0) >= ($model->paypalAccount->max_receive + 0)){
+            echo "This payment gateway is temporarily closed. Please come back in 8 hours. I apologize for this inconvenience."
+            . " If you have crypto in your wallet then please buy your products at this website: https://takepremium.com."
+            . " Thank you for using our service!";
+            exit;
+        }else if ($model->payment_status == "completed" || $model->payment_status == "paid") {
             echo "Your order has been paid successfully. Thank you for using our service!";
             exit;
         } else {
             //Mac dinh lay trong bang payment type
             $website_paid = $model->payment_type->website;
-            //X? l? trý?ng h?p khách hàng ð?t hàng ? account c? nhýng khi ðó h? th?ng ð? chuy?n sang account m?i
+            //X? l? trï¿½?ng h?p khï¿½ch hï¿½ng ï¿½?t hï¿½ng ? account c? nhï¿½ng khi ï¿½ï¿½ h? th?ng ï¿½? chuy?n sang account m?i
             if($model->paypalAccount->status != 'Limit'){
                 if ($model->paypalAccount->status_website == 1 && $model->paypalAccount->website != "") {
                     $website_paid = $model->paypalAccount->website;
@@ -29,7 +35,7 @@ if ($model != null) {
 }
 ?>
 <?php if ($url != "") { ?>
-    <a href="<?php echo $url ?>" id="paypal">Redirect to make a payment</a>
+    <a href="<?php echo $url ?>" id="paypal">Redirect to Paypal...</a>
     <script>
         $(document).ready(function () {
             document.getElementById('paypal').click();

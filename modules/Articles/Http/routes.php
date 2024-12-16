@@ -27,8 +27,10 @@ Route::group(['prefix' => 'onestepcheckout', 'namespace' => 'Modules\Articles\Ht
 Route::group(['prefix' => 'checkout', 'namespace' => 'Modules\Articles\Http\Controllers'], function()
 {
     Route::get('index.html',['as'=>'frontend.checkout.index','uses'=>'CheckoutController@index']);
+    Route::get('error.html',['as'=>'frontend.checkout.error','uses'=>'CheckoutController@error403']);
     Route::post('selectTypePayment',['as'=>'frontend.checkout.selectTypePayment','uses'=>'CheckoutController@selectTypePayment']);
     Route::post('changeQuantity',['as'=>'frontend.checkout.changeQuantity','uses'=>'CheckoutController@changeQuantity']);
+    Route::post('checkDisablePaymentMethod',['as'=>'frontend.checkout.checkDisablePaymentMethod','uses'=>'CheckoutController@checkDisablePaymentMethod']);
     Route::post('deleteProductCheckout',['as'=>'frontend.checkout.deleteProductCheckout','uses'=>'CheckoutController@deleteProductCheckout']);
     Route::post('chooseBonusMoney',['as'=>'frontend.checkout.chooseBonusMoney','uses'=>'CheckoutController@chooseBonusMoney']);
     Route::post('confirmOrder',['as'=>'frontend.checkout.confirmOrder','uses'=>'CheckoutController@confirmOrder']);
@@ -36,6 +38,7 @@ Route::group(['prefix' => 'checkout', 'namespace' => 'Modules\Articles\Http\Cont
     Route::get('success/{email?}/{password?}',['as'=>'frontend.checkout.success','uses'=>'CheckoutController@checkoutSuccess']);
     Route::get('sendMail',['as'=>'frontend.checkout.sendMail','uses'=>'CheckoutController@sendMail']);
     Route::post('createOrderVisa',['as'=>'frontend.checkout.createOrderVisa','uses'=>'CheckoutController@createOrderVisa']);
+    Route::post('testPlatformCallback',['as'=>'frontend.checkout.testPlatformCallback','uses'=>'CheckoutController@testPlatformCallback']);
 });
 
 
@@ -53,6 +56,9 @@ Route::group(['prefix' => 'checkout-visa', 'namespace' => 'Modules\Articles\Http
     Route::get('failure',['as'=>'frontend.checkoutVisa.failure','uses'=>'VisaController@checkoutFailure']);
     Route::post('callback',['as'=>'frontend.checkoutVisa.callback','uses'=>'VisaController@checkoutCallback']);
     Route::get('callback',['as'=>'frontend.checkoutVisa.getCallback','uses'=>'VisaController@getCallback']);
+    
+    Route::post('callbackVisaStripe',['as'=>'frontend.checkoutVisa.callbackVisaStripe','uses'=>'VisaController@callbackVisaStripe']);
+    Route::get('callbackVisaStripe',['as'=>'frontend.checkoutVisa.getCallbackVisaStripe','uses'=>'VisaController@getCallbackVisaStripe']);
 });
 
 
@@ -61,4 +67,17 @@ Route::group(['prefix' => 'invoice', 'namespace' => 'Modules\Articles\Http\Contr
     Route::get('pay/{token}',['as'=>'frontend.invoice.paypalPay','uses'=>'InvoiceController@paypalPay']);
     Route::post('callback',['as'=>'frontend.invoice.callback','uses'=>'InvoiceController@callbackPaypalPay']);
     Route::get('pay-success',['as'=>'frontend.invoice.paySuccess','uses'=>'InvoiceController@paySuccess']);
+    Route::post('callbacknew/{id}',['as'=>'frontend.invoice.callbacknew','uses'=>'InvoiceController@callbackPaypalPayNew']);
+    Route::get('payVisa/{token}',['as'=>'frontend.invoice.visaStripePay','uses'=>'InvoiceController@visaStripePay']);
 });
+
+///=======================PLATFORM=================================================================================
+Route::group(['prefix' => 'platform', 'namespace' => 'Modules\Articles\Http\Controllers'], function()
+{
+    Route::post('platformCreateOrder',['as'=>'frontend.platform.platformCreateOrder','uses'=>'PlatformController@platformCreateOrder']);
+    Route::post('platformCallback',['as'=>'frontend.platform.platformCallback','uses'=>'PlatformController@platformCallback']);
+    Route::get('getListProductCode',['as'=>'frontend.platform.getListProductCode','uses'=>'PlatformController@getListProductCode']);
+    Route::get('payment-error.html',['as'=>'frontend.platform.getNotifyPaymentError','uses'=>'PlatformController@getNotifyPaymentError']);
+    
+});
+///=======================END PLATFORM=================================================================================

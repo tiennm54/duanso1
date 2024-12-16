@@ -14,6 +14,9 @@ use App\Models\UserOrders;
 use App\Models\VisaPaymentLog;
 use App\Models\BonusPaymentHistory;
 use App\Models\UserOrdersHistory;
+use App\Models\KeyStock;
+use App\Models\PaymentType;
+use App\Models\StripeAccount;
 use Log;
 use DB;
 use Illuminate\Support\Facades\Mail;
@@ -30,6 +33,124 @@ class VisaController extends Controller {
     }
 
     public function checkoutCallback(Request $request) {
+        if (isset($request)) {
+            DB::beginTransaction();
+            $data = $request->all();
+            //Log::info($data);
+
+            $seller_ref_code = (isset($data["seller_ref_code"])) ? $data["seller_ref_code"] : 0;
+            $total_price = (isset($data["total_price"])) ? $data["total_price"] : 0;
+            $tran_hash = (isset($data["tran_hash"])) ? $data["tran_hash"] : "";
+            $tran_id = (isset($data["tran_id"])) ? $data["tran_id"] : "";
+            $tran_ref = (isset($data["tran_ref"])) ? $data["tran_ref"] : "";
+            $customer_email = (isset($data["customer_email"])) ? $data["customer_email"] : "";
+            $extra_fields = (isset($data["extra_fields"])) ? $data["extra_fields"] : "";
+            $secure_hash = (isset($data["secure_hash"])) ? $data["secure_hash"] : "";
+
+            $status = (isset($data["status"])) ? $data["status"] : 0;
+
+            $validate = md5(VISA_SELLER_ID . $seller_ref_code . $tran_hash . $total_price . $status . VISA_PRIVATE_KEY);
+
+            if ($secure_hash == $validate) {
+
+                //$model_log = new VisaPaymentLog();
+                //$model_log->saveLog($data);
+                $orderid_int = (int) $seller_ref_code;
+                $model = UserOrders::find($orderid_int);
+
+                if ($model) {
+                    if ($status == 1 && $model->total_price == $total_price) {
+                        $this->paymentByBonusVisa($model);
+
+                        $keyStock = new KeyStock();
+                        $model_key = $keyStock->sendAndChangeStatusKey($model);
+                        if ($model_key != null) {
+                            $this->sendProductEmail($model, $model_key);
+                        } else {
+                            $this->sendMailPaid($model);
+                        }
+                        $this->sendEmailNotifyAdmin($model);
+                        DB::commit();
+                        return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
+                    } else {
+                        Log::info("ERORR!!! DON HANG" . $seller_ref_code . " TRA VE LOI: " . $status . " TOTAL PRICE LA: " . $total_price);
+                    }
+                } else {
+                    Log::info("ERORR!!! KHONG TIM THAY ORDER_ID LA: " . $seller_ref_code);
+                }
+
+                DB::commit();
+            } else {
+                Log::info("ERORR!!! VALIDATE KHONG DUNG: " . $seller_ref_code);
+            }
+            return redirect()->route('frontend.checkoutVisa.failure');
+        }
+    }
+
+    public function callbackVisaStripe(Request $request) {
+        if (isset($request)) {
+            DB::beginTransaction();
+            $data = $request->all();
+
+            //Log::info("Checkout with Stripe");
+            //Log::info($data);
+
+            $id = (isset($data["id"])) ? $data["id"] : 0;
+            $amount = (isset($data["amount"])) ? $data["amount"] : 0;
+            $transaction_id = (isset($data["transaction_id"])) ? $data["transaction_id"] : "";
+            $created = (isset($data["created"])) ? $data["created"] : "";
+            $status = (isset($data["status"])) ? $data["status"] : "";
+            $bpk_order_id = (isset($data["bpk_order_id"])) ? $data["bpk_order_id"] : 0;
+            $bpk_private_key = (isset($data["bpk_private_key"])) ? $data["bpk_private_key"] : 0;
+
+            $checkSignature = md5(VISA_CODE . $id . $transaction_id . $amount . $bpk_order_id . $created);
+            if ($checkSignature == $bpk_private_key) {
+                $model = UserOrders::find($bpk_order_id);
+
+                if ($model) {
+                    if ($status == "succeeded" && $model->total_price == $amount) {
+
+                        //Them tien vao tong so du
+                        $model_payment_type = new PaymentType();
+                        $model_payment_type->saveMoneyTotal("VISA_STRIPE", $model->total_price);
+                        
+                        $model_stripe_account = new StripeAccount();
+                        $model_stripe_account->saveMoneyStripeAccount($model);
+
+                        $this->paymentByBonusVisa($model);
+
+                        $keyStock = new KeyStock();
+                        $model_key = $keyStock->sendAndChangeStatusKey($model);
+                        if ($model_key != null) {
+                            $this->sendProductEmail($model, $model_key);
+                        } else {
+                            $this->sendMailPaid($model);
+                        }
+                        $this->sendEmailNotifyAdmin($model);
+                        DB::commit();
+                        return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
+                    } else {
+                        Log::info("ERORR!!! DON HANG " . $bpk_order_id . " TRA VE LOI: " . $status . " TOTAL PRICE LA: " . $amount);
+                        Log::info($data);
+                        $model->payment_status = "echeck";
+                        $model->save();
+                        DB::commit();
+                        return redirect()->route('frontend.invoice.paySuccess');
+                    }
+                } else {
+                    Log::info("ERORR!!! KHONG TIM THAY ORDER_ID LA: " . $bpk_order_id);
+                    Log::info($data);
+                }
+            } else {
+                Log::info("Signature ERRROR");
+                Log::info($data);
+            }
+        }
+        Log::info("VISA STRIPE ERORR!!!");
+        return redirect()->route('frontend.checkoutVisa.failure');
+    }
+
+    public function checkoutCallbackQuickPay(Request $request) {// Da bo
         /*
           action = 'Product'
           buyer = Name of the customer
@@ -63,14 +184,18 @@ class VisaController extends Controller {
             //Log::info("Signature: " . $signature);
             //Log::info("CheckSignature: " . $checkSignature);
             if ($signature == $checkSignature) {
-                Log::info("Signature OKIEEEE");
+                //Log::info("Signature OKIEEEE");
                 $model_log = new VisaPaymentLog();
                 $model_log->saveLog($data);
                 $orderid_int = (int) $orderid;
                 $model = UserOrders::find($orderid_int);
                 if ($model) {
                     if ($status == "Transaction Success" && $model->total_price == $total) {
+
+                        //Tru tien neu khach hang dung them tien bonus o don hang truoc thanh toan cho don hang nay
                         $this->paymentByBonusVisa($model);
+
+
                         $model->payment_status = "paid";
                         $model->save();
                         $model_orders_history = new UserOrdersHistory();
@@ -101,6 +226,10 @@ class VisaController extends Controller {
         return view('articles::checkoutVisa.checkout-failure');
     }
 
+    public function getCallbackVisaStripe() {
+        return view('articles::checkoutVisa.checkout-failure');
+    }
+
     public function checkoutFailure() {
         return view('articles::checkoutVisa.checkout-failure');
     }
@@ -115,20 +244,45 @@ class VisaController extends Controller {
         }
     }
 
+    //Gửi mail sản phẩm tới khách hàng
+    public function sendProductEmail($model_orders, $model_key) {
+        try {
+            $subject_email = SUBJECT_SEND_PRODUCT . $model_orders->id;
+            if ($model_orders->payment_status == "completed") {
+                $subject_email = SUBJECT_RESEND_PRODUCT . $model_orders->id;
+            }
+            Mail::send('admin::userOrders.email-sent-product', ['model_orders' => $model_orders, 'model_key' => $model_key], function ($m) use ($model_orders, $subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+            $model_orders->saveEmailDie(1);
+        }
+    }
+
     public function sendMailPaid($model_orders) {
-        $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->order_no;
-        Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
-        });
+        try {
+            $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->id;
+            Mail::send('admin::userOrders.email-send-paid', ['model_orders' => $model_orders], function ($m) use ($model_orders, $subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
     public function sendEmailNotifyAdmin($model_orders) {
-        $subject_email = "Customer PAY VISA for order: " . $model_orders->order_no;
-        Mail::send('articles::checkoutVisa.email-notify-admin', ['model_orders' => $model_orders], function ($m) use ($subject_email) {
-            $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
-            $m->to(EMAIL_RECEIVE_VISA, "Admin")->subject($subject_email);
-        });
+        try {
+            $subject_email = "Customer PAY VISA for order: " . $model_orders->id;
+            Mail::send('articles::checkoutVisa.email-notify-admin', ['model_orders' => $model_orders], function ($m) use ($subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to(EMAIL_RECEIVE_VISA, "Admin")->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
     }
 
 }

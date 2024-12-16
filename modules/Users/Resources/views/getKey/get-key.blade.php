@@ -25,9 +25,9 @@
                         </div>
 
                         <div class="form-group required">
-                            <label class="col-sm-2" for="input-email">Invoice</label>
+                            <label class="col-sm-2" for="input-email">Order ID (Invoice)</label>
                             <div class="col-sm-6">
-                                <input type="text" name="order_no" placeholder="BPK-12345679. We have sent it to your email." class="form-control" value="{{ old('order_no') }}" required>
+                                <input type="text" name="order_no" placeholder="Example: 155064. We have sent it to your email." class="form-control" value="{{ old('order_no') }}" required>
                                 {!! $errors->first('order_no','<span class="control-label color-red" style="color: red">:message</span>') !!}
                             </div>
                         </div>

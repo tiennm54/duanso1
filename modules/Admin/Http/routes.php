@@ -95,6 +95,8 @@ Route::group(['prefix' => 'adminnmt', 'namespace' => 'Modules\Admin\Http\Control
         Route::post('add-premium-key/{product_id}/{order_detail_id}', ['as' => 'adminUserOrders.postAddPremiumKey', 'uses' => 'AdminUserOrdersController@postAddPremiumKey']);
         Route::post('delete-premium-key/{id}', ['as' => 'adminUserOrders.deletePremiumKey', 'uses' => 'AdminUserOrdersController@deletePremiumKey']);
         Route::post('save-premium-key/{id}', ['as' => 'adminUserOrders.savePremiumKey', 'uses' => 'AdminUserOrdersController@savePremiumKey']);
+        
+        Route::get('sendEmailDie', ['as' => 'adminUserOrders.sendEmailDie', 'uses' => 'AdminUserOrdersController@sendEmailDie']);
     });
 
 
@@ -111,11 +113,14 @@ Route::group(['prefix' => 'adminnmt', 'namespace' => 'Modules\Admin\Http\Control
 
     Route::group(['prefix' => 'user-management'], function() {
         Route::get('index', ['as' => 'admin.userManagement.index', 'uses' => 'UserManagementController@index']);
+        Route::post('index', ['as' => 'admin.userManagement.createUserScam', 'uses' => 'UserManagementController@createUserScam']);
         Route::get('view/{id}', ['as' => 'admin.userManagement.view', 'uses' => 'UserManagementController@view']);
         Route::post('updateMoney/{id}', ['as' => 'admin.userManagement.updateMoney', 'uses' => 'UserManagementController@updateMoney']);
         Route::post('changeRole/{id}', ['as' => 'admin.userManagement.changeRole', 'uses' => 'UserManagementController@changeRole']);
         Route::get('delete/{id}', ['as' => 'admin.userManagement.delete', 'uses' => 'UserManagementController@delete']);
+        Route::get('reset/{id}', ['as' => 'admin.userManagement.reset', 'uses' => 'UserManagementController@reset']);
         Route::post('edit', ['as' => 'admin.userManagement.edit', 'uses' => 'UserManagementController@edit']);
+        
     });
 
     Route::group(['prefix' => 'news'], function() {
@@ -196,6 +201,53 @@ Route::group(['prefix' => 'adminnmt', 'namespace' => 'Modules\Admin\Http\Control
         Route::get('edit/{id}', ['as' => 'admin.coupons.getEdit', 'uses' => 'CouponsManagementController@getEdit']);
         Route::post('edit/{id}', ['as' => 'admin.coupons.postEdit', 'uses' => 'CouponsManagementController@postEdit']);
         Route::get('delete/{id}', ['as' => 'admin.coupons.delete', 'uses' => 'CouponsManagementController@delete']);
+    });
+    
+    
+    Route::group(['prefix' => 'key-stock'], function() {
+        Route::get('create/{id}',['as'=>'admin.keyStock.getCreate','uses'=>'KeyStockController@getCreate']);
+        Route::post('create/{id}',['as'=>'admin.keyStock.postCreate','uses'=>'KeyStockController@postCreate']);
+        Route::get('delete/{id}', ['as' => 'admin.keyStock.delete', 'uses' => 'KeyStockController@delete']);
+        Route::post('saveStatusKey/{id}',['as'=>'admin.keyStock.saveStatusKey','uses'=>'KeyStockController@saveStatusKey']);
+        Route::post('saveUnPaid/{id}',['as'=>'admin.keyStock.saveUnPaid','uses'=>'KeyStockController@saveUnPaid']);
+        Route::post('saveAllUnPaid/{id}',['as'=>'admin.keyStock.saveAllUnPaid','uses'=>'KeyStockController@saveAllUnPaid']);
+    });
+    
+    
+    Route::group(['prefix' => 'payment-log'], function() {
+        Route::get('index/{id}',['as'=>'admin.paymentLog.index','uses'=>'PaymentLogController@index']);
+        Route::get('indexStripe/{code}',['as'=>'admin.paymentLog.indexStripe','uses'=>'PaymentLogController@indexStripe']);
+        Route::post('create/{id}',['as'=>'admin.paymentLog.postCreate','uses'=>'PaymentLogController@postCreate']);
+        Route::post('edit', ['as' => 'admin.paymentLog.postEdit', 'uses' => 'PaymentLogController@postEdit']);
+    });
+    
+    Route::group(['prefix' => 'report'], function() {
+        Route::get('index',['as'=>'admin.report.index','uses'=>'ReportController@index']);
+    });
+    
+    
+    Route::group(['prefix' => 'paid-filehost'], function() {
+        Route::get('index/{id}',['as'=>'admin.paidFilehost.index','uses'=>'PaidKeyLogController@index']);
+    });
+    
+    Route::group(['prefix' => 'blackListIp'], function() {
+        Route::get('index',['as'=>'admin.blackListIp.index','uses'=>'BlackListIPController@index']);
+        Route::get('delete/{id}',['as'=>'admin.blackListIp.delete','uses'=>'BlackListIPController@delete']);
+        Route::post('create',['as'=>'admin.blackListIp.create','uses'=>'BlackListIPController@create']);
+    });
+    
+    
+    Route::group(['prefix' => 'stripe'], function() {
+        Route::get('index', ['as' => 'admin.stripe.index', 'uses' => 'StripeAccountController@index']);
+        Route::get('create', ['as' => 'admin.stripe.getCreate', 'uses' => 'StripeAccountController@getCreate']);
+        Route::post('create', ['as' => 'admin.stripe.postCreate', 'uses' => 'StripeAccountController@postCreate']);
+        Route::get('edit/{id}', ['as' => 'admin.stripe.getEdit', 'uses' => 'StripeAccountController@getEdit']);
+        Route::post('edit/{id}', ['as' => 'admin.stripe.postEdit', 'uses' => 'StripeAccountController@postEdit']);
+        Route::get('delete/{id}', ['as' => 'admin.stripe.delete', 'uses' => 'StripeAccountController@delete']);
+        Route::post('saveData/{id}', ['as' => 'admin.stripe.saveData', 'uses' => 'StripeAccountController@saveData']);
+        Route::post('sellStripe', ['as' => 'admin.stripe.sellStripe', 'uses' => 'StripeAccountController@sellStripe']);
+        Route::get('indexStripePay', ['as' => 'admin.stripe.indexStripePay', 'uses' => 'StripeAccountController@indexStripePay']);
+        Route::post('editStripePay', ['as' => 'admin.stripe.editStripePay', 'uses' => 'StripeAccountController@editStripePay']);
     });
     
 });

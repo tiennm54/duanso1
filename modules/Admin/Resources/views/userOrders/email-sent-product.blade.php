@@ -13,7 +13,7 @@
                         <tr>
                             <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
-                                <p>This is your premium key/account for the invoice # <b>{{ $model_orders->order_no }}</b></p>
+                                <p>This is your premium key/account for the invoice # <b>{{ $model_orders->id }}</b></p>
                             </td>
                         </tr>
 
@@ -183,12 +183,12 @@
                                             <p>
                                                 <span style="font-weight: bold">HOW TO ACTIVATE PREMIUM KEY:</span> <a href="https://buypremiumkey.com/faq/category-2/how-to-activate-premium-key.html">Click here</a>
                                             </p>
-                                            
-                                            <p style="color: red">
-                                                When you receive the premium key from us, please check your premium key status. 
-                                                If you can not use it please contact us within 48h. 
-                                                After 48h we will not resolve any recommendations from you. Thank you so much!
+
+                                            <p>
+                                                <strong style="color: red">Note *</strong>: If you are not satisfied with the service or product, please contact us via email: <strong>support@buypremiumkey.com</strong>, We will try to solve the problem for you or we can refund you if the fault is on our side. 
+                                                <strong style="color: red">Please do not open the dispute</strong> because if you open a dispute we will be forced to cancel your premium key and lock your account on all our systems. I apologize for this inconvenience.
                                             </p>
+
                                             <p>You can view your order history by going to the
                                                 <a href="{{ URL::route('users.getMyAccount') }}">my account</a>
                                                 page and by clicking on
