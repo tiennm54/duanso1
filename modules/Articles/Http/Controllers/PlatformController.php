@@ -93,7 +93,7 @@ class PlatformController extends CheckoutController {
                                 //SAVE LỊCH SỬ TRẠNG THÁI CỦA ORDER
                                 $model_history = new UserOrdersHistory();
                                 $model_history->saveHistoryOrder($model_orders);
-                                $this->changeStatusAfterCheckout($model_user); // tại đây cần sửa
+                                $this->changeStatusAfterCheckout($model_user); 
 
                                 DB::commit();
                             } else {
@@ -149,7 +149,7 @@ class PlatformController extends CheckoutController {
                 if ($model) {
                     $keyStock = new KeyStock();
 
-                    if ($code == 2) {// thanh toan thành công
+                    if ($code == 2 && $model->total_price == $amount) {// thanh toan thành công
                         //Update status bonus cho khach hang
                         $updateBonusStatus = new BonusPaymentHistory();
                         $updateBonusStatus->updateStatus($model);

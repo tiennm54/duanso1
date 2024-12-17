@@ -13,7 +13,7 @@
                         <tr>
                             <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
-                                <p>This is your premium key/account for the invoice # <b>{{ $model_orders->id }}</b></p>
+                                <p>This is your premium key/account for the Invoice #<b>{{ $model_orders->id }}</b></p>
                             </td>
                         </tr>
 
@@ -194,7 +194,7 @@
                                                     2. Please <span style="color: red;">DO NOT OPEN DISPUTE</span> in any case, we are always here to assist you!
                                                 </span><br/>
                                                 <span>
-                                                    3. If you would like us to refund your money then please contact us via this email: <?php echo EMAIL_ADMIN_BUYPREMIUMKEY;?>. (<span style="color: red;">DO NOT OPEN DISPUTE</span>)
+                                                    3. If you would like us to <span style="font-weight: bold;">Refund your money</span> then please contact us via this email: <?php echo EMAIL_ADMIN_BUYPREMIUMKEY;?>. (<span style="color: red;">PLEASE DO NOT OPEN DISPUTE</span>)
                                                 </span>
                                             </p>
 

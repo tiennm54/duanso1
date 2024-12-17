@@ -22,9 +22,9 @@
                                 
                                 <p>
                                     <span>1. If you do not receive premium voucher/account by email within 2 hours => Please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and re-send premium voucher to you.</span><br>
-                                    <span>2. You can check your premium key/order status here: <a href="{{ URL::route('users.orderHistoryView', ["id" => $model_orders->id , "order_no" => $model_orders->order_no ]) }}">CHECK YOUR PREMIUM KEY</a></span><br>
-                                    <span>3. Please <span style="color: red">DO NOT OPEN DISPUTE</span> in any case, we are always here to assist you!</span><br>
-                                    <span>4. If you cannot find the product in your inbox, please check your spam mailbox. Thank you!</span><br>
+                                    <span>2. You can check your premium key/order status here: <a href="{{ URL::route('users.orderHistoryView', ["id" => $model_orders->id , "order_no" => $model_orders->order_no ]) }}">CHECK YOUR ORDER</a></span><br>
+                                    <span>3. Please <span style="color: red">DO NOT OPEN DISPUTE</span> in any case. <span style="font-weight: bold">We are always here to assist you.</span></span><br>
+                                    <span>4. If you cannot find the product in your inbox, please check your spam mailbox.</span><br>
                                     <span>5. If you have any problems, just contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?></span><br>
                                 </p>
 

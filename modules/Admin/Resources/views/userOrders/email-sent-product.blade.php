@@ -13,7 +13,7 @@
                         <tr>
                             <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
-                                <p>This is your premium key/account for the invoice # <b>{{ $model_orders->id }}</b></p>
+                                <p>This is your premium key/account for the Invoice #<b>{{ $model_orders->id }}</b></p>
                             </td>
                         </tr>
 
@@ -181,12 +181,21 @@
                                     <tr>
                                         <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                             <p>
-                                                <span style="font-weight: bold">HOW TO ACTIVATE PREMIUM KEY:</span> <a href="https://buypremiumkey.com/faq/category-2/how-to-activate-premium-key.html">Click here</a>
+                                                <a style="font-weight: bold" href="https://buypremiumkey.com/faq/category-2/how-to-activate-premium-key.html">HOW TO ACTIVATE PREMIUM KEY</a>
                                             </p>
 
-                                            <p>
-                                                <strong style="color: red">Note *</strong>: If you are not satisfied with the service or product, please contact us via email: <strong>support@buypremiumkey.com</strong>, We will try to solve the problem for you or we can refund you if the fault is on our side. 
-                                                <strong style="color: red">Please do not open the dispute</strong> because if you open a dispute we will be forced to cancel your premium key and lock your account on all our systems. I apologize for this inconvenience.
+                                            <p><strong style="color: red">PLEASE NOTICE *</strong></p>
+                                            <p>    
+                                           
+                                                <span>
+                                                    1. If your premium key is not working then please contact us via this email: <?php echo EMAIL_BUYPREMIUMKEY; ?>
+                                                </span><br/>
+                                                <span>
+                                                    2. Please <span style="color: red;">DO NOT OPEN DISPUTE</span> in any case, we are always here to assist you!
+                                                </span><br/>
+                                                <span>
+                                                    3. If you would like us to <span style="font-weight: bold;">Refund your money</span> then please contact us via this email: <?php echo EMAIL_ADMIN_BUYPREMIUMKEY;?>. (<span style="color: red;">PLEASE DO NOT OPEN DISPUTE</span>)
+                                                </span>
                                             </p>
 
                                             <p>You can view your order history by going to the
