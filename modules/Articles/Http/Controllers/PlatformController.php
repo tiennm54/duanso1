@@ -51,7 +51,7 @@ class PlatformController extends CheckoutController {
                     //Check số tiền thanh toán vượt quá hạn mức cho phép
                     $checkMaxOrder = $this->checkMaxOrder($request, $totalOrder, $model_payment);
                     $checkTimePay = $this->checkTimePay($request);
-                    
+
                     if ($checkMaxOrder == 1 && $checkTimePay == 1) {// Hạn mức thanh toán không bị vượt quá mức cho phép
                         //Tạo order
                         $obj_model_orders = new UserOrders();
@@ -93,7 +93,7 @@ class PlatformController extends CheckoutController {
                                 //SAVE LỊCH SỬ TRẠNG THÁI CỦA ORDER
                                 $model_history = new UserOrdersHistory();
                                 $model_history->saveHistoryOrder($model_orders);
-                                $this->changeStatusAfterCheckout($model_user); 
+                                $this->changeStatusAfterCheckout($model_user);
 
                                 DB::commit();
                             } else {
@@ -147,13 +147,18 @@ class PlatformController extends CheckoutController {
 
                 $model = UserOrders::find($order_id);
                 if ($model) {
+
+                    if ($model->payment_status == "completed") {
+                        return null;
+                    }
+
                     $keyStock = new KeyStock();
 
                     if ($code == 2 && $model->total_price == $amount) {// thanh toan thành công
                         //Update status bonus cho khach hang
-                        $updateBonusStatus = new BonusPaymentHistory();
-                        $updateBonusStatus->updateStatus($model);
-
+                        //$updateBonusStatus = new BonusPaymentHistory();
+                        //$updateBonusStatus->updateStatus($model);
+                        
                         //Send key toi khach hang
                         $model_key = $keyStock->sendAndChangeStatusKey($model);
                         if ($model_key != null) {

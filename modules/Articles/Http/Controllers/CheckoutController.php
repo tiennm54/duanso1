@@ -749,7 +749,9 @@ class CheckoutController extends ShoppingCartController {
     public function deleteProductCheckout(Request $request) {
         if (isset($request)) {
             $data = $request->all();
-            $id = $data["id"];
+            $id = (isset($data["id"])) ? $data["id"] : 0;
+            $payment_type = (isset($data["payment_type"])) ? $data["payment_type"] : 0;
+            
             $model_articles_type = ArticlesType::find($id);
             if ($model_articles_type) {
                 //Nếu là member
@@ -766,7 +768,7 @@ class CheckoutController extends ShoppingCartController {
                 $obj_shopping_cart = new UserShoppingCart();
                 $data_product = $array_orders;
                 $obj_shopping_cart->setSession($data_product);
-                $totalOrder = $this->getTotalOrder($data_product, $data["payment_type"], $money_user);
+                $totalOrder = $this->getTotalOrder($data_product, $payment_type, $money_user);
                 $subTotal = $totalOrder["sub_total"];
                 $payment_charges = $totalOrder["charges"];
                 $total = $totalOrder["total"];
@@ -844,32 +846,6 @@ class CheckoutController extends ShoppingCartController {
             "status" => 0,
         );
         return $visa;
-    }
-
-    ///Test callback
-    public function testPlatformCallback(Request $request) {
-        $data = $request->all();
-        Log::info("TEST PLATFORM CALLBACK");
-        Log::info($data);
-        $order_id = 385969;
-        $model = UserOrders::find($order_id);
-        DB::beginTransaction();
-        if ($model) {
-            //Update status bonus cho khach hang
-            $updateBonusStatus = new BonusPaymentHistory();
-            $updateBonusStatus->updateStatus($model);
-
-            //Send key toi khach hang
-            $keyStock = new KeyStock();
-            $model_key = $keyStock->sendAndChangeStatusKey($model);
-            if ($model_key != null) {
-                $keyStock->sendProductEmail($model, $model_key);
-            } else {
-                $keyStock->sendMailPaid($model);
-            }
-            DB::commit();
-            return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
-        }
     }
 
 }

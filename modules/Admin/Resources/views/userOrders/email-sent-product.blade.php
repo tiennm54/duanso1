@@ -180,9 +180,19 @@
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td align="left" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
-                                            <p>
-                                                <a style="font-weight: bold" href="https://buypremiumkey.com/faq/category-2/how-to-activate-premium-key.html">HOW TO ACTIVATE PREMIUM KEY</a>
-                                            </p>
+                                                <?php $check_name = ""; ?>
+                                                <?php foreach ($model_key as $item): ?>
+                                                    <?php
+                                                    if ($item->getLinkActivate()) {
+                                                        $model_activate = $item->getLinkActivate();
+                                                        if($check_name != $model_activate->title){
+                                                            $check_name = $model_activate->title;
+                                                        ?>
+                                                        <p><a href="<?php echo $model_activate->getUrl(); ?>" target="_blank"><?php echo $model_activate->title; ?></a></p>
+                                                    <?php }
+                                                    }
+                                                    ?>
+                                                <?php endforeach; ?>
 
                                             <p><strong style="color: red">PLEASE NOTICE *</strong></p>
                                             <p>    
