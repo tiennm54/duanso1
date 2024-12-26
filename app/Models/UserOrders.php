@@ -334,5 +334,10 @@ class UserOrders extends Model {
         $this->email_die = $status;
         $this->save();
     }
+    
+    public function saveStatusOrder($status){
+        $this->payment_status = $status;
+        $this->save();
+    }
 
 }

@@ -9,7 +9,7 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                             <td align="center" style="font-size: 32px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding-copy">
-                                You paid $<?php echo $model_orders->total_price; ?> USD
+                                You have successfully paid $<?php echo $model_orders->total_price; ?> USD
                             </td>
                         </tr>
                         <tr>
@@ -17,10 +17,15 @@
                                 Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
 
                                 <p>
-                                    <span style="font-weight: bold">We have received your payment for order #{{ $model_orders->id }}.</span><br>
-                                    <span>Our working time is: Mon - Sun / 8:00AM - 10:00PM GTM + 7</span><br>
-                                    <span>If you pay within this period, you will receive premium key/voucher within 1 hours.</span><br>
-                                    <span>In contrast, you will be received your premium key/voucher within 6->8 hours. We're sorry for the delay in delivery.</span><br>
+                                    <span style="font-weight: bold">We have received your payment for order #{{ $model_orders->id }}.</span>
+                                </p>
+                                
+                                <p>
+                                    <span>1. If you do not receive premium voucher/account by email within 2 hours => Please contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?>. We will check again and re-send premium voucher to you.</span><br>
+                                    <span>2. You can check your premium key/order status here: <a href="{{ URL::route('users.orderHistoryView', ["id" => $model_orders->id , "order_no" => $model_orders->order_no ]) }}">CHECK YOUR ORDER</a></span><br>
+                                    <span>3. Please <span style="color: red">DO NOT OPEN DISPUTE</span> in any case. <span style="font-weight: bold">We are always here to assist you.</span></span><br>
+                                    <span>4. If you cannot find the product in your inbox, please check your spam folder.</span><br>
+                                    <span>5. If you have any problems, just contact us: <?php echo EMAIL_BUYPREMIUMKEY; ?></span><br>
                                 </p>
 
                                 <p>
@@ -33,7 +38,7 @@
                                 </p>
 
                                 <p>
-                                    <span style="font-weight: bold">Best Regards</span><br>
+                                    <span style="font-weight: bold">Thanks in advance, Best Regards</span><br>
                                     <span>Support Team BuyPremiumKey.Com</spans>
                                 </p>
                             </td>

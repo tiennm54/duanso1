@@ -4,6 +4,7 @@ namespace Modules\Admin\Http\Controllers;
 
 use App\Models\PaymentType;
 use Modules\Admin\Http\Requests\PaymentTypeRequest;
+use Illuminate\Http\Request;
 use Pingpong\Modules\Routing\Controller;
 use DB;
 use Input;

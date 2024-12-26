@@ -31,4 +31,9 @@ class PaymentType extends Model{
         }
     }
     
+    public function saveStatusDisable($status){
+        $this->status_disable = $status;
+        $this->save();
+    }
+    
 }

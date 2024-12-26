@@ -97,6 +97,11 @@ class PlatformController extends CheckoutController {
 
                                 DB::commit();
                             } else {
+                                if($error == 1){//Tat ca cac acc deu pending nen se dong cong thanh toan nay
+                                    $model_payment->saveStatusDisable(1);
+                                    $model_orders->saveStatusOrder("cancel");
+                                    DB::commit();
+                                }
                                 $request->session()->flash('alert-warning', 'Warning: ' . $message);
                             }
                             return $response;

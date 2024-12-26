@@ -14,7 +14,7 @@
                                 <td align="left" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding-copy">
                                     Dear {{ $model_orders->first_name." ".$model_orders->last_name }},
                                     <p>
-                                        Your order {{ $model_orders->id }} was canceled!
+                                        Your order {{ $model_orders->id }} has been successfully canceled!
                                     </p>
                                     <p>
                                         You can view your order history by going to the

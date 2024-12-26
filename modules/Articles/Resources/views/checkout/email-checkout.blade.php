@@ -21,9 +21,9 @@
                                     <span>Your order has been placed! Invoice: #<span style="font-weight: bold;">{{ $model_orders->id }}</span></span><br/>
                                     <?php if ($model_orders->total_price == 0) { ?>
                                         <span style="font-weight: bold; color: blue">
-                                            This order has been charging on your available balance. 
-                                            Please wait us to verify again, then we will send you an email to confirm that your payment is valid. 
-                                            If your payment is not valid, transaction will be canceled.
+                                            This order has been paid using the balance in your account. 
+                                            Please wait while we verify your payment. After that, we will send you an email to confirm that your payment is valid.
+                                            If your payment is invalid, the order will be canceled.
                                         </span>
                                     <?php } ?>
                                 </p>
@@ -34,7 +34,7 @@
                                         <span>Click <a href="{{ URL::route('users.getChangePassword') }}">here</a> to change your password</span><br/>
                                     <?php } ?>
                                         <span>
-                                            After your successful payment then please login to your account and get your premium key here 
+                                            After your order has been successfully paid, please login to your account and get your premium key here
                                             <a href="{{ URL::route('users.orderHistoryView', ["id" => $model_orders->id , "order_no" => $model_orders->order_no ]) }}">GET YOUR PREMIUM KEY</a>
                                         </span><br/>
                                 </p>
@@ -44,7 +44,7 @@
                                         <li>Please DO NOT write any things on MESSAGE BOX (We will cancel your payment if you write any things)</li>
                                         <li>Your product will be delivery within 1-8 hours. Usually you will get it within 30 minutes -> 1 hours.</li>
                                         <li>If you do not receive product in maximum 8 hours => Please contact us first, do not open the disputed!</li>
-                                        <li>If you cannot find the product in your inbox, please check your spam mailbox. Thank you!</li>
+                                        <li>If you cannot find the product in your inbox, please check your spam folder. Thank you!</li>
                                     </ul>
                                 <?php } ?>
                             </td>
