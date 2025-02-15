@@ -68,7 +68,9 @@ define('FIELDS_IP', 66846719);
 
 define('PLATFORM_PUBLIC_KEY', "bf239cf4-cf02-454b-82b2-4a185931b947");
 define('PLATFORM_PRIVATE_KEY', "t0yu1ISpnXg4qz5JrF78pnqYR1mdwwW2SzPwBTJp");
-define('PLATFORM_URL_POST', "https://buypremiumkey.co/api/v1/order");
+//define('PLATFORM_URL_POST', "https://buypremiumkey.co/api/v1/order");
+define('PLATFORM_URL_POST', "http://lumipay.247vn.asia/api/v1/order");
+define('IP_PLATFORM','66.29.132.');
 
 
 /*

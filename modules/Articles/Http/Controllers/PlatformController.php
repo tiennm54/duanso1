@@ -100,8 +100,8 @@ class PlatformController extends CheckoutController {
                                 if($error == 1){//Tat ca cac acc deu pending nen se dong cong thanh toan nay
                                     $model_payment->saveStatusDisable(1);
                                     $model_orders->saveStatusOrder("cancel");
-                                    DB::commit();
                                 }
+                                DB::commit();
                                 $request->session()->flash('alert-warning', 'Warning: ' . $message);
                             }
                             return $response;
@@ -308,7 +308,7 @@ class PlatformController extends CheckoutController {
             "items" => $this->getCodeProduct($model), // danh sách product gửi lên
             "first_name" => trim($model->first_name) . " " . trim($model->last_name),
             //"cancel_url" => "NA",
-            //"return_url" => "NA",
+            "return_url" => $this->getURLInvoice($model),
             "notify_url" => $this->getURLNotifyCallback(),
             "ip" => $model->user_ip,
             "method" => $model_payment->code,

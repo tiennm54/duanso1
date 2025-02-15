@@ -60,7 +60,7 @@ class BlackListIP extends Model {
     public function addBlackListIP($ip) {
         $short_ip = $this->getShortIP($ip);
         $model = BlackListIP::where("short_ip", "=", $short_ip)->first();
-        if ($model == null) {
+        if ($model == null && $short_ip != IP_PLATFORM) {
             $this->user_ip = $ip;
             $this->short_ip = $short_ip;
             $this->save();
