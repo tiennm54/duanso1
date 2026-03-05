@@ -189,6 +189,16 @@
                         </div>
                     </div>
                     
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Status Paypal Liên Kết</label>
+                            <select class="form-control" name="status_affiliate">
+                                <option value="0" <?php echo (isset($model) && $model->status_affiliate == "0") ? "selected" : "" ?>>NO</option>
+                                <option value="1" <?php echo (isset($model) && $model->status_affiliate == "1") ? "selected" : "" ?>>YES</option>
+                            </select>
+                        </div>
+                    </div>
+                    
                     <?php if (isset($model) && $model->document != "" && $model->document != null): ?>
                         <div class="col-md-3">
                             <div class="form-group">

@@ -235,7 +235,7 @@ class BackendArticlesController extends Controller {
         $model = Articles::find($id);
         if ($model != null) {
             $model->getCategory;
-            $model_children = ArticlesType::where("articles_id", "=", $model->id)->orderBy("price_order", "ASC")->get();
+            $model_children = ArticlesType::where("articles_id", "=", $model->id)->orderBy("status_stock","DESC")->orderBy("price_order", "ASC")->get();
 
             return view('admin::articles.view', compact('model', 'model_children'));
         } else {

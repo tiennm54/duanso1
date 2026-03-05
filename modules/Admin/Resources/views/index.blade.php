@@ -14,8 +14,8 @@
     <div class="row">
 
         <div class="col-lg-3 col-md-3 col-sm-6"><div class="tile">
-                <div class="tile-heading">Total Paid</div>
-                <div class="tile-body"><i class="fa fa-credit-card"></i>
+                <div class="tile-heading">Total Paid / Day</div>
+                <div class="tile-body"><i class="glyphicon glyphicon-shopping-cart"></i>
                     <h2 class="pull-right">{{ count($model_order_paid)}}</h2>
                 </div>
                 <div class="tile-footer"><a href="{{ URL::route('adminUserOrders.listOrders') }}">View more...</a></div>
@@ -23,11 +23,24 @@
         </div>
 
         <div class="col-lg-3 col-md-3 col-sm-6"><div class="tile">
-                <div class="tile-heading">Total user locked</div>
-                <div class="tile-body"><i class="glyphicon glyphicon-remove-sign"></i>
-                    <h2 class="pull-right">{{count($model_user_lock)}}</h2>
+                <div class="tile-heading">Total Completed / Day</div>
+                <div class="tile-body"><i class="glyphicon glyphicon-shopping-cart"></i>
+                    <h2 class="pull-right">{{ count($model_order_completed) }}</h2>
                 </div>
-                <div class="tile-footer"><a href="{{ URL::route('admin.userManagement.index') }}">View more...</a></div>
+                <div class="tile-footer"><a href="{{ URL::route('adminUserOrders.listOrders') }}">View more...</a></div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-3 col-sm-6"><div class="tile">
+                <div class="tile-heading">Total money / Day</div>
+                <div class="tile-body"><i class="glyphicon glyphicon-usd"></i>
+                    <h2 class="pull-right">
+                        {{ $data_money["money"] }}
+                    </h2>
+                </div>
+                <div class="tile-footer">
+                    {{ $data_money["money"] }}$ / {{$data_money['money_order']}}$
+                </div>
             </div>
         </div>
 
@@ -39,18 +52,7 @@
                 <div class="tile-footer"><a href="{{ URL::route('admin.userManagement.index') }}">View more...</a></div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-6"><div class="tile">
-                <div class="tile-heading">Total money</div>
-                <div class="tile-body"><i class="glyphicon glyphicon-xbt"></i>
-                    <h3 class="pull-right">
-                        {{ $data_money["money"] }}$
-                    </h3>
-                </div>
-                <div class="tile-footer">
-                    {{ $data_money["money"] }}$ / {{$data_money['money_order']}}$
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>
 
@@ -63,51 +65,55 @@ Danh sách user sử dụng thanh toán bonus trong tuần
 <div class="container-fluid">
     <div class="row">
 
-        <!--DANH SACH ORDER PENDING-->
+        <!--DANH SACH TONG SO SAN PHAM MUA TRONG NGAY-->
         <div class="col-lg-6 col-md-12 col-sm-12"><div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-shopping-cart"></i> Order pending</h3>
+                    <h3 class="panel-title"><i class="fa fa-shopping-cart"></i> Total products Purchased</h3>
                 </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
-                                <td>Order ID</td>
-                                <td>Email</td>
-                                <td>Date</td>
-                                <td>Total</td>
+                                <td>Invoice</td>
+                                <td>Image</td>
+                                <td>Title</td>
+                                <td>Quantity</td>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php if (count($model_order_pending) == 0): ?>
+                            <?php if (count($model_buyProduct) == 0): ?>
                                 <tr>
                                     <td colspan="4">
                                         Không có bản ghi nào!
                                     </td>
                                 </tr>
                             <?php endif; ?>
-                            <?php foreach ($model_order_pending as $item): ?>
+                            <?php foreach ($model_buyProduct as $item): ?>
                                 <tr>
                                     <td>
                                         <a href="{{ URL::route('adminUserOrders.viewOrders', ["id" => $item->id])}}">{{$item->id}}</a>
                                     </td>
                                     <td>
-                                        <a href="{{ URL::route('admin.userManagement.view', ["id" => $item->users_id])}}">{{$item->email}}</a>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        $date = date_create($item->created_at);
-                                        echo date_format($date, "d/m/Y");
+                                        <?php if($item->image) {?>
+                                            <img src="{{ $item->image }}" style="width: 100px"/>
+                                        <?php }else{
+                                            echo "N/A";
+                                        }
                                         ?>
                                     </td>
-                                    <td>{{$item->total_price}}$</td>
+                                    <td>
+                                        <?php echo $item->title; ?>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php echo $item->total_quantity; ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
-            {!! $model_order_pending->render() !!}
+            {!! $model_buyProduct->render() !!}
         </div>
 
         <!--DANH SACH ORDER PAID-->
@@ -122,8 +128,8 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                                 <td>Invoice</td>
                                 <td>Email</td>
                                 <td>Status</td>
-                                <td>Date</td>
                                 <td>Total</td>
+                                <td>Date</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -147,13 +153,12 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                                             <?php echo $item->payment_status; ?>
                                         </span>
                                     </td>
-                                    <td>
+                                    <td>{{$item->total_price}}$</td>
+                                     <td>
                                         <?php
-                                        $date = date_create($item->created_at);
-                                        echo date_format($date, "d/m/Y");
+                                            echo $item->created_at->timezone('Asia/Ho_Chi_Minh');
                                         ?>
                                     </td>
-                                    <td>{{$item->total_price}}$</td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -166,7 +171,7 @@ Danh sách user sử dụng thanh toán bonus trong tuần
     </div>
     <div class="row">
         <!--DANH SACH ORDER COMPLETED-->
-        <div class="col-lg-6 col-md-12 col-sm-12" style="margin-top: 20px">
+        <div class="col-lg-12 col-md-12 col-sm-12" style="margin-top: 20px">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><i class="fa fa-shopping-cart"></i> Order Completed (Today: <?php echo count($model_order_completed); ?> order)</h3>
@@ -175,11 +180,13 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                     <table class="table">
                         <thead>
                             <tr>
-                                <td>Invoice</td>
+                                <td>Invoice ID</td>
                                 <td>Email</td>
                                 <td>Full Name</td>
-                                <td>Date completed</td>
+                                <td>Country</td>
+                                <td>Product</td>
                                 <td>Total</td>
+                                <td>Date completed</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -202,11 +209,20 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                                         <?php echo $item->first_name . " " . $item->last_name; ?>
                                     </td>
                                     <td>
-                                        <?php
-                                        echo $item->payment_date;
-                                        ?>
+                                        <?php echo $item->user_info; ?>
                                     </td>
+                                    <td>
+                                        <?php foreach ($item->orders_detail as $product): ?>
+                                            {{ $product->articles_type->title }} ({{ $product->quantity }}) <br>
+                                        <?php endforeach; ?>
+                                    </td>
+                                    
                                     <td>{{$item->total_price}}$</td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($item->payment_date)
+                                            ->timezone('Asia/Ho_Chi_Minh')
+                                            ->format('Y-m-d H:i:s') }}
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -214,60 +230,6 @@ Danh sách user sử dụng thanh toán bonus trong tuần
                 </div>
             </div>
         </div>
-
-
-        <!--DANH SACH USER BỊ KHÓA-->
-        <div class="col-lg-6 col-md-12 col-sm-12" style="margin-top: 20px">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-shopping-cart"></i> User locked</h3>
-                </div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <td>Username</td>
-                                <td>Email</td>
-                                <td>Money account</td>
-                                <td>Money bonus</td>
-                                <td>Money spending</td>
-                                <td>Total money</td>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php if (count($model_user_lock) == 0): ?>
-                                <tr>
-                                    <td colspan="6">
-                                        Không có bản ghi nào!
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                            <?php foreach ($model_user_lock as $item): ?>
-                                <?php
-                                $money_bonus = $item->getMoneyBonus();
-                                $money_spending = $item->getSpendingMoney();
-                                $total_money = $money_bonus - $money_spending;
-                                ?>
-                                <tr>
-                                    <td>
-                                        <a href="{{ URL::route('admin.userManagement.view', ["id" => $item->id])}}">{{$item->full_name}}</a>
-                                    </td>
-                                    <td>
-                                        <a href="{{ URL::route('admin.userManagement.view', ["id" => $item->id])}}">{{$item->email}}</a>
-                                    </td>
-                                    <td>{{$item->getMoneyAccountCurrent()}}$</td>
-                                    <td>{{ ($money_bonus) ? $money_bonus : 0}}$</td>
-                                    <td>{{ ($money_spending) ? $money_spending : 0}}$</td>
-                                    <td>{{$total_money}}$</td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
     </div>
 
 </div>

@@ -9,13 +9,13 @@
                 url: "<?php echo URL::route('adminUserOrders.savePremiumKey') ?>",
                 data: {"id": item.id, "key": key},
                 success: function (data) {
-                    if (data == 1 || data == 2) {
+                    if (data["check"] == 1 || data["check"] == 2) {
                         count_save++;
                         $(".alert").show();
                         $(".alert").removeClass("alert-warning");
                         $(".alert").addClass("alert-success");
-                        $(".alert").html("Success! Save premium key: " + item.articles_type_title + " complete (" + count_save + ") !!!")
-                        if (data == 1) {
+                        $(".alert").html(data["message"] + " | " + item.articles_type_title + " complete (" + count_save + ") !!!")
+                        if (data["check"] == 1) {
                             document.getElementById("btn-send-key").disabled = false;
                         } else {
                             document.getElementById("btn-send-key").disabled = true;
@@ -24,7 +24,7 @@
                         $(".alert").show();
                         $(".alert").removeClass("alert-success");
                         $(".alert").addClass("alert-warning")
-                        $(".alert").html("Warning! Save premium key error !!!");
+                        $(".alert").html(data["message"]);
                     }
                 },
                 error: function (ex) {

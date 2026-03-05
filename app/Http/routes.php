@@ -4,8 +4,8 @@ define('DOMAIN_SITE','buypremiumkey.com');
 define('NAME_COMPANY','BuyPremiumKey Authorized Reseller');
 define('EMAIL_BUYPREMIUMKEY','support@buypremiumkey.com');
 define('EMAIL_ADMIN_BUYPREMIUMKEY','admin@buypremiumkey.com');
-define('EMAIL_RECEIVE_ORDER','driverxheqadni@gmail.com');
-define('EMAIL_RECEIVE_AMAZON','driverxheqadni@gmail.com');
+define('EMAIL_RECEIVE_ORDER','admin@buypremiumkey.com');
+define('EMAIL_RECEIVE_AMAZON','admin@buypremiumkey.com');
 define('EMAIL_RECEIVE_VISA','buypremiumkey@gmail.com');
 
 define('SUBJECT_PAYPAL_PAYMENT','[Buypremiumkey.com] Paypal Invoice for Order #');
@@ -68,9 +68,10 @@ define('FIELDS_IP', 66846719);
 
 define('PLATFORM_PUBLIC_KEY', "bf239cf4-cf02-454b-82b2-4a185931b947");
 define('PLATFORM_PRIVATE_KEY', "t0yu1ISpnXg4qz5JrF78pnqYR1mdwwW2SzPwBTJp");
-//define('PLATFORM_URL_POST', "https://buypremiumkey.co/api/v1/order");
-define('PLATFORM_URL_POST', "http://lumipay.247vn.asia/api/v1/order");
+define('PLATFORM_URL_POST', "https://buypremiumkey.co/api/v1/order");
+//define('PLATFORM_URL_POST', "http://lumipay.247vn.asia/api/v1/order");
 define('IP_PLATFORM','66.29.132.');
+define('URL_PLATFORM_SEARCH_ORDER','https://buypremiumkey.co/admin7979/ordermanager?request_id=');
 
 
 /*

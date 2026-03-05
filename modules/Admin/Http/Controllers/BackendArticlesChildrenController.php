@@ -110,6 +110,8 @@ class BackendArticlesChildrenController extends Controller {
                     $model->seo_description = $request->txt_seo_description;
                     $model->seo_keyword = $request->txt_seo_keyword;
                     $model->url_title = $request->txt_url_title;
+                    $model->api_link = $request->txt_api_link;
+                    $model->api_link_status = $request->int_api_link_status;
 
                     if (isset($request->old_price)) {
                         $model->old_price = $request->old_price;
@@ -192,6 +194,7 @@ class BackendArticlesChildrenController extends Controller {
             $model->price_reseller = $data["price_reseller"];
             $model->price_order = $data["price_order"];
             $model->old_price = $data["old_price"];
+            $model->api_link_status = $data["status_api_link"];
             $model->save();
             $request->session()->flash('alert-success', 'Success: Save trạng thái cho sản phẩm '. $model->title .' thành công!');
             return back();

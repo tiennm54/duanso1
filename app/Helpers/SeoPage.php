@@ -7,6 +7,7 @@ use OpenGraph;
 use Twitter;
 use App\Models\Seo;
 use URL;
+use Log;
 
 class SeoPage {
 
@@ -35,16 +36,19 @@ class SeoPage {
     }
 
     public static function seoPage($model_route) {
-        $route_current = $model_route->getRouter()->getCurrentRoute()->getName();
-        $model = Seo::where("page_code", "=", $route_current)->first();
-        if ($model == null) {
-            $model = Seo::where("page_code", "=", "frontend.articles.index")->first();
-        }
-        if ($model != null) {
-            $url_page = URL::route($route_current);
-            $image_page = url('images/seo/' . $model->image);
-            SeoPage::createSeo($model, $url_page, $image_page);
+        try {
+            $route_current = $model_route->getRouter()->getCurrentRoute()->getName();
+            $model = Seo::where("page_code", "=", $route_current)->first();
+            if ($model == null) {
+                $model = Seo::where("page_code", "=", "frontend.articles.index")->first();
+            }
+            if ($model != null) {
+                $url_page = URL::route($route_current);
+                $image_page = url('images/seo/' . $model->image);
+                SeoPage::createSeo($model, $url_page, $image_page);
+            }
+        }catch (\Exception $e) {
+            Log::info("LOI SEO PAGE");
         }
     }
-
 }

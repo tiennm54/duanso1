@@ -78,6 +78,20 @@ Route::group(['prefix' => 'platform', 'namespace' => 'Modules\Articles\Http\Cont
     Route::post('platformCallback',['as'=>'frontend.platform.platformCallback','uses'=>'PlatformController@platformCallback']);
     Route::get('getListProductCode',['as'=>'frontend.platform.getListProductCode','uses'=>'PlatformController@getListProductCode']);
     Route::get('payment-error.html',['as'=>'frontend.platform.getNotifyPaymentError','uses'=>'PlatformController@getNotifyPaymentError']);
+    Route::post('platformUpdateAccLimited',['as'=>'frontend.platform.platformUpdateAccLimited','uses'=>'PlatformController@platformUpdateAccLimited']);
+    Route::get('testGetKey/{id}',['as'=>'frontend.platform.testGetKey','uses'=>'PlatformController@testGetKey']);
     
 });
 ///=======================END PLATFORM=================================================================================
+
+Route::group(['prefix' => 'fcheckout', 'namespace' => 'Modules\Articles\Http\Controllers'], function()
+{
+    Route::get('/{payment_type?}/{product_id?}/{customer_email?}',['as'=>'frontend.fcheckout.view','uses'=>'FastCheckoutController@view']);
+    
+    //Route::get('getProduct/{id}',['as'=>'frontend.fcheckout.getProduct','uses'=>'FastCheckoutController@getProduct']);
+});
+
+Route::group(['prefix' => 'track-order', 'namespace' => 'Modules\Articles\Http\Controllers'], function()
+{
+    Route::get('invoice/{id}',['as'=>'frontend.trackOrder.getProduct','uses'=>'FastCheckoutController@getProduct']);
+});

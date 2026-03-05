@@ -11,12 +11,23 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Model;
 use Log;
 
-
 class KeyStock extends Model {
 
     protected $table = 'key_stock';
     public $timestamps = true;
-    
+
+    public function sendEmailCheckOrder($email_customer, $transaction_id) {
+        try {
+            $subject_email = "Cần kiểm tra đơn hàng của khách hàng: " . $email_customer;
+            Mail::send('articles::platform.email-check-order', ['email_customer' => $email_customer, "transaction_id" => $transaction_id], function ($m) use ($subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to(EMAIL_ADMIN_BUYPREMIUMKEY, "Admin")->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
+    }
+
     public function sendMailPaid($model_orders) {
         try {
             $subject_email = SUBJECT_CUSTOMER_PAID . $model_orders->id;
@@ -45,7 +56,7 @@ class KeyStock extends Model {
             $model_orders->saveEmailDie(1);
         }
     }
-    
+
     public function sendMailPaypalInvoice($model_orders, $model_user, $password, $payment_url) {
         try {
             $subject_email = SUBJECT_PAYPAL_PAYMENT . $model_orders->id;
@@ -58,7 +69,7 @@ class KeyStock extends Model {
             Log::info($e);
         }
     }
-    
+
     public function checkKeyEnough($model_order) {
         if ($model_order) {
             $count_quantity = UserOrdersDetail::where("user_orders_id", "=", $model_order->id)->sum("quantity");
@@ -119,13 +130,13 @@ class KeyStock extends Model {
 
     // GUI KEY DI VA CAP NHAT TRANG THAI KEY THANH DA SENT
     public function sendAndChangeStatusKey($model) {
-        
+
         $model_orders_history = new UserOrdersHistory();
         $obj_paypal_history = new PaypalReceive();
-        
+
         $check_send_key = $this->getKeyFromStock($model);
-        
-        
+
+
         if ($check_send_key == 1) {//Đủ key để send đi
             $model_key = $this->getPremiumKeySend($model);
             if ($model_key) {
@@ -138,7 +149,7 @@ class KeyStock extends Model {
                 $model->payment_date = Carbon::now();
                 $model->save();
 
-                
+
                 $model_orders_history->saveHistoryOrder($model);
                 $obj_paypal_history->saveHistoryReceive($model, "completed");
 
@@ -151,6 +162,76 @@ class KeyStock extends Model {
             return null;
         }
         return null;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+    //LÀM TÍNH NĂNG GET KEY TỰ ĐỘNG THÔNG QUA API
+    /////////////////////////////////////////////////////////////////////////////
+
+    public function getKeyViaAPI($linkAPI) {
+        try {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $linkAPI);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    "Content-Type: application/json",
+                    "Accept: application/json"
+                ));
+            $key = curl_exec($ch);
+            if ($key && is_string($key) === true && strpos($key, 'ERROR') === false && strpos($key, 'you have been blocked') === false && strpos($key, 'DOCTYPE') === false && strpos($key, '<html>') === false) {
+                Log::info("DA LAY DUOC KEY API THANH CONG... ");
+                Log::info($key);
+                return $key;
+            } else {
+                Log::info("ERROR GET KEY API");
+                Log::info($linkAPI);
+                Log::info($key);
+                return null;
+            }
+        } catch (Exception $ex) {
+            Log::info("ERRORR GET KEY VIA API");
+        }
+        return null;
+    }
+
+    //Tự động save key lấy được thông qua API vào Kho tương ứng với sản phẩm
+    public function saveKeyToStock($model_product, $premiumKey) {
+        $this->articles_type_id = $model_product->id;
+        $this->articles_type_title = $model_product->title;
+        $this->premium_key = $premiumKey;
+        $this->status_paid = 0;
+        $this->status = "Pending";
+        $this->created_at = Carbon::now();
+        $this->updated_at = Carbon::now();
+        $this->save();
+    }
+    
+    //Hàm kiểm tra sản phẩm có gắn API không? Đồng thời save Key nếu có
+    public function checkLinkApiProduct($model_order) {
+        //Check sản phẩm trong đơn hàng
+        $model_order_detail = UserOrdersDetail::where("user_orders_id", "=", $model_order->id)->get();
+        if ($model_order_detail) {
+            foreach ($model_order_detail as $item) {
+                //Lấy sản phẩm trong đơn hàng
+                $model_product = ArticlesType::find($item->articles_type_id);
+                if ($model_product) {
+                    if ($model_product->api_link != null && $model_product->api_link != "") {
+                        if ($model_product->api_link_status == 1) {// Cho phép lấy key thông qua API
+                            //Lấy premium key theo số lượng product
+                            for ($i = 0; $i < $item->quantity; $i++) {
+                                $premiumKey = $this->getKeyViaAPI($model_product->api_link);
+                                if ($premiumKey) {
+                                    $model_key = new KeyStock();
+                                    $model_key->saveKeyToStock($model_product, $premiumKey);
+                                    Log::info("ĐÃ SAVE KEY VÀO STOCK HOÀN THÀNH");
+                                    Log::info($premiumKey);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

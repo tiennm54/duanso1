@@ -192,7 +192,7 @@
 
                                     </td>
                                     <td>{{ $item->payment_status }}</td>
-                                    <td>{{ $item->created_at }}</td>
+                                    <td>{{ $item->created_at->timezone('Asia/Ho_Chi_Minh') }}</td>
                                     <td><a class="btn btn-primary"
                                            href="<?php echo URL::route('adminUserOrders.viewOrders', ['id' => $item->id]); ?>"><i
                                                 class="fa fa-eye"></i></a></td>

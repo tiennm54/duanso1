@@ -14,9 +14,10 @@
                         </td>
                         <td>
 
-                            {{ $model->payment_type->title }}: 
+                            {{ $model->payment_type->title }} 
 
                             <?php
+                            
                             if ($model->payment_type->code == "VISA_STRIPE" && $model->stripeAccount != null) {
                                 ?>
                                 <a class="label label-primary" href="<?php echo URL::route('admin.stripe.getEdit', $model->stripeAccount->id); ?>"> 
@@ -49,7 +50,7 @@
                                     data-original-title="Date Added"><i class="fa fa-calendar fa-fw"></i>
                             </button>
                         </td>
-                        <td>{{ $model->created_at }}</td>
+                        <td>{{ $model->created_at->timezone('Asia/Ho_Chi_Minh') }}</td>
                     </tr>
 
                     <tr>
@@ -88,7 +89,7 @@
                                     data-original-title="E-Mail"><i class="fa fa-envelope-o fa-fw"></i>
                             </button>
                         </td>
-                        <td><a href="mailto:{{ $model->email }}">{{ $model->email }}</a></td>
+                        <td><a href="<?php echo URL::route('admin.userManagement.view', $model->users_id); ?>">{{ $model->email }}</a></td>
                     </tr>
 
                     <tr>
@@ -106,7 +107,19 @@
                                 <i class="glyphicon glyphicon-grain"></i>
                             </button>
                         </td>
-                        <td>Order ID: <b>#{{ $model->id }}</b></td>
+                        <td>
+                            Order ID: <b>#{{ $model->id }}</b>
+                            <?php
+                                if($model->payment_type->code == "PREMIUM_PAYPAL"){
+                                    $url_platform = URL_PLATFORM_SEARCH_ORDER . $model->id;
+                            ?>
+                                    <a class="label label-danger" href="<?php echo $url_platform; ?>" target="blank"> 
+                                        <span>Update On Platform</span>
+                                    </a>
+                            <?php
+                                }
+                            ?>
+                        </td>
                     </tr>
 
                 </tbody>
@@ -121,8 +134,8 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td width="20%">Status</td>
-                        <td class="text-right col-md-12">
+                        <td class="col-md-5">Status</td>
+                        <td class="text-right col-md-5">
                             <form method="post" action="{{ URL::route('adminUserOrders.saveStatusPayment',['id'=>$model->id] ) }}">
                                 <div class="col-md-8">
                                     <select class="form-control" name="payment_status" style="width: 120px">
@@ -136,20 +149,35 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <button class="btn btn-primary" data-toggle="confirmation" data-placement="left">Save</button>
                                 </div>
                             </form>
                         </td>
                     </tr>
                     <tr>
-                        <td>Total</td>
+                        <td class="col-md-5">Total</td>
                         <td class="text-right"><label class="label label-default">${{ $model->total_price }}</label></td>
                     </tr>
 
                     <tr>
-                        <td>Email</td>
-                        <td class="text-right"><label class="label {{ ($model->check_send_key) ? "label-success" : "label-danger" }}">{{ ($model->check_send_key) ? "YES" : "NO" }}</label></td>
+                        <td class="col-md-5">Date Completed (VN)</td>
+                        <td class="text-right">
+                            <label class="label {{ ($model->check_send_key) ? "label-success" : "label-danger" }}">
+                                 {{ \Carbon\Carbon::parse($model->payment_date)
+                                            ->timezone('Asia/Ho_Chi_Minh')
+                                            ->format('Y-m-d H:i:s') }}
+                            </label>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="col-md-5">Date Completed (US)</td>
+                        <td class="text-right">
+                            <label class="label {{ ($model->check_send_key) ? "label-success" : "label-danger" }}">
+                                {{ \Carbon\Carbon::parse($model->payment_date)->format('Y-m-d H:i:s') }}
+                            </label>
+                        </td>
                     </tr>
 
                 </tbody>

@@ -6,6 +6,7 @@ use App\Models\ArticlesType;
 use App\Models\StripeAccount;
 use App\Models\Information;
 use App\Models\PaymentType;
+use App\Models\PaypalAccount;
 use App\Models\UserOrders;
 use App\Models\UserOrdersHistory;
 use App\Models\UserShippingAddress;
@@ -68,8 +69,8 @@ class PlatformController extends CheckoutController {
 
                             // POST thong tin len PLATFORM va nhan reponse tra ve 
                             $response = $this->platformPost($platformParams);
-                            Log::info("RESPONSE TRA VE TU PLATFORM");
-                            Log::info($response);
+                            //Log::info("RESPONSE TRA VE TU PLATFORM");
+                            //Log::info($response);
 
                             $response["url_invoice"] = $this->getURLInvoice($model_orders); // Add link view invoice cua khach hang de huong dan khach hang check email thuc hien thanh toan
 
@@ -81,7 +82,7 @@ class PlatformController extends CheckoutController {
 
                             if ($status == "success") {
                                 //Thiếu đoạn gửi email invoice tới khách hàng
-                                if ($payment_type == 'invoice') { // PAYMENT TYPE LÀ INVOICE
+                                if ($payment_type == 'invoice' || $payment_type == 'none') { // PAYMENT TYPE LÀ INVOICE
                                     $password = "";
                                     if (Session::has('user_password_login')) {
                                         $password = Session::get('user_password_login');
@@ -97,11 +98,13 @@ class PlatformController extends CheckoutController {
 
                                 DB::commit();
                             } else {
-                                if($error == 1){//Tat ca cac acc deu pending nen se dong cong thanh toan nay
+                                if ($error == 1) {//Tat ca cac acc deu pending nen se dong cong thanh toan nay
                                     $model_payment->saveStatusDisable(1);
                                     $model_orders->saveStatusOrder("cancel");
+                                    //SEND EMAIL THÔNG BÁO ĐÃ ĐÓNG CỔNG
+                                    $model_payment->sendEmailClosePaymentGateway();
+                                    DB::commit();
                                 }
-                                DB::commit();
                                 $request->session()->flash('alert-warning', 'Warning: ' . $message);
                             }
                             return $response;
@@ -125,7 +128,7 @@ class PlatformController extends CheckoutController {
     }
 
     public function platformCallback(Request $request) {
-        Log::info("START CALLBACK PLATFORM!!!");
+        //Log::info("START CALLBACK PLATFORM!!!");
         if (isset($request)) {
             DB::beginTransaction();
             $data = $request->all();
@@ -138,48 +141,79 @@ class PlatformController extends CheckoutController {
             $signature = (isset($data["signature"])) ? $data["signature"] : "";
             $code = (isset($data["code"])) ? $data["code"] : 0; // Code = 2 nghia là success
             $email_blocked = (isset($data["email_blocked"])) ? $data["email_blocked"] : ""; // Code = 2 nghia là success
+            $transaction_id = (isset($data["transaction_id"])) ? $data["transaction_id"] : "";
 
-            $param = [
-                "data" => [
-                    "request_id" => $order_id,
-                    "amount" => $amount,
-                    "email" => $email
-                ]
-            ];
-
-            $checkSingature = $this->generateSignature($param['data']);
+            $checkSingature = $this->generateSignature($data["data"]);
             if ($checkSingature == $signature) {
-
+                $keyStock = new KeyStock();
                 $model = UserOrders::find($order_id);
-                if ($model) {
+                if ($model && $model->id == $order_id) {
+
+                    Log::info("MODEL ID #" . $model->id);
 
                     if ($model->payment_status == "completed") {
-                        return null;
+                        echo "done";
+                        Log::info("DONE COMPLETED ORDER: #" . $order_id);
+                        exit;
                     }
+                    if ($code == 2) {// thanh toan thành công
+                        if ($model->total_price == $amount) {
 
-                    $keyStock = new KeyStock();
+                            //KIỂM TRA SẢN PHẨM CÓ DÙNG API LINK KHÔNG??????
+                            //NẾU DÙNG THÌ TẠO KEY THÔNG QUA API VÀ SAVE VÀO DB
+                            $keyStock->checkLinkApiProduct($model);
 
-                    if ($code == 2 && $model->total_price == $amount) {// thanh toan thành công
-                        //Update status bonus cho khach hang
-                        //$updateBonusStatus = new BonusPaymentHistory();
-                        //$updateBonusStatus->updateStatus($model);
-                        
-                        //Send key toi khach hang
-                        $model_key = $keyStock->sendAndChangeStatusKey($model);
-                        if ($model_key != null) {
-                            $keyStock->sendProductEmail($model, $model_key);
-                        } else {
-                            $keyStock->sendMailPaid($model);
+                            //Send key toi khach hang
+                            $model_key = $keyStock->sendAndChangeStatusKey($model);
+                            if ($model_key != null) {
+                                $keyStock->sendProductEmail($model, $model_key);
+                            } else {
+                                $keyStock->sendMailPaid($model);
+                            }
+                            
+                            Log::info("DONE ORDER: #" . $order_id);
+                            echo "done";
+                        } else {// PLATFORM tra ve Order ID sai
+                            //$keyStock->sendMailPaid($model);
+                            $model->payment_status = "echeck";
+                            $model->save();
+                            Log::info("ECHECK VOI CODE = 2 ORDER: #" . $order_id);
                         }
+                        
                     } else if ($code == 1 || $email_blocked != "") { // echeck
-                        $keyStock->sendMailPaid($model);
-                        $model->payment_status = "echeck";
-                        $model->save();
+                        if ($model->total_price == $amount) {
+                            $keyStock->sendMailPaid($model);
+                            $model->payment_status = "echeck";
+                            $model->save();
+                        }
+                        Log::info("ECHECK VOI CODE = 1 ORDER: #" . $order_id);
+                        echo "done";
                     }
                     DB::commit();
-                    return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
+                    exit;
+                    //return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
                 } else {
-                    Log::info("platformCallback(): Khong tim thay model order !!!");
+                    Log::info("platformCallback(): Khong tim thay model order theo ID !!!");
+                    $model = UserOrders::where("email", "=", $email)->orderBy("id", "DESC")->first();
+                    if ($model) {
+                        if ($model->payment_status == "pending") {
+                            if ($model->total_price == $amount) {
+                                $keyStock->sendMailPaid($model);
+                                $model->payment_status = "echeck";
+                                $model->save();
+                            }
+                            DB::commit();
+                            echo "done";
+                            Log::info("TIM THEO EMAIL => ECHECK ORDER: #" . $model->id);
+                            exit;
+                        }
+                    } else {
+                        //send email thông báo cần kiểm tra bằng tay
+                        $keyStock->sendEmailCheckOrder($email, $transaction_id);
+                        echo "done";
+                        Log::info("Da gui email kiem tra khach hang nay: " . $email);
+                        exit;
+                    }
                 }
             } else {
                 Log::info("platformCallback(): checkSingature khong dung !!!");
@@ -299,15 +333,15 @@ class PlatformController extends CheckoutController {
             }
         }
 
-
+        $customer_name = $model->first_name . " " . $model->last_name;
         $params = [
-            "request_id" => $model->id,
-            "amount" => $model->total_price,
+            "request_id" => (string) $model->id,
+            "amount" => (string) $model->total_price,
             "email" => trim($model->email),
             //"description" => $this->getCodeProduct($model),
             "items" => $this->getCodeProduct($model), // danh sách product gửi lên
-            "first_name" => trim($model->first_name) . " " . trim($model->last_name),
-            //"cancel_url" => "NA",
+            "first_name" => trim($customer_name),
+            "cancel_url" => "NA",
             "return_url" => $this->getURLInvoice($model),
             "notify_url" => $this->getURLNotifyCallback(),
             "ip" => $model->user_ip,
@@ -316,14 +350,17 @@ class PlatformController extends CheckoutController {
             "country_name" => $country_name,
             "ips" => $ips
         ];
+        //Log::info("POST PARAM: ");
+        //Log::info($params);
+
         return $params;
     }
 
     public function platformPost($params) {
         $platform_sigature = $this->generateSignature($params);
         $response = $this->curlPlatformPost($params, PLATFORM_PUBLIC_KEY, $platform_sigature, PLATFORM_URL_POST);
-        Log::info("POST PARAM LEN PLATFORM VA NHAN VE KET QUA: ");
-        Log::info($response);
+        //Log::info("POST PARAM LEN PLATFORM VA NHAN VE KET QUA: ");
+        //Log::info($response);
         return $response;
     }
 
@@ -342,6 +379,54 @@ class PlatformController extends CheckoutController {
             }
         }
         echo json_encode($data);
+    }
+
+    //Nhận response từ Platform để cập nhật status acc Limited
+    public function platformUpdateAccLimited(Request $request) {
+        //Log::info("START CALLBACK UPDATE ACC LIMITED !!!");
+        if (isset($request)) {
+            DB::beginTransaction();
+            $data = $request->all();
+            //Log::info($data);
+
+            $email = (isset($data["data"]["email"])) ? $data["data"]["email"] : "";
+            $status = (isset($data["data"]["status"])) ? $data["data"]["status"] : "";
+            $signature = (isset($data["signature"])) ? $data["signature"] : "";
+
+            $param = [
+                "data" => [
+                    "email" => $email,
+                    "status" => $status
+                ]
+            ];
+            $checkSingature = $this->generateSignature($param['data']);
+            Log::info($checkSingature);
+            if ($checkSingature == $signature) {
+
+                Log::info("Check signature acc limited ok!!!");
+
+                $model = PaypalAccount::where("email", "=", trim($email))->first();
+                if ($model) {
+                    if ($status == "Limited Step") {
+                        $model->status = "UnLimit";
+                        $model->save();
+                    } else if ($status == "Limited 180d") {
+                        $model->status = "Limit";
+                        $model->save();
+                    }
+                    DB::commit();
+                    Log::info("save acc limited ok: " . $email . " Status: " . $status);
+                }
+            }
+        }
+    }
+
+    public function testGetKey($id) {
+        $model_order = UserOrders::find($id);
+        if ($model_order) {
+            $model_stock = new KeyStock();
+            $model_stock->checkLinkApiProduct($model_order);
+        }
     }
 
 }

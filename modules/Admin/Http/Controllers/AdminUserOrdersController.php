@@ -102,9 +102,9 @@ class AdminUserOrdersController extends Controller {
         DB::beginTransaction();
         $model_orders = UserOrders::find($id);
         if ($model_orders) {
-            
-            if($model_orders->paypalAccount != null && $model_orders->payment_type->code == "PAYPAL" &&
-                    ($model_orders->paypalAccount->status == "Limit" || $model_orders->paypalAccount->status == "UnLimit")){
+
+            if ($model_orders->paypalAccount != null && $model_orders->payment_type->code == "PAYPAL" &&
+                    ($model_orders->paypalAccount->status == "Limit" || $model_orders->paypalAccount->status == "UnLimit")) {
                 $request->session()->flash('alert-warning', 'Warning: Tài khoản paypal của đơn hàng này đã bị limit!');
                 return back();
             }
@@ -484,11 +484,19 @@ class AdminUserOrdersController extends Controller {
 
     public function savePremiumKey(Request $request) {
         $data = $request->all();
+
+        $data_result = [
+            "check" => 0,
+            "message" => "Warning! Save premium key error !!!"
+        ];
+
         if (isset($data["id"]) && isset($data["key"]) && $data["key"] != "") {
             $id = $data["id"];
             $key = $data["key"];
             $model = ArticlesTypeKey::find($id);
             if ($model) {
+                //OLD KEY là de kiem tra da co key nao nguoi khac add truoc do chua
+                $old_key = $model->key;
                 $model->key = $key;
                 $model->status = "active";
                 $model->save();
@@ -496,12 +504,28 @@ class AdminUserOrdersController extends Controller {
                 $model_order = UserOrders::find($model->user_orders_id);
                 $check = $this->checkKeyEnough($model_order);
                 if ($check == 1) {
-                    return 1; // Đủ key để gửi cho khách
+                    // Đủ key để gửi cho khách
+                    $data_result = [
+                        "check" => 1,
+                        "message" => "Success! Save premium key: ". $key . " complete:"
+                    ];
+                    //return 1; 
+                }else{
+                    // Không đủ key
+                    $data_result = [
+                        "check" => 2,
+                        "message" => "Success! Save premium key:" . $key . " complete:"
+                    ];
+                    //return 2; 
                 }
-                return 2; // Không đủ key
+                
+                if($old_key != "" && $old_key != null){
+                    $data_result["message"] = "SUCCESS! VUI LÒNG KIỂM TRA KĨ LẠI TRÁNH SEND KEY 2 LẦN. KEY ĐÃ ĐƯỢC ADD TRƯỚC ĐÓ LÀ: " . $old_key;
+                }
+                
             }
         }
-        return 0; // Lỗi
+        return $data_result; // Lỗi
     }
 
     //SAVE COMMENT HISTORY
@@ -556,7 +580,7 @@ class AdminUserOrdersController extends Controller {
     //Gửi mail sản phẩm tới khách hàng
     public function sendProductEmail($model_orders, $model_key) {
         try {
-            
+
             $subject_email = SUBJECT_SEND_PRODUCT . $model_orders->id;
             if ($model_orders->payment_status == "completed") {
                 $subject_email = SUBJECT_RESEND_PRODUCT . $model_orders->id;
@@ -566,7 +590,6 @@ class AdminUserOrdersController extends Controller {
                 $m->to($model_orders->email, $model_orders->first_name . " " . $model_orders->last_name)->subject($subject_email);
             });
             $model_orders->saveEmailDie(0);
-            
         } catch (\Exception $e) {
             Log::info("LOI SEND EMAIL 1111111");
             $model_orders->saveEmailDie(1);

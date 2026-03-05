@@ -22,21 +22,20 @@ class AdminController extends Controller {
     public function index() {
         $obj_order = new UserOrders();
         $obj_user = new User();
-        $model_order_pending = $obj_order->getOrderPending();
         $model_order_paid = $obj_order->getOrderPaid();
         $model_order_completed = $obj_order->getOrderCompletedDay();
         $data_money = $obj_order->getTotalOrderMoney();
         $count_user = $obj_user->countTotalUser();
-        $model_user_lock = $obj_user->getModelUserLock();
+        $model_buyProduct = $obj_order->reportBuyProductDay();
+        
         $this->statisticSession();
         
         return view('admin::index', compact(
-                'model_order_pending', 
                 'model_order_paid',
                 'model_order_completed',
                 'data_money', 
                 'count_user', 
-                'model_user_lock'
+                'model_buyProduct'
         ));
     }
 
@@ -60,7 +59,7 @@ class AdminController extends Controller {
      * Số lượng feedback chưa giải quyết
      * * */
     public function statisticSession() {
-        $obj_user = new User();
+        /*$obj_user = new User();
         $count_used_bonus_pending = UserOrders::where("used_bonus", ">", 0)->where("payment_status", "=", "pending")->count();
         $count_bonus_payment = UserOrders::join('payments_type', 'user_orders.payments_type_id', '=', 'payments_type.id')
                         ->select('user_orders.payment_status', 'payments_type.code')
@@ -99,6 +98,24 @@ class AdminController extends Controller {
             "count_comment" => $count_comment,
             "count_noti" => ($count_reviews + $count_feedback),
             "payment_bonus_id" => $payment_bonus_id
+        );*/
+        
+        
+        $data = array(
+            "count_used_bonus_pending" => 0,
+            "count_bonus_payment" => 0,
+            "count_order_pending" => 0,
+            "count_order_paid" => 0,
+            "count_order_refund" => 0,
+            "count_order_completed" => 0,
+            "count_order_cancel" => 0,
+            "count_user_lock" => 0,
+            "count_product_no_stock" => 0,
+            "count_feedback" => 0,
+            "count_reviews" => 0,
+            "count_comment" => 0,
+            "count_noti" => 0,
+            "payment_bonus_id" => 0
         );
 
         Session::set('statisticCount', $data);

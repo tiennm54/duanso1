@@ -59,6 +59,25 @@
 </div>
 
 <div class="row">
+    <div class="col-md-9">
+        <div class="form-group">
+            <label>API Link</label>
+            <input type="text" class="form-control border-input" placeholder="API Link..." name="txt_api_link" value="{{ ($model->api_link) ? $model->api_link : "" }}">
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>API Link Status</label>
+            <select class="form-control border-input" name="int_api_link_status">
+                <option value="0" {{ ($model->api_link_status == 0) ? "selected" : "" }}>OFF</option>
+                <option value="1" {{ ($model->api_link_status == 1) ? "selected" : "" }}>ON</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-md-12">
         <div class="form-group">
             <label for="exampleInputEmail1">Description</label>

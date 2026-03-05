@@ -95,6 +95,7 @@ class PaypalAccountManagerController extends Controller {
             $model->max_money = $data["max_money"];
             $model->max_receive = $data["max_receive"];
             $model->status_xmdt = $data["status_xmdt"];
+            $model->status_affiliate = $data["status_affiliate"];
 
             if (isset($request->document)) {
                 if ($request->hasFile('document')) {
@@ -157,6 +158,7 @@ class PaypalAccountManagerController extends Controller {
             $model->max_money = $data["max_money"];
             $model->max_receive = $data["max_receive"];
             $model->status_xmdt = $data["status_xmdt"];
+            $model->status_affiliate = $data["status_affiliate"];
             
             if($data["status_xmdt"] == 1 && strtotime($model->date_xmdt) <= 0){
                 $model->date_xmdt = Carbon::now();
@@ -219,6 +221,9 @@ class PaypalAccountManagerController extends Controller {
             }
             if (isset($data["website"]) && $data["website"] != "") {
                 $model = $model->where("website", "LIKE", "%" . trim($data["website"]) . "%");
+            }
+            if (isset($data["status_affiliate"]) && $data["status_affiliate"] != "") {
+               $model = $model->where("status_affiliate", $data["status_affiliate"]);
             }
         }
 

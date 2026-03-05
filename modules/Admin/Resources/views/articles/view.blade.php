@@ -58,6 +58,7 @@
             @include('validator.flash-message')
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#listProduct">List Product</a></li>
+                <li><a data-toggle="tab" href="#fcheckout">Link FCheckout</a></li>
                 <li><a data-toggle="tab" href="#general">General</a></li>
                 <li><a data-toggle="tab" href="#seo">SEO</a></li>
                 <li><a data-toggle="tab" href="#image">Image</a></li>
@@ -67,6 +68,10 @@
 
                 <div id="listProduct" class="tab-pane fade  in active">
                     @include('admin::articles.includes.view_tab_list_product',compact('model'))
+                </div>
+                
+                 <div id="fcheckout" class="tab-pane fade">
+                    @include('admin::articles.includes.view_tab_fcheckout',compact('model'))
                 </div>
 
                 <div id="general" class="tab-pane fade">

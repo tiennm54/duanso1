@@ -9,6 +9,7 @@ use App\Models\PaymentType;
 use App\Models\PaypalAccount;
 use App\Models\StripeAccount;
 use Log;
+use DB;
 
 class UserOrders extends Model {
 
@@ -40,7 +41,7 @@ class UserOrders extends Model {
         $prefix = "BPK-";
         if ($model_paypal_account != null) {
             if ($model_paypal_account->prefix != null && $model_paypal_account->prefix != "") {
-                $prefix = $model_paypal_account->prefix . "-";
+                $prefix = trim($model_paypal_account->prefix) . " - ";
             }
         }
         $order_no = $prefix . $this->id;
@@ -204,7 +205,7 @@ class UserOrders extends Model {
         if ($model_payment_type == null) {
             return null;
         }
-        
+
         $model_paypal_account = null;
         if ($totalOrder['payment_code'] == "PAYPAL") {// Chon acc paypal de thuc hien thanh toan
             $model_paypal_account = $this->getEmailPaypal($totalOrder["total"], $model_payment_type);
@@ -266,6 +267,58 @@ class UserOrders extends Model {
         return $this;
     }
 
+    public function createFastOrder($model_payment, $model_product, $model_user) {
+
+        $user_ip = $this->get_client_ip();
+        $user_info = $this->getUserInfo($user_ip);
+
+        $this->users_id = $model_user->id;
+        $this->users_roles_id = $model_user->roles_id;
+        $this->first_name = $model_user->first_name;
+        $this->last_name = $model_user->last_name;
+        $this->email = $model_user->email;
+
+        $this->payments_type_id = $model_payment->id;
+        $this->sub_total = $model_product->price_order;
+        $this->payment_charges = $model_payment->getPaymentCharges($model_product->price_order); // Tien phi
+        $this->used_bonus = 0; // Su dung tien bonus de thanh toan
+        $this->total_price = $model_payment->getPaymentTotal($model_product->price_order);
+        $this->quantity_product = 1;
+        $this->payment_status = "pending";
+        $this->user_ip = $user_ip;
+        $this->user_info = $user_info;
+
+        $this->save();
+        $this->order_no = "FBPK-" . $this->id;
+        $this->paypal_token = "";
+        $this->save();
+
+        //Save Order Detail
+        $model_user_orders_detail = new UserOrdersDetail();
+        $model_user_orders_detail->user_orders_id = $this->id;
+        $model_user_orders_detail->users_id = $model_user->id;
+        $model_user_orders_detail->users_roles_id = $model_user->roles_id;
+        $model_user_orders_detail->articles_type_id = $model_product->id;
+        $model_user_orders_detail->title = $model_product->title;
+        $model_user_orders_detail->image = $model_product->image;
+        $model_user_orders_detail->quantity = 1;
+        $model_user_orders_detail->price_order = $model_product->price_order;
+        $model_user_orders_detail->total_price = $this->total_price;
+        $model_user_orders_detail->save();
+
+        //Save Model Key
+        $model_premium_key = new ArticlesTypeKey();
+        $model_premium_key->user_orders_id = $this->id;
+        $model_premium_key->user_orders_detail_id = $model_user_orders_detail->id;
+        $model_premium_key->articles_type_id = $model_user_orders_detail->articles_type_id;
+        $model_premium_key->articles_type_title = $model_user_orders_detail->title;
+        $model_premium_key->articles_type_price = $model_user_orders_detail->price_order;
+        $model_premium_key->status = "none";
+        $model_premium_key->save();
+
+        return $this;
+    }
+
     //Update lại tài khoản nếu có nghi vấn thì update trong user
     public function cancelRefundOrder($type, $model_user) {
         if ($model_user) {
@@ -313,7 +366,7 @@ class UserOrders extends Model {
 
     public function getTotalOrderMoney() {
         //Tiền thanh toán
-        $money_order = UserOrders::where("payment_status", "completed")->sum('total_price');
+        $money_order = UserOrders::where("payment_status", "completed")->where('payment_date', '>=', date('Y-m-d') . ' 00:00:00')->sum('total_price');
         //Tiền thực nhận sau khi trừ 3.9% + 0.3$ phí
         $charge = ( ($money_order * 4) / 100 );
         $money = $money_order - $charge;
@@ -325,6 +378,24 @@ class UserOrders extends Model {
         );
         return $data;
     }
+    
+    public function reportBuyProductDay(){
+        $model = DB::table('user_orders')
+                ->join('user_orders_detail', 'user_orders.id', '=', 'user_orders_detail.user_orders_id')
+                ->select(
+                        'user_orders.id as id',
+                        'image',
+                        'articles_type_id',
+                        'title',
+                        DB::raw('SUM(user_orders_detail.quantity) as total_quantity')
+                        )
+                ->groupBy('user_orders_detail.articles_type_id')
+                ->where("user_orders.payment_status", "completed")
+                ->where('user_orders.payment_date', '>=', date('Y-m-d') . ' 00:00:00')
+                ->orderBy('total_quantity', 'DESC')
+                ->paginate(10);;
+        return $model;
+    }
 
     public function getUrl() {
         return URL::route('users.orderHistoryView', ["id" => $this->id, "order_no" => $this->order_no]);
@@ -334,8 +405,8 @@ class UserOrders extends Model {
         $this->email_die = $status;
         $this->save();
     }
-    
-    public function saveStatusOrder($status){
+
+    public function saveStatusOrder($status) {
         $this->payment_status = $status;
         $this->save();
     }

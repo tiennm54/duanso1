@@ -17,6 +17,7 @@
                 <th>Status Stock</th>
                 <th>Status Show/Hide</th>
                 <th>Enabled Visa</th>
+                <th>Status API</th>
                 <th width="20%">Action</th>
             </tr>
         </thead>
@@ -53,6 +54,14 @@
                                 <option value="0" <?php echo ($item->status_enabledVisa == "0") ? "selected" : ""; ?>>Disabled</option>
                             </select>
                         </td>
+                        
+                        <td>
+                            <select name="status_api_link">
+                                <option value="1" <?php echo ($item->api_link_status == "1") ? "selected" : ""; ?>>ON</option>
+                                <option value="0" <?php echo ($item->api_link_status == "0") ? "selected" : ""; ?>>OFF</option>
+                            </select>
+                        </td>
+                        
                         <td>
                             <button type="submit" class="btn btn-primary" data-toggle="confirmation">
                                 <i class="fa fa-save"></i>

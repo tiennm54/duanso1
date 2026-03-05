@@ -80,6 +80,9 @@ Route::group(['prefix' => 'adminnmt', 'namespace' => 'Modules\Admin\Http\Control
     Route::group(['prefix' => 'import'], function() {
         Route::get('import-key/{id?}', ['as' => 'import.getImport', 'uses' => 'ImportKeyController@getImport']);
         Route::post('import-key', ['as' => 'import.postImport', 'uses' => 'ImportKeyController@postImport']);
+        
+        Route::get('import-acc-paypal', ['as' => 'import.getImportAccPaypal', 'uses' => 'ImportAccPaypalController@getImportAccPaypal']);
+        Route::post('import-acc-paypal', ['as' => 'import.postImportAccPaypal', 'uses' => 'ImportAccPaypalController@postImportAccPaypal']);
     });
 
     //USER ORDER

@@ -21,7 +21,7 @@
 </p>
 
 <p>
-    Step 2. Set the amount <span style="color: red">*</span>: <b><?php echo round($model->total_price * 25000) ?> VND</b> or <b>${{ $model->total_price }}</b>
+    Step 2. Set the amount <span style="color: red">*</span>: <b><?php echo round($model->total_price * 26500) ?> VND</b> or <b>${{ $model->total_price }}</b>
 </p>
 
 <p>

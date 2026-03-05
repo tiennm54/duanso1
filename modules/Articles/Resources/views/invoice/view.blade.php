@@ -84,8 +84,10 @@
                                                 @include('articles::invoice.includes.checkout_banktransfer')
                                             <?php }else if($model->payment_type->code == "VISA_STRIPE"){ ?>
                                                 @include('articles::invoice.includes.checkout_visaStripe')
-                                            <?php }else{ ?>
+                                            <?php }else if($model->payment_type->code == "PREMIUM_PAYPAL"){ ?>
                                                 @include('articles::invoice.includes.checkout_platformInvoice')
+                                            <?php }else{ ?>
+                                                @include('articles::invoice.includes.checkout_platformVisa')
                                             <?php } ?>
                                             
                                            

@@ -241,6 +241,10 @@ class InvoiceController extends Controller {
                                     }
 
                                     $keyStock = new KeyStock();
+                                    
+                                    //Trả key tự động thông qua link API
+                                    $keyStock->checkLinkApiProduct($model);
+                                    
                                     $model_key = $keyStock->sendAndChangeStatusKey($model);
                                     if ($model_key != null) {
                                         $model_paypal_account = $model->paypalAccount;

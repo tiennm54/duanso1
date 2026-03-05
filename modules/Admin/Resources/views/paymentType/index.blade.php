@@ -32,7 +32,7 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>No.</th>
+                            <th>ID</th>
                             <th>Image</th>
                             <th>Title</th>
                             <th>Email</th>
@@ -40,13 +40,14 @@
                             <th>Position</th>
                             <th>Fees</th>
                             <th>Disabled</th>
+                            <th>Disabled VN</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($model as $key => $item): ?>
                             <tr>
-                                <td><?php echo $key + 1; ?></td>
+                                <td><?php echo $item->id; ?></td>
                                 <td><img src="{{ url('images/'.$item->image) }}" width="80px"></td>
                                 <td><?php echo $item->title; ?></td>
                                 <td><span class="label label-primary"><?php echo ($item->email) ? $item->email : "N/A"; ?></span></td>
@@ -63,6 +64,7 @@
                                 <td><?php echo $item->position; ?></td>
                                 <td><?php echo $item->fees; ?></td>
                                 <td> <span class="label {{ ($item->status_disable == 0) ? "label-primary" : "label-danger"}}"> {{ ($item->status_disable == 0) ? "SHOW" : "HIDE" }}</td>
+                                <td> <span class="label {{ ($item->disable_vn == 0) ? "label-primary" : "label-danger"}}"> {{ ($item->disable_vn == 0) ? "SHOW" : "HIDE" }}</td>
                                 <td>
                                     <a class="btn btn-primary" href="<?php echo URL::route('paymentType.getEdit', $item->id); ?>"><i class="fa fa-edit"></i></a>
                                     <a onclick="return confirm('Are you sure you want to delete this item?');" href="<?php echo URL::route('paymentType.delete', $item->id); ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i></a>

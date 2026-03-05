@@ -229,15 +229,17 @@ class CheckoutController extends ShoppingCartController {
             $infoIP = $this->getInfoIP($ip);
             $isProxy = "NO";
             $user_country = "";
-
+            $checkPaypalView = false;
             if ($infoIP['status'] == 'success') {
                 $user_country = $infoIP['countryCode'];
                 $check_isp = strpos(strtolower($infoIP['isp']), 'paypal');
+                //$checkPaypalView = false;
                 $check_proxy = $infoIP['proxy'];
                 $check_hosting = $infoIP['hosting'];
                 if ($check_isp !== false || $check_proxy === true || $check_hosting === true) {
                     $isProxy = "YES";
                     if ($check_isp !== false) {
+                        $checkPaypalView = true;
                         $this->sendEmailWarningPaypal($infoIP);
                         //return redirect()->route('frontend.checkout.error');
                     }
@@ -247,9 +249,11 @@ class CheckoutController extends ShoppingCartController {
                     $request->session()->flash('alert-warning', 'Please disable VPN / Proxy to see full available payment method');
                 }
             }
+            
+            $checkFilextrasTrue = $this->checkFilextrasCom(); // Kiểm tra xem có phải sản phẩm filextras không? Thằng này nó bắt mở khi có cả proxy
 
             return view('articles::checkout.checkout', compact(
-                            "data", "model_payment_type", "model_terms", "model_user", 'totalOrder', 'money_user', 'user_country', 'isProxy'
+                            "data", "model_payment_type", "model_terms", "model_user", 'totalOrder', 'money_user', 'user_country', 'isProxy', 'checkFilextrasTrue','checkPaypalView'
             ));
         } else {
             return view('articles::checkout.checkout-none');
@@ -410,6 +414,24 @@ class CheckoutController extends ShoppingCartController {
         return 1;
     }
 
+    //LÀM CHO THẰNG CHÓ ĂN CỨT FILEXTRAS.COM
+
+    public function checkFilextrasCom() {//thằng này nó yêu cầu không chặn proxy và vpn
+        $array_orders = Session::get('array_orders', []);
+        //Log::info($array_orders);
+        $check = false;
+        foreach ($array_orders as $item) {
+            $articles_id = $item["id"];
+            if ($articles_id == 709 || $articles_id == 710 || $articles_id == 711 || $articles_id == 712) {
+                Log::info("DAY LA CU FILEXTRAS.COM");
+                $check = true;
+            } else {
+                $check = false;
+            }
+        }
+        return $check;
+    }
+
     public function countTotalOrderCompleted($email_user) {
         $check_completed = UserOrders::where("email", "=", trim($email_user))->where(function ($query) {
                     $query->where("payment_status", "=", "completed")
@@ -431,7 +453,7 @@ class CheckoutController extends ShoppingCartController {
             return 0; // hiển thị phương thức thanh toán
         }
     }
-    
+
     //Check điều kiện ẩn hiện của cổng thanh toán
     public function checkDisablePaymentMethod(Request $request) {
         if ($request) {
@@ -442,7 +464,7 @@ class CheckoutController extends ShoppingCartController {
             if (isset($data["user_country"])) {
                 $user_country = $data["user_country"];
             }
-            if(isset($data["check_paypal_proxy"])){
+            if (isset($data["check_paypal_proxy"])) {
                 $check_paypal_proxy = $data["check_paypal_proxy"];
             }
 
@@ -455,55 +477,66 @@ class CheckoutController extends ShoppingCartController {
 
                     //Check san pham chap nhan thanh toan Visa. Nếu = 1 nghĩa là khách lạ cũng được thanh toán thông qua Visa/Master Card (Hiện tại theo logic mới là tất cả các cổng)
                     $check_enabledVisa = $this->checkProductEnabledVisa();
-                    
+
+                    $checkFilextrasCom = $this->checkFilextrasCom();
+
                     //Log::info("check enable Visa: ".$check_enabledVisa);
-                    
+
                     $model_payment = PaymentType::where("status_disable", "=", 0)->get();
 
                     foreach ($model_payment as $item) {
 
-                        /*
-                         * Mức độ ưu tiên check hiển thị payment method
-                         * 1. Status_disable: Chủ động tắt cổng
-                         * 2. Country: Chủ động chặn theo quốc gian
-                         * 3. Paypal and Proxy: Check chủ động nếu paypal vào website và khách sử dụng proxy
-                         * 3. Sản phẩm dược phép mở full cổng mà ko phụ thuộc vào khách lạ, và khách quen
-                         * 4. Chặn theo khách lạ và khách quen         
-                         *                 */
-
-                        $check_disable_country = $this->checkDisableForCountry($item, $user_country);
-
-                        if ($item->status_disable == 1) {// ẩn cổng thanh toán
-                            $data_check = array(// ẩn phương thức thanh toán
-                                "payment_type_id" => $item->id,
-                                "status_show" => 0,
-                                "payment_name" => $item->title
-                            );
-                        } else if ($check_disable_country == 1) {//ẩn
-                            $data_check = array(// ẩn phương thức thanh toán
-                                "payment_type_id" => $item->id,
-                                "status_show" => 0,
-                                "payment_name" => $item->title
-                            );
-                        }else if($item->check_proxy == 1 && $check_paypal_proxy == "YES"){
-                            $data_check = array(// ẩn phương thức thanh toán
-                                "payment_type_id" => $item->id,
-                                "status_show" => 0,
-                                "payment_name" => $item->title
-                            );
-                        }
-                        else if($item->disable_guests == 1 && $item->total_completed > $check_completed && $check_enabledVisa == 0){//ẩn
-                            $data_check = array(
-                                "payment_type_id" => $item->id,
-                                "status_show" => 0,
-                                "payment_name" => $item->title
-                            );
-                        }else{//show
+                        //Ưu tiên thằng chó Filextras nhất
+                        if ($item->id == 3 && $checkFilextrasCom == true) {// là thằng filextras và là cổng paypal phụ
                             $data_check = array(
                                 "payment_type_id" => $item->id,
                                 "status_show" => 1,
                                 "payment_name" => $item->title
                             );
+                        } else {
+
+                            /*
+                             * Mức độ ưu tiên check hiển thị payment method
+                             * 1. Status_disable: Chủ động tắt cổng
+                             * 2. Country: Chủ động chặn theo quốc gian
+                             * 3. Paypal and Proxy: Check chủ động nếu paypal vào website và khách sử dụng proxy
+                             * 3. Sản phẩm dược phép mở full cổng mà ko phụ thuộc vào khách lạ, và khách quen
+                             * 4. Chặn theo khách lạ và khách quen         
+                             *                 */
+
+                            $check_disable_country = $this->checkDisableForCountry($item, $user_country);
+
+                            if ($item->status_disable == 1) {// ẩn cổng thanh toán
+                                $data_check = array(// ẩn phương thức thanh toán
+                                    "payment_type_id" => $item->id,
+                                    "status_show" => 0,
+                                    "payment_name" => $item->title
+                                );
+                            } else if ($check_disable_country == 1) {//ẩn
+                                $data_check = array(// ẩn phương thức thanh toán
+                                    "payment_type_id" => $item->id,
+                                    "status_show" => 0,
+                                    "payment_name" => $item->title
+                                );
+                            } else if ($item->check_proxy == 1 && $check_paypal_proxy == "YES") {
+                                $data_check = array(// ẩn phương thức thanh toán
+                                    "payment_type_id" => $item->id,
+                                    "status_show" => 0,
+                                    "payment_name" => $item->title
+                                );
+                            } else if ($item->disable_guests == 1 && $item->total_completed > $check_completed && $check_enabledVisa == 0) {//ẩn
+                                $data_check = array(
+                                    "payment_type_id" => $item->id,
+                                    "status_show" => 0,
+                                    "payment_name" => $item->title
+                                );
+                            } else {//show
+                                $data_check = array(
+                                    "payment_type_id" => $item->id,
+                                    "status_show" => 1,
+                                    "payment_name" => $item->title
+                                );
+                            }
                         }
                         array_push($data_response, $data_check);
                     }
@@ -554,7 +587,7 @@ class CheckoutController extends ShoppingCartController {
             $date_now = strtotime(date("Y-m-d H:i:s"));
             $date_order = ($model_order->created_at) ? strtotime($model_order->created_at) : strtotime(date("Y-m-d H:i:s"));
             $secs_order = $date_now - $date_order;
-            if ($secs_order <= 3600) {// Khách hàng vừa thanh toán trong 1h
+            if ($secs_order <= 600) {// Khách hàng vừa thanh toán trong 10p
                 return $model_order;
             }
         }
@@ -659,7 +692,7 @@ class CheckoutController extends ShoppingCartController {
                             //Kiểm tra khách hàng có đặt nhiều đơn hàng một lúc không?
                             $model_pending = $this->checkOrderViaIP();
                             if ($model_pending != null) {
-                                $request->session()->flash('alert-warning', 'Warning: Your order #' . $model_pending->id . ' has not been processed successfully, please wait 1 hour before you create a new order. We apologize for this inconvenience.');
+                                $request->session()->flash('alert-warning', 'Warning: Your order #' . $model_pending->id . ' has not been processed successfully, please wait 10 minutes before you create a new order. We apologize for this inconvenience.');
                                 return back();
                             }
 
@@ -751,7 +784,7 @@ class CheckoutController extends ShoppingCartController {
             $data = $request->all();
             $id = (isset($data["id"])) ? $data["id"] : 0;
             $payment_type = (isset($data["payment_type"])) ? $data["payment_type"] : 0;
-            
+
             $model_articles_type = ArticlesType::find($id);
             if ($model_articles_type) {
                 //Nếu là member

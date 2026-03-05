@@ -3,6 +3,12 @@
 <div class="page-header">
     <div class="container-fluid">
         <div class="pull-right">
+            
+            <a href="{{ URL::route('import.getImportAccPaypal') }}" data-toggle="tooltip" title=""
+               class="btn btn-primary" data-original-title="Import Paypal">
+                <i class="fa fa-plus"></i> Import Paypal
+            </a>
+            
             <a href="{{ URL::route('admin.paypal.getCreate') }}" data-toggle="tooltip" title=""
                class="btn btn-primary" data-original-title="Add New">
                 <i class="fa fa-plus"></i>
@@ -59,9 +65,9 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-2">
+                        <div class="col-sm-1">
                             <div class="form-group">
-                                <label class="control-label">Status Limit</label>
+                                <label class="control-label">Status</label>
                                 <select name="status_limit" class="form-control">
                                     <option value="">Status limit</option>
                                     <option value="Work" {{ (app('request')->input('status_limit') == "Work") ? "selected" : "" }} >
@@ -92,20 +98,20 @@
                             </div>
                         </div>
 
-                        <!--<div class="col-sm-2">
+                        <div class="col-sm-1">
                             <div class="form-group">
-                                <label class="control-label">Status Activate</label>
-                                <select name="status_activate" class="form-control">
-                                    <option value="">Status activate</option>
-                                    <option value="No_Activate" {{ (app('request')->input('status_activate') == "No_Activate") ? "selected" : "" }} >
-                                        No Activate
+                                <label class="control-label">Liên Kết</label>
+                                <select name="status_affiliate" class="form-control">
+                                    <option value="">Status Affiliate</option>
+                                    <option value="0" {{ (app('request')->input('status_affiliate') == "0") ? "selected" : "" }} >
+                                        NO
                                     </option>
-                                    <option value="Activate" {{ (app('request')->input('status_activate') == "Activate") ? "selected" : "" }}>
-                                        Activate
+                                    <option value="1" {{ (app('request')->input('status_affiliate') == "1") ? "selected" : "" }}>
+                                        YES
                                     </option>
                                 </select>
                             </div>
-                        </div>-->
+                        </div>
 
                         <div class="col-sm-2">
                             <div class="form-group">
@@ -145,6 +151,7 @@
                             <th>Money activate</th>
                             <th>Money hold</th>
                             <th>Status Limit</th>
+                            <th>Status Affiliate</th>
                             <th>Status Activate</th>
                             <th>Max Payment</th>
                             <th>End date</th>
@@ -207,11 +214,25 @@
                                         <?php echo $item->status; ?>
                                     </span>
                                 </td>
+                                
+                                <td> 
+                                    <span class="label {{ ($item->status_affiliate == 1) ? "label-primary" : "label-danger"}}"> 
+                                        <?php 
+                                            if($item->status_affiliate == 1){
+                                                echo "YES";
+                                            }else{
+                                                echo "NO";
+                                            }
+                                        ?>
+                                    </span>
+                                </td>
+                                
                                 <td> 
                                     <span class="label {{ ($item->status_activate == "Activate") ? "label-primary" : "label-danger"}}"> 
                                         <?php echo $item->status_activate; ?>
                                     </span>
                                 </td>
+                                
 
                                 <td> 
                                     <span><?php echo $item->max_money; ?></span>

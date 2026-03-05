@@ -31,7 +31,8 @@ class VisaController extends Controller {
     public function checkoutSuccess() {
         return view('articles::checkoutVisa.checkout-success');
     }
-
+    
+    //HÀM CŨ TÍCH HỢP VỚI CỔNG VISA CỦA PHÁT
     public function checkoutCallback(Request $request) {
         if (isset($request)) {
             DB::beginTransaction();
@@ -63,13 +64,17 @@ class VisaController extends Controller {
                         $this->paymentByBonusVisa($model);
 
                         $keyStock = new KeyStock();
+                        
+                        //Trả key tự động thông qua link API
+                        $keyStock->checkLinkApiProduct($model);
+                        
                         $model_key = $keyStock->sendAndChangeStatusKey($model);
                         if ($model_key != null) {
                             $this->sendProductEmail($model, $model_key);
                         } else {
                             $this->sendMailPaid($model);
                         }
-                        $this->sendEmailNotifyAdmin($model);
+                        //$this->sendEmailNotifyAdmin($model);
                         DB::commit();
                         return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
                     } else {
@@ -86,7 +91,7 @@ class VisaController extends Controller {
             return redirect()->route('frontend.checkoutVisa.failure');
         }
     }
-
+    //ĐANG CHẠY LIVE CHO CỔNG STRIPE CŨ
     public function callbackVisaStripe(Request $request) {
         if (isset($request)) {
             DB::beginTransaction();
@@ -108,7 +113,7 @@ class VisaController extends Controller {
                 $model = UserOrders::find($bpk_order_id);
 
                 if ($model) {
-                    if ($status == "succeeded" && $model->total_price == $amount) {
+                    if ($status == "succeeded" && $model->total_price == $amount && $model->payment_status != "completed") {
 
                         //Them tien vao tong so du
                         $model_payment_type = new PaymentType();
@@ -120,13 +125,16 @@ class VisaController extends Controller {
                         $this->paymentByBonusVisa($model);
 
                         $keyStock = new KeyStock();
+                        
+                        //Trả key tự động thông qua link API
+                        $keyStock->checkLinkApiProduct($model);
                         $model_key = $keyStock->sendAndChangeStatusKey($model);
                         if ($model_key != null) {
                             $this->sendProductEmail($model, $model_key);
                         } else {
                             $this->sendMailPaid($model);
                         }
-                        $this->sendEmailNotifyAdmin($model);
+                        //$this->sendEmailNotifyAdmin($model);
                         DB::commit();
                         return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
                     } else {
@@ -149,7 +157,8 @@ class VisaController extends Controller {
         Log::info("VISA STRIPE ERORR!!!");
         return redirect()->route('frontend.checkoutVisa.failure');
     }
-
+    
+    //Hàm tích hợp cổng thanh toán visa quickpay đã bỏ
     public function checkoutCallbackQuickPay(Request $request) {// Da bo
         /*
           action = 'Product'
