@@ -5,7 +5,7 @@
     @include('validator.flash-message')
     <div class="row">
         <div id="content" class="col-sm-12">
-            
+
             <div class="row">
                 <form>
                     <div class="search-cate-content">
@@ -25,23 +25,50 @@
                     echo "There is no product that matches the search criteria.";
                 }
                 ?>
-                <?php foreach ($model as $key => $item): ?>
-                    <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div class="product-thumb transition">
-                            <div class="image">
-                                <a href="{{ $item->getUrlPricing() }}">
-                                    <img src="{{url('images/'.$item->image)}}" alt="Buy {{ $item->title }} Premium via Paypal, Visa/Master card" title="{{ $item->title }} ({{$item->view_count}} views)"
-                                         class="img-responsive" style="width: 100%; max-height: 71px">
-                                </a>
-                            </div>
-                            <div class="">
-                                <h4 style="text-align: center;">
-                                    <a href="{{ $item->getUrlPricing() }}">{{ $item->title }}</a>
-                                </h4>
+                <?php
+                $country = "";
+                $proxy_vpn = false;
+                
+                if(isset($user_country) && $user_country != ""){
+                    $country = $user_country;
+                }else{
+                    $country = \Illuminate\Support\Facades\Session::get("user_country");
+                }
+                
+                if(isset($check_proxy_vpn)){
+                    $proxy_vpn = $check_proxy_vpn;
+                }else{
+                    $proxy_vpn = \Illuminate\Support\Facades\Session::get("check_proxy_vpn");
+                }
+                
+                if($country == ""){
+                    $country = "VN";
+                }
+                
+                foreach ($model as $key => $item):
+                    $list_country_disable = $item->disable_country;
+                    $check_country = strpos($list_country_disable, $country);
+                    if ($check_country === false && $proxy_vpn === false) {// chan vn thi chac chan chan proxy
+                        ?>
+                        <div class="product-layout col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="product-thumb transition">
+                                <div class="image">
+                                    <a href="{{ $item->getUrlPricing() }}">
+                                        <img src="{{url('images/'.$item->image)}}" alt="Buy {{ $item->title }} Premium via Paypal, Visa/Master card" title="{{ $item->title }} ({{$item->view_count}} views)"
+                                             class="img-responsive" style="width: 100%; max-height: 71px">
+                                    </a>
+                                </div>
+                                <div class="">
+                                    <h4 style="text-align: center;">
+                                        <a href="{{ $item->getUrlPricing() }}">{{ $item->title }}</a>
+                                    </h4>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                        <?php
+                    }
+                endforeach;
+                ?>
             </div>
 
             <div class="row">
@@ -60,11 +87,12 @@
         <div class="row">
             <div id="content" class="col-sm-12">
                 <div class="page-title">
-                    <h2>Some of our 379,868+ customers used services</h2>
+                    <h2>Some of our 879,868+ customers used services</h2>
                 </div>
-
                 <div id="review">
-                    <?php foreach ($model_reviews as $item): ?>
+                <?php 
+                if(isset($model_reviews) && $model_reviews != null){
+                    foreach ($model_reviews as $item): ?>
                         <div class="well">
                             <p>
                                 <b><?php echo $item->review_name; ?></b>
@@ -81,7 +109,8 @@
                                 <span><?php echo $item->review_des; ?></span>
                             </p>
                         </div>
-                    <?php endforeach; ?>
+                    <?php endforeach;
+                }?>
                 </div>
             </div>
             <div class="row">

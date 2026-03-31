@@ -129,14 +129,14 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>View</label>
                                     <input type="number" class="form-control border-input" placeholder="View..." name="view_count" value="<?php echo ($model->view_count) ? $model->view_count : ''; ?>">
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Order count</label>
                                     <input type="number" class="form-control border-input" placeholder="Order count..." name="order_count" value="<?php echo ($model->order_count) ? $model->order_count : ''; ?>">
@@ -147,6 +147,13 @@
                                 <div class="form-group">
                                     <label>Reseller Page</label>
                                     <input type="text" class="form-control border-input" placeholder="Reseller Page..." name="reseller_page" value="<?php echo ($model->reseller_page) ? $model->reseller_page : ''; ?>">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Disable Country View</label>
+                                    <input type="text" class="form-control border-input" placeholder="Disable Country in Index Page" name="disable_country" value="<?php echo ($model->disable_country) ? $model->disable_country : ''; ?>">
                                 </div>
                             </div>
 

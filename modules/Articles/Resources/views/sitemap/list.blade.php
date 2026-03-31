@@ -1,4 +1,4 @@
-<?php echo '<?xml version="1.0" encoding="UTF-8"?>'?>
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>' ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>{{ URL::route('frontend.articles.index') }}</loc>
@@ -52,75 +52,96 @@
     <url>
         <loc>{{ URL::route('users.contact.getContact') }}</loc>
     </url>
-    
+
     <url>
         <loc>{{ URL::route('users.feedback.getFeedBack') }}</loc>
     </url>
-    
+
     <url>
         <loc>{{ URL::route('users.guestOrder.guestGetKey') }}</loc>
     </url>
-    
+
     <url>
         <loc>{{ URL::route('frontend.news.index') }}</loc>
     </url>
-    
+
     <url>
         <loc>{{ URL::route('users.review.index') }}</loc>
     </url>
-    
+
     <url>
         <loc>{{ URL::route('product.reviews.index') }}</loc>
     </url>
-    
-    @foreach($model_information as $info)
-        <url>
-            <loc>{{ URL::route('frontend.information.view',["id"=> $info->id, 'url'=>$info->url_title.".html"]) }}</loc>
-        </url>
-    @endforeach
 
+    @foreach($model_information as $info)
+    <url>
+        <loc>{{ URL::route('frontend.information.view',["id"=> $info->id, 'url'=>$info->url_title.".html"]) }}</loc>
+    </url>
+    @endforeach
+    <?php
+    $country = \Illuminate\Support\Facades\Session::get("user_country");
+    $proxy_vpn = \Illuminate\Support\Facades\Session::get("check_proxy_vpn");
+    if ($country == "") {
+        $country = "VN";
+    }
+    ?>
     @foreach($model_product as $product)
-        <url>
-            <loc>{{ $product->getUrlPricing() }}</loc>
-        </url>
+        <?php
+        $list_country_disable = $product->disable_country;
+        $check_country = strpos($list_country_disable, $country);
+        //echo $list_country_disable . " ================ ";
+        if ($check_country === false && $proxy_vpn === false) {
+            ?>
+            <url>
+                <loc>{{ $product->getUrlPricing() }}</loc>
+            </url>
+        <?php } ?>
     @endforeach
 
 
     @foreach($model_product_detail as $product_detail)
-        <url>
-            <loc>{{ $product_detail->getUrl() }}</loc>
-        </url>
+        <?php
+        $product = $product_detail->getArticles;
+        $list_country_disable = $product->disable_country;
+        $check_country = strpos($list_country_disable, $country);
+        //echo $list_country_disable . " ================ ";
+        if ($check_country === false && $proxy_vpn === false) {
+            ?>
+            <url>
+                <loc>{{ $product_detail->getUrl() }}</loc>
+            </url>
+        <?php } ?>
     @endforeach
-    
-    
+
+
     @foreach($model_cate as $cate)
-        <url>
-            <loc>{{ $cate->getUrl() }}</loc>
-        </url>
+    <url>
+        <loc>{{ $cate->getUrl() }}</loc>
+    </url>
     @endforeach
-    
+
     @foreach($model_news as $news)
-        <url>
-            <loc>{{ $news->getUrl() }}</loc>
-        </url>
+    <url>
+        <loc>{{ $news->getUrl() }}</loc>
+    </url>
     @endforeach
-    
+
     @foreach($model_cate_faq as $cate_faq)
-        <url>
-            <loc>{{ $cate_faq->getUrl() }}</loc>
-        </url>
+    <url>
+        <loc>{{ $cate_faq->getUrl() }}</loc>
+    </url>
     @endforeach
-    
+
     @foreach($model_faq as $faq)
-        <url>
-            <loc>{{ $faq->getUrl() }}</loc>
-        </url>
+    <url>
+        <loc>{{ $faq->getUrl() }}</loc>
+    </url>
     @endforeach
-    
+
     @foreach($model_product_reviews as $review)
-        <url>
-            <loc>{{ $review->getUrl() }}</loc>
-        </url>
+    <url>
+        <loc>{{ $review->getUrl() }}</loc>
+    </url>
     @endforeach
 
 </urlset>

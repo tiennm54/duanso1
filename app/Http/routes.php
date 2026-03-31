@@ -46,9 +46,9 @@ define('VISA_POST',"https://ipremium.io/receiverpost.php");
 define('VISA_STRIPE_SITE','https://hugeamazing.com');
 
 
-define('NOTI_WORKING', "We are working in business time! Place your order now, or contact us if you have a problem.");
-define('NOTI_OUT_WORKING', "Your keys/vouchers/account will be delivery within 1-8 hours. If you do not receive premium in maximum 8 hours => Please contact us first, do not open the disputed. We will deliver to you as soon as possible. Thanks you!");
-define('NOTI_NOTE_VISA', "You are our loyal customer so you can pay through VISA/MASTER CARD payment gateway. Please note: The content of the payment for this order in your bank will be different from the description of the product you will purchase so please do not open a dispute. If you would like a refund, please contact us via the customer support email: support@buypremiumkey.com. Thank you for using our service!");
+define('NOTI_WORKING', "We are currently operating during business hours. Place your order now, or contact us if you have any issues. Thank you very much!");
+define('NOTI_OUT_WORKING', "Your keys/vouchers/account will be delivered within 10–15 minutes. If you do not receive your premium within a maximum of 1 hour, please contact us first instead of opening a dispute. We will deliver it to you as soon as possible. Thank you very much!");
+define('NOTI_NOTE_VISA', "You are our valued customer, so you can pay via the Visa/MasterCard payment gateway. Please note: The payment description on your bank statement may differ from the product description. Therefore, please do not open a dispute. If you would like a refund, please contact us via our customer support email at support@buypremiumkey.com. Thank you for using our service!");
 
 define('PRIVATE_PAYPAL_KEY', "AAABBBCCC");
 define('MAX_PAYMENT', 500);

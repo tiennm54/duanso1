@@ -25,6 +25,10 @@ class BackendArticlesController extends Controller {
         if (isset($request->txt_title) && $request->txt_title != "") {
             $model = $model->where("title", "LIKE", "%" . $request->txt_title . "%");
         }
+        
+        if (isset($request->txt_country) && $request->txt_country != "") {
+            $model = $model->where("disable_country", "LIKE", "%" . $request->txt_country . "%");
+        }
 
         if (isset($request->txt_code) && $request->txt_code != "") {
             $model = $model->where("code", "LIKE", "%" . $request->txt_code . "%");
@@ -182,6 +186,10 @@ class BackendArticlesController extends Controller {
                 }else{
                     $model->reseller_page = $request->reseller_page;
                     $model->reseller_status = 0;
+                }
+                
+                if (isset($request->disable_country)) {
+                    $model->disable_country = $request->disable_country;
                 }
 
 

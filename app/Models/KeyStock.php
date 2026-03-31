@@ -27,6 +27,19 @@ class KeyStock extends Model {
             Log::info("LOI SEND EMAIL");
         }
     }
+    
+    //Thong bao khi het hang
+    public function sendEmailOutOfStock($model_orders) {
+        try {
+            $subject_email = "Notify Keys Product";
+            Mail::send('articles::platform.email-out-of-stock', ['order_id' => $model_orders->id], function ($m) use ($subject_email) {
+                $m->from(EMAIL_BUYPREMIUMKEY, NAME_COMPANY);
+                $m->to(EMAIL_ADMIN_BUYPREMIUMKEY, "Admin")->subject($subject_email);
+            });
+        } catch (\Exception $e) {
+            Log::info("LOI SEND EMAIL");
+        }
+    }
 
     public function sendMailPaid($model_orders) {
         try {

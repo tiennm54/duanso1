@@ -73,6 +73,7 @@ class VisaController extends Controller {
                             $this->sendProductEmail($model, $model_key);
                         } else {
                             $this->sendMailPaid($model);
+                            $keyStock->sendEmailOutOfStock($model);
                         }
                         //$this->sendEmailNotifyAdmin($model);
                         DB::commit();

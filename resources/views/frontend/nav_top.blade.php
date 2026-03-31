@@ -53,7 +53,7 @@
             <span class="badge badge-pill badge-info out_business_class" style="background-color: #8cc152;display: none;"
                   data-toggle="tooltip" data-placement="bottom" 
                   data-original-title="<?php echo NOTI_OUT_WORKING; ?>">
-                <i class="fa fa-check-circle"></i> Delivery within 1-8 hours
+                <i class="fa fa-check-circle"></i> Delivery within 10-15 minutes
             </span>
         </div>
 

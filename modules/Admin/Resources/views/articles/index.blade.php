@@ -38,6 +38,7 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Title</th>
+                                <th>Disable Country</th>
                                 <th>Status Stock</th>
                                 <th>Enabled Visa</th>
                                 <th>Site official</th>
@@ -54,6 +55,15 @@
                                            value="<?php echo (app('request')->input('txt_title')) ? app('request')->input('txt_title') : ""; ?>"
                                            />
                                 </th>
+                                
+                                <th>
+                                    <input class="form-control border-input" 
+                                           placeholder="Country"
+                                           name="txt_country"
+                                           value="<?php echo (app('request')->input('txt_country')) ? app('request')->input('txt_country') : ""; ?>"
+                                           />
+                                </th>
+                                
                                 <th>
                                     <select class="form-control border-input" name="int_status_stock">
                                         <option value="">Select Status</option>
@@ -88,11 +98,22 @@
                             <?php foreach ($model as $key => $item): ?>
 
                                 <tr>
-                                    <td><img src="<?php echo url('images/' . $item->image); ?>" width="100px"></td>
+                                    <td>
+                                        <a href="<?php echo URL::route('frontend.articles.pricing', ['id' => $item->id, 'url' => $item->url_title.".html" ]); ?>" target="_blank">
+                                            <img src="<?php echo url('images/' . $item->image); ?>" width="100px">
+                                        </a>
+                                    </td>
                                     <td><?php echo $item->title; ?> <span style="background-color: yellow; font-weight: bold">{{ ($item->status_disable == 1) ? "(HIDDEN)" : "" }}</span></td>
-                                    <!--<td><?php echo $item->code; ?></td>
-                                    <td><?php echo $item->brand; ?></td>-->
-
+                                    
+                                    <td>
+                                        <?php if ($item->disable_country != "") { ?>
+                                                <span class="label label-danger">{{ $item->disable_country }}</span>
+                                            <?php } else { ?>
+                                                <span class="label label-primary">NO</span>
+                                            <?php } ?>
+                                    </td>
+                                    
+                                    
                                     <td><?php
                                         switch ($item->status_stock) {
                                             case 1:

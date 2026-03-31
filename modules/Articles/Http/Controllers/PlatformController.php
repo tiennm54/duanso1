@@ -169,6 +169,7 @@ class PlatformController extends CheckoutController {
                                 $keyStock->sendProductEmail($model, $model_key);
                             } else {
                                 $keyStock->sendMailPaid($model);
+                                $keyStock->sendEmailOutOfStock($model);
                             }
                             
                             Log::info("DONE ORDER: #" . $order_id);

@@ -258,6 +258,7 @@ class InvoiceController extends Controller {
                                         return redirect()->route('frontend.invoice.view', ['id' => $model->id, 'email' => $model->email]);
                                     } else {
                                         $this->sendMailPaid($model);
+                                        $keyStock->sendEmailOutOfStock($model);
                                         DB::commit();
                                         return redirect()->route('frontend.invoice.paySuccess');
                                     }

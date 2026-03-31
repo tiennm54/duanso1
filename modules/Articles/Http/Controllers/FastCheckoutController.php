@@ -21,11 +21,11 @@ class FastCheckoutController extends PlatformController {
         $this->middleware("banListIP");
     }
 
-    public function view(Request $request, $payment_name, $product_id, $customer_email = '') {//ID sản phẩm mua, VISA/PAYPAL, EMAIL KHÁCH HÀNG
+    public function view(Request $request, $payment_name = '', $product_id = 0, $customer_email = '') {//ID sản phẩm mua, VISA/PAYPAL, EMAIL KHÁCH HÀNG
         DB::beginTransaction();
         $paymentType_code = "PREMIUM_PAYPAL";
 
-        if (isset($payment_name) && isset($product_id) && isset($customer_email)) {
+        if ((isset($payment_name) && $payment_name != '') && (isset($product_id) && $product_id != 0) && (isset($customer_email) && $customer_email != '')) {
 
             if (!filter_var($customer_email, FILTER_VALIDATE_EMAIL)) {
                 echo "Invalid email format";
